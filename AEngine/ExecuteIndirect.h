@@ -2,7 +2,7 @@
 #ifndef __EXECUTEINDIRECT_H__
 #define __EXECUTEINDIRECT_H__
 
-#include"DX.hpp"
+#include"DX.h"
 
 class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 {

@@ -2,14 +2,14 @@
 #ifndef __NBODY_H__
 #define __NBODY_H__
 
-#include"DX.hpp"
+#include"DX.h"
 #include"DTimer.h"
 #include"MCamera.h"
 #define InterlockedGetValue(obj) InterlockedCompareExchange(obj, 0, 0)
 
 class NBody :public D3D12AppBase, public D3D12Base
 {
-	static const UINT ParticleCount = 20000;
+	static const UINT ParticleCount = 10;
 	static const float ParticleSpread;
 	static const UINT ThreadCount = DefaultThreadCount;
 

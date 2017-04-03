@@ -27,7 +27,7 @@ using namespace std;
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-namespace DirectY
+namespace RenderCore
 {
 	static const UINT DefaultFrameCount = 2;
 	static const UINT SwapChainBufferCount = 3;
@@ -42,7 +42,7 @@ namespace DirectY
 	extern ComPtr<ID3D12PipelineState> thisPipelineState;
 };
 
-using namespace DirectY;
+using namespace RenderCore;
 
 class D3D12AppBase
 {

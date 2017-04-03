@@ -1,6 +1,6 @@
 #include"DX.h"
 
-namespace DirectY
+namespace RenderCore
 {
 	ComPtr<ID3D12Device> thisDevice;
 	ComPtr<ID3D12CommandQueue> thisCommandQueue;

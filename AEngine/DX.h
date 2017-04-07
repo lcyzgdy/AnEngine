@@ -40,6 +40,8 @@ namespace RenderCore
 	extern ComPtr<ID3D12GraphicsCommandList> thisCommandList;
 	extern ComPtr<ID3D12CommandAllocator> thisCommandAllocator[DefaultFrameCount];
 	extern ComPtr<ID3D12PipelineState> thisPipelineState;
+
+	extern ComPtr<ID3D12CommandQueue> computeCommandQueue;
 };
 
 using namespace RenderCore;

@@ -4,6 +4,7 @@
 
 #include"onwind.h"
 #include"DX.h"
+#include"Input.h"
 
 class FrameBuffering :public D3D12AppBase, public D3D12Base
 {

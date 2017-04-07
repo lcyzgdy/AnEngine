@@ -144,6 +144,7 @@
     <ClInclude Include="DX.h" />
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="frameBuffering.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
     <ClCompile Include="WinMain.cpp" />

@@ -45,6 +45,9 @@
     <ClInclude Include="DX.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExecuteIndirect.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="DX.cpp">
       <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,11 +13,6 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-enum KeyCode :int
-{
-	A
-};
-
 static class BaseInput
 {
 	static ComPtr<IDirectInput8> directInput;
@@ -26,6 +21,8 @@ static class BaseInput
 	static HWND hwnd;
 	static DIMOUSESTATE2 mouseState;
 	static unsigned char keyState[256];
+
+	static bool mouseButtonState[10];
 
 public:
 	static void Initialize(HWND _hwnd);

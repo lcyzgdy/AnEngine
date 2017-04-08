@@ -412,13 +412,13 @@ void NBody::PopulateCommandList()
 	// Render the particles.
 	float viewportHeight = static_cast<float>(static_cast<UINT>(viewport.Height) / heightInstances);
 	float viewportWidth = static_cast<float>(static_cast<UINT>(viewport.Width) / widthInstances);
-	for (UINT n = 0; n < ThreadCount; n++)
+	for (UINT i = 0; i < ThreadCount; i++)
 	{
-		const UINT srvI = n + (srvIndex[n] == 0 ? SrvParticlePosVelo0 : SrvParticlePosVelo1);
+		const UINT srvI = i + (srvIndex[i] == 0 ? SrvParticlePosVelo0 : SrvParticlePosVelo1);
 
 		CD3DX12_VIEWPORT viewport(
-			(n % widthInstances) * viewportWidth,
-			(n / widthInstances) * viewportHeight,
+			(i % widthInstances) * viewportWidth,
+			(i / widthInstances) * viewportHeight,
 			viewportWidth,
 			viewportHeight);
 

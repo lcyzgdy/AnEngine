@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DrawLine.h" />
     <ClInclude Include="DTimer.h" />
     <ClInclude Include="DX.h" />
     <ClInclude Include="ExecuteIndirect.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="onwind.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DrawLine.cpp" />
     <ClCompile Include="DTimer.cpp" />
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />

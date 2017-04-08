@@ -7,6 +7,7 @@ ComPtr<IDirectInputDevice8> BaseInput::mouse = nullptr;
 HWND BaseInput::hwnd = NULL;
 DIMOUSESTATE2 BaseInput::mouseState = {};
 unsigned char BaseInput::keyState[256] = {};
+bool BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
 
 void BaseInput::Initialize(HWND _hwnd)
 {
@@ -60,8 +61,14 @@ void BaseInput::Update()
 	}
 	if (mouse)
 	{
-		mouse->GetDeviceState(sizeof(DIMOUSESTATE2), &mouseState);
+		mouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
+	/*
+	for (int i = 0; i < 8; ++i)
+	{
+		mouseButtonState[i] = mouseState.rgbButtons[i] & 0x80;
+	}*/
+	memset(mouseButtonState, 0, sizeof(mouseButtonState));
 }
 
 bool BaseInput::IsAnyKeyDown()
@@ -86,6 +93,7 @@ bool BaseInput::GetKeyDown(int _key)
 
 bool BaseInput::GetKey(int _key)
 {
+	return KeyPress(_key);
 	return false;
 }
 
@@ -96,11 +104,18 @@ bool BaseInput::GetKeyUp(int _key)
 
 bool BaseInput::GetMouseButtonDown(int _mouseButton)
 {
+	bool press = mouseState.rgbButtons[_mouseButton] & 0x80;
+	if (!mouseButtonState[_mouseButton])
+	{
+		mouseButtonState[_mouseButton] = press;
+		return press;
+	}
 	return false;
 }
 
 bool BaseInput::GetMouseButton(int _mouseButton)
 {
+	return mouseState.rgbButtons[_mouseButton] & 0x80;
 	return false;
 }
 

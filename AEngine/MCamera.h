@@ -4,6 +4,7 @@
 
 #include"onwind.h"
 #include"DX.h"
+#include"Input.h"
 using namespace DirectX;
 
 class MCamera

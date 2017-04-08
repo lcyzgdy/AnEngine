@@ -1,6 +1,6 @@
-#include "frameBuffering.h"
+#include "DrawLine.h"
 
-FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _height) :
+DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
 	scissorRect(0, 0, static_cast<LONG>(_width), static_cast<LONG>(_height)),
@@ -9,11 +9,11 @@ FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _
 {
 }
 
-FrameBuffering::~FrameBuffering()
+DrawLine::~DrawLine()
 {
 }
 
-void FrameBuffering::OnInit()
+void DrawLine::OnInit()
 {
 	frameIndex = 0;
 	rtvDescriptorSize = 0;
@@ -22,11 +22,37 @@ void FrameBuffering::OnInit()
 	InitializeAssets();
 }
 
-void FrameBuffering::OnUpdate()
+void DrawLine::OnRelease()
 {
+	WaitForGpu();
+	CloseHandle(fenceEvent);
 }
 
-void FrameBuffering::OnRender()
+void DrawLine::OnUpdate()
+{
+	if (BaseInput::GetMouseButtonDown(0))
+	{
+		Vertex v;
+		v.color = { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f };
+		auto pos = BaseInput::GetMousePosition();
+		v.position = XMFLOAT3(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
+		vertex.push_back(v);
+	}
+	/*if (vertex.size() & 1 != 0)
+	{
+		vertex.pop_back();
+	}*/
+	
+	UINT8* pVertexDataBegin;
+	CD3DX12_RANGE readRange(0, 0);
+	vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
+	memcpy(pVertexDataBegin, vertex.data(), sizeof(Vertex)*vertex.size());
+	vertexBuffer->Unmap(0, nullptr);
+
+	//vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
+}
+
+void DrawLine::OnRender()
 {
 	PopulateCommandList();	//填入命令
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
@@ -35,21 +61,15 @@ void FrameBuffering::OnRender()
 	MoveToNextFrame();		//等待前一帧
 }
 
-void FrameBuffering::OnRelease()
-{
-	WaitForGpu();
-	CloseHandle(fenceEvent);
-}
-
-void FrameBuffering::OnKeyUp(UINT8 _key)
+void DrawLine::OnKeyDown(UINT8 key)
 {
 }
 
-void FrameBuffering::OnKeyDown(UINT8 _key)
+void DrawLine::OnKeyUp(UINT8 key)
 {
 }
 
-void FrameBuffering::InitializePipeline()
+void DrawLine::InitializePipeline()
 {
 	UINT dxgiFactoryFlags = 0;
 
@@ -141,7 +161,7 @@ void FrameBuffering::InitializePipeline()
 	// 创建帧资源
 }
 
-void FrameBuffering::InitializeAssets()
+void DrawLine::InitializeAssets()
 {
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
@@ -196,31 +216,28 @@ void FrameBuffering::InitializeAssets()
 	commandList->Close();
 	//Close the command list
 
-	Vertex triangleVertices[] =
-	{
-		//{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-		{ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
-		{ { 0.3f, 0.0f * aspectRatio, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-		{ { 0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-		{ { -0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-		{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-		{ { 0.1f, 0.3f * aspectRatio, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }
-	};
-	const UINT vertexBufferSize = sizeof(triangleVertices);
+	vertex.push_back({ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+		
+	vertex.push_back({ { 0.3f, 0.0f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } });
+	vertex.push_back({ { 0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } });
+	vertex.push_back({ { -0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } });
+	vertex.push_back({ { -0.3f, 0.0f * aspectRatio, 0.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } });
+	vertex.push_back({ { 0.1f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
 	ThrowIfFailed(device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&vertexBuffer)));
 
-	//Copy the triangle data to the vertex buffer.
+	// 将数据复制到顶点缓存里
 	UINT8* pVertexDataBegin;
-	CD3DX12_RANGE readRange(0, 0);		//We do not intend to read from this resource on the CPU.
+	CD3DX12_RANGE readRange(0, 0);
 	vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-	memcpy(pVertexDataBegin, triangleVertices, sizeof(triangleVertices));
+	memcpy(pVertexDataBegin, vertex.data(), sizeof(Vertex) * vertex.size());
 	vertexBuffer->Unmap(0, nullptr);
 
 	//Initialize the vertex buffer view.
@@ -242,7 +259,18 @@ void FrameBuffering::InitializeAssets()
 	WaitForGpu();
 }
 
-void FrameBuffering::PopulateCommandList()
+void DrawLine::WaitForGpu()
+{
+	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
+	// 在队列中调度信号命令。
+
+	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
+	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
+
+	fenceValues[frameIndex]++;
+}
+
+void DrawLine::PopulateCommandList()
 {
 	commandAllocators[frameIndex]->Reset();
 	// 命令列表分配器只能在关联的命令列表已在GPU上完成执行时重置; 
@@ -257,36 +285,28 @@ void FrameBuffering::PopulateCommandList()
 	commandList->RSSetScissorRects(1, &scissorRect);
 	// 设置必要的状态。
 
-	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+	//commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
 	const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
-	
-	commandList->DrawInstanced(6, 1, 0, 0);
 
+	commandList->DrawInstanced(vertex.size(), 1, 0, 0);
+	/*
+	UpdateSubresources<1>(commandList.Get(), vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
+	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+	*/
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	// 指示现在将使用后缓冲来呈现
 
 	commandList->Close();
 }
 
-void FrameBuffering::WaitForGpu()
-{
-	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
-	// 在队列中调度信号命令。
-
-	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
-	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
-
-	fenceValues[frameIndex]++;
-}
-
-void FrameBuffering::MoveToNextFrame()
+void DrawLine::MoveToNextFrame()
 {
 	const UINT64 currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
@@ -304,6 +324,6 @@ void FrameBuffering::MoveToNextFrame()
 	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
 }
 
-void FrameBuffering::WaitForRenderContext()
+void DrawLine::WaitForRenderContext()
 {
 }

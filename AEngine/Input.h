@@ -2,40 +2,53 @@
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
-#include"onwind.h"
-#include<dinput.h>
-#include<wrl.h>
-#pragma comment(lib,"dinput8.lib")
-using namespace Microsoft::WRL;
+#define INITGUID
 
-class BaseInput
+#include"onwind.h"
+#include<DirectXMath.h>
+#include<dinput.h>
+#include<xinput.h>
+#include<wrl.h>
+#pragma comment(lib, "dinput8.lib")
+using namespace Microsoft::WRL;
+using namespace DirectX;
+
+enum KeyCode :int
 {
-	ComPtr<IDirectInput8> directInput;
-	ComPtr<IDirectInputDevice8> keyboard;
-	ComPtr<IDirectInputDevice8> mouse;
-	HWND hwnd;
-	DIMOUSESTATE2 mouseState;
-	unsigned char keyState[256];
+	A
+};
+
+static class BaseInput
+{
+	static ComPtr<IDirectInput8> directInput;
+	static ComPtr<IDirectInputDevice8> keyboard;
+	static ComPtr<IDirectInputDevice8> mouse;
+	static HWND hwnd;
+	static DIMOUSESTATE2 mouseState;
+	static unsigned char keyState[256];
 
 public:
-	void Initialize(HWND _hwnd);
-	void Release();
-	void Update();
+	static void Initialize(HWND _hwnd);
+	static void Release();
+	static void Update();
 
-	bool IsAnyKeyDown();
-	bool IsAnyKey();
-	bool IsAnyKeyUp();
+	static bool IsAnyKeyDown();
+	static bool IsAnyKey();
+	static bool IsAnyKeyUp();
 
-	bool GetKeyDown(int _key);
-	bool GetKey(int _key);
-	bool GetKeyUp(int _key);
+	static bool GetKeyDown(int _key);
+	static bool GetKey(int _key);
+	static bool GetKeyUp(int _key);
 
-	bool GetMouseButtonDown(int _mouseButton);
-	bool GetMouseButton(int _mouseButton);
-	bool GetMouseButtonUp(int _mouseButton);
+	static bool GetMouseButtonDown(int _mouseButton);
+	static bool GetMouseButton(int _mouseButton);
+	static bool GetMouseButtonUp(int _mouseButton);
+	static XMINT2 GetMousePosition();
 
-	void SetAcquire();
-	void SetUnacquire();
+	static void SetAcquire();
+	static void SetUnacquire();
+
+	static void ZeroInputState();
 };
 
 #endif // !__INPUT_H__

@@ -9,7 +9,7 @@
 
 class NBody :public D3D12AppBase, public D3D12Base
 {
-	static const UINT ParticleCount = 10;
+	static const UINT ParticleCount = 8000;
 	static const float ParticleSpread;
 	static const UINT ThreadCount = DefaultThreadCount;
 

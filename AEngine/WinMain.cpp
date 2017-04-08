@@ -1,6 +1,7 @@
 ﻿#include"onwind.h"
 #include"frameBuffering.h"
 #include"NBody.h"
+#include"Input.h"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -27,10 +28,12 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 	}
 	case(WM_SETFOCUS):
 	{
+		BaseInput::SetAcquire();
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
+		BaseInput::SetUnacquire();
 		break;
 	}
 	case(WM_KEYDOWN):
@@ -108,6 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	d3dApp->SetHwnd(window);
 
 	d3dApp->OnInit();
+	BaseInput::Initialize(window);
 
 	ShowWindow(window, nCmdShow);
 
@@ -121,6 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 	
+	BaseInput::Release();
 	d3dApp->OnRelease();
 
 	UnregisterClass(wnd.lpszClassName, hInstance);

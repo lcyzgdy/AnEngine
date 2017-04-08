@@ -1,4 +1,12 @@
 #include "Input.h"
+#define KeyPress(a) ((keyState[a]) & 0x80)
+
+ComPtr<IDirectInput8> BaseInput::directInput = nullptr;
+ComPtr<IDirectInputDevice8> BaseInput::keyboard = nullptr;
+ComPtr<IDirectInputDevice8> BaseInput::mouse = nullptr;
+HWND BaseInput::hwnd = NULL;
+DIMOUSESTATE2 BaseInput::mouseState = {};
+unsigned char BaseInput::keyState[256] = {};
 
 void BaseInput::Initialize(HWND _hwnd)
 {
@@ -17,7 +25,10 @@ void BaseInput::Initialize(HWND _hwnd)
 
 	ThrowIfFailed(directInput->CreateDevice(GUID_SysMouse, mouse.GetAddressOf(), nullptr));
 	ThrowIfFailed(mouse->SetDataFormat(&c_dfDIMouse2));
-	mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+
+	keyboard->Acquire();
+	mouse->Acquire();
 }
 
 void BaseInput::Release()
@@ -98,6 +109,12 @@ bool BaseInput::GetMouseButtonUp(int _mouseButton)
 	return false;
 }
 
+XMINT2 BaseInput::GetMousePosition()
+{
+	XMINT2 pos(mouseState.lX, mouseState.lY);
+	return pos;
+}
+
 void BaseInput::SetAcquire()
 {
 	if (keyboard)
@@ -120,4 +137,11 @@ void BaseInput::SetUnacquire()
 	{
 		mouse->Unacquire();
 	}
+	ZeroInputState();
+}
+
+void BaseInput::ZeroInputState()
+{
+	memset(keyState, 0,sizeof(keyState));
+	memset(&mouseState, 0, sizeof(DIMOUSESTATE2));
 }

@@ -3,7 +3,8 @@
 #define __MCAMERA_H__
 
 #include"onwind.h"
-#include"DX.hpp"
+#include"DX.h"
+#include"Input.h"
 using namespace DirectX;
 
 class MCamera

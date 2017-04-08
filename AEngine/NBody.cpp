@@ -1,5 +1,4 @@
 #include "NBody.h"
-
 const float NBody::ParticleSpread = 400.0f;
 
 NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :
@@ -16,7 +15,7 @@ NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :
 		renderContextFenceValues[i] = 0;
 		threadFenceValues[i] = 0;
 	}
-
+	
 	float sqRootAsyncContextsNum = sqrt(static_cast<float>(ThreadCount));
 	heightInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
 	widthInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
@@ -413,13 +412,13 @@ void NBody::PopulateCommandList()
 	// Render the particles.
 	float viewportHeight = static_cast<float>(static_cast<UINT>(viewport.Height) / heightInstances);
 	float viewportWidth = static_cast<float>(static_cast<UINT>(viewport.Width) / widthInstances);
-	for (UINT n = 0; n < ThreadCount; n++)
+	for (UINT i = 0; i < ThreadCount; i++)
 	{
-		const UINT srvI = n + (srvIndex[n] == 0 ? SrvParticlePosVelo0 : SrvParticlePosVelo1);
+		const UINT srvI = i + (srvIndex[i] == 0 ? SrvParticlePosVelo0 : SrvParticlePosVelo1);
 
 		CD3DX12_VIEWPORT viewport(
-			(n % widthInstances) * viewportWidth,
-			(n / widthInstances) * viewportHeight,
+			(i % widthInstances) * viewportWidth,
+			(i / widthInstances) * viewportHeight,
 			viewportWidth,
 			viewportHeight);
 

@@ -1,5 +1,7 @@
 #include "DrawLine.h"
 
+XMFLOAT3 tempPos;
+
 DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
@@ -34,22 +36,29 @@ void DrawLine::OnUpdate()
 	{
 		Vertex v;
 		v.color = { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f };
-		auto pos = BaseInput::GetMousePosition();
-		v.position = XMFLOAT3(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
-		vertex.push_back(v);
+		auto pos = BaseInput::GetM128MousePosition();
+		//v.position = XMFLOAT3(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
+		//v.position = XMFLOAT3(static_cast<float>(pos.x) / static_cast<float>(width), static_cast<float>(pos.y) / static_cast<float>(height), 0.0f);
+		//v.position = XMFLOAT3(static_cast<float>(pos.x), static_cast<float>(pos.y), 0.0f);
+		//vertex.push_back(v);
+		pos = DirectX::XMVector2Normalize(pos);
+		
+		if (XMVector2Length(pos).m128_f32[0] >= 0.1)
+		{
+			v.position = XMFLOAT3(pos.m128_f32[0] * 0.6, pos.m128_f32[1] * 0.6*aspectRatio, 0.0f);
+			*(vertex.rbegin()) = v;
+		}
+		else (*(vertex.rbegin())).color = v.color;
+		
+		//vertex.push_back(v);
 	}
-	/*if (vertex.size() & 1 != 0)
-	{
-		vertex.pop_back();
-	}*/
-	
+	CPOINT aa;
+
 	UINT8* pVertexDataBegin;
 	CD3DX12_RANGE readRange(0, 0);
 	vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
 	memcpy(pVertexDataBegin, vertex.data(), sizeof(Vertex)*vertex.size());
 	vertexBuffer->Unmap(0, nullptr);
-
-	//vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
 }
 
 void DrawLine::OnRender()
@@ -215,14 +224,14 @@ void DrawLine::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-
+	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
 	vertex.push_back({ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
 		
-	vertex.push_back({ { 0.3f, 0.0f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } });
-	vertex.push_back({ { 0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } });
-	vertex.push_back({ { -0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } });
-	vertex.push_back({ { -0.3f, 0.0f * aspectRatio, 0.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } });
-	vertex.push_back({ { 0.1f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+	//vertex.push_back({ { 0.3f, 0.0f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } });
+	//vertex.push_back({ { 0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } });
+	//vertex.push_back({ { -0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } });
+	//vertex.push_back({ { -0.3f, 0.0f * aspectRatio, 0.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } });
+	//vertex.push_back({ { 0.1f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
 	ThrowIfFailed(device->CreateCommittedResource(

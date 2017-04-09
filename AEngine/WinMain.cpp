@@ -3,6 +3,7 @@
 #include"NBody.h"
 #include"DrawLine.h"
 #include"Input.h"
+#include"Screen.h"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -110,10 +111,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
+	
+
 	d3dApp->SetHwnd(window);
 
 	d3dApp->OnInit();
-	BaseInput::Initialize(window);
+	BaseInput::Initialize(window, hInstance);
+	Screen::InitializeScreen(screenw, screenh);
 
 	ShowWindow(window, nCmdShow);
 

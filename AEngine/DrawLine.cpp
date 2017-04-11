@@ -1,6 +1,8 @@
-#include "frameBuffering.h"
+#include "DrawLine.h"
 
-FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _height) :
+XMFLOAT3 tempPos;
+
+DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
 	scissorRect(0, 0, static_cast<LONG>(_width), static_cast<LONG>(_height)),
@@ -9,11 +11,11 @@ FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _
 {
 }
 
-FrameBuffering::~FrameBuffering()
+DrawLine::~DrawLine()
 {
 }
 
-void FrameBuffering::OnInit()
+void DrawLine::OnInit()
 {
 	frameIndex = 0;
 	rtvDescriptorSize = 0;
@@ -22,34 +24,62 @@ void FrameBuffering::OnInit()
 	InitializeAssets();
 }
 
-void FrameBuffering::OnUpdate()
-{
-}
-
-void FrameBuffering::OnRender()
-{
-	PopulateCommandList();	//å¡«å…¥å‘½ä»¤
-	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
-	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);	//æäº¤å‘½ä»¤
-	swapChain->Present(1, 0);	//äº¤æ¢å‰åç¼“å†²
-	MoveToNextFrame();		//ç­‰å¾…å‰ä¸€å¸§
-}
-
-void FrameBuffering::OnRelease()
+void DrawLine::OnRelease()
 {
 	WaitForGpu();
 	CloseHandle(fenceEvent);
 }
 
-void FrameBuffering::OnKeyUp(UINT8 _key)
+void DrawLine::OnUpdate()
+{
+	if (BaseInput::GetMouseButtonDown(0))
+	{
+		Vertex v;
+		//v.color = { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f };
+		v.color = { 0.5f,0.1f,0.0f,1.0f };
+		auto pos = -BaseInput::GetM128MousePosition();
+		//v.position = XMFLOAT3(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
+		//v.position = XMFLOAT3(static_cast<float>(pos.x) / static_cast<float>(width), static_cast<float>(pos.y) / static_cast<float>(height), 0.0f);
+		//v.position = XMFLOAT3(static_cast<float>(pos.x), static_cast<float>(pos.y), 0.0f);
+		//vertex.push_back(v);
+		//pos = DirectX::XMVector2Normalize(pos);
+		
+		//if (XMVector2Length(pos).m128_f32[0] >= 0.1)
+		{
+			v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
+			*(vertex.rbegin()) = v;
+		}
+		//else (*(vertex.rbegin())).color = v.color;
+		
+		//vertex.push_back(v);
+	}
+	CPOINT aa;
+
+	UINT8* pVertexDataBegin;
+	CD3DX12_RANGE readRange(0, 0);
+	vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
+	memcpy(pVertexDataBegin, vertex.data(), sizeof(Vertex)*vertex.size());
+	vertexBuffer->Unmap(0, nullptr);
+}
+
+void DrawLine::OnRender()
+{
+	PopulateCommandList();	//ÌîÈëÃüÁî
+	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
+	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);	//Ìá½»ÃüÁî
+	swapChain->Present(1, 0);	//½»»»Ç°ºó»º³å
+	MoveToNextFrame();		//µÈ´ıÇ°Ò»Ö¡
+}
+
+void DrawLine::OnKeyDown(UINT8 key)
 {
 }
 
-void FrameBuffering::OnKeyDown(UINT8 _key)
+void DrawLine::OnKeyUp(UINT8 key)
 {
 }
 
-void FrameBuffering::InitializePipeline()
+void DrawLine::InitializePipeline()
 {
 	UINT dxgiFactoryFlags = 0;
 
@@ -61,7 +91,7 @@ void FrameBuffering::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// å¼€å¯Debugæ¨¡å¼
+	// ¿ªÆôDebugÄ£Ê½
 
 	ComPtr<IDXGIFactory4> factory;
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
@@ -77,13 +107,13 @@ void FrameBuffering::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
-	// åˆ›è®¾å¤‡
+	// ´´Éè±¸
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
-	// æè¿°å¹¶åˆ›å»ºå‘½ä»¤é˜Ÿåˆ—
+	// ÃèÊö²¢´´½¨ÃüÁî¶ÓÁĞ
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = DefaultFrameCount;
@@ -96,14 +126,14 @@ void FrameBuffering::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// äº¤æ¢é“¾éœ€è¦é˜Ÿåˆ—ï¼Œä»¥ä¾¿å¯ä»¥å¼ºåˆ¶åˆ·æ–°å®ƒ
+		commandQueue.Get(),		// ½»»»Á´ĞèÒª¶ÓÁĞ£¬ÒÔ±ã¿ÉÒÔÇ¿ÖÆË¢ĞÂËü
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// æè¿°å¹¶åˆ›å»ºäº¤æ¢é“¾
+	// ÃèÊö²¢´´½¨½»»»Á´
 
 	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 	swapChain1.As(&swapChain);
@@ -115,17 +145,17 @@ void FrameBuffering::InitializePipeline()
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
-	// åˆ›å»ºæ¸²æŸ“ç›®æ ‡è§†å›¾æè¿°ç¬¦å †
+	// ´´½¨äÖÈ¾Ä¿±êÊÓÍ¼ÃèÊö·û¶Ñ
 
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 	srvHeapDesc.NumDescriptors = 1;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
-	// æè¿°å¹¶åˆ›å»ºçº¹ç†çš„ç€è‰²å™¨èµ„æºè§†å›¾å † [Shader resource view (SRV) heap]
+	// ÃèÊö²¢´´½¨ÎÆÀíµÄ×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼¶Ñ [Shader resource view (SRV) heap]
 
 	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	// !#1	åˆ›å»ºæè¿°ç¬¦å †
+	// !#1	´´½¨ÃèÊö·û¶Ñ
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
 	for (UINT i = 0; i < DefaultFrameCount; i++)
@@ -137,11 +167,11 @@ void FrameBuffering::InitializePipeline()
 		device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i]));
 		//// !!!!
 	}
-	// åˆ›å»ºå‘½ä»¤åˆ†é…å™¨
-	// åˆ›å»ºå¸§èµ„æº
+	// ´´½¨ÃüÁî·ÖÅäÆ÷
+	// ´´½¨Ö¡×ÊÔ´
 }
 
-void FrameBuffering::InitializeAssets()
+void DrawLine::InitializeAssets()
 {
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
@@ -195,32 +225,29 @@ void FrameBuffering::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-
-	Vertex triangleVertices[] =
-	{
-		//{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-		{ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
-		{ { 0.3f, 0.0f * aspectRatio, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-		{ { 0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-		{ { -0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-		{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-		{ { 0.1f, 0.3f * aspectRatio, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }
-	};
-	const UINT vertexBufferSize = sizeof(triangleVertices);
+	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
+	vertex.push_back({ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+		
+	//vertex.push_back({ { 0.3f, 0.0f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } });
+	//vertex.push_back({ { 0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } });
+	//vertex.push_back({ { -0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } });
+	//vertex.push_back({ { -0.3f, 0.0f * aspectRatio, 0.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } });
+	//vertex.push_back({ { 0.1f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
 	ThrowIfFailed(device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&vertexBuffer)));
 
-	//Copy the triangle data to the vertex buffer.
+	// ½«Êı¾İ¸´ÖÆµ½¶¥µã»º´æÀï
 	UINT8* pVertexDataBegin;
-	CD3DX12_RANGE readRange(0, 0);		//We do not intend to read from this resource on the CPU.
+	CD3DX12_RANGE readRange(0, 0);
 	vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-	memcpy(pVertexDataBegin, triangleVertices, sizeof(triangleVertices));
+	memcpy(pVertexDataBegin, vertex.data(), sizeof(Vertex) * vertex.size());
 	vertexBuffer->Unmap(0, nullptr);
 
 	//Initialize the vertex buffer view.
@@ -242,43 +269,10 @@ void FrameBuffering::InitializeAssets()
 	WaitForGpu();
 }
 
-void FrameBuffering::PopulateCommandList()
-{
-	commandAllocators[frameIndex]->Reset();
-	// å‘½ä»¤åˆ—è¡¨åˆ†é…å™¨åªèƒ½åœ¨å…³è”çš„å‘½ä»¤åˆ—è¡¨å·²åœ¨GPUä¸Šå®Œæˆæ‰§è¡Œæ—¶é‡ç½®; 
-	// åº”ç”¨ç¨‹åºåº”è¯¥ä½¿ç”¨æ …æ æ¥ç¡®å®šGPUæ‰§è¡Œè¿›åº¦ã€‚
-
-	commandList->Reset(commandAllocators[frameIndex].Get(), pipelineState.Get());
-	// ä½†æ˜¯ï¼Œå½“åœ¨ç‰¹å®šå‘½ä»¤åˆ—è¡¨ä¸Šè°ƒç”¨ExecuteCommandListï¼ˆï¼‰æ—¶ï¼Œè¯¥å‘½ä»¤åˆ—è¡¨éšåå¯ä»¥åœ¨ä»»ä½•æ—¶é—´é‡ç½®ï¼Œ
-	// ä½†è¦åœ¨é‡æ–°è®°å½•ä¹‹å‰ã€‚
-
-	commandList->SetGraphicsRootSignature(rootSignature.Get());
-	commandList->RSSetViewports(1, &viewport);
-	commandList->RSSetScissorRects(1, &scissorRect);
-	// è®¾ç½®å¿…è¦çš„çŠ¶æ€ã€‚
-
-	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
-	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-
-	const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
-	
-	commandList->DrawInstanced(6, 1, 0, 0);
-
-	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-	// æŒ‡ç¤ºç°åœ¨å°†ä½¿ç”¨åç¼“å†²æ¥å‘ˆç°
-
-	commandList->Close();
-}
-
-void FrameBuffering::WaitForGpu()
+void DrawLine::WaitForGpu()
 {
 	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
-	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
+	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
 
 	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
@@ -286,24 +280,60 @@ void FrameBuffering::WaitForGpu()
 	fenceValues[frameIndex]++;
 }
 
-void FrameBuffering::MoveToNextFrame()
+void DrawLine::PopulateCommandList()
+{
+	commandAllocators[frameIndex]->Reset();
+	// ÃüÁîÁĞ±í·ÖÅäÆ÷Ö»ÄÜÔÚ¹ØÁªµÄÃüÁîÁĞ±íÒÑÔÚGPUÉÏÍê³ÉÖ´ĞĞÊ±ÖØÖÃ; 
+	// Ó¦ÓÃ³ÌĞòÓ¦¸ÃÊ¹ÓÃÕ¤À¸À´È·¶¨GPUÖ´ĞĞ½ø¶È¡£
+
+	commandList->Reset(commandAllocators[frameIndex].Get(), pipelineState.Get());
+	// µ«ÊÇ£¬µ±ÔÚÌØ¶¨ÃüÁîÁĞ±íÉÏµ÷ÓÃExecuteCommandList£¨£©Ê±£¬¸ÃÃüÁîÁĞ±íËæºó¿ÉÒÔÔÚÈÎºÎÊ±¼äÖØÖÃ£¬
+	// µ«ÒªÔÚÖØĞÂ¼ÇÂ¼Ö®Ç°¡£
+
+	commandList->SetGraphicsRootSignature(rootSignature.Get());
+	commandList->RSSetViewports(1, &viewport);
+	commandList->RSSetScissorRects(1, &scissorRect);
+	// ÉèÖÃ±ØÒªµÄ×´Ì¬¡£
+
+	//commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
+	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+
+	const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
+
+	commandList->DrawInstanced(vertex.size(), 1, 0, 0);
+	/*
+	UpdateSubresources<1>(commandList.Get(), vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
+	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+	*/
+	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+	// Ö¸Ê¾ÏÖÔÚ½«Ê¹ÓÃºó»º³åÀ´³ÊÏÖ
+
+	commandList->Close();
+}
+
+void DrawLine::MoveToNextFrame()
 {
 	const UINT64 currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
-	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
+	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
 
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
-	// æ›´æ–°å¸§ç¼–å·
+	// ¸üĞÂÖ¡±àºÅ
 
 	if (fence->GetCompletedValue() < fenceValues[frameIndex])
 	{
 		fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 		WaitForSingleObjectEx(fenceEvent, INFINITE, false);
-	}// å¦‚æœä¸‹ä¸€å¸§è¿˜æ²¡æœ‰æ¸²æŸ“å®Œï¼Œåˆ™ç­‰å¾…
+	}// Èç¹ûÏÂÒ»Ö¡»¹Ã»ÓĞäÖÈ¾Íê£¬ÔòµÈ´ı
 
 	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
 }
 
-void FrameBuffering::WaitForRenderContext()
+void DrawLine::WaitForRenderContext()
 {
 }

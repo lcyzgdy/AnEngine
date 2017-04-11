@@ -36,14 +36,23 @@
     <ClInclude Include="DTimer.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="DX.hpp">
-      <Filter>头文件\UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="MCamera.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
     <ClInclude Include="onwind.h">
       <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DX.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +74,18 @@
     <ClCompile Include="MCamera.cpp">
       <Filter>源文件\UTIL</Filter>
     </ClCompile>
+    <ClCompile Include="DX.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

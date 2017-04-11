@@ -1,13 +1,12 @@
 #pragma once
-#ifndef __FRAMEBUFFERING_H__
-#define __FRAMEBUFFERING_H__
+#ifndef __DRAWLINE_H__
+#define __DRAWLINE_H__
 
 #include"onwind.h"
-
 #include"DX.h"
 #include"Input.h"
 
-class FrameBuffering :public D3D12AppBase, public D3D12Base
+class DrawLine :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
@@ -39,29 +38,41 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView;
-	ComPtr<ID3D12Resource> cubeResource;
-	// 脫娄脫脙鲁脤脨貌脳脢脭麓
+	// 应用程序资源
 
+	vector<Vertex> vertex;
 
 public:
-	FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _height);
-	~FrameBuffering();
+	DrawLine(const HWND _hwnd, const UINT _width, const UINT _height);
+	~DrawLine();
 
-	virtual void OnInit();
-	virtual void OnUpdate();
-	virtual void OnRender();
-	virtual void OnRelease();
 
-	virtual void OnKeyUp(UINT8 _key);
-	virtual void OnKeyDown(UINT8 _key);
+	// 通过 D3D12AppBase 继承
+	virtual void OnInit() override;
 
-	virtual void InitializePipeline();
-	virtual void InitializeAssets();
-	virtual void PopulateCommandList();
-	virtual void WaitForGpu();
-	virtual void MoveToNextFrame();
-	virtual void WaitForRenderContext();
+	virtual void OnRelease() override;
+
+	virtual void OnUpdate() override;
+
+	virtual void OnRender() override;
+
+	virtual void OnKeyDown(UINT8 key) override;
+
+	virtual void OnKeyUp(UINT8 key) override;
+
+
+	// 通过 D3D12Base 继承
+	virtual void InitializePipeline() override;
+
+	virtual void InitializeAssets() override;
+
+	virtual void WaitForGpu() override;
+
+	virtual void PopulateCommandList() override;
+
+	virtual void MoveToNextFrame() override;
+
+	virtual void WaitForRenderContext() override;
+
 };
-
-#endif // !__FRAMEBUFFERING_H__
+#endif // !__DRAWLINE_H__

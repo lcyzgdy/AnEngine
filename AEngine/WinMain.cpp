@@ -1,6 +1,9 @@
 ﻿#include"onwind.h"
 #include"frameBuffering.h"
 #include"NBody.h"
+#include"DrawLine.h"
+#include"Input.h"
+#include"Screen.h"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -27,10 +30,16 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 	}
 	case(WM_SETFOCUS):
 	{
+		BaseInput::SetAcquire();
+		POINT p;
+		GetCursorPos(&p);
+		//ClientToScreen(hwnd, &p);
+		BaseInput::SetMousePosition(p);
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
+		BaseInput::SetUnacquire();
 		break;
 	}
 	case(WM_KEYDOWN):
@@ -45,6 +54,7 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 	}
 	case(WM_PAINT):
 	{
+		BaseInput::Update();
 		if (pD3dApp)
 		{
 			pD3dApp->OnUpdate();
@@ -64,8 +74,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wstring windowClassName(_T("AWindow"));
 	screenw = 1280;
 	screenh = 720;
-
-	D3D12AppBase* d3dApp = new NBody(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);
@@ -88,7 +97,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	window = CreateWindow(
 		windowClassName.c_str(),
 		windowTitle.c_str(),
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_BORDER ^ WS_SIZEBOX,
+		//WS_POPUPWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		windowRect.right - windowRect.left,
@@ -106,8 +116,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	d3dApp->SetHwnd(window);
-
 	d3dApp->OnInit();
+	POINT curPos;
+	ThrowIfFailed(GetCursorPos(&curPos));
+	//ClientToScreen(window, &curPos);
+	BaseInput::Initialize(window, hInstance);
+	BaseInput::SetMousePosition(curPos);
+	Screen::InitializeScreen(screenw, screenh);
 
 	ShowWindow(window, nCmdShow);
 
@@ -120,7 +135,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DispatchMessage(&msg);
 		}
 	}
-	
+	BaseInput::Release();
 	d3dApp->OnRelease();
 
 	UnregisterClass(wnd.lpszClassName, hInstance);

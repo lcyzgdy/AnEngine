@@ -44,6 +44,7 @@ public:
 	static bool GetMouseButtonUp(int _mouseButton);
 	static XMINT2 GetMousePosition();
 	static XMVECTOR GetM128MousePosition();
+	static void SetMousePosition(const POINT& _point);
 
 	static void SetAcquire();
 	static void SetUnacquire();

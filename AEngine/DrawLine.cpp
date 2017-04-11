@@ -35,20 +35,21 @@ void DrawLine::OnUpdate()
 	if (BaseInput::GetMouseButtonDown(0))
 	{
 		Vertex v;
-		v.color = { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f };
-		auto pos = BaseInput::GetM128MousePosition();
+		//v.color = { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f };
+		v.color = { 0.5f,0.1f,0.0f,1.0f };
+		auto pos = -BaseInput::GetM128MousePosition();
 		//v.position = XMFLOAT3(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
 		//v.position = XMFLOAT3(static_cast<float>(pos.x) / static_cast<float>(width), static_cast<float>(pos.y) / static_cast<float>(height), 0.0f);
 		//v.position = XMFLOAT3(static_cast<float>(pos.x), static_cast<float>(pos.y), 0.0f);
 		//vertex.push_back(v);
-		pos = DirectX::XMVector2Normalize(pos);
+		//pos = DirectX::XMVector2Normalize(pos);
 		
-		if (XMVector2Length(pos).m128_f32[0] >= 0.1)
+		//if (XMVector2Length(pos).m128_f32[0] >= 0.1)
 		{
-			v.position = XMFLOAT3(pos.m128_f32[0] * 0.6, pos.m128_f32[1] * 0.6*aspectRatio, 0.0f);
+			v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 			*(vertex.rbegin()) = v;
 		}
-		else (*(vertex.rbegin())).color = v.color;
+		//else (*(vertex.rbegin())).color = v.color;
 		
 		//vertex.push_back(v);
 	}

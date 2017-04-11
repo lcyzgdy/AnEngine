@@ -37,7 +37,6 @@ void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 
 	keyboard->Acquire();
 	mouse->Acquire();
-	
 }
 
 void BaseInput::Release()
@@ -77,8 +76,11 @@ void BaseInput::Update()
 		mouseButtonState[i] = mouseState.rgbButtons[i] & 0x80;
 	}*/
 	memset(mouseButtonState, 0, sizeof(mouseButtonState));
-	curPosition.m128_f32[0] -= static_cast<float>(mouseState.lX) / static_cast<float>(Screen::Width());
-	curPosition.m128_f32[1] -= static_cast<float>(mouseState.lY) / static_cast<float>(Screen::Width());
+	XMVECTOR a;
+	a = { -static_cast<float>(mouseState.lX) / static_cast<float>(Screen::Width()), static_cast<float>(mouseState.lY) / static_cast<float>(Screen::Height()), 0.0f, 0.0f };
+	curPosition += a;
+	//curPosition.m128_f32[0] -= static_cast<float>(mouseState.lX) / static_cast<float>(Screen::Width());
+	//curPosition.m128_f32[1] -= static_cast<float>(mouseState.lY) / static_cast<float>(Screen::Width());
 }
 
 bool BaseInput::IsAnyKeyDown()
@@ -142,9 +144,12 @@ XMINT2 BaseInput::GetMousePosition()
 
 XMVECTOR BaseInput::GetM128MousePosition()
 {
-	XMVECTOR a;
-	a = { static_cast<float>(mouseState.lX), static_cast<float>(mouseState.lY),0.0f,0.0f };
-	return a;
+	return curPosition;
+}
+
+void BaseInput::SetMousePosition(const POINT& _point)
+{
+	curPosition = { -static_cast<float>(_point.x) / static_cast<float>(Screen::Width()), static_cast<float>(_point.y) / static_cast<float>(Screen::Height()), 0.0f, 0.0f };
 }
 
 void BaseInput::SetAcquire()

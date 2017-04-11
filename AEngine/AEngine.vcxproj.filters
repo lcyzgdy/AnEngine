@@ -85,7 +85,7 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
+    </ClCompile
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

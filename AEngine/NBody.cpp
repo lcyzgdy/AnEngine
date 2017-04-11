@@ -15,11 +15,10 @@ NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :
 		renderContextFenceValues[i] = 0;
 		threadFenceValues[i] = 0;
 	}
-	
 	float sqRootAsyncContextsNum = sqrt(static_cast<float>(ThreadCount));
 	heightInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
 	widthInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
-	// ceil(): ÏòÉÏÈ¡Õû
+	// ceil(): å‘ä¸Šå–æ•´
 
 	if (widthInstances * (heightInstances - 1) >= ThreadCount)
 	{
@@ -61,7 +60,7 @@ void NBody::OnRender()
 	{
 		InterlockedExchange(&renderContextFenceValues[i], renderContextFenceValue);
 	}
-	// ÈÃ¼ÆËãÏß³ÌÖªµÀÕıÔÚäÖÈ¾ĞÂµÄÒ»Ö¡
+	// è®©è®¡ç®—çº¿ç¨‹çŸ¥é“æ­£åœ¨æ¸²æŸ“æ–°çš„ä¸€å¸§
 
 	for (int i = 0; i < ThreadCount; i++)
 	{
@@ -71,7 +70,7 @@ void NBody::OnRender()
 			ThrowIfFailed(commandQueue->Wait(threadFences[i].Get(), threadFenceValue));
 		}
 	}
-	// ¼ÆËã¹¤×÷ÒªÔÚäÖÈ¾¿ªÊ¼Ö®Ç°Íê³É£¬·ñÔòSRV»á·¢Éú´íÎó
+	// è®¡ç®—å·¥ä½œè¦åœ¨æ¸²æŸ“å¼€å§‹ä¹‹å‰å®Œæˆï¼Œå¦åˆ™SRVä¼šå‘ç”Ÿé”™è¯¯
 
 	PopulateCommandList();
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
@@ -87,7 +86,7 @@ void NBody::OnRelease()
 	WaitForMultipleObjects(ThreadCount, threadHandles, TRUE, INFINITE);
 
 	WaitForRenderContext();
-	// È·±£GPU²»ÔÙÒıÓÃ½«ÓÉÎö¹¹º¯ÊıÇå³ıµÄ×ÊÔ´¡£
+	// ç¡®ä¿GPUä¸å†å¼•ç”¨å°†ç”±ææ„å‡½æ•°æ¸…é™¤çš„èµ„æºã€‚
 
 	CloseHandle(renderContextFenceEvent);
 	for (int i = 0; i < ThreadCount; i++)
@@ -119,7 +118,7 @@ void NBody::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// ¿ªÆôDebugÄ£Ê½
+	// å¼€å¯Debugæ¨¡å¼
 
 	ComPtr<IDXGIFactory4> factory;
 	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
@@ -135,13 +134,13 @@ void NBody::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		ThrowIfFailed(D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)));
 	}
-	// ´´Éè±¸
+	// åˆ›è®¾å¤‡
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	ThrowIfFailed(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue)));
-	// ÃèÊö²¢´´½¨ÃüÁî¶ÓÁĞ
+	// æè¿°å¹¶åˆ›å»ºå‘½ä»¤é˜Ÿåˆ—
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = DefaultFrameCount;
@@ -155,14 +154,14 @@ void NBody::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// ½»»»Á´ĞèÒª¶ÓÁĞ£¬ÒÔ±ã¿ÉÒÔÇ¿ÖÆË¢ĞÂËü
+		commandQueue.Get(),		// äº¤æ¢é“¾éœ€è¦é˜Ÿåˆ—ï¼Œä»¥ä¾¿å¯ä»¥å¼ºåˆ¶åˆ·æ–°å®ƒ
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// ÃèÊö²¢´´½¨½»»»Á´
+	// æè¿°å¹¶åˆ›å»ºäº¤æ¢é“¾
 	ThrowIfFailed(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
 	ThrowIfFailed(swapChain1.As(&swapChain));
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
@@ -183,7 +182,7 @@ void NBody::InitializePipeline()
 
 		rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		srvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	}	// ´´½¨ÃèÊö·û¶Ñ
+	}	// åˆ›å»ºæè¿°ç¬¦å †
 
 	{
 
@@ -199,7 +198,7 @@ void NBody::InitializePipeline()
 
 			ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i])));
 		}
-	}	// ´´½¨Ö¡×ÊÔ´
+	}	// åˆ›å»ºå¸§èµ„æº
 }
 
 void NBody::InitializeAssets()
@@ -227,7 +226,7 @@ void NBody::InitializeAssets()
 			ComPtr<ID3DBlob> error;
 			ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error));
 			ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature)));
-		}	// Í¼ĞÎ¸ùÇ©Ãû
+		}	// å›¾å½¢æ ¹ç­¾å
 
 		{
 			CD3DX12_DESCRIPTOR_RANGE1 ranges[2];
@@ -246,8 +245,8 @@ void NBody::InitializeAssets()
 			ComPtr<ID3DBlob> error;
 			ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&computeRootSignatureDesc, featureData.HighestVersion, &signature, &error));
 			ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&computeRootSignature)));
-		}	// ¼ÆËã¸ùÇ©Ãû
-	}	// ´´½¨¸ùÇ©Ãû
+		}	// è®¡ç®—æ ¹ç­¾å
+	}	// åˆ›å»ºæ ¹ç­¾å
 
 	{
 		ComPtr<ID3DBlob> vertexShader;
@@ -348,7 +347,7 @@ void NBody::InitializeAssets()
 
 		UpdateSubresources<1>(commandList.Get(), constantBufferCS.Get(), constantBufferCSUpload.Get(), 0, 0, 1, &computeCBData);
 		commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(constantBufferCS.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
-	}	// ´´½¨¼ÆËã×ÅÉ«Æ÷µÄ³£Á¿»º³åÇø
+	}	// åˆ›å»ºè®¡ç®—ç€è‰²å™¨çš„å¸¸é‡ç¼“å†²åŒº
 
 	{
 		const UINT constantBufferGSSize = sizeof(ConstantBufferGS) * DefaultFrameCount;
@@ -365,7 +364,7 @@ void NBody::InitializeAssets()
 		CD3DX12_RANGE readRange(0, 0);
 		ThrowIfFailed(constantBufferGS->Map(0, &readRange, reinterpret_cast<void**>(&pConstantBufferGSData)));
 		ZeroMemory(pConstantBufferGSData, constantBufferGSSize);
-	}	// ´´½¨¼¸ºÎ×ÅÉ«Æ÷µÄ³£Á¿»º³åÇø
+	}	// åˆ›å»ºå‡ ä½•ç€è‰²å™¨çš„å¸¸é‡ç¼“å†²åŒº
 
 	ThrowIfFailed(commandList->Close());
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
@@ -440,7 +439,7 @@ void NBody::PopulateCommandList()
 void NBody::WaitForGpu()
 {
 	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
-	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
+	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
 
 	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
@@ -451,14 +450,14 @@ void NBody::WaitForGpu()
 void NBody::WaitForRenderContext()
 {
 	ThrowIfFailed(commandQueue->Signal(fence.Get(), renderContextFenceValue));
-	// ½«ĞÅºÅÃüÁîÌí¼Óµ½¶ÓÁĞÖĞ
+	// å°†ä¿¡å·å‘½ä»¤æ·»åŠ åˆ°é˜Ÿåˆ—ä¸­
 
 	ThrowIfFailed(fence->SetEventOnCompletion(renderContextFenceValue, renderContextFenceEvent));
 	renderContextFenceValue++;
-	// Ö¸Ê¾fenceÔÚĞÅºÅÃüÁîÍê³ÉÊ±ÉèÖÃÊÂ¼ş¶ÔÏó
+	// æŒ‡ç¤ºfenceåœ¨ä¿¡å·å‘½ä»¤å®Œæˆæ—¶è®¾ç½®äº‹ä»¶å¯¹è±¡
 
 	WaitForSingleObject(renderContextFenceEvent, INFINITE);
-	// µÈ´ıÖ±µ½ĞÅºÅÃüÁî±»´¦Àí¡£
+	// ç­‰å¾…ç›´åˆ°ä¿¡å·å‘½ä»¤è¢«å¤„ç†ã€‚
 }
 
 void NBody::MoveToNextFrame()
@@ -486,7 +485,7 @@ void NBody::CreateAsyncContexts()
 		ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_COMPUTE, IID_PPV_ARGS(&computeCommandAllocators[threadIndex])));
 		ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_COMPUTE, computeCommandAllocators[threadIndex].Get(), nullptr, IID_PPV_ARGS(&computeCommandList[threadIndex])));
 		ThrowIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_SHARED, IID_PPV_ARGS(&threadFences[threadIndex])));
-		// ´´½¨¼ÆËã×ÅÉ«Æ÷×ÊÔ´
+		// åˆ›å»ºè®¡ç®—ç€è‰²å™¨èµ„æº
 
 		threadFenceEvents[threadIndex] = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 		if (threadFenceEvents[threadIndex] == nullptr)
@@ -584,12 +583,12 @@ void NBody::CreateParticlesBuffer()
 	vector<Particle> data;
 	data.resize(ParticleCount);
 	const UINT dataSize = ParticleCount * sizeof(Particle);
-	// »º³åÇø³õÊ¼»¯Êı¾İ
+	// ç¼“å†²åŒºåˆå§‹åŒ–æ•°æ®
 
 	float centerSpread = ParticleSpread * 0.50f;
 	InitializeParticles(&data[0], XMFLOAT3(centerSpread, 0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, -20.0f, 1.0f / 100000000.0f), ParticleSpread, ParticleCount / 2);
 	InitializeParticles(&data[ParticleCount / 2], XMFLOAT3(-centerSpread, 0, 0), XMFLOAT4(0, 0, 20, 1 / 100000000.0f), ParticleSpread, ParticleCount / 2);
-	// ½«Á£×Ó·Ö³ÉÁ½×é¡£
+	// å°†ç²’å­åˆ†æˆä¸¤ç»„ã€‚
 
 	D3D12_HEAP_PROPERTIES defaultHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	D3D12_HEAP_PROPERTIES uploadHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -598,8 +597,8 @@ void NBody::CreateParticlesBuffer()
 
 	for (UINT index = 0; index < ThreadCount; index++)
 	{
-		// ÔÚGPUÖĞ´´½¨Á½¸ö»º³åÇø£¬Ã¿¸ö¶¼ÓĞÒ»¸öÁ£×ÓÊı¾İµÄ¸±±¾¡£
-		// ¼ÆËã×ÅÉ«Æ÷½«¸üĞÂÆäÖĞµÄÒ»¸ö£¬¶øäÖÈ¾Ïß³ÌäÖÈ¾ÁíÒ»¸ö¡£ µ±äÖÈ¾Íê³ÉÊ±£¬Ïß³Ì½«½»»»ËüÃÇ¹¤×÷µÄ»º³åÇø¡£
+		// åœ¨GPUä¸­åˆ›å»ºä¸¤ä¸ªç¼“å†²åŒºï¼Œæ¯ä¸ªéƒ½æœ‰ä¸€ä¸ªç²’å­æ•°æ®çš„å‰¯æœ¬ã€‚
+		// è®¡ç®—ç€è‰²å™¨å°†æ›´æ–°å…¶ä¸­çš„ä¸€ä¸ªï¼Œè€Œæ¸²æŸ“çº¿ç¨‹æ¸²æŸ“å¦ä¸€ä¸ªã€‚ å½“æ¸²æŸ“å®Œæˆæ—¶ï¼Œçº¿ç¨‹å°†äº¤æ¢å®ƒä»¬å·¥ä½œçš„ç¼“å†²åŒºã€‚
 
 		ThrowIfFailed(device->CreateCommittedResource(
 			&defaultHeapProperties,
@@ -688,7 +687,7 @@ DWORD NBody::AsyncComputeThreadProc(int _threadIndex)
 	while (0 == InterlockedGetValue(&terminating))
 	{
 		Simulate(_threadIndex);
-		// ÔËĞĞÁ£×Ó
+		// è¿è¡Œç²’å­
 
 		ThrowIfFailed(pCommandList->Close());
 		ID3D12CommandList* ppCommandLists[] = { pCommandList };
@@ -699,7 +698,7 @@ DWORD NBody::AsyncComputeThreadProc(int _threadIndex)
 		ThrowIfFailed(pCommandQueue->Signal(pFence, threadFenceValue));
 		ThrowIfFailed(pFence->SetEventOnCompletion(threadFenceValue, threadFenceEvents[_threadIndex]));
 		WaitForSingleObject(threadFenceEvents[_threadIndex], INFINITE);
-		// µÈ´ı¼ÆËã×ÅÉ«Æ÷Íê³É¡£
+		// ç­‰å¾…è®¡ç®—ç€è‰²å™¨å®Œæˆã€‚
 
 		UINT64 renderContextFenceValue = InterlockedGetValue(&renderContextFenceValues[_threadIndex]);
 		if (fence->GetCompletedValue() < renderContextFenceValue)
@@ -707,14 +706,14 @@ DWORD NBody::AsyncComputeThreadProc(int _threadIndex)
 			ThrowIfFailed(pCommandQueue->Wait(fence.Get(), renderContextFenceValue));
 			InterlockedExchange(&renderContextFenceValues[_threadIndex], 0);
 		}
-		// µÈ´ıäÖÈ¾Ïß³ÌÊ¹ÓÃSRVÍê³É£¬ÒÔ±ãÏÂÒ»Ö¡¿ÉÒÔÔËĞĞ¡£
+		// ç­‰å¾…æ¸²æŸ“çº¿ç¨‹ä½¿ç”¨SRVå®Œæˆï¼Œä»¥ä¾¿ä¸‹ä¸€å¸§å¯ä»¥è¿è¡Œã€‚
 
 		srvIndex[_threadIndex] = 1 - srvIndex[_threadIndex];
-		// SRVºÍUAVÖĞµÄË÷Òı»¥»»
+		// SRVå’ŒUAVä¸­çš„ç´¢å¼•äº’æ¢
 
 		ThrowIfFailed(pCommandAllocator->Reset());
 		ThrowIfFailed(pCommandList->Reset(pCommandAllocator, computeState.Get()));
-		// ×¼±¸ÏÂÒ»Ö¡
+		// å‡†å¤‡ä¸‹ä¸€å¸§
 	}
 
 	return 0;

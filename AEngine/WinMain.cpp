@@ -74,7 +74,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wstring windowClassName(_T("AWindow"));
 	screenw = 1280;
 	screenh = 720;
-
 	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
@@ -136,7 +135,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DispatchMessage(&msg);
 		}
 	}
-	
 	BaseInput::Release();
 	d3dApp->OnRelease();
 

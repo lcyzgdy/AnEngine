@@ -9,7 +9,6 @@
 #include<dinput.h>
 #include<xinput.h>
 #include<wrl.h>
-#include"Screen.h"
 #pragma comment(lib, "dinput8.lib")
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -24,10 +23,9 @@ static class BaseInput
 	static unsigned char keyState[256];
 
 	static bool mouseButtonState[10];
-	static XMVECTOR curPosition;
 
 public:
-	static void Initialize(HWND _hwnd, HINSTANCE _hInstance);
+	static void Initialize(HWND _hwnd);
 	static void Release();
 	static void Update();
 
@@ -43,8 +41,6 @@ public:
 	static bool GetMouseButton(int _mouseButton);
 	static bool GetMouseButtonUp(int _mouseButton);
 	static XMINT2 GetMousePosition();
-	static XMVECTOR GetM128MousePosition();
-	static void SetMousePosition(const POINT& _point);
 
 	static void SetAcquire();
 	static void SetUnacquire();

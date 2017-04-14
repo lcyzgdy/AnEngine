@@ -8,18 +8,11 @@ HWND BaseInput::hwnd = NULL;
 DIMOUSESTATE2 BaseInput::mouseState = {};
 unsigned char BaseInput::keyState[256] = {};
 bool BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
-XMVECTOR BaseInput::curPosition = {};
 
-void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
+void BaseInput::Initialize(HWND _hwnd)
 {
 	hwnd = _hwnd;
-
-	/*LPPOINT a = nullptr;
-	GetCursorPos(a);
-	curPosition = { static_cast<float>(a->x) / static_cast<float>(Screen::Width()) * 2 - 0.5f , static_cast<float>(a->y) / static_cast<float>(Screen::Height()) * 2 - 0.5f, 0.0f, 0.0f };
-	*/
-	//ThrowIfFailed(DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)directInput.GetAddressOf(), nullptr));
-	ThrowIfFailed(DirectInput8Create(_hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)directInput.GetAddressOf(), nullptr));
+	ThrowIfFailed(DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)directInput.GetAddressOf(), nullptr));
 	ThrowIfFailed(directInput->CreateDevice(GUID_SysKeyboard, keyboard.GetAddressOf(), nullptr));
 	ThrowIfFailed(keyboard->SetDataFormat(&c_dfDIKeyboard));
 	ThrowIfFailed(keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE));
@@ -76,11 +69,6 @@ void BaseInput::Update()
 		mouseButtonState[i] = mouseState.rgbButtons[i] & 0x80;
 	}*/
 	memset(mouseButtonState, 0, sizeof(mouseButtonState));
-	XMVECTOR a;
-	a = { -static_cast<float>(mouseState.lX) / static_cast<float>(Screen::Width()), static_cast<float>(mouseState.lY) / static_cast<float>(Screen::Height()), 0.0f, 0.0f };
-	curPosition += a;
-	//curPosition.m128_f32[0] -= static_cast<float>(mouseState.lX) / static_cast<float>(Screen::Width());
-	//curPosition.m128_f32[1] -= static_cast<float>(mouseState.lY) / static_cast<float>(Screen::Width());
 }
 
 bool BaseInput::IsAnyKeyDown()
@@ -140,16 +128,6 @@ XMINT2 BaseInput::GetMousePosition()
 {
 	XMINT2 pos(mouseState.lX, mouseState.lY);
 	return pos;
-}
-
-XMVECTOR BaseInput::GetM128MousePosition()
-{
-	return curPosition;
-}
-
-void BaseInput::SetMousePosition(const POINT& _point)
-{
-	curPosition = { -static_cast<float>(_point.x) / static_cast<float>(Screen::Width()), static_cast<float>(_point.y) / static_cast<float>(Screen::Height()), 0.0f, 0.0f };
 }
 
 void BaseInput::SetAcquire()

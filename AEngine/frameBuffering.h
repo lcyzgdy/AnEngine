@@ -3,6 +3,7 @@
 #define __FRAMEBUFFERING_H__
 
 #include"onwind.h"
+
 #include"DX.h"
 #include"Input.h"
 
@@ -40,7 +41,7 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView;
 	ComPtr<ID3D12Resource> cubeResource;
-	// 应用程序资源
+	// 脫娄脫脙鲁脤脨貌脳脢脭麓
 
 
 public:

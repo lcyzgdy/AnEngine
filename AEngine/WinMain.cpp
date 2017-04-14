@@ -33,7 +33,7 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 		BaseInput::SetAcquire();
 		POINT p;
 		GetCursorPos(&p);
-		//ClientToScreen(hwnd, &p);
+		ScreenToClient(hwnd, &p);
 		BaseInput::SetMousePosition(p);
 		break;
 	}
@@ -119,8 +119,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();
 	POINT curPos;
-	ThrowIfFailed(GetCursorPos(&curPos));
-	//ClientToScreen(window, &curPos);
+	GetCursorPos(&curPos);
+	ScreenToClient(window, &curPos);
 	BaseInput::Initialize(window, hInstance);
 	BaseInput::SetMousePosition(curPos);
 	Screen::InitializeScreen(screenw, screenh);

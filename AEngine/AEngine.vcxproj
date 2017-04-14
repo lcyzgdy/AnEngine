@@ -149,7 +149,6 @@
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
-    <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawLine.cpp" />
@@ -160,7 +159,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
-    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>

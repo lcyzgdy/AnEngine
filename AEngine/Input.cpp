@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Screen.h"
 #define KeyPress(a) ((keyState[a]) & 0x80)
 
 ComPtr<IDirectInput8> BaseInput::directInput = nullptr;

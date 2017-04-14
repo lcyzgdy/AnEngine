@@ -21,11 +21,11 @@ static class BaseInput
 	static HWND hwnd;
 	static DIMOUSESTATE2 mouseState;
 	static unsigned char keyState[256];
-
 	static bool mouseButtonState[10];
+	static XMVECTOR curPosition;
 
 public:
-	static void Initialize(HWND _hwnd);
+	static void Initialize(HWND _hwnd, HINSTANCE _hInstance);
 	static void Release();
 	static void Update();
 
@@ -41,6 +41,8 @@ public:
 	static bool GetMouseButton(int _mouseButton);
 	static bool GetMouseButtonUp(int _mouseButton);
 	static XMINT2 GetMousePosition();
+	static XMVECTOR GetM128MousePosition();
+	static void SetMousePosition(const POINT& _point);
 
 	static void SetAcquire();
 	static void SetUnacquire();

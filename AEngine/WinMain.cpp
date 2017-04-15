@@ -33,13 +33,31 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 		BaseInput::SetAcquire();
 		POINT p;
 		GetCursorPos(&p);
-		//ClientToScreen(hwnd, &p);
+		ScreenToClient(hwnd, &p);
 		BaseInput::SetMousePosition(p);
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
 		BaseInput::SetUnacquire();
+		break;
+	}
+	case(WM_MOUSEMOVE):
+	{
+		POINT p;
+		GetCursorPos(&p);
+		ScreenToClient(hwnd, &p);
+		BaseInput::SetMousePosition(p);
+		break; 
+	}
+	case(WM_LBUTTONDOWN):
+	{
+		BaseInput::UpdateMouseButton(0, 1);
+		break; 
+	}
+	case(WM_LBUTTONUP):
+	{
+		BaseInput::UpdateMouseButton(0, 0);
 		break;
 	}
 	case(WM_KEYDOWN):
@@ -74,6 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wstring windowClassName(_T("AWindow"));
 	screenw = 1280;
 	screenh = 720;
+
 	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
@@ -117,11 +136,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();
-	POINT curPos;
-	ThrowIfFailed(GetCursorPos(&curPos));
-	//ClientToScreen(window, &curPos);
+	//POINT curPos;
+	//GetCursorPos(&curPos);
+	//ScreenToClient(window, &curPos);
+	//BaseInput::Initialize(window, hInstance);
+	//BaseInput::SetMousePosition(curPos);
 	BaseInput::Initialize(window, hInstance);
-	BaseInput::SetMousePosition(curPos);
 	Screen::InitializeScreen(screenw, screenh);
 
 	ShowWindow(window, nCmdShow);
@@ -135,6 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DispatchMessage(&msg);
 		}
 	}
+	
 	BaseInput::Release();
 	d3dApp->OnRelease();
 

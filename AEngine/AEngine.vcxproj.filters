@@ -52,7 +52,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\UTIL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,8 +84,8 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

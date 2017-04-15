@@ -13,14 +13,14 @@ class MCamera
 	{
 		bool w, a, s, d, up, left, down, right;
 	};
-	XMFLOAT3 initialPosition;	// 鍒濆浣嶇疆
+	XMFLOAT3 initialPosition;	// 初始位置
 	XMFLOAT3 position;
-	float yawRotate;	// 姘村钩杞姩
-	float pitchRotate;	// 鍨傜洿杞姩
+	float yawRotate;	// 水平转动
+	float pitchRotate;	// 垂直转动
 	XMFLOAT3 lookDirection;
 	XMFLOAT3 upDirection;
-	float moveSpeed;	// 鐩告満绉诲姩閫熷害
-	float turnSpeed;	// 鐩告満杞姩閫熷害
+	float moveSpeed;	// 相机移动速度
+	float turnSpeed;	// 相机转动速度
 	KeyPressed keyPressed;
 
 	void Reset();
@@ -38,8 +38,8 @@ public:
 
 	XMMATRIX GetViewMatrix();
 	XMMATRIX GetProjectionMatrix(float _fov, float _aspectRatio, float _nearPlane = 1.0f, float _farPlane = 1000.0f);
-	void SetMoveSpeed(float v);// 鍗曚綅锛歶int/s
-	void SetTurnSpeed(float v);// 鍗曚綅锛歴^-1 || /s
+	void SetMoveSpeed(float v);// 单位：uint/s
+	void SetTurnSpeed(float v);// 单位：s^-1 || /s
 };
 
 #endif // !__MCAMERA_H__

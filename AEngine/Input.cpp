@@ -9,17 +9,18 @@ HWND BaseInput::hwnd = NULL;
 DIMOUSESTATE2 BaseInput::mouseState = {};
 unsigned char BaseInput::keyState[256] = {};
 bool BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
+bool BaseInput::mouseButtonDownState[10] = {};
 XMVECTOR BaseInput::curPosition = {};
 
 void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 {
 	hwnd = _hwnd;
 
-	/*LPPOINT a = nullptr;
-	GetCursorPos(a);
-	curPosition = { static_cast<float>(a->x) / static_cast<float>(Screen::Width()) * 2 - 0.5f , static_cast<float>(a->y) / static_cast<float>(Screen::Height()) * 2 - 0.5f, 0.0f, 0.0f };
-	*/
-	//ThrowIfFailed(DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)directInput.GetAddressOf(), nullptr));
+	InitializeKeyboard(_hInstance);
+}
+
+void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)
+{
 	ThrowIfFailed(DirectInput8Create(_hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)directInput.GetAddressOf(), nullptr));
 	ThrowIfFailed(directInput->CreateDevice(GUID_SysKeyboard, keyboard.GetAddressOf(), nullptr));
 	ThrowIfFailed(keyboard->SetDataFormat(&c_dfDIKeyboard));
@@ -32,11 +33,15 @@ void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 	dipdw.dwData = 10;
 	ThrowIfFailed(keyboard->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph));
 
+	keyboard->Acquire();
+}
+
+void BaseInput::InitializeMouse(HINSTANCE _hInstance)
+{
 	ThrowIfFailed(directInput->CreateDevice(GUID_SysMouse, mouse.GetAddressOf(), nullptr));
 	ThrowIfFailed(mouse->SetDataFormat(&c_dfDIMouse2));
 	mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 
-	keyboard->Acquire();
 	mouse->Acquire();
 }
 
@@ -70,12 +75,12 @@ void BaseInput::Update()
 	if (mouse)
 	{
 		mouse->GetDeviceState(sizeof(mouseState), &mouseState);
-	}
 
-	memset(mouseButtonState, 0, sizeof(mouseButtonState));
-	XMVECTOR a;
-	a = { static_cast<float>(mouseState.lX) / Screen::Width()*1.4f, -static_cast<float>(mouseState.lY) / Screen::Height()*1.5f, 0.0f, 0.0f };
-	curPosition += a;
+		memset(mouseButtonState, 0, sizeof(mouseButtonState));
+		XMVECTOR a;
+		a = { static_cast<float>(mouseState.lX) *0.0018f, -static_cast<float>(mouseState.lY) *0.0018f, 0.0f, 0.0f };
+		curPosition += a;
+	}
 }
 
 bool BaseInput::IsAnyKeyDown()
@@ -109,26 +114,41 @@ bool BaseInput::GetKeyUp(int _key)
 	return false;
 }
 
+void BaseInput::UpdateMouseButton(int _button, int _action)
+{
+	mouseButtonState[_button] = _action;
+	mouseButtonDownState[_button] = _action;
+}
+
 bool BaseInput::GetMouseButtonDown(int _mouseButton)
 {
-	bool press = mouseState.rgbButtons[_mouseButton] & 0x80;
-	if (!mouseButtonState[_mouseButton])
+	if (mouse)
 	{
-		mouseButtonState[_mouseButton] = press;
-		return press;
+		bool press = mouseState.rgbButtons[_mouseButton] & 0x80;
+		if (!mouseButtonState[_mouseButton])
+		{
+			mouseButtonState[_mouseButton] = press;
+			return press;
+		}
+		return false;
 	}
-	return false;
+	else
+	{
+		return mouseButtonDownState[_mouseButton];
+	}
 }
 
 bool BaseInput::GetMouseButton(int _mouseButton)
 {
-	return mouseState.rgbButtons[_mouseButton] & 0x80;
+	//return mouseState.rgbButtons[_mouseButton] & 0x80;
+	return mouseButtonState[_mouseButton];
 	return false;
 }
 
 bool BaseInput::GetMouseButtonUp(int _mouseButton)
 {
-	return false;
+	if (mouseButtonDownState[_mouseButton] || mouseButtonDownState[_mouseButton]) return false;
+	return true;
 }
 
 XMINT2 BaseInput::GetMousePosition()

@@ -212,14 +212,9 @@ void DrawLine::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-	vertex.push_back({ { -1.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
+	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
 	vertex.push_back({ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
-		
-	//vertex.push_back({ { 0.3f, 0.0f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } });
-	//vertex.push_back({ { 0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } });
-	//vertex.push_back({ { -0.2f, -0.4f * aspectRatio, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } });
-	//vertex.push_back({ { -0.3f, 0.0f * aspectRatio, 0.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } });
-	//vertex.push_back({ { 0.1f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
 	ThrowIfFailed(device->CreateCommittedResource(

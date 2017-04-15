@@ -15,8 +15,8 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 		XMFLOAT4 velocity;
 		XMFLOAT4 offset;
 		XMFLOAT4 color;
-		XMFLOAT4X4 projection;	// æŠ•å½±
-		float padding[36];	// å¸¸é‡ç¼“å†²åŒºæ˜¯256å­—èŠ‚å¯¹é½ã€‚
+		XMFLOAT4X4 projection;	// Í¶Ó°
+		float padding[36];	// ³£Á¿»º³åÇøÊÇ256×Ö½Ú¶ÔÆë¡£
 	};
 	struct CSRootConstants
 	{
@@ -24,43 +24,43 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 		float zOffset;
 		float cullOffset;
 		float commandCount;
-	};	// è®¡ç®—ç€è‰²å™¨çš„æ ¹å¸¸é‡ã€‚
+	};	// ¼ÆËã×ÅÉ«Æ÷µÄ¸ù³£Á¿¡£
 	struct IndirectCommand
 	{
 		D3D12_GPU_VIRTUAL_ADDRESS cbv;
 		D3D12_DRAW_ARGUMENTS drawArguments;
-	};	// æ•°æ®ç»“æ„åŒ¹é…ExecuteIndirectçš„å‘½ä»¤ç­¾åã€‚
+	};	// Êı¾İ½á¹¹Æ¥ÅäExecuteIndirectµÄÃüÁîÇ©Ãû¡£
 	enum GraphicsRootParameters
 	{
 		Cbv,
 		GraphicsRootParametersCount
-	};	// å›¾å½¢æ ¹ç­¾åå‚æ•°åç§»é‡
+	};	// Í¼ĞÎ¸ùÇ©Ãû²ÎÊıÆ«ÒÆÁ¿
 	enum ComputeRootParameters
 	{
 		SrvUavTable,
-		RootConstants,			// æä¾›å…³äºä¸‰è§’å½¢é¡¶ç‚¹å’Œå‰”é™¤å¹³é¢çš„ç€è‰²å™¨ä¿¡æ¯çš„æ ¹å¸¸é‡
+		RootConstants,			// Ìá¹©¹ØÓÚÈı½ÇĞÎ¶¥µãºÍÌŞ³ıÆ½ÃæµÄ×ÅÉ«Æ÷ĞÅÏ¢µÄ¸ù³£Á¿
 		ComputeRootParametersCount
-	};	// è®¡ç®—æ ¹ç­¾åå‚æ•°åç§»é‡
+	};	// ¼ÆËã¸ùÇ©Ãû²ÎÊıÆ«ÒÆÁ¿
 	enum HeapOffsets
 	{
-		CbvSrvOffset = 0,													// SRVæŒ‡å‘æ¸²æŸ“çº¿ç¨‹ä½¿ç”¨çš„å¸¸é‡ç¼“å†²åŒºã€‚
-		CommandsOffset = CbvSrvOffset + 1,									// SRVæŒ‡å‘æ‰€æœ‰é—´æ¥å‘½ä»¤ã€‚
-		ProcessedCommandsOffset = CommandsOffset + 1,						// UAVè®°å½•å®é™…æƒ³è¦æ‰§è¡Œçš„å‘½ä»¤
-		CbvSrvUavDescriptorCountPerFrame = ProcessedCommandsOffset + 1		// 2ä¸ªSRVå’Œ1ä¸ªUAVç”¨äºè®¡ç®—ç€è‰²å™¨
-	};	// CBVã€SRVã€UAVæè¿°ç¬¦å †åç§»
+		CbvSrvOffset = 0,													// SRVÖ¸ÏòäÖÈ¾Ïß³ÌÊ¹ÓÃµÄ³£Á¿»º³åÇø¡£
+		CommandsOffset = CbvSrvOffset + 1,									// SRVÖ¸ÏòËùÓĞ¼ä½ÓÃüÁî¡£
+		ProcessedCommandsOffset = CommandsOffset + 1,						// UAV¼ÇÂ¼Êµ¼ÊÏëÒªÖ´ĞĞµÄÃüÁî
+		CbvSrvUavDescriptorCountPerFrame = ProcessedCommandsOffset + 1		// 2¸öSRVºÍ1¸öUAVÓÃÓÚ¼ÆËã×ÅÉ«Æ÷
+	};	// CBV¡¢SRV¡¢UAVÃèÊö·û¶ÑÆ«ÒÆ
 
 	std::vector<SceneConstantBuffer> constantBufferData;
 	UINT8* pCbvDataBegin;
-	// æ¯ä¸ªä¸‰è§’å½¢æ¯å¸§è·å¾—è‡ªå·±çš„å¸¸é‡ç¼“å†²åŒºã€‚
+	// Ã¿¸öÈı½ÇĞÎÃ¿Ö¡»ñµÃ×Ô¼ºµÄ³£Á¿»º³åÇø¡£
 
 	static const UINT triangleCount = 1024;
 	static const UINT triangleResourceCount = triangleCount*DefaultFrameCount;
-	static const UINT commandSizePerFrame;			// ç”¨äºåœ¨å•ä¸ªæ¡†æ¶ä¸­ç»˜åˆ¶æ‰€æœ‰ä¸‰è§’å½¢çš„é—´æ¥å‘½ä»¤çš„å¤§å°ã€‚
-	static const UINT commandBufferCounterOffset;	// åœ¨å¤„ç†å‘½ä»¤ç¼“å†²åŒºuvaè®¡æ•°å™¨çš„åç§»é‡ã€‚
-	static const UINT computeThreadBlockSize = 128;	// åº”ä¸compute.hlslä¸­çš„å€¼åŒ¹é…ã€‚
-	static const float triangleHalfWidth;			// ä¸‰è§’å½¢é¡¶ç‚¹ä½¿ç”¨çš„xå’Œyåç§»ã€‚
-	static const float triangleDepth;				// ä¸‰è§’å½¢é¡¶ç‚¹ä½¿ç”¨çš„zåç§»ã€‚
-	static const float cullingCutoff;				// å‡åŒ€ç©ºé—´ä¸­çš„å‰ªåˆ‡å¹³é¢çš„Â±xåç§»[-1,1]ã€‚
+	static const UINT commandSizePerFrame;			// ÓÃÓÚÔÚµ¥¸ö¿ò¼ÜÖĞ»æÖÆËùÓĞÈı½ÇĞÎµÄ¼ä½ÓÃüÁîµÄ´óĞ¡¡£
+	static const UINT commandBufferCounterOffset;	// ÔÚ´¦ÀíÃüÁî»º³åÇøuva¼ÆÊıÆ÷µÄÆ«ÒÆÁ¿¡£
+	static const UINT computeThreadBlockSize = 128;	// Ó¦Óëcompute.hlslÖĞµÄÖµÆ¥Åä¡£
+	static const float triangleHalfWidth;			// Èı½ÇĞÎ¶¥µãÊ¹ÓÃµÄxºÍyÆ«ÒÆ¡£
+	static const float triangleDepth;				// Èı½ÇĞÎ¶¥µãÊ¹ÓÃµÄzÆ«ÒÆ¡£
+	static const float cullingCutoff;				// ¾ùÔÈ¿Õ¼äÖĞµÄ¼ôÇĞÆ½ÃæµÄ¡ÀxÆ«ÒÆ[-1,1]¡£
 
 	UINT frameIndex;
 
@@ -103,8 +103,8 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12Resource> processedCommandBufferCounterReset;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 
-	CSRootConstants csRootConstants;	// è®¡ç®—ç€è‰²å™¨çš„å¸¸é‡
-	bool enableCulling;	// è®¡ç®—ç€è‰²å™¨æ˜¯å¦é¢„å¤„ç†é—´æ¥å‘½ä»¤
+	CSRootConstants csRootConstants;	// ¼ÆËã×ÅÉ«Æ÷µÄ³£Á¿
+	bool enableCulling;	// ¼ÆËã×ÅÉ«Æ÷ÊÇ·ñÔ¤´¦Àí¼ä½ÓÃüÁî
 
 	virtual void InitializePipeline();
 	virtual void InitializeAssets();
@@ -114,8 +114,8 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	virtual void WaitForRenderContext();
 
 	static UINT AlignForUavCounter(UINT bufferSize);
-	// æˆ‘ä»¬å°†UAVè®¡æ•°å™¨æ‰“åŒ…åˆ°ä¸å‘½ä»¤ç›¸åŒçš„ç¼“å†²åŒºä¸­ï¼Œè€Œä¸æ˜¯ä¸ºå…¶åˆ›å»ºå•ç‹¬çš„64Kèµ„æºå †ã€‚
-	// è®¡æ•°å™¨å¿…é¡»åœ¨4Kè¾¹ç•Œä¸Šå¯¹é½ï¼Œå› æ­¤æˆ‘ä»¬å¡«å……å‘½ä»¤ç¼“å†²åŒºï¼ˆå¦‚æœéœ€è¦ï¼‰ï¼Œä½¿å¾—è®¡æ•°å™¨å°†æ”¾ç½®åœ¨ç¼“å†²åŒºä¸­çš„æœ‰æ•ˆä½ç½®ã€‚
+	// ÎÒÃÇ½«UAV¼ÆÊıÆ÷´ò°üµ½ÓëÃüÁîÏàÍ¬µÄ»º³åÇøÖĞ£¬¶ø²»ÊÇÎªÆä´´½¨µ¥¶ÀµÄ64K×ÊÔ´¶Ñ¡£
+	// ¼ÆÊıÆ÷±ØĞëÔÚ4K±ß½çÉÏ¶ÔÆë£¬Òò´ËÎÒÃÇÌî³äÃüÁî»º³åÇø£¨Èç¹ûĞèÒª£©£¬Ê¹µÃ¼ÆÊıÆ÷½«·ÅÖÃÔÚ»º³åÇøÖĞµÄÓĞĞ§Î»ÖÃ¡£
 
 public:
 	ExecuteIndirect(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title);

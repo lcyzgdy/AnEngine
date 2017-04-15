@@ -1,7 +1,6 @@
 #pragma once
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
-
 #include"onwind.h";
 
 static class Screen
@@ -11,7 +10,7 @@ static class Screen
 public:
 
 	static void InitializeScreen(const int _width, const int _height);
-	
+
 	inline static int Width()
 	{
 		return width;
@@ -22,5 +21,6 @@ public:
 		return height;
 	}
 };
+
 
 #endif // !__SCREEN_H__

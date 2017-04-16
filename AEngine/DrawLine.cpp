@@ -32,10 +32,16 @@ void DrawLine::OnRelease()
 
 void DrawLine::OnUpdate()
 {
-	if (BaseInput::GetMouseButtonDown(0))
+	if (BaseInput::GetMouseButton(0))
 	{
 		Vertex v;
-		v.color = { 0.5f,0.1f,0.0f,1.0f };
+		//v.color = { 0.5f,0.1f,0.0f,1.0f };
+		if (BaseInput::GetMouseButtonDown(0))
+		{
+			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+		}
+		else v.color = (*vertex.rbegin()).color;
 		auto pos = BaseInput::GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
@@ -213,7 +219,7 @@ void DrawLine::InitializeAssets()
 	commandList->Close();
 	//Close the command list
 	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
-	vertex.push_back({ { 0.0f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+	vertex.push_back({ { 0.0f, 0.3f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } });
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 

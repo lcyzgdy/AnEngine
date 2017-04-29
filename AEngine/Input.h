@@ -23,6 +23,7 @@ static class BaseInput
 	static unsigned char keyState[256];
 	static bool mouseButtonState[10];
 	static bool mouseButtonDownState[10];
+	static bool mouseButtonDownFlag[10];
 	static XMVECTOR curPosition;
 
 public:

@@ -50,16 +50,6 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 		BaseInput::SetMousePosition(p);
 		break; 
 	}
-	case(WM_LBUTTONDOWN):
-	{
-		BaseInput::UpdateMouseButton(0, 1);
-		break; 
-	}
-	case(WM_LBUTTONUP):
-	{
-		BaseInput::UpdateMouseButton(0, 0);
-		break;
-	}
 	case(WM_KEYDOWN):
 	{
 		pD3dApp->OnKeyDown(static_cast<UINT8>(wparam));
@@ -133,6 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		state = 1;
 		return 0;
 	}
+	randomize();
 
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();

@@ -13,7 +13,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-static class BaseInput
+class BaseInput
 {
 	static ComPtr<IDirectInput8> directInput;
 	static ComPtr<IDirectInputDevice8> keyboard;

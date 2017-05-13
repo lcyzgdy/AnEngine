@@ -1,16 +1,13 @@
 #pragma once
-#include<windows.h>
 #include<iostream>
 #include<fstream>
 #include<ctime>
 #include<cstring>
-#include<tchar.h>
 #include<cmath>
 #include<cstdlib>
 #include<algorithm>
 #include<memory>
 #include<string>
-#include<wrl.h>
 #include<vector>
 
 using namespace std;
@@ -19,6 +16,11 @@ using namespace std;
 #define GDY
 #define var auto
 #ifdef _WIN64
+
+#include<windows.h>
+#include<wrl.h>
+#include<tchar.h>
+
 #ifdef UNICODE
 
 #define Strcpy(a,b) wcscpy_s(a,b);

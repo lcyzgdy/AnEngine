@@ -293,7 +293,7 @@ void DrawLine::PopulateCommandList()
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
 
-	commandList->DrawInstanced(vertex.size(), 1, 0, 0);
+	commandList->DrawInstanced(static_cast<UINT>(vertex.size()), 1, 0, 0);
 	/*
 	UpdateSubresources<1>(commandList.Get(), vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
@@ -617,7 +617,7 @@ void DrawLineWithWu::PopulateCommandList()
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
 
-	commandList->DrawInstanced(vertex.size(), 1, 0, 0);
+	commandList->DrawInstanced(static_cast<UINT>(vertex.size()), 1, 0, 0);
 	/*
 	UpdateSubresources<1>(commandList.Get(), vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));

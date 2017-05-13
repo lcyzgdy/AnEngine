@@ -1,9 +1,9 @@
 #pragma once
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
-#include"onwind.h";
+#include"onwind.h"
 
-static class Screen
+class Screen
 {
 	static int width;
 	static int height;

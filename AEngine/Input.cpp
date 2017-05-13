@@ -10,6 +10,7 @@ DIMOUSESTATE2 BaseInput::mouseState = {};
 unsigned char BaseInput::keyState[256] = {};
 bool BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
 bool BaseInput::mouseButtonDownState[10] = {};
+bool BaseInput::mouseButtonDownFlag[10] = {};
 XMVECTOR BaseInput::curPosition = {};
 
 void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
@@ -17,6 +18,11 @@ void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 	hwnd = _hwnd;
 
 	InitializeKeyboard(_hInstance);
+	InitializeMouse(_hInstance);
+
+	memset(mouseButtonDownFlag, 0, sizeof(mouseButtonDownFlag));
+	memset(mouseButtonDownState, 0, sizeof(mouseButtonDownState));
+	memset(mouseButtonState, 0, sizeof(mouseButtonState));
 }
 
 void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)
@@ -75,11 +81,26 @@ void BaseInput::Update()
 	if (mouse)
 	{
 		mouse->GetDeviceState(sizeof(mouseState), &mouseState);
-
-		memset(mouseButtonState, 0, sizeof(mouseButtonState));
-		XMVECTOR a;
+		for (int i = 0; i < 4; i++)
+		{
+			mouseButtonState[i] = mouseState.rgbButtons[i] & 0x80;
+			if ((!mouseButtonDownState[i]) && mouseButtonState[i] && (!mouseButtonDownFlag[i]))
+			{
+				mouseButtonDownState[i] = true;
+				mouseButtonDownFlag[i] = true;
+			}
+			else if (mouseButtonDownState[i] && mouseButtonState[i])
+			{
+				mouseButtonDownState[i] = false;
+			}
+			else if (!mouseButtonState[i])
+			{
+				mouseButtonDownFlag[i] = false;
+			}
+		}
+		/*XMVECTOR a;
 		a = { static_cast<float>(mouseState.lX) *0.0018f, -static_cast<float>(mouseState.lY) *0.0018f, 0.0f, 0.0f };
-		curPosition += a;
+		curPosition += a;*/
 	}
 }
 
@@ -124,13 +145,14 @@ bool BaseInput::GetMouseButtonDown(int _mouseButton)
 {
 	if (mouse)
 	{
-		bool press = mouseState.rgbButtons[_mouseButton] & 0x80;
-		if (!mouseButtonState[_mouseButton])
+		/*bool press = mouseState.rgbButtons[_mouseButton] & 0x80;
+		if (!mouseButtonDownState[_mouseButton])
 		{
-			mouseButtonState[_mouseButton] = press;
+			mouseButtonDownState[_mouseButton] = press;
 			return press;
 		}
-		return false;
+		return false;*/
+		return mouseButtonDownState[_mouseButton];
 	}
 	else
 	{
@@ -147,7 +169,7 @@ bool BaseInput::GetMouseButton(int _mouseButton)
 
 bool BaseInput::GetMouseButtonUp(int _mouseButton)
 {
-	if (mouseButtonDownState[_mouseButton] || mouseButtonDownState[_mouseButton]) return false;
+	
 	return true;
 }
 

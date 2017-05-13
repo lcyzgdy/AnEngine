@@ -13,7 +13,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-static class BaseInput
+class BaseInput
 {
 	static ComPtr<IDirectInput8> directInput;
 	static ComPtr<IDirectInputDevice8> keyboard;
@@ -23,6 +23,7 @@ static class BaseInput
 	static unsigned char keyState[256];
 	static bool mouseButtonState[10];
 	static bool mouseButtonDownState[10];
+	static bool mouseButtonDownFlag[10];
 	static XMVECTOR curPosition;
 
 public:

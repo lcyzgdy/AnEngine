@@ -149,6 +149,7 @@
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
+    <ClInclude Include="RenderCore.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
+    <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>

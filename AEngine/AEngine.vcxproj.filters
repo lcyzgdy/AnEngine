@@ -54,6 +54,9 @@
     <ClInclude Include="Screen.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="RenderCore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExecuteIndirect.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderCore.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

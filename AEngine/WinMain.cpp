@@ -50,16 +50,6 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 		BaseInput::SetMousePosition(p);
 		break; 
 	}
-	case(WM_KEYDOWN):
-	{
-		pD3dApp->OnKeyDown(static_cast<UINT8>(wparam));
-		break;
-	}
-	case(WM_KEYUP):
-	{
-		pD3dApp->OnKeyUp(static_cast<UINT8>(wparam)); 
-		break;
-	}
 	case(WM_PAINT):
 	{
 		BaseInput::Update();

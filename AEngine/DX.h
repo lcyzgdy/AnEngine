@@ -27,24 +27,8 @@ using namespace std;
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-namespace RenderCore
-{
-	static const UINT DefaultFrameCount = 2;
-	static const UINT SwapChainBufferCount = 3;
-	static const float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	static const D3D_FEATURE_LEVEL D3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	static constexpr UINT DefaultThreadCount = 1;
 
-	extern ComPtr<ID3D12Device> thisDevice;
-	extern ComPtr<ID3D12CommandQueue> thisCommandQueue;
-	extern ComPtr<ID3D12GraphicsCommandList> thisCommandList;
-	extern ComPtr<ID3D12CommandAllocator> thisCommandAllocator[DefaultFrameCount];
-	extern ComPtr<ID3D12PipelineState> thisPipelineState;
-
-	extern ComPtr<ID3D12CommandQueue> computeCommandQueue;
-};
-
-using namespace RenderCore;
+//using namespace RenderCore;
 
 class D3D12AppBase
 {

@@ -5,6 +5,7 @@
 #include"onwind.h"
 #include"d3dx12.h"
 #include<dxgi1_4.h>
+#include<mutex>
 using namespace Microsoft::WRL;
 
 namespace RenderCore
@@ -16,26 +17,50 @@ namespace RenderCore
 	static const D3D_FEATURE_LEVEL D3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	static const bool IsUseWarpDevice = false;
 
-	class RenderCore
+	class GraphicCard
 	{
 		ComPtr<ID3D12Device> device;
-		ComPtr<ID3D12CommandQueue> renderCommandQueue;
-		ComPtr<ID3D12CommandQueue> computeCommandQueue;
-		ComPtr<ID3D12CommandQueue> copyCommandQueue;
+
+		CommandQueue renderCommandQueue;
+		CommandQueue computeCommandQueue;
+		CommandQueue copyCommandQueue;
 
 		void CreateDevice();
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		ComPtr<ID3D12Device> GetDevice();
-		ComPtr<ID3D12CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 	public:
-		RenderCore() = default;
-		~RenderCore() = default;
+		GraphicCard() = default;
+		~GraphicCard() = default;
 
 		void Initialize(bool compute = false, bool copy = false);
+		ComPtr<ID3D12CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		ComPtr<ID3D12Device> GetDevice();
 	};
 
-	extern vector<RenderCore> r_renderCore;
+	class CommandQueue
+	{
+		ComPtr<ID3D12CommandQueue> commandQueue;
+
+		mutex fenceMutex;
+		mutex eventMutex;
+
+		ComPtr<ID3D12Fence> fence;
+		uint64_t nextFenceValue;
+		uint64_t lastCompleteFenceValue;
+		HANDLE fenceEvent;
+
+	public:
+		CommandQueue() = default;
+		~CommandQueue() = default;
+
+		void Initilaize(const ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		void Release();
+
+		const ID3D12CommandQueue* GetCommandQueue() const;
+		D3D12_COMMAND_LIST_TYPE GetType();
+	};
+
+	extern vector<GraphicCard> r_renderCore;
 	extern ComPtr<IDXGISwapChain1> r_swapChain;
 
 	void InitializeRender(int graphicCardCount = 1);

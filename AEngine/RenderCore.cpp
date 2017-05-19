@@ -2,10 +2,10 @@
 
 namespace RenderCore
 {
-	vector<RenderCore> r_renderCore;
+	vector<GraphicCard> r_renderCore;
 	ComPtr<IDXGISwapChain1> r_swapChain = nullptr;
 
-	void RenderCore::CreateDevice()
+	void GraphicCard::CreateDevice()
 	{
 		UINT dxgiFactoryFlags = 0;
 
@@ -42,7 +42,7 @@ namespace RenderCore
 		}
 	}
 
-	void RenderCore::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
+	void GraphicCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
 	{
 		switch (type)
 		{
@@ -79,12 +79,12 @@ namespace RenderCore
 		}
 	}
 
-	ComPtr<ID3D12Device> RenderCore::GetDevice()
+	ComPtr<ID3D12Device> GraphicCard::GetDevice()
 	{
 		return this->device;
 	}
 
-	ComPtr<ID3D12CommandQueue> RenderCore::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
+	ComPtr<ID3D12CommandQueue> GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
 	{
 		switch (type)
 		{
@@ -113,7 +113,7 @@ namespace RenderCore
 		return nullptr;
 	}
 
-	void RenderCore::Initialize(bool compute = false, bool copy = false)
+	void GraphicCard::Initialize(bool compute = false, bool copy = false)
 	{
 		CreateDevice();
 		CreateCommandQueue();
@@ -125,10 +125,9 @@ namespace RenderCore
 	{
 		while (graphicCardCount--)
 		{
-			RenderCore aRender;
+			GraphicCard aRender;
 			aRender.Initialize();
 			r_renderCore.push_back(aRender);
 		}
-		
 	}
 }

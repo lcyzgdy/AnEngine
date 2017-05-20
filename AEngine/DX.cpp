@@ -1,13 +1,6 @@
 #include"DX.h"
 
-namespace RenderCore
-{
-	ComPtr<ID3D12Device> thisDevice;
-	ComPtr<ID3D12CommandQueue> thisCommandQueue;
-	ComPtr<ID3D12GraphicsCommandList> thisCommandList;
-	ComPtr<ID3D12CommandAllocator> thisCommandAllocator[DefaultFrameCount];
-	ComPtr<ID3D12PipelineState> thisPipelineState;
-}
+
 
 
 D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height) :

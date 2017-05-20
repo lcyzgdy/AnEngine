@@ -5,6 +5,7 @@
 #include"DX.h"
 #include"DTimer.h"
 #include"MCamera.h"
+#include"RenderCore.h"
 #define InterlockedGetValue(obj) InterlockedCompareExchange(obj, 0, 0)
 
 class NBody :public D3D12AppBase, public D3D12Base

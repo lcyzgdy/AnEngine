@@ -5,6 +5,7 @@
 #include"onwind.h"
 #include"DX.h"
 #include"Input.h"
+#include"RenderCore.h"
 
 class DrawLine :public D3D12AppBase, public D3D12Base
 {

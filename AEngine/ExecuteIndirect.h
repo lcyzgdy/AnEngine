@@ -3,6 +3,7 @@
 #define __EXECUTEINDIRECT_H__
 
 #include"DX.h"
+#include"RenderCore.h"
 
 class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 {

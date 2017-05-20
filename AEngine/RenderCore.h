@@ -17,26 +17,6 @@ namespace RenderCore
 	static const D3D_FEATURE_LEVEL D3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	static const bool IsUseWarpDevice = false;
 
-	class GraphicCard
-	{
-		ComPtr<ID3D12Device> device;
-
-		CommandQueue renderCommandQueue;
-		CommandQueue computeCommandQueue;
-		CommandQueue copyCommandQueue;
-
-		void CreateDevice();
-		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-
-	public:
-		GraphicCard() = default;
-		~GraphicCard() = default;
-
-		void Initialize(bool compute = false, bool copy = false);
-		ComPtr<ID3D12CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		ComPtr<ID3D12Device> GetDevice();
-	};
-
 	class CommandQueue
 	{
 		ComPtr<ID3D12CommandQueue> commandQueue;
@@ -53,11 +33,32 @@ namespace RenderCore
 		CommandQueue() = default;
 		~CommandQueue() = default;
 
-		void Initilaize(const ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		void Initialize(const ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		void Release();
 
 		const ID3D12CommandQueue* GetCommandQueue() const;
 		D3D12_COMMAND_LIST_TYPE GetType();
+	};
+
+	class GraphicCard
+	{
+		ComPtr<ID3D12Device> device;
+
+		CommandQueue renderCommandQueue;
+		CommandQueue computeCommandQueue;
+		CommandQueue copyCommandQueue;
+
+		void CreateDevice();
+		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+
+	public:
+		GraphicCard() = default;
+		GraphicCard(const GraphicCard& graphicCard);
+		~GraphicCard() = default;
+
+		void Initialize(bool compute = false, bool copy = false);
+		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
+		const ID3D12Device* GetDevice() const;
 	};
 
 	extern vector<GraphicCard> r_renderCore;

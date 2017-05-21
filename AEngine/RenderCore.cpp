@@ -66,10 +66,6 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			/*D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-			queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-			queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
-			device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(copyCommandQueue.GetAddressOf()));*/
 			copyCommandQueue.Initialize(device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
 			break;
 		}
@@ -124,18 +120,12 @@ namespace RenderCore
 		if (copy) CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
 	}
 
-	void InitializeRender(int graphicCardCount)
+	void CommandQueue::Initialize(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type)
 	{
-		while (graphicCardCount--)
-		{
-			GraphicCard aRender;
-			aRender.Initialize();
-			r_renderCore.push_back(aRender);
-		}
-	}
-
-	void CommandQueue::Initialize(const ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type)
-	{
+		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+		device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(commandQueue.GetAddressOf()));
 	}
 
 	void CommandQueue::Release()
@@ -150,5 +140,21 @@ namespace RenderCore
 	D3D12_COMMAND_LIST_TYPE CommandQueue::GetType()
 	{
 		return D3D12_COMMAND_LIST_TYPE();
+	}
+
+	void InitializeRender(int graphicCardCount)
+	{
+		while (graphicCardCount--)
+		{
+			GraphicCard aRender;
+			aRender.Initialize();
+			r_renderCore.push_back(aRender);
+		}
+	}
+
+	void InitializeSwapChain()
+	{
+		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+		swapChainDesc.BufferCount = SwapChainBufferCount;
 	}
 }

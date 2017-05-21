@@ -14,7 +14,7 @@ namespace RenderCore
 	static const UINT SwapChainBufferCount = 3;
 	static constexpr UINT DefaultThreadCount = 1;
 	static const float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	static const D3D_FEATURE_LEVEL D3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	static const D3D_FEATURE_LEVEL MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	static const bool IsUseWarpDevice = false;
 
 	class CommandQueue
@@ -33,7 +33,7 @@ namespace RenderCore
 		CommandQueue() = default;
 		~CommandQueue() = default;
 
-		void Initialize(const ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		void Initialize(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		void Release();
 
 		const ID3D12CommandQueue* GetCommandQueue() const;
@@ -90,6 +90,8 @@ namespace RenderCore
 		}
 		*ppAdapter = adapter.Detach();
 	}
+
+	void InitializeSwapChain();
 }
 
 using namespace RenderCore;

@@ -284,9 +284,9 @@ void ExecuteIndirect::InitializeAssets()
 		UINT compileFlags = 0;
 #endif
 
-		D3DCompileFromFile(GetAssetFullPath(L"execute_indirect_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, &error);
-		D3DCompileFromFile(GetAssetFullPath(L"execute_indirect_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, &error);
-		D3DCompileFromFile(GetAssetFullPath(L"compute_shader.hlsl").c_str(), nullptr, nullptr, "CSMain", "cs_5_0", compileFlags, 0, &computeShader, &error);
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(_T("execute_indirect_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, &error));
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"execute_indirect_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, &error));
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"compute_shader.hlsl").c_str(), nullptr, nullptr, "CSMain", "cs_5_0", compileFlags, 0, &computeShader, &error));
 
 		// Define the vertex input layout.
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =

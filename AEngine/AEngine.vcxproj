@@ -150,6 +150,7 @@
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
+    <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />

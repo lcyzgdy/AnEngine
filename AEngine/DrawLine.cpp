@@ -1,7 +1,5 @@
 ﻿#include "DrawLine.h"
 
-XMFLOAT3 tempPos;
-
 DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
@@ -655,12 +653,22 @@ float DrawTriangle::Cross(Vertex & a, Vertex & b)
 	return (a.position.x * b.position.y - b.position.x * a.position.y);
 }
 
+float DrawTriangle::Cross(Vertex& a, Vertex& b, Vertex& c)
+{
+	return ((a.position.x - c.position.x)*(b.position.y - c.position.y) - (b.position.x - c.position.x)*(a.position.y - c.position.y));
+}
+
 void DrawTriangle::Graham()
 {
 	while (!vertexIndexStack.empty()) vertexIndexStack.pop();
 	if (vertex.size() <= 2) return;
 	Vertex p1, p2;
-	sort(vertex.begin(), vertex.end(), [](Vertex& a, Vertex& b)-> bool { if (a.position.y == b.position.y) return a.position.x < b.position.x; return a.position.y < b.position.y; });
+	sort(vertex.begin(), vertex.end(), [](Vertex& a, Vertex& b)->
+		bool
+	{
+		if (a.position.y == b.position.y) return a.position.x < b.position.x;
+		return a.position.y < b.position.y;
+	});
 	vertexIndexStack.push(0);
 	vertexIndexStack.push(1);
 	int a, b;
@@ -676,7 +684,7 @@ void DrawTriangle::Graham()
 			p1.position.y = vertex[a].position.y - vertex[b].position.y;
 			p2.position.x = vertex[i].position.x - vertex[a].position.x;
 			p2.position.y = vertex[i].position.y - vertex[a].position.y;
-			if (Cross(p1, p2) < 0.000001f)
+			if (Cross(p1, p2) < 0.0f)
 			{
 				vertexIndexStack.push(a);//包括共线点，若为“<”，则不包括。   
 				break;
@@ -686,6 +694,7 @@ void DrawTriangle::Graham()
 	}
 	int w = static_cast<int>(vertexIndexStack.size());
 	//vertexIndexStack.push(vertex.size() - 2);
+	if (vertex.size() - 2 <= 0) return;
 	for (int i = vertex.size() - 2; i > 0; i--)
 	{
 		while (1)
@@ -698,7 +707,7 @@ void DrawTriangle::Graham()
 			p1.position.y = vertex[a].position.y - vertex[b].position.y;
 			p2.position.x = vertex[i].position.x - vertex[a].position.x;
 			p2.position.y = vertex[i].position.y - vertex[a].position.y;
-			if (Cross(p1, p2) < 0.000001f)
+			if (Cross(p1, p2) < 0.0f)
 			{
 				vertexIndexStack.push(a);//包括共线点，若为“<”，则不包括   
 				break;
@@ -763,9 +772,9 @@ void DrawTriangle::OnUpdate()
 		{
 			for (int i = 1; i < newVertex.size() - 1; i++)
 			{
-				finalVertex.push_back(newVertex[0]);
 				finalVertex.push_back(newVertex[i]);
 				finalVertex.push_back(newVertex[i + 1]);
+				finalVertex.push_back(newVertex[0]);
 			}
 		}
 
@@ -939,8 +948,8 @@ void DrawTriangle::InitializeAssets()
 	psoDesc.DepthStencilState.DepthEnable = FALSE;
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
 	psoDesc.SampleMask = UINT_MAX;
-	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
+	//psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
@@ -956,6 +965,7 @@ void DrawTriangle::InitializeAssets()
 	//Close the command list
 	//vertex.push_back({ { 0.0f, 0.0f, 0.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } });
 	//vertex.push_back({ { 0.0f, 0.3f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } });
+
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
@@ -1024,7 +1034,7 @@ void DrawTriangle::PopulateCommandList()
 
 	const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
 
 	commandList->DrawInstanced(static_cast<UINT>(vertex.size()), 1, 0, 0);

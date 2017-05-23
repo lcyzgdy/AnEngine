@@ -188,6 +188,8 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 
 	float Cross(Vertex& a, Vertex& b);
 
+	float Cross(Vertex& a, Vertex& b, Vertex& c);
+
 	void Graham();
 	
 

@@ -2,10 +2,10 @@
 
 namespace RenderCore
 {
-	vector<RenderCore> r_renderCore;
+	vector<GraphicCard> r_renderCore;
 	ComPtr<IDXGISwapChain1> r_swapChain = nullptr;
 
-	void RenderCore::CreateDevice()
+	void GraphicCard::CreateDevice()
 	{
 		UINT dxgiFactoryFlags = 0;
 
@@ -42,16 +42,13 @@ namespace RenderCore
 		}
 	}
 
-	void RenderCore::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
+	void GraphicCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
 		switch (type)
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-			queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-			queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-			device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(renderCommandQueue.GetAddressOf()));
+			renderCommandQueue.Initialize(device.Get());
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -60,18 +57,16 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
 		{
-			D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-			queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-			queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
-			device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(computeCommandQueue.GetAddressOf()));
+			//D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+			//queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+			//queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
+			//device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(computeCommandQueue.GetAddressOf()));
+			computeCommandQueue.Initialize(device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-			queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-			queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
-			device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(copyCommandQueue.GetAddressOf()));
+			copyCommandQueue.Initialize(device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
 			break;
 		}
 		default:
@@ -79,18 +74,18 @@ namespace RenderCore
 		}
 	}
 
-	ComPtr<ID3D12Device> RenderCore::GetDevice()
+	const ID3D12Device* GraphicCard::GetDevice() const
 	{
-		return this->device;
+		return device.Get();
 	}
 
-	ComPtr<ID3D12CommandQueue> RenderCore::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT)
+	const ID3D12CommandQueue* GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
 	{
 		switch (type)
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			return renderCommandQueue;
+			return renderCommandQueue.GetCommandQueue();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -99,12 +94,12 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
 		{
-			return computeCommandQueue;
+			return computeCommandQueue.GetCommandQueue();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			return copyCommandQueue;
+			return copyCommandQueue.GetCommandQueue();
 			break;
 		}
 		default:
@@ -113,7 +108,11 @@ namespace RenderCore
 		return nullptr;
 	}
 
-	void RenderCore::Initialize(bool compute = false, bool copy = false)
+	GraphicCard::GraphicCard(const GraphicCard & graphicCard)
+	{
+	}
+
+	void GraphicCard::Initialize(bool compute, bool copy)
 	{
 		CreateDevice();
 		CreateCommandQueue();
@@ -121,14 +120,41 @@ namespace RenderCore
 		if (copy) CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
 	}
 
-	void InitializeRender(int graphicCardCount = 1)
+	void CommandQueue::Initialize(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type)
+	{
+		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+		device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(commandQueue.GetAddressOf()));
+	}
+
+	void CommandQueue::Release()
+	{
+	}
+
+	const ID3D12CommandQueue* CommandQueue::GetCommandQueue() const
+	{
+		return nullptr;
+	}
+
+	D3D12_COMMAND_LIST_TYPE CommandQueue::GetType()
+	{
+		return D3D12_COMMAND_LIST_TYPE();
+	}
+
+	void InitializeRender(int graphicCardCount)
 	{
 		while (graphicCardCount--)
 		{
-			RenderCore aRender;
+			GraphicCard aRender;
 			aRender.Initialize();
 			r_renderCore.push_back(aRender);
 		}
-		
+	}
+
+	void InitializeSwapChain()
+	{
+		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+		swapChainDesc.BufferCount = SwapChainBufferCount;
 	}
 }

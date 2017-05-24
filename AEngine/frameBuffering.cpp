@@ -204,12 +204,13 @@ void FrameBuffering::InitializeAssets()
 		{ { 0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
 		{ { -0.2f, -0.4f * aspectRatio, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
 		{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-		{ { 0.1f, 0.3f * aspectRatio, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }
+		{ { -0.1f, 0.3f * aspectRatio, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+		{ { -0.05f, 0.3f * aspectRatio, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } }
 	};
-	const UINT vertexBufferSize = sizeof(triangleVertices);
+	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
 
 	ThrowIfFailed(device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
@@ -264,10 +265,10 @@ void FrameBuffering::PopulateCommandList()
 
 	const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
 	
-	commandList->DrawInstanced(6, 1, 0, 0);
+	commandList->DrawInstanced(7, 1, 0, 0);
 
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	// 指示现在将使用后缓冲来呈现

@@ -1,6 +1,7 @@
 ﻿#include"onwind.h"
 #include"frameBuffering.h"
 #include"NBody.h"
+#include"ExecuteIndirect.h"
 #include"DrawLine.h"
 #include"Input.h"
 #include"Screen.h"
@@ -68,12 +69,13 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	DeleteFile(_T("log.txt"));
 	wstring windowTitle(_T("AEngine"));
 	wstring windowClassName(_T("AWindow"));
-	screenw = 1280;
-	screenh = 720;
+	screenw = 800;
+	screenh = 600;
 
-	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new DrawTriangle(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);

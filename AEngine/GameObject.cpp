@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject():gameObject(this)
+GameObject::GameObject() :gameObject(this)
 {
 }
 

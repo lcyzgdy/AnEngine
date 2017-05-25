@@ -3,10 +3,13 @@
 #define __GAMEOBJECT_H__
 
 #include"onwind.h"
+#include"PhysicsCore.h"
+using namespace PhysicsCore;
 
 class GameObject
 {
 	vector<GameObject> content;
+	Transform transform;
 
 public:
 	GameObject();
@@ -14,8 +17,8 @@ public:
 
 	string name;
 	GameObject* const gameObject;
-	GameObject* const parentObject;
-	vector<GameObject* const> childrenObject;
+	GameObject* parentObject;
+	vector<GameObject*> childrenObject;
 
 	virtual void OnInit();
 	virtual void OnUpdate();

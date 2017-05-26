@@ -7,8 +7,9 @@
 #include"Input.h"
 #include"RenderCore.h"
 #include<stack>
+using namespace RenderCore;
 
-class DrawLine :public D3D12AppBase, public D3D12Base
+class DrawCube :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
@@ -45,8 +46,8 @@ class DrawLine :public D3D12AppBase, public D3D12Base
 	vector<Vertex> vertex;
 
 public:
-	DrawLine(const HWND _hwnd, const UINT _width, const UINT _height);
-	~DrawLine();
+	DrawCube(const HWND _hwnd, const UINT _width, const UINT _height);
+	~DrawCube();
 
 
 	// 通过 D3D12AppBase 继承

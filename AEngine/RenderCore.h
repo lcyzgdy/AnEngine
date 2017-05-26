@@ -95,6 +95,5 @@ namespace RenderCore
 	void InitializeSwapChain();
 }
 
-using namespace RenderCore;
 
 #endif // !__RENDERCORE_H__

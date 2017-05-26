@@ -1,6 +1,6 @@
 ﻿#include "DrawLine.h"
 
-DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
+DrawCube::DrawCube(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
 	scissorRect(0, 0, static_cast<LONG>(_width), static_cast<LONG>(_height)),
@@ -9,11 +9,11 @@ DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 {
 }
 
-DrawLine::~DrawLine()
+DrawCube::~DrawCube()
 {
 }
 
-void DrawLine::OnInit()
+void DrawCube::OnInit()
 {
 	frameIndex = 0;
 	rtvDescriptorSize = 0;
@@ -22,13 +22,13 @@ void DrawLine::OnInit()
 	InitializeAssets();
 }
 
-void DrawLine::OnRelease()
+void DrawCube::OnRelease()
 {
 	WaitForGpu();
 	CloseHandle(fenceEvent);
 }
 
-void DrawLine::OnUpdate()
+void DrawCube::OnUpdate()
 {
 	if (BaseInput::GetMouseButton(0))
 	{
@@ -53,7 +53,7 @@ void DrawLine::OnUpdate()
 	}
 }
 
-void DrawLine::OnRender()
+void DrawCube::OnRender()
 {
 	PopulateCommandList();	//填入命令
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
@@ -62,15 +62,15 @@ void DrawLine::OnRender()
 	MoveToNextFrame();		//等待前一帧
 }
 
-void DrawLine::OnKeyDown(UINT8 key)
+void DrawCube::OnKeyDown(UINT8 key)
 {
 }
 
-void DrawLine::OnKeyUp(UINT8 key)
+void DrawCube::OnKeyUp(UINT8 key)
 {
 }
 
-void DrawLine::InitializePipeline()
+void DrawCube::InitializePipeline()
 {
 	UINT dxgiFactoryFlags = 0;
 
@@ -164,7 +164,7 @@ void DrawLine::InitializePipeline()
 	// 创建帧资源
 }
 
-void DrawLine::InitializeAssets()
+void DrawCube::InitializeAssets()
 {
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
@@ -255,7 +255,7 @@ void DrawLine::InitializeAssets()
 	WaitForGpu();
 }
 
-void DrawLine::WaitForGpu()
+void DrawCube::WaitForGpu()
 {
 	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
 	// 在队列中调度信号命令。
@@ -266,7 +266,7 @@ void DrawLine::WaitForGpu()
 	fenceValues[frameIndex]++;
 }
 
-void DrawLine::PopulateCommandList()
+void DrawCube::PopulateCommandList()
 {
 	commandAllocators[frameIndex]->Reset();
 	// 命令列表分配器只能在关联的命令列表已在GPU上完成执行时重置; 
@@ -302,7 +302,7 @@ void DrawLine::PopulateCommandList()
 	commandList->Close();
 }
 
-void DrawLine::MoveToNextFrame()
+void DrawCube::MoveToNextFrame()
 {
 	const UINT64 currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
@@ -320,7 +320,7 @@ void DrawLine::MoveToNextFrame()
 	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
 }
 
-void DrawLine::WaitForRenderContext()
+void DrawCube::WaitForRenderContext()
 {
 }
 

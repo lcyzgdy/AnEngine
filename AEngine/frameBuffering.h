@@ -6,6 +6,7 @@
 #include"DX.h"
 #include"Input.h"
 #include"RenderCore.h"
+using namespace RenderCore;
 
 class FrameBuffering :public D3D12AppBase, public D3D12Base
 {

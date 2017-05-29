@@ -6,6 +6,7 @@
 #include"d3dx12.h"
 #include<dxgi1_4.h>
 #include<mutex>
+#include<atomic>
 using namespace Microsoft::WRL;
 
 namespace RenderCore
@@ -21,12 +22,12 @@ namespace RenderCore
 	{
 		ComPtr<ID3D12CommandQueue> commandQueue;
 
-		mutex fenceMutex;
-		mutex eventMutex;
+		//mutex fenceMutex;
+		//mutex eventMutex;
 
 		ComPtr<ID3D12Fence> fence;
-		uint64_t nextFenceValue;
-		uint64_t lastCompleteFenceValue;
+		atomic_uint64_t nextFenceValue;
+		atomic_uint64_t lastCompleteFenceValue;
 		HANDLE fenceEvent;
 
 	public:
@@ -94,6 +95,5 @@ namespace RenderCore
 	void InitializeSwapChain();
 }
 
-using namespace RenderCore;
 
 #endif // !__RENDERCORE_H__

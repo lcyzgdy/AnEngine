@@ -7,6 +7,7 @@
 #include"Input.h"
 #include"RenderCore.h"
 #include<stack>
+using namespace RenderCore;
 
 class DrawLine :public D3D12AppBase, public D3D12Base
 {
@@ -187,6 +188,8 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 	stack<int> vertexIndexStack;
 
 	float Cross(Vertex& a, Vertex& b);
+
+	float Cross(Vertex& a, Vertex& b, Vertex& c);
 
 	void Graham();
 	

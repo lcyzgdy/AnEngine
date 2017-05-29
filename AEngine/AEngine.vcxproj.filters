@@ -19,17 +19,14 @@
     <Filter Include="源文件\UTIL">
       <UniqueIdentifier>{792a8e2c-343a-410f-89ad-30e401c882f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Demos">
+      <UniqueIdentifier>{c08d3caa-e606-475f-b93f-1b9f262cf62f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Demos">
+      <UniqueIdentifier>{1ebdceee-48bc-450a-8080-edb7d2ddc89d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExecuteIndirect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="frameBuffering.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="NBody.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="d3dx12.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
@@ -48,9 +45,6 @@
     <ClInclude Include="Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DrawLine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
@@ -60,17 +54,29 @@
     <ClInclude Include="GameObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ExecuteIndirect.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="frameBuffering.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="NBody.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawLine.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsCore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawCube.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicConstantBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ExecuteIndirect.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="frameBuffering.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="NBody.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="WinMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -86,13 +92,28 @@
     <ClCompile Include="Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DrawLine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>源文件\UTIL</Filter>
     </ClCompile>
     <ClCompile Include="RenderCore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawLine.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecuteIndirect.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="frameBuffering.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="NBody.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

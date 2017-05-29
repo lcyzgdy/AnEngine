@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DrawCube.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DrawLine.h" />
     <ClInclude Include="DTimer.h" />
     <ClInclude Include="DX.h" />
+    <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
@@ -150,6 +152,7 @@
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
+    <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
@@ -157,8 +160,10 @@
     <ClCompile Include="DrawLine.cpp" />
     <ClCompile Include="DTimer.cpp" />
     <ClCompile Include="DX.cpp" />
+    <ClCompile Include="DynamicConstantBuffer.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />

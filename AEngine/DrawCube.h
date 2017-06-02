@@ -7,6 +7,7 @@
 #include"RenderCore.h"
 #include"MCamera.h"
 #include"DTimer.h"
+#include"DynamicConstantBuffer.h"
 using namespace RenderCore;
 
 class DrawCube :public D3D12AppBase, public D3D12Base
@@ -57,6 +58,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
+	HANDLE swapChainEvent;
 	UINT fenceValues[DefaultFrameCount];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
@@ -70,10 +72,11 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	MCamera camera;
 	XMMATRIX projectionMatrix;
 	DTimer timer;
+	DynamicConstantBuffer dynamicCB;
 
 public:
 	DrawCube(const HWND _hwnd, const UINT _width, const UINT _height);
-	~DrawCube();
+	~DrawCube() = default;
 
 
 	// Í¨¹ý D3D12AppBase ¼Ì³Ð

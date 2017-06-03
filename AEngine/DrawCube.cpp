@@ -1,17 +1,13 @@
 #include "DrawCube.h"
 
 DrawCube::DrawCube(const HWND _hwnd, const UINT _width, const UINT _height) :
-	D3D12AppBase(_hwnd, _width, _height), //m_psoLibrary(FrameCount, RootParameterUberShaderCB),
+	D3D12AppBase(_hwnd, _width, _height),
 	frameIndex(0),
-	swapChainEvent(0),
-	//drawIndex(0),
-	//maxDrawsPerFrame(256),
-	dynamicCB(sizeof(DrawConstantBuffer), 256, DefaultFrameCount),
 	viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)),
 	scissorRect(0, 0, static_cast<LONG>(width), static_cast<LONG>(height)),
-	rtvDescriptorSize(0),
-	srvDescriptorSize(0),
-	fenceValues{}
+	rtvDescriptorSize(0), cbvSrvUavDescriptorSize(0), dsvDescriptorSize(0), samDescriptorSize(0),
+	fenceValues{},
+	renderTargets{}
 {
 }
 
@@ -43,16 +39,10 @@ void DrawCube::OnUpdate()
 
 void DrawCube::OnRender()
 {
-	PIXBeginEvent(commandQueue.Get(), 0, L"Render");
-
-	// Record all the commands we need to render the scene into the command list.
 	PopulateCommandList();
 
-	// Execute the command list.
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-	PIXEndEvent(commandQueue.Get());
 
 	ThrowIfFailed(swapChain->Present(1, 0));
 
@@ -71,207 +61,188 @@ void DrawCube::InitializePipeline()
 {
 	UINT dxgiFactoryFlags = 0;
 
-#if defined(_DEBUG)
+#if defined(DEBUG) || defined(_DEBUG)
+	ComPtr<ID3D12Debug> d3dDebugController;
+	if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
 	{
-		ComPtr<ID3D12Debug> debugController;
-		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
-		{
-			debugController->EnableDebugLayer();
-
-			// Enable additional debug layers.
-			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-		}
+		d3dDebugController->EnableDebugLayer();
+		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
+	// 开启Debug模式
 
 	ComPtr<IDXGIFactory4> factory;
-	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
-
-	if (IsUseWarpDevice)
+	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
+	if (isUseWarpDevice)
 	{
 		ComPtr<IDXGIAdapter> warpAdapter;
-		ThrowIfFailed(factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
-
-		ThrowIfFailed(D3D12CreateDevice(
-			warpAdapter.Get(),
-			D3D_FEATURE_LEVEL_11_0,
-			IID_PPV_ARGS(&device)
-		));
+		factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
+		D3D12CreateDevice(warpAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
 	else
 	{
 		ComPtr<IDXGIAdapter1> hardwareAdapter;
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
-
-		ThrowIfFailed(D3D12CreateDevice(
-			hardwareAdapter.Get(),
-			D3D_FEATURE_LEVEL_11_0,
-			IID_PPV_ARGS(&device)
-		));
+		D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
+	// 创设备
 
-	// Describe and create the command queue.
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
+	// 描述并创建命令队列
 
-	ThrowIfFailed(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue)));
-
-	// Describe and create the swap chain.
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = DefaultFrameCount;
-	swapChainDesc.Width = width;
-	swapChainDesc.Height = height;
+	swapChainDesc.Width = this->width;
+	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
 
 	ComPtr<IDXGISwapChain1> swapChain1;
-	ThrowIfFailed(factory->CreateSwapChainForHwnd(
-		commandQueue.Get(),		// Swap chain needs the queue so that it can force a flush on it.
+	ThrowIfFailed(factory->CreateSwapChainForHwnd
+	(
+		commandQueue.Get(),		// 交换链需要队列，以便可以强制刷新它
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
+	// 描述并创建交换链
 
-	ThrowIfFailed(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
-
-	ThrowIfFailed(swapChain1.As(&swapChain));
+	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+	swapChain1.As(&swapChain);
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
-	swapChainEvent = swapChain->GetFrameLatencyWaitableObject();
 
+	//#1
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+	rtvHeapDesc.NumDescriptors = DefaultFrameCount;
+	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
+	// 创建渲染目标视图描述符堆
+
+	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavDesc = {};
+	cbvSrvUavDesc.NumDescriptors = 1;
+	cbvSrvUavDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvSrvUavDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	device->CreateDescriptorHeap(&cbvSrvUavDesc, IID_PPV_ARGS(&cbvSrvUavHeap));
+	// 描述并创建纹理的着色器资源视图堆 [Shader resource view (SRV) heap]
+
+	D3D12_DESCRIPTOR_HEAP_DESC dsvDesc = {};
+	dsvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	dsvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	ThrowIfFailed(device->CreateDescriptorHeap(&dsvDesc, IID_PPV_ARGS(&dsvHeap)));
+
+	/*D3D12_DESCRIPTOR_HEAP_DESC samDesc = {};
+	samDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+	samDesc.NumDescriptors;
+	samDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	ThrowIfFailed(device->CreateDescriptorHeap(&samDesc, IID_PPV_ARGS(&samHeap)));*/
+
+	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	//samDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+	// !#1	创建描述符堆
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
+	for (UINT i = 0; i < DefaultFrameCount; i++)
 	{
-		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-		rtvHeapDesc.NumDescriptors = DefaultFrameCount + 1;
-		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		ThrowIfFailed(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap)));
-
-
-		D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-		srvHeapDesc.NumDescriptors = 1;
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		ThrowIfFailed(device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap)));
-
-		rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		srvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	}
-
-	// Create frame resources.
-	{
-		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-
-		// Create RTVs and a command allocator for each frame.
-		for (UINT n = 0; n < DefaultFrameCount; n++)
-		{
-			ThrowIfFailed(swapChain->GetBuffer(n, IID_PPV_ARGS(&renderTargets[n])));
-			device->CreateRenderTargetView(renderTargets[n].Get(), nullptr, rtvHandle);
-			rtvHandle.Offset(1, rtvDescriptorSize);
-
-			ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[n])));
-		}
-
-		D3D12_RESOURCE_DESC renderTargetDesc = renderTargets[0]->GetDesc();
-
-		D3D12_CLEAR_VALUE clearValue = {};
-		memcpy(clearValue.Color, ClearColor, sizeof(ClearColor));
-		clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-		// Create an intermediate render target that is the same dimensions as the swap chain.
-		ThrowIfFailed(device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE,
-			&renderTargetDesc,
-			D3D12_RESOURCE_STATE_RENDER_TARGET,
-			&clearValue,
-			IID_PPV_ARGS(&intermediateRenderTarget)));
-
-
-		device->CreateRenderTargetView(intermediateRenderTarget.Get(), nullptr, rtvHandle);
+		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
+		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
 		rtvHandle.Offset(1, rtvDescriptorSize);
 
-		// Create a SRV of the intermediate render target.
-		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc.Format = renderTargetDesc.Format;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = 1;
-
-		CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(srvHeap->GetCPUDescriptorHandleForHeapStart());
-		device->CreateShaderResourceView(intermediateRenderTarget.Get(), &srvDesc, srvHandle);
+		ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i])));
 	}
+	// 创建命令分配器
+	// 创建帧资源
 }
 
 void DrawCube::InitializeAssets()
-{// Create the root signature.
+{
+	{
+		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
+		rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+		ComPtr<ID3DBlob> signature;
+		ComPtr<ID3DBlob> error;
+		D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error);
+		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+		//Create an empty root signature.
+
+		ComPtr<ID3DBlob> vertexShader;
+		ComPtr<ID3DBlob> pixelShader;
+#if defined(_DEBUG)
+		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+		UINT compileFlags = 0;
+#endif
+		//auto l = GetAssetFullPath(_T("shaders.hlsl"));
+		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+
+
+		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, sizeof(XMFLOAT3), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+		psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
+		psoDesc.pRootSignature = rootSignature.Get();
+		psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShader.Get());
+		psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, FALSE, D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP, D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS, FALSE, TRUE, TRUE, 0, D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF);
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		psoDesc.DepthStencilState.DepthEnable = true;
+		psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+		psoDesc.DepthStencilState.StencilEnable = FALSE;
+		psoDesc.SampleMask = UINT_MAX;
+		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		psoDesc.NumRenderTargets = 1;
+		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		psoDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+		psoDesc.SampleDesc.Count = 1;
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState)));
+	}
+	{
+		ThrowIfFailed(DCompositionCreateDevice(nullptr, IID_PPV_ARGS(dCompositionDevice.GetAddressOf())));
+		dCompositionDevice->CreateTargetForHwnd(hwnd, false, dCompositionTarget.GetAddressOf());
+		dCompositionDevice->CreateVisual(dCompositionVisual.GetAddressOf());
+		dCompositionVisual->SetContent(swapChain.Get());
+		dCompositionTarget->SetRoot(dCompositionVisual.Get());
+		dCompositionDevice->Commit();
+	}
+
 	{
 		D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
-
-		// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
 		featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
-
 		if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &featureData, sizeof(featureData))))
 		{
 			featureData.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 		}
-
-		CD3DX12_DESCRIPTOR_RANGE1 ranges[RootParametersCount];
-		ranges[RootParameterSRV].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-
-		CD3DX12_ROOT_PARAMETER1 rootParameters[RootParametersCount];
-		rootParameters[RootParameterUberShaderCB].InitAsConstantBufferView(0, 0, D3D12_ROOT_DESCRIPTOR_FLAG_DATA_STATIC, D3D12_SHADER_VISIBILITY_ALL);
-		rootParameters[RootParameterCB].InitAsConstantBufferView(1, 0, D3D12_ROOT_DESCRIPTOR_FLAG_DATA_STATIC, D3D12_SHADER_VISIBILITY_ALL);
-		rootParameters[RootParameterSRV].InitAsDescriptorTable(1, &ranges[RootParameterSRV], D3D12_SHADER_VISIBILITY_PIXEL);
-
-		D3D12_STATIC_SAMPLER_DESC sampler = {};
-		sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
-		sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		sampler.MipLODBias = 0;
-		sampler.MaxAnisotropy = 0;
-		sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-		sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-		sampler.MinLOD = 0.0f;
-		sampler.MaxLOD = 9999.0f;
-		sampler.ShaderRegister = 0;
-		sampler.RegisterSpace = 0;
-		sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-
-		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-		rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 1, &sampler, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-		ComPtr<ID3DBlob> signature;
-		ComPtr<ID3DBlob> error;
-		ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error));
-		ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature)));
-
 	}
 
-	// Create the command list.
-	ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocators[frameIndex].Get(), nullptr, IID_PPV_ARGS(&commandList)));
-
-	ComPtr<ID3D12Resource> vertexIndexBufferUpload;
-
-	// Vertex and Index Buffer.
 	{
-		const VertexPositionColor cubeVertices[] = {
-			{ { -1.0f, 1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f) } },	// Back Top Left
-			{ { 1.0f, 1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f) } },	// Back Top Right
-			{ { 1.0f, 1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f) } },	// Front Top Right
-			{ { -1.0f, 1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f) } },	// Front Top Left
-			{ { -1.0f, -1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f) } },	// Back Bottom Left
-			{ { 1.0f, -1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f) } },	// Back Bottom Right
-			{ { 1.0f, -1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f) } },	// Front Bottom Right
-			{ { -1.0f, -1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f) ,random(0.0f,1.0f) ,random(0.0f,1.0f) } },	// Front Bottom Left
+		VertexPositionColor cubeVertices[] = {
+			{ { -1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Left
+			{ { 1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Right
+			{ { 1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Right
+			{ { -1.0f, 1.0f, 1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Left
+			{ { -1.0f, -1.0f, -1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Left
+			{ { 1.0f, -1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Right
+			{ { 1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Bottom Right
+			{ { -1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f) ,random(0.0f,1.0f) ,random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
 		};
 
-		const UINT cubeIndices[] =
+		UINT cubeIndices[] =
 		{
 			0, 1, 3,
 			1, 2, 3,
@@ -292,91 +263,56 @@ void DrawCube::InitializeAssets()
 			5, 4, 6,
 		};
 
-		static const VertexPositionUV quadVertices[] =
-		{
-			{ { -1.0f, -1.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },	// Bottom Left
-			{ { -1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f } },	// Top Left
-			{ { 1.0f, -1.0f, 0.0f, 1.0f },{ 1.0f, 1.0f } },	// Bottom Right
-			{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 1.0f, 0.0f } },		// Top Right
-		};
+		UINT vertexIndexBufferSize = sizeof(cubeIndices) + sizeof(cubeVertices);// +sizeof(quadVertices);
 
-		const UINT vertexIndexBufferSize = sizeof(cubeIndices) + sizeof(cubeVertices) + sizeof(quadVertices);
-
-		ThrowIfFailed(device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(vertexIndexBufferSize),
-			D3D12_RESOURCE_STATE_COPY_DEST,
-			nullptr,
-			IID_PPV_ARGS(&vertexIndexBuffer)));
-
-		ThrowIfFailed(device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(vertexIndexBufferSize),
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&vertexIndexBufferUpload)));
-
-
+		ThrowIfFailed(device->CreateCommittedResource
+		(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 
+			D3D12_HEAP_FLAG_NONE, 
+			&CD3DX12_RESOURCE_DESC::Buffer(vertexIndexBufferSize), 
+			D3D12_RESOURCE_STATE_GENERIC_READ, 
+			nullptr, 
+			IID_PPV_ARGS(&vertexIndexBuffer)
+		));
 		UINT8* mappedUploadHeap = nullptr;
-		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
-		ThrowIfFailed(vertexIndexBufferUpload->Map(0, &readRange, reinterpret_cast<void**>(&mappedUploadHeap)));
+		CD3DX12_RANGE readRange(0, 0);
+		ThrowIfFailed(vertexIndexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&mappedUploadHeap)));
 
-		// Fill in part of the upload heap with our index and vertex data.
-		UINT8* heapLocation = static_cast<UINT8*>(mappedUploadHeap);
-		memcpy(heapLocation, cubeVertices, sizeof(cubeVertices));
-		heapLocation += sizeof(cubeVertices);
-		memcpy(heapLocation, cubeIndices, sizeof(cubeIndices));
-		heapLocation += sizeof(cubeIndices);
-		memcpy(heapLocation, quadVertices, sizeof(quadVertices));
+		memcpy(mappedUploadHeap, cubeVertices, sizeof(cubeVertices));
+		memcpy(mappedUploadHeap + sizeof(cubeVertices), cubeIndices, sizeof(cubeIndices));
+		vertexIndexBuffer->Unmap(0, nullptr);
 
-		// Pack the vertices and indices into their destination by copying from the upload heap.
-		commandList->CopyBufferRegion(vertexIndexBuffer.Get(), 0, vertexIndexBufferUpload.Get(), 0, vertexIndexBufferSize);
-		commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_INDEX_BUFFER));
-
-		// Create the index and vertex buffer views.
 		cubeVbv.BufferLocation = vertexIndexBuffer.Get()->GetGPUVirtualAddress();
 		cubeVbv.SizeInBytes = sizeof(cubeVertices);
 		cubeVbv.StrideInBytes = sizeof(VertexPositionColor);
-
 		cubeIbv.BufferLocation = cubeVbv.BufferLocation + sizeof(cubeVertices);
+		cubeIbv.Format = DXGI_FORMAT_R16_UINT;
 		cubeIbv.SizeInBytes = sizeof(cubeIndices);
-		cubeIbv.Format = DXGI_FORMAT_R32_UINT;
 
-		/*quadVbv.BufferLocation = cubeIbv.BufferLocation + sizeof(cubeIndices);
-		quadVbv.SizeInBytes = sizeof(quadVertices);
-		quadVbv.StrideInBytes = sizeof(VertexPositionUV);*/
+		ThrowIfFailed(device->CreateCommandList
+		(
+			0,
+			D3D12_COMMAND_LIST_TYPE_DIRECT, 
+			commandAllocators[frameIndex].Get(), 
+			pipelineState.Get(), 
+			IID_PPV_ARGS(&commandList)
+		));
+		//commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_INDEX_BUFFER));
 	}
-
-	// Create the constant buffer.
-	dynamicCB.Init(device.Get());
-
-	// Close the command list and execute it to begin the vertex/index buffer copy
-	// into the default heap.
-	ThrowIfFailed(commandList->Close());
-	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
-	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-	// Create synchronization objects and wait until assets have been uploaded to the GPU.
+	commandList->Close();
+	//ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
+	//commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 	{
 		ThrowIfFailed(device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
 		fenceValues[frameIndex]++;
 
-		// Create an event handle to use for frame synchronization.
 		fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 		if (fenceEvent == nullptr)
 		{
 			ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
 		}
-
-		// Wait for the command list to execute; we are reusing the same command 
-		// list in our main loop but for now, we just want to wait for setup to 
-		// complete before continuing.
 		WaitForGpu();
 	}
-
-	//m_psoLibrary.Build(device.Get(), m_rootSignature.Get());
 }
 
 void DrawCube::WaitForGpu()
@@ -394,91 +330,30 @@ void DrawCube::WaitForGpu()
 void DrawCube::PopulateCommandList()
 {
 	ThrowIfFailed(commandAllocators[frameIndex]->Reset());
-	ThrowIfFailed(commandList->Reset(commandAllocators[frameIndex].Get(), nullptr));
 
+	ThrowIfFailed(commandList->Reset(commandAllocators[frameIndex].Get(), pipelineState.Get()));
+
+	commandList->SetPipelineState(pipelineState.Get());
 	commandList->SetGraphicsRootSignature(rootSignature.Get());
 
-	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList->RSSetViewports(1, &viewport);
-	commandList->RSSetScissorRects(1, &scissorRect);
+	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE intermediateRtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), DefaultFrameCount, rtvDescriptorSize);
-	CD3DX12_GPU_DESCRIPTOR_HANDLE srvHandle(srvHeap->GetGPUDescriptorHandleForHeapStart());
-
-	commandList->OMSetRenderTargets(1, &intermediateRtvHandle, FALSE, nullptr);
-
-	// Record commands.
-	commandList->ClearRenderTargetView(intermediateRtvHandle, ClearColor, 0, nullptr);
-
-	// Draw the scene as normal into the intermediate buffer.
-	PIXBeginEvent(commandList.Get(), 0, L"Draw cube");
-	{
-		static float rot = 0.0f;
-		DrawConstantBuffer* drawCB = (DrawConstantBuffer*)dynamicCB.GetMappedMemory(0, frameIndex);
-		drawCB->worldViewProjection = XMMatrixTranspose(XMMatrixRotationY(rot) * XMMatrixRotationX(-rot) * camera.GetViewMatrix() * projectionMatrix);
-
-		rot += 0.01f;
-
-		commandList->IASetVertexBuffers(0, 1, &cubeVbv);
-		commandList->IASetIndexBuffer(&cubeIbv);
-		//psoLibrary.SetPipelineState(device.Get(), rootSignature.Get(), m_commandList.Get(), BaseNormal3DRender, m_frameIndex);
-
-		//commandList->SetGraphicsRootConstantBufferView(RootParameterCB, dynamicCB.GetGpuVirtualAddress(drawIndex, m_frameIndex));
-		commandList->DrawIndexedInstanced(36, 1, 0, 0, 0);
-		//drawIndex++;
-	}
-	PIXEndEvent(commandList.Get());
-
-	// Set up the state for a fullscreen quad.
-	//commandList->IASetVertexBuffers(0, 1, &quadVbv);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-	// Indicate that the back buffer will be used as a render target and the
-	// intermediate render target will be used as a SRV.
-	D3D12_RESOURCE_BARRIER barriers[] = {
-		CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET),
-		CD3DX12_RESOURCE_BARRIER::Transition(intermediateRenderTarget.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE)
-	};
-
-	commandList->ResourceBarrier(_countof(barriers), barriers);
-	commandList->SetGraphicsRootDescriptorTable(RootParameterSRV, srvHeap->GetGPUDescriptorHandleForHeapStart());
-
-	const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	commandList->ClearRenderTargetView(rtvHandle, black, 0, nullptr);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	// Draw some quads using the rendered scene with some effect shaders.
-	PIXBeginEvent(commandList.Get(), 0, L"Post-processing");
-	{
-		UINT quadCount = 0;
-		static const UINT quadsX = 3;
-		static const UINT quadsY = 3;
+	commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
+	commandList->RSSetViewports(1, &viewport);
+	commandList->RSSetScissorRects(1, &scissorRect);
+	commandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());
+	commandList->IASetVertexBuffers(0, 1, &cubeVbv);
+	commandList->IASetIndexBuffer(&cubeIbv);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList->DrawIndexedInstanced(36, 1, 0, 0, 0);
 
-
-		CD3DX12_VIEWPORT viewport(
-			(quadCount % quadsX) * (viewport.Width / quadsX),
-			(quadCount / quadsY) * (viewport.Height / quadsY),
-			viewport.Width / quadsX,
-			viewport.Height / quadsY);
-
-		//PIXBeginEvent(commandList.Get(), 0, cEffectNames[i]);
-		commandList->RSSetViewports(1, &viewport);
-		//psoLibrary.SetPipelineState(device.Get(), rootSignature.Get(), commandList.Get(), static_cast<EffectPipelineType>(i), m_frameIndex);
-		commandList->DrawInstanced(4, 1, 0, 0);
-		PIXEndEvent(commandList.Get());
-	}
-	PIXEndEvent(commandList.Get());
-
-	barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-	barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-	commandList->ResourceBarrier(_countof(barriers), barriers);
+	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
 	ThrowIfFailed(commandList->Close());
 }

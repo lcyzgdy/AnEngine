@@ -14,8 +14,8 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 {
 	struct VertexPositionColor
 	{
-		XMFLOAT4 position;
-		XMFLOAT3 color;
+		XMFLOAT3 position;
+		XMFLOAT4 color;
 	};
 
 	struct VertexPositionUV
@@ -44,12 +44,20 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12CommandQueue> commandQueue;
 	ComPtr<ID3D12CommandAllocator> commandAllocators[DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
+	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
+	ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	ComPtr<ID3D12DescriptorHeap> samHeap;
 	ComPtr<ID3D12Resource> renderTargets[DefaultFrameCount];
-	ComPtr<ID3D12Resource> intermediateRenderTarget;
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
-	UINT srvDescriptorSize;
+	UINT srvDescriptorSize; 
+	UINT dsvDescriptorSize;
+	UINT samDescriptorSize;
+	UINT cbvSrvUavDescriptorSize;
+
+	ComPtr<IDCompositionDevice> dCompositionDevice;
+	ComPtr<IDCompositionTarget> dCompositionTarget;
+	ComPtr<IDCompositionVisual> dCompositionVisual;
 
 	ComPtr<ID3D12GraphicsCommandList> commandList;
 	ComPtr<ID3D12PipelineState> pipelineState;
@@ -61,10 +69,17 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	HANDLE swapChainEvent;
 	UINT fenceValues[DefaultFrameCount];
 
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleCSU[1];
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleDSV[1];
+
+	ComPtr<ID3D12Resource> cube;
 	ComPtr<ID3D12Resource> vertexBuffer;
 	ComPtr<ID3D12Resource> vertexIndexBuffer;
+	ComPtr<ID3D12Resource> cBufferMatrix;
+	ComPtr<ID3D12Resource> depthBuffer;
 	D3D12_VERTEX_BUFFER_VIEW cubeVbv;
 	D3D12_INDEX_BUFFER_VIEW cubeIbv;
+	XMFLOAT4X4  cBMatrix;
 	// 应用程序资源
 
 	vector<VertexPositionColor> vertex;
@@ -72,7 +87,6 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	MCamera camera;
 	XMMATRIX projectionMatrix;
 	DTimer timer;
-	DynamicConstantBuffer dynamicCB;
 
 public:
 	DrawCube(const HWND _hwnd, const UINT _width, const UINT _height);

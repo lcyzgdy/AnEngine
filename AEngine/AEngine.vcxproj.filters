@@ -145,10 +145,8 @@
     <CustomBuild Include="compute_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="cube_shader.hlsl">
+    <CustomBuild Include="cube_shader.hlsl">
       <Filter>资源文件</Filter>
-    </FxCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>

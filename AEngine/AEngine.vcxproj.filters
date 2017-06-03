@@ -116,6 +116,9 @@
     <ClCompile Include="DynamicConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DrawCube.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">
@@ -140,6 +143,9 @@
       <Filter>资源文件</Filter>
     </CustomBuild>
     <CustomBuild Include="compute_shader.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cube_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
   </ItemGroup>

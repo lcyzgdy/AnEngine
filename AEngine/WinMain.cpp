@@ -5,6 +5,7 @@
 #include"DrawLine.h"
 #include"Input.h"
 #include"Screen.h"
+#include"DrawCube.h"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -75,7 +76,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	screenw = 800;
 	screenh = 600;
 
-	D3D12AppBase* d3dApp = new DrawTriangle(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new DrawCube(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);

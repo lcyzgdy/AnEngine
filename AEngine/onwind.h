@@ -119,6 +119,21 @@ inline HRESULT ReadDataFromFile(LPCWSTR filename, byte** data, UINT* size)
 	return S_OK;
 }
 
+inline void ThrowIfFailed(HRESULT hr)
+{
+	if (FAILED(hr))
+	{
+		throw std::exception();
+	}
+}
+
+template <typename T>
+inline T* SafeAcquire(T* newObject)
+{
+	if (newObject != nullptr) ((IUnknown*)newObject)->AddRef();
+	return newObject;
+}
+
 #else
 #define Strcpy(a,b) wcscpy(a,b);
 #endif // !UNICODE
@@ -159,12 +174,5 @@ inline float random(float a, float b)
 	return scale * range + a;
 }
 
-inline void ThrowIfFailed(HRESULT hr)
-{
-	if (FAILED(hr))
-	{
-		throw std::exception();
-	}
-}
 
 #endif // !GDY

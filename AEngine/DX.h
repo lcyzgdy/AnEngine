@@ -19,7 +19,9 @@
 #include<DirectXMath.h>
 #include<dxgi1_4.h>
 #include<pix.h>
+#include<dcomp.h>
 
+#pragma comment(lib, "dcomp.lib")
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")

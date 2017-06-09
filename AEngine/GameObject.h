@@ -8,7 +8,7 @@ using namespace PhysicsCore;
 
 class GameObject
 {
-	vector<GameObject> content;
+	vector<GameObject*> content;
 	Transform transform;
 
 public:

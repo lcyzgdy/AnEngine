@@ -147,7 +147,6 @@ public:
 	virtual void MoveToNextFrame() override;
 
 	virtual void WaitForRenderContext() override;
-
 };
 
 class DrawTriangle :public D3D12AppBase, public D3D12Base

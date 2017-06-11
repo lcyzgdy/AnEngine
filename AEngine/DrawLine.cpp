@@ -20,6 +20,8 @@ void DrawLine::OnInit()
 
 	InitializePipeline();
 	InitializeAssets();
+
+	PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
 }
 
 void DrawLine::OnRelease()
@@ -845,8 +847,6 @@ void DrawTriangle::InitializePipeline()
 	}
 	// 创设备
 
-	//device->CheckFeatureSupport
-
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -861,6 +861,7 @@ void DrawTriangle::InitializePipeline()
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.SampleDesc.Count = 1;
+
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(

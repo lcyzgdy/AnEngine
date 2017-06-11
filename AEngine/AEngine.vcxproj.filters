@@ -42,9 +42,6 @@
     <ClInclude Include="DX.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
     <ClInclude Include="DynamicConstantBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -88,9 +88,6 @@
     </ClCompile>
     <ClCompile Include="DX.cpp">
       <Filter>源文件\UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>源文件\UTIL</Filter>
@@ -116,6 +113,12 @@
     <ClCompile Include="DynamicConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DrawCube.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">
@@ -140,6 +143,9 @@
       <Filter>资源文件</Filter>
     </CustomBuild>
     <CustomBuild Include="compute_shader.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cube_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
   </ItemGroup>

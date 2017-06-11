@@ -2,11 +2,23 @@
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
 #include"onwind.h"
+#include<atomic>
 
 class Screen
 {
-	static int width;
-	static int height;
+	static atomic<int> width;
+	static atomic<int> height;
+
+	static enum TargetResolution :int
+	{
+		S720P,
+		S900P,
+		S1080P,
+		S1440P,
+		S1800P,
+		S2160P
+	};
+
 public:
 
 	static void InitializeScreen(const int _width, const int _height);

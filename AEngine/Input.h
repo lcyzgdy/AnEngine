@@ -9,6 +9,7 @@
 #include<dinput.h>
 #include<xinput.h>
 #include<wrl.h>
+#include<atomic>
 #pragma comment(lib, "dinput8.lib")
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -20,11 +21,11 @@ class BaseInput
 	static ComPtr<IDirectInputDevice8> mouse;
 	static HWND hwnd;
 	static DIMOUSESTATE2 mouseState;
-	static unsigned char keyState[256];
-	static bool mouseButtonState[10];
-	static bool mouseButtonDownState[10];
-	static bool mouseButtonDownFlag[10];
-	static XMVECTOR curPosition;
+	static atomic<unsigned char> keyState[256];
+	static atomic<bool> mouseButtonState[10];
+	static atomic<bool> mouseButtonDownState[10];
+	static atomic<bool> mouseButtonDownFlag[10];
+	static atomic<XMVECTOR> curPosition;
 
 public:
 	static void Initialize(HWND _hwnd, HINSTANCE _hInstance);

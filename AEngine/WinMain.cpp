@@ -5,6 +5,7 @@
 #include"DrawLine.h"
 #include"Input.h"
 #include"Screen.h"
+#include"DrawCube.h"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -13,14 +14,14 @@ int state;
 int screenw;
 int screenh;
 
-LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam)
+LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
 	D3D12AppBase* pD3dApp = reinterpret_cast<D3D12AppBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	switch (msg)
 	{
 	case(WM_CREATE):
 	{
-		LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lparam);
+		LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
 		break;
 	}
@@ -61,8 +62,16 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam
 		}
 		break;
 	}
+	case(WM_USER):
+	{
+		var cc = LOWORD(lParam);
+		char* l = new char[1];
+		l[0] = { (char)(cc + '0') };
+		SetWindowText(hwnd, ToLPCWSTR(l));
+		break;
+	}
 	default:
-		return DefWindowProc(hwnd, msg, wparam, lparam);
+		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	return 0;
 }
@@ -72,10 +81,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	DeleteFile(_T("log.txt"));
 	wstring windowTitle(_T("AEngine"));
 	wstring windowClassName(_T("AWindow"));
-	screenw = 800;
-	screenh = 600;
+	screenw = 1280;
+	screenh = 720;
 
-	D3D12AppBase* d3dApp = new DrawTriangle(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);

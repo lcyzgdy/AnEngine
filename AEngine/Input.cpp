@@ -7,11 +7,11 @@ ComPtr<IDirectInputDevice8> BaseInput::keyboard = nullptr;
 ComPtr<IDirectInputDevice8> BaseInput::mouse = nullptr;
 HWND BaseInput::hwnd = NULL;
 DIMOUSESTATE2 BaseInput::mouseState = {};
-unsigned char BaseInput::keyState[256] = {};
-bool BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
-bool BaseInput::mouseButtonDownState[10] = {};
-bool BaseInput::mouseButtonDownFlag[10] = {};
-XMVECTOR BaseInput::curPosition = {};
+atomic<unsigned char> BaseInput::keyState[256] = {};
+atomic<bool> BaseInput::mouseButtonState[10] = { 0,0,0,0,0,0,0,0,0,0 };
+atomic<bool> BaseInput::mouseButtonDownState[10] = {};
+atomic<bool> BaseInput::mouseButtonDownFlag[10] = {};
+atomic<XMVECTOR> BaseInput::curPosition = {};
 
 void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 {

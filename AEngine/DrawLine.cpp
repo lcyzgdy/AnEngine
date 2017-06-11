@@ -20,6 +20,8 @@ void DrawLine::OnInit()
 
 	InitializePipeline();
 	InitializeAssets();
+
+	PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
 }
 
 void DrawLine::OnRelease()

@@ -1,11 +1,16 @@
 #include"RenderCore.h"
 
+// 检验是否有HDR输出功能
+#define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
+
+
 namespace RenderCore
 {
 	void GraphicCard::CreateDevice()
 	{
 		UINT dxgiFactoryFlags = 0;
 
+		// 开启Debug模式
 #if defined(DEBUG) || defined(_DEBUG)
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
@@ -14,19 +19,18 @@ namespace RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 #endif
-		// 开启Debug模式
 
-		ComPtr<IDXGIFactory4> dxgiFactory;
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
+		//ComPtr<IDXGIFactory4> dxgiFactory;
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::dxgiFactory.GetAddressOf()));
 
 		ComPtr<IDXGIAdapter1> hardwareAdapter;
-		GetHardwareAdapter(dxgiFactory.Get(), &hardwareAdapter);
+		GetHardwareAdapter(Private::dxgiFactory.Get(), &hardwareAdapter);
 		D3D12CreateDevice(hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&device));
 
 		if (device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> warpAdapter;
-			dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
+			Private::dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
 			D3D12CreateDevice(warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&device));
 		}
 
@@ -200,6 +204,8 @@ namespace RenderCore
 	vector<GraphicCard> r_renderCore;
 	ComPtr<IDXGISwapChain1> r_swapChain = nullptr;
 
+	bool r_enableHDROutput = false;
+
 	void InitializeRender(int graphicCardCount, bool isStable)
 	{
 		while (graphicCardCount--)
@@ -211,9 +217,46 @@ namespace RenderCore
 		}
 	}
 
-	void InitializeSwapChain()
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = SwapChainBufferCount;
+		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		swapChainDesc.Width = width;
+		swapChainDesc.Height = height;
+		swapChainDesc.Format = dxgiFormat;
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+		swapChainDesc.SampleDesc.Count = 1;
+		swapChainDesc.SampleDesc.Quality = 0;
+		swapChainDesc.Scaling = DXGI_SCALING_NONE;
+
+		ComPtr<IDXGISwapChain1> swapChain1;
+		ThrowIfFailed(Private::dxgiFactory->CreateSwapChainForHwnd
+		(
+			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()), 
+			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
+		));
+		swapChain1.As(&r_swapChain);
+#if CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+		{
+			IDXGISwapChain4* swapChain = static_cast<IDXGISwapChain4*>(r_swapChain.Get());
+			ComPtr<IDXGIOutput> output;
+			ComPtr<IDXGIOutput6> output6;
+			DXGI_OUTPUT_DESC1 outputDesc;
+			UINT colorSpaceSupport;
+
+			if (SUCCEEDED(swapChain->GetContainingOutput(&output)) &&
+				SUCCEEDED(output.As(&output6)) &&
+				SUCCEEDED(output6->GetDesc1(&outputDesc)) &&
+				outputDesc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020 &&
+				SUCCEEDED(swapChain->CheckColorSpaceSupport(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020, &colorSpaceSupport)) &&
+				(colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) &&
+				SUCCEEDED(swapChain->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020)))
+			{
+				r_enableHDROutput = true;
+			}
+		}
+#endif
 	}
 }

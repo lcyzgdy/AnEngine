@@ -5,6 +5,8 @@
 #include"onwind.h"
 #include"d3dx12.h"
 #include<dxgi1_4.h>
+#include<dxgi1_5.h>
+#include<dxgi1_6.h>
 #include<mutex>
 #include<atomic>
 using namespace Microsoft::WRL;
@@ -14,10 +16,18 @@ namespace RenderCore
 	static const UINT DefaultFrameCount = 2;
 	static const UINT SwapChainBufferCount = 3;
 	static constexpr UINT DefaultThreadCount = 1;
+	static const DXGI_FORMAT DefaultSwapChainFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
 	static const float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	static const D3D_FEATURE_LEVEL MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	static const D3D_FEATURE_LEVEL CreatorUpdateD3DFeatureLevel = D3D_FEATURE_LEVEL_12_1;
+	static const D3D_FEATURE_LEVEL D3DFeatureLevelWithCreatorUpdate = D3D_FEATURE_LEVEL_12_1;
 	static const bool IsUseWarpDevice = false;
+
+	extern bool r_enableHDROutput;
+
+	namespace Private
+	{
+		ComPtr<IDXGIFactory4> dxgiFactory;
+	}
 
 	class CommandQueue
 	{
@@ -52,7 +62,6 @@ namespace RenderCore
 
 		bool isTypedUAVLoadSupport_R11G11B10_FLOAT;
 		bool isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
-
 		bool stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 
 		void CreateDevice();
@@ -100,7 +109,7 @@ namespace RenderCore
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
 
-	void InitializeSwapChain();
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = DefaultSwapChainFormat);
 }
 
 

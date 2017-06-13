@@ -148,6 +148,7 @@
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GpuResource.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />

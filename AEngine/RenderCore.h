@@ -23,6 +23,7 @@ namespace RenderCore
 	static const bool IsUseWarpDevice = false;
 
 	extern bool r_enableHDROutput;
+	extern int r_displayPlane[SwapChainBufferCount];
 
 	namespace Private
 	{

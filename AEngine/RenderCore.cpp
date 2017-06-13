@@ -258,5 +258,11 @@ namespace RenderCore
 			}
 		}
 #endif
+		for (UINT i = 0; i < SwapChainBufferCount; ++i)
+		{
+			ComPtr<ID3D12Resource> DisplayPlane;
+			ThrowIfFailed(r_swapChain->GetBuffer(i, IID_PPV_ARGS(&DisplayPlane)));
+			//g_DisplayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer", DisplayPlane.Detach());
+		}
 	}
 }

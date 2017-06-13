@@ -75,6 +75,9 @@
     <ClInclude Include="Input.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="GpuResource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">

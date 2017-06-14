@@ -41,7 +41,7 @@ void D3D12AppBase::GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_resu
 		}
 
 		// Check to see if the adapter supports Direct3D 12, but don't create the
-		// actual device yet.
+		// actual m_device yet.
 		if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
 		{
 			break;

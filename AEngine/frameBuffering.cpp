@@ -230,7 +230,7 @@ void FrameBuffering::InitializeAssets()
 	vertexBufferView.SizeInBytes = vertexBufferSize;
 
 	device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//Create a fence
+	//Create a m_fence
 
 	fenceValues[frameIndex]++;
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);

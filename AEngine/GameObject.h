@@ -5,6 +5,7 @@
 #include"onwind.h"
 #include"PhysicsCore.h"
 using namespace PhysicsCore;
+using namespace std;
 
 class GameObject
 {

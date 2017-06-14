@@ -20,25 +20,25 @@ namespace RenderCore
 		}
 #endif
 
-		//ComPtr<IDXGIFactory4> dxgiFactory;
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::dxgiFactory.GetAddressOf()));
+		//ComPtr<IDXGIFactory4> r_dxgiFactory;
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory.GetAddressOf()));
 
 		ComPtr<IDXGIAdapter1> hardwareAdapter;
-		GetHardwareAdapter(Private::dxgiFactory.Get(), &hardwareAdapter);
-		D3D12CreateDevice(hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&device));
+		GetHardwareAdapter(Private::r_dxgiFactory.Get(), &hardwareAdapter);
+		D3D12CreateDevice(hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_device));
 
-		if (device.Get() == nullptr)
+		if (m_device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> warpAdapter;
-			Private::dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
-			D3D12CreateDevice(warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&device));
+			Private::r_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
+			D3D12CreateDevice(warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_device));
 		}
 
-		device->SetStablePowerState(stableFlag);
+		m_device->SetStablePowerState(stableFlag);
 
 #if defined(DEBUG) || defined(_DEBUG)
 		ID3D12InfoQueue* compInfoQueue;
-		device->QueryInterface(IID_PPV_ARGS(&compInfoQueue));
+		m_device->QueryInterface(IID_PPV_ARGS(&compInfoQueue));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
 		// 通过ID来避免个人消息。
@@ -62,9 +62,9 @@ namespace RenderCore
 		compInfoQueue->PushStorageFilter(&newFilter);
 		compInfoQueue->Release();
 #endif
-		if (SUCCEEDED(device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &featureDataOptions, sizeof(featureDataOptions))))
+		if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
 		{
-			if (featureDataOptions.TypedUAVLoadAdditionalFormats)
+			if (m_featureDataOptions.TypedUAVLoadAdditionalFormats)
 			{
 				D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport =
 				{
@@ -72,14 +72,14 @@ namespace RenderCore
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
 				};
-				if (SUCCEEDED(device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
-					isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
+					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
 				}
 				formatSupport.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-				if (SUCCEEDED(device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
-					isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
+					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
 			}
 		}
@@ -91,7 +91,7 @@ namespace RenderCore
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			renderCommandQueue.Initialize(device.Get());
+			m_renderCommandQueue.Initialize(m_device.Get());
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -103,13 +103,13 @@ namespace RenderCore
 			//D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 			//queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 			//queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
-			//device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(computeCommandQueue.GetAddressOf()));
-			computeCommandQueue.Initialize(device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			//m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_computeCommandQueue.GetAddressOf()));
+			m_computeCommandQueue.Initialize(m_device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			copyCommandQueue.Initialize(device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
+			m_copyCommandQueue.Initialize(m_device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
 			break;
 		}
 		default:
@@ -119,7 +119,7 @@ namespace RenderCore
 
 	const ID3D12Device2* GraphicCard::GetDevice() const
 	{
-		return device.Get();
+		return m_device.Get();
 	}
 
 	void GraphicCard::IsStable(bool isStable)
@@ -133,7 +133,7 @@ namespace RenderCore
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			return renderCommandQueue.GetCommandQueue();
+			return m_renderCommandQueue.GetCommandQueue();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -142,12 +142,12 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
 		{
-			return computeCommandQueue.GetCommandQueue();
+			return m_computeCommandQueue.GetCommandQueue();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			return copyCommandQueue.GetCommandQueue();
+			return m_copyCommandQueue.GetCommandQueue();
 			break;
 		}
 		default:
@@ -181,7 +181,7 @@ namespace RenderCore
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
-		device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(commandQueue.GetAddressOf()));
+		device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_commandQueue.GetAddressOf()));
 	}
 
 	void CommandQueue::Release()
@@ -205,6 +205,11 @@ namespace RenderCore
 	ComPtr<IDXGISwapChain1> r_swapChain = nullptr;
 
 	bool r_enableHDROutput = false;
+
+	namespace Private
+	{
+		ComPtr<IDXGIFactory4> r_dxgiFactory;
+	}
 
 	void InitializeRender(int graphicCardCount, bool isStable)
 	{
@@ -232,7 +237,7 @@ namespace RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
-		ThrowIfFailed(Private::dxgiFactory->CreateSwapChainForHwnd
+		ThrowIfFailed(Private::r_dxgiFactory->CreateSwapChainForHwnd
 		(
 			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()), 
 			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
@@ -262,7 +267,7 @@ namespace RenderCore
 		{
 			ComPtr<ID3D12Resource> DisplayPlane;
 			ThrowIfFailed(r_swapChain->GetBuffer(i, IID_PPV_ARGS(&DisplayPlane)));
-			//g_DisplayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer", DisplayPlane.Detach());
+			//r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer", DisplayPlane.Detach());
 		}
 	}
 }

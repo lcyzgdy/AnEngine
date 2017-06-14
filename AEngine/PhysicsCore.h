@@ -4,6 +4,7 @@
 
 #include"onwind.h"
 #include<DirectXMath.h>
+using namespace std;
 using namespace DirectX;
 
 namespace PhysicsCore

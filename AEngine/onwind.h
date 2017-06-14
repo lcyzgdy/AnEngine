@@ -9,7 +9,6 @@
 #include<memory>
 #include<string>
 #include<vector>
-
 using namespace std;
 
 #ifndef GDY
@@ -23,7 +22,7 @@ using namespace std;
 
 #ifdef UNICODE
 
-#define Strcpy(a,b) wcscpy_s(a,b);
+#define Strcpy(a,b) wcscpy_s(a,b)
 #define ERRORBLOCK(a) MessageBox(NULL, ,_T("Error"), ToLPCWSTR("Error"+a),0)
 
 inline LPCWSTR ToLPCWSTR(string& orig)

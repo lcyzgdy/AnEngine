@@ -3,13 +3,13 @@
 #define __RENDERCORE_H__
 
 #include"onwind.h"
-#include"d3dx12.h"
-#include<dxgi1_4.h>
-#include<dxgi1_5.h>
+#include"DX.h"
 #include<dxgi1_6.h>
 #include<mutex>
 #include<atomic>
+#include"ColorBuffer.h"
 using namespace Microsoft::WRL;
+using namespace std;
 
 namespace RenderCore
 {
@@ -23,21 +23,20 @@ namespace RenderCore
 	static const bool IsUseWarpDevice = false;
 
 	extern bool r_enableHDROutput;
-	extern int r_displayPlane[SwapChainBufferCount];
 
 	namespace Private
 	{
-		ComPtr<IDXGIFactory4> dxgiFactory;
+		extern ComPtr<IDXGIFactory4> r_dxgiFactory;
 	}
 
 	class CommandQueue
 	{
-		ComPtr<ID3D12CommandQueue> commandQueue;
+		ComPtr<ID3D12CommandQueue> m_commandQueue;
 
-		ComPtr<ID3D12Fence> fence;
-		atomic_uint64_t nextFenceValue;
-		atomic_uint64_t lastCompleteFenceValue;
-		HANDLE fenceEvent;
+		ComPtr<ID3D12Fence> m_fence;
+		atomic_uint64_t m_nextFenceValue;
+		atomic_uint64_t m_lastCompleteFenceValue;
+		HANDLE m_fenceEvent;
 
 	public:
 		CommandQueue() = default;
@@ -53,16 +52,16 @@ namespace RenderCore
 	// 显卡设备接口。
 	class GraphicCard
 	{
-		ComPtr<ID3D12Device2> device;
+		ComPtr<ID3D12Device2> m_device;
 
-		CommandQueue renderCommandQueue;	// 渲染着色器的命令队列。
-		CommandQueue computeCommandQueue;	// 计算着色器的命令队列。
-		CommandQueue copyCommandQueue;
+		CommandQueue m_renderCommandQueue;	// 渲染着色器的命令队列。
+		CommandQueue m_computeCommandQueue;	// 计算着色器的命令队列。
+		CommandQueue m_copyCommandQueue;
 
-		D3D12_FEATURE_DATA_D3D12_OPTIONS featureDataOptions;
+		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 
-		bool isTypedUAVLoadSupport_R11G11B10_FLOAT;
-		bool isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
+		bool m_isTypedUAVLoadSupport_R11G11B10_FLOAT;
+		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
 		bool stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 
 		void CreateDevice();
@@ -107,6 +106,7 @@ namespace RenderCore
 
 	extern vector<GraphicCard> r_renderCore;
 	extern ComPtr<IDXGISwapChain1> r_swapChain;
+	extern Resource::ColorBuffer r_displayPlane[SwapChainBufferCount];
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
 

@@ -142,13 +142,13 @@ void DrawCube::InitializePipeline()
 	samDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	samDesc.NumDescriptors;
 	samDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	ThrowIfFailed(device->CreateDescriptorHeap(&samDesc, IID_PPV_ARGS(&samHeap)));*/
+	ThrowIfFailed(m_device->CreateDescriptorHeap(&samDesc, IID_PPV_ARGS(&samHeap)));*/
 
 	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	//rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	//samDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+	//samDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 	// !#1	´´½¨ÃèÊö·û¶Ñ
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
@@ -319,11 +319,11 @@ void DrawCube::WaitForGpu()
 {
 	ThrowIfFailed(commandQueue->Signal(fence.Get(), fenceValues[frameIndex]));
 
-	// Wait until the fence has been processed.
+	// Wait until the m_fence has been processed.
 	ThrowIfFailed(fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent));
 	WaitForSingleObjectEx(fenceEvent, INFINITE, FALSE);
 
-	// Increment the fence value for the current frame.
+	// Increment the m_fence value for the current frame.
 	fenceValues[frameIndex]++;
 }
 

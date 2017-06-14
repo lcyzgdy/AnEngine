@@ -102,7 +102,7 @@ void DrawLine::InitializePipeline()
 	}
 	// 创设备
 
-	//device->CheckFeatureSupport
+	//m_device->CheckFeatureSupport
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -246,7 +246,7 @@ void DrawLine::InitializeAssets()
 	vertexBufferView.SizeInBytes = vertexBufferSize;
 
 	device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//Create a fence
+	//Create a m_fence
 
 	fenceValues[frameIndex]++;
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
@@ -426,7 +426,7 @@ void DrawLineWithWu::InitializePipeline()
 	}
 	// 创设备
 
-	//device->CheckFeatureSupport
+	//m_device->CheckFeatureSupport
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -570,7 +570,7 @@ void DrawLineWithWu::InitializeAssets()
 	vertexBufferView.SizeInBytes = vertexBufferSize;
 
 	device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//Create a fence
+	//Create a m_fence
 
 	fenceValues[frameIndex]++;
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
@@ -991,7 +991,7 @@ void DrawTriangle::InitializeAssets()
 	vertexBufferView.SizeInBytes = vertexBufferSize;
 
 	device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//Create a fence
+	//Create a m_fence
 
 	fenceValues[frameIndex]++;
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);

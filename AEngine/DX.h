@@ -29,8 +29,7 @@ using namespace std;
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-
-//using namespace RenderCore;
+#ifdef _WIN64
 
 class D3D12AppBase
 {
@@ -72,6 +71,7 @@ public:
 
 	void D3D12AppBase::SetWindowTitleText(LPCWSTR text);
 };
+#endif // !_WIN64
 
 class D3D12Base
 {
@@ -86,5 +86,4 @@ public:
 	D3D12Base() = default;
 	~D3D12Base() = default;
 };
-
 #endif // !__DX_H__

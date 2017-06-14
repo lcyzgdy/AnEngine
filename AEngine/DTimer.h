@@ -3,6 +3,7 @@
 #define __DTIMER_H__
 
 #include"onwind.h"
+using namespace std;
 
 class DTimer
 {

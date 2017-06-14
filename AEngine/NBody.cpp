@@ -455,7 +455,7 @@ void NBody::WaitForRenderContext()
 
 	ThrowIfFailed(fence->SetEventOnCompletion(renderContextFenceValue, renderContextFenceEvent));
 	renderContextFenceValue++;
-	// 指示fence在信号命令完成时设置事件对象
+	// 指示m_fence在信号命令完成时设置事件对象
 
 	WaitForSingleObject(renderContextFenceEvent, INFINITE);
 	// 等待直到信号命令被处理。

@@ -75,6 +75,15 @@
     <ClInclude Include="Input.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="GpuResource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -118,6 +127,12 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuResource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelBuffer.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

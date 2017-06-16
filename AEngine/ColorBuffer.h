@@ -4,14 +4,19 @@
 
 #include"DX.h"
 #include"PixelBuffer.h"
+#include"RenderCore.h"
 using namespace std;
+using namespace RenderCore;
 
 namespace RenderCore
 {
 	namespace Resource
 	{
-		class ColorBuffer
+		class ColorBuffer: public PixelBuffer
 		{
+		protected:
+
+			D3D12_RESOURCE_FLAGS CombineResourceFlags() const;
 		public:
 			ColorBuffer() = default;
 			~ColorBuffer() = default;

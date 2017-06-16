@@ -26,14 +26,14 @@ namespace RenderCore
 
 	namespace Private
 	{
-		extern ComPtr<IDXGIFactory4> r_dxgiFactory;
+		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
 	class CommandQueue
 	{
-		ComPtr<ID3D12CommandQueue> m_commandQueue;
+		ComPtr<ID3D12CommandQueue> m_cp_commandQueue;
 
-		ComPtr<ID3D12Fence> m_fence;
+		ComPtr<ID3D12Fence> m_cp_fence;
 		atomic_uint64_t m_nextFenceValue;
 		atomic_uint64_t m_lastCompleteFenceValue;
 		HANDLE m_fenceEvent;
@@ -46,13 +46,14 @@ namespace RenderCore
 		void Release();
 
 		const ID3D12CommandQueue* GetCommandQueue() const;
+		ID3D12CommandQueue* GetCommandQueue();
 		D3D12_COMMAND_LIST_TYPE GetType();
 	};
 
 	// 显卡设备接口。
 	class GraphicCard
 	{
-		ComPtr<ID3D12Device2> m_device;
+		ComPtr<ID3D12Device2> m_cp_device;
 
 		CommandQueue m_renderCommandQueue;	// 渲染着色器的命令队列。
 		CommandQueue m_computeCommandQueue;	// 计算着色器的命令队列。
@@ -62,7 +63,7 @@ namespace RenderCore
 
 		bool m_isTypedUAVLoadSupport_R11G11B10_FLOAT;
 		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
-		bool stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
+		bool m_stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 
 		void CreateDevice();
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -99,13 +100,15 @@ namespace RenderCore
 
 		void Initialize(bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
+		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		const ID3D12Device2* GetDevice() const;
+		ID3D12Device2* GetDevice();
 
 		void IsStable(bool isStable);
 	};
 
 	extern vector<GraphicCard> r_renderCore;
-	extern ComPtr<IDXGISwapChain1> r_swapChain;
+	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
 	extern Resource::ColorBuffer r_displayPlane[SwapChainBufferCount];
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);

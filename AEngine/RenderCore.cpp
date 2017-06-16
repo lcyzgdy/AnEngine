@@ -3,7 +3,6 @@
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
-
 namespace RenderCore
 {
 	void GraphicCard::CreateDevice()
@@ -20,25 +19,25 @@ namespace RenderCore
 		}
 #endif
 
-		//ComPtr<IDXGIFactory4> r_dxgiFactory;
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory.GetAddressOf()));
+		//ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_cp_dxgiFactory.GetAddressOf()));
 
-		ComPtr<IDXGIAdapter1> hardwareAdapter;
-		GetHardwareAdapter(Private::r_dxgiFactory.Get(), &hardwareAdapter);
-		D3D12CreateDevice(hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_device));
+		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
+		GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 
-		if (m_device.Get() == nullptr)
+		if (m_cp_device.Get() == nullptr)
 		{
-			ComPtr<IDXGIAdapter> warpAdapter;
-			Private::r_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
-			D3D12CreateDevice(warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_device));
+			ComPtr<IDXGIAdapter> cp_warpAdapter;
+			Private::r_cp_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
+			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 		}
 
-		m_device->SetStablePowerState(stableFlag);
+		m_cp_device->SetStablePowerState(m_stableFlag);
 
 #if defined(DEBUG) || defined(_DEBUG)
-		ID3D12InfoQueue* compInfoQueue;
-		m_device->QueryInterface(IID_PPV_ARGS(&compInfoQueue));
+		ID3D12InfoQueue* p_compInfoQueue;
+		m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
 		// 通过ID来避免个人消息。
@@ -59,10 +58,10 @@ namespace RenderCore
 		newFilter.DenyList.NumIDs = _countof(denyMessageIds);
 		newFilter.DenyList.pIDList = denyMessageIds;
 
-		compInfoQueue->PushStorageFilter(&newFilter);
-		compInfoQueue->Release();
+		p_compInfoQueue->PushStorageFilter(&newFilter);
+		p_compInfoQueue->Release();
 #endif
-		if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
+		if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
 		{
 			if (m_featureDataOptions.TypedUAVLoadAdditionalFormats)
 			{
@@ -72,12 +71,12 @@ namespace RenderCore
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
 				};
-				if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
 				}
 				formatSupport.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-				if (SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
@@ -91,7 +90,7 @@ namespace RenderCore
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			m_renderCommandQueue.Initialize(m_device.Get());
+			m_renderCommandQueue.Initialize(m_cp_device.Get());
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -104,12 +103,12 @@ namespace RenderCore
 			//queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 			//queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
 			//m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_computeCommandQueue.GetAddressOf()));
-			m_computeCommandQueue.Initialize(m_device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			m_computeCommandQueue.Initialize(m_cp_device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			m_copyCommandQueue.Initialize(m_device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
+			m_copyCommandQueue.Initialize(m_cp_device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
 			break;
 		}
 		default:
@@ -119,12 +118,17 @@ namespace RenderCore
 
 	const ID3D12Device2* GraphicCard::GetDevice() const
 	{
-		return m_device.Get();
+		return m_cp_device.Get();
+	}
+
+	ID3D12Device2 * GraphicCard::GetDevice()
+	{
+		return m_cp_device.Get();
 	}
 
 	void GraphicCard::IsStable(bool isStable)
 	{
-		stableFlag = isStable;
+		m_stableFlag = isStable;
 	}
 
 	const ID3D12CommandQueue* GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
@@ -156,8 +160,37 @@ namespace RenderCore
 		return nullptr;
 	}
 
+	ID3D12CommandQueue * GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
+	{
+		switch (type)
+		{
+		case D3D12_COMMAND_LIST_TYPE_DIRECT:
+		{
+			return m_renderCommandQueue.GetCommandQueue();
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
+		{
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
+		{
+			return m_computeCommandQueue.GetCommandQueue();
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_COPY:
+		{
+			return m_copyCommandQueue.GetCommandQueue();
+			break;
+		}
+		default:
+			break;
+		}
+		return nullptr;
+	}
+
 	GraphicCard::GraphicCard() :
-		stableFlag(false)
+		m_stableFlag(false)
 	{
 	}
 
@@ -176,12 +209,12 @@ namespace RenderCore
 
 namespace RenderCore
 {
-	void CommandQueue::Initialize(ID3D12Device2* device, D3D12_COMMAND_LIST_TYPE type)
+	void CommandQueue::Initialize(ID3D12Device2* p_device, D3D12_COMMAND_LIST_TYPE type)
 	{
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
-		device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_commandQueue.GetAddressOf()));
+		p_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_cp_commandQueue.GetAddressOf()));
 	}
 
 	void CommandQueue::Release()
@@ -189,6 +222,11 @@ namespace RenderCore
 	}
 
 	const ID3D12CommandQueue* CommandQueue::GetCommandQueue() const
+	{
+		return nullptr;
+	}
+
+	ID3D12CommandQueue * CommandQueue::GetCommandQueue()
 	{
 		return nullptr;
 	}
@@ -202,13 +240,13 @@ namespace RenderCore
 namespace RenderCore
 {
 	vector<GraphicCard> r_renderCore;
-	ComPtr<IDXGISwapChain1> r_swapChain = nullptr;
+	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
 
 	bool r_enableHDROutput = false;
 
 	namespace Private
 	{
-		ComPtr<IDXGIFactory4> r_dxgiFactory;
+		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
 	void InitializeRender(int graphicCardCount, bool isStable)
@@ -237,27 +275,27 @@ namespace RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
-		ThrowIfFailed(Private::r_dxgiFactory->CreateSwapChainForHwnd
+		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
 			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()), 
 			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
 		));
-		swapChain1.As(&r_swapChain);
+		swapChain1.As(&r_cp_swapChain);
 #if CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 		{
-			IDXGISwapChain4* swapChain = static_cast<IDXGISwapChain4*>(r_swapChain.Get());
-			ComPtr<IDXGIOutput> output;
-			ComPtr<IDXGIOutput6> output6;
+			IDXGISwapChain4* p_swapChain = static_cast<IDXGISwapChain4*>(r_cp_swapChain.Get());
+			ComPtr<IDXGIOutput> cp_output;
+			ComPtr<IDXGIOutput6> cp_output6;
 			DXGI_OUTPUT_DESC1 outputDesc;
 			UINT colorSpaceSupport;
 
-			if (SUCCEEDED(swapChain->GetContainingOutput(&output)) &&
-				SUCCEEDED(output.As(&output6)) &&
-				SUCCEEDED(output6->GetDesc1(&outputDesc)) &&
+			if (SUCCEEDED(p_swapChain->GetContainingOutput(&cp_output)) &&
+				SUCCEEDED(cp_output.As(&cp_output6)) &&
+				SUCCEEDED(cp_output6->GetDesc1(&outputDesc)) &&
 				outputDesc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020 &&
-				SUCCEEDED(swapChain->CheckColorSpaceSupport(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020, &colorSpaceSupport)) &&
+				SUCCEEDED(p_swapChain->CheckColorSpaceSupport(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020, &colorSpaceSupport)) &&
 				(colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) &&
-				SUCCEEDED(swapChain->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020)))
+				SUCCEEDED(p_swapChain->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020)))
 			{
 				r_enableHDROutput = true;
 			}
@@ -265,8 +303,8 @@ namespace RenderCore
 #endif
 		for (UINT i = 0; i < SwapChainBufferCount; ++i)
 		{
-			ComPtr<ID3D12Resource> DisplayPlane;
-			ThrowIfFailed(r_swapChain->GetBuffer(i, IID_PPV_ARGS(&DisplayPlane)));
+			ComPtr<ID3D12Resource> cp_displayPlane;
+			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
 			//r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer", DisplayPlane.Detach());
 		}
 	}

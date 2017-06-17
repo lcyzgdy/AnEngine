@@ -92,5 +92,37 @@ namespace RenderCore
 		{
 			m_color = XMVectorSelect(m_color, XMVectorSet(r, g, b, b), g_XMMask3);
 		}
+		Color Color::ToSRGB() const
+		{
+			return Color();
+		}
+		Color Color::FromSRGB() const
+		{
+			return Color();
+		}
+		Color Color::ToREC709() const
+		{
+			return Color();
+		}
+		Color Color::FromREC709() const
+		{
+			return Color();
+		}
+		uint32_t Color::R10G10B10A2() const
+		{
+			return uint32_t();
+		}
+		uint32_t Color::R8G8B8A8() const
+		{
+			return uint32_t();
+		}
+		uint32_t Color::R11G11B10F(bool RoundToEven) const
+		{
+			return uint32_t();
+		}
+		Color::operator XMVECTOR() const
+		{
+			return m_color;
+		}
 	}
 }

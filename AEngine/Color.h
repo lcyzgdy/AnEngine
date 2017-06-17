@@ -49,7 +49,7 @@ namespace RenderCore
 
 			uint32_t R11G11B10F(bool RoundToEven = false) const;
 
-			operator XMVECTOR() const { return m_color; }
+			operator XMVECTOR() const;
 		};
 	}
 }

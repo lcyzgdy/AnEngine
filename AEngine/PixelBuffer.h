@@ -3,16 +3,13 @@
 #define __PIXELBUFFER_H__
 #include"DX.h"
 #include"GpuResource.h"
-#include"RenderCore.h"
 using namespace std;
-using namespace RenderCore;
-using namespace RenderCore::Resource;
 
 namespace RenderCore
 {
 	namespace Resource
 	{
-		class PixelBuffer :public GpuResource
+		class PixelBuffer: public GpuResource
 		{
 		protected:
 			UINT m_width;
@@ -52,7 +49,7 @@ namespace RenderCore
 
 			void SetBankRotation(UINT rotationAmount);
 
-			void ExportToFile(wstring& filePath);
+			void ExportToFile(wstring& filePath, ID3D12Device* device);
 		};
 	}
 }

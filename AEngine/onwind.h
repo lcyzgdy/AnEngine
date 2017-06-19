@@ -144,6 +144,27 @@ inline T* SafeAcquire(T* newObject)
 #endif
 #endif // !_WIN64
 
+template<typename T>
+struct Range
+{
+	T maxn, minn;
+
+	Range(T& _maxn, T& _minn)
+	{
+		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long)) 
+			throw exception();
+		maxn = _maxn;
+		minn = _minn;
+	}
+
+	bool in(T& value)
+	{
+		if (value < minn) return false;
+		if (value > maxn) return false;
+		return true;
+	}
+};
+
 inline void randomize()
 {
 	srand((unsigned)time(nullptr));

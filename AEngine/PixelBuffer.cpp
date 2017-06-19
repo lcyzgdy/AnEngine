@@ -6,7 +6,7 @@ namespace RenderCore
 	{
 		PixelBuffer::PixelBuffer() :
 			m_width(0), m_height(0), m_format(DXGI_FORMAT_UNKNOWN), m_bankRotation(0),
-			m_size(0)
+			m_size(0), GpuResource()
 		{
 		}
 
@@ -35,7 +35,7 @@ namespace RenderCore
 			m_bankRotation = rotationAmount;
 		}
 
-		void PixelBuffer::ExportToFile(wstring & filePath)
+		void PixelBuffer::ExportToFile(wstring & filePath, ID3D12Device* device)
 		{
 			// 创建一个足够大的纹理缓冲区
 			D3D12_HEAP_PROPERTIES heapProps;
@@ -60,7 +60,7 @@ namespace RenderCore
 
 			// 创建缓冲
 			ID3D12Resource* p_tempResource;
-			ThrowIfFailed(r_renderCore[0].GetDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &tempDesc,
+			ThrowIfFailed(device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &tempDesc,
 				D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&p_tempResource)));
 			p_tempResource->SetName(L"Temporary Readback Buffer");
 			GpuResource tempResource(p_tempResource, D3D12_RESOURCE_STATE_COPY_DEST);

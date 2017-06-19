@@ -4,7 +4,6 @@
 
 #include"DX.h"
 #include"PixelBuffer.h"
-#include"RenderCore.h"
 using namespace std;
 using namespace RenderCore;
 

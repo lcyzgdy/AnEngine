@@ -13,6 +13,11 @@ using namespace std;
 
 namespace RenderCore
 {
+
+};
+
+namespace RenderCore
+{
 	static const UINT DefaultFrameCount = 2;
 	static const UINT SwapChainBufferCount = 3;
 	static constexpr UINT DefaultThreadCount = 1;

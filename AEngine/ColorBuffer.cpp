@@ -1,4 +1,6 @@
 #include "ColorBuffer.h"
+#include "DescriptorHeap.h"
+#include "RenderCore.h"
 using namespace RenderCore;
 using namespace Resource;
 
@@ -15,11 +17,12 @@ namespace RenderCore
 		}
 
 		void ColorBuffer::CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
-			ID3D12Device* device)
+			ID3D12Device* device, RenderCore::Heap::DescriptorAllocator* heapDescAllocator)
 		{
 			// 和资源进行关联，状态是present（呈现）。
 			AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
-			//m_rtvHandle=Al
+			m_rtvHandle = heapDescAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, device);
+			device->CreateRenderTargetView(m_cp_resource.Get(), nullptr, m_rtvHandle);
 		}
 
 		D3D12_RESOURCE_FLAGS ColorBuffer::CombineResourceFlags() const

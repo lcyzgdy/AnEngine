@@ -8,24 +8,28 @@
 #include<mutex>
 #include<atomic>
 #include"ColorBuffer.h"
+#include"DescriptorHeap.h"
 using namespace Microsoft::WRL;
 using namespace std;
 
 namespace RenderCore
 {
-
+	namespace Heap
+	{
+		extern DescriptorAllocator r_h_heapDescAllocator;
+	}
 };
 
 namespace RenderCore
 {
-	static const UINT DefaultFrameCount = 2;
-	static const UINT SwapChainBufferCount = 3;
-	static constexpr UINT DefaultThreadCount = 1;
-	static const DXGI_FORMAT DefaultSwapChainFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
-	static const float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	static const D3D_FEATURE_LEVEL MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	static const D3D_FEATURE_LEVEL D3DFeatureLevelWithCreatorUpdate = D3D_FEATURE_LEVEL_12_1;
-	static const bool IsUseWarpDevice = false;
+	static const UINT cnt_r_DefaultFrameCount = 2;
+	static const UINT cnt_r_SwapChainBufferCount = 3;
+	static constexpr UINT cnt_r_DefaultThreadCount = 1;
+	static const DXGI_FORMAT cnt_r_DefaultSwapChainFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
+	static const float cnt_r_ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	static const D3D_FEATURE_LEVEL cnt_r_MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	static const D3D_FEATURE_LEVEL cnt_r_D3DFeatureLevelWithCreatorUpdate = D3D_FEATURE_LEVEL_12_1;
+	static const bool cnt_r_IsUseWarpDevice = false;
 
 	extern bool r_enableHDROutput;
 
@@ -114,11 +118,11 @@ namespace RenderCore
 
 	extern vector<GraphicCard> r_renderCore;
 	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
-	extern Resource::ColorBuffer r_displayPlane[SwapChainBufferCount];
+	extern Resource::ColorBuffer r_displayPlane[cnt_r_SwapChainBufferCount];
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = DefaultSwapChainFormat);
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = cnt_r_DefaultSwapChainFormat);
 }
 
 

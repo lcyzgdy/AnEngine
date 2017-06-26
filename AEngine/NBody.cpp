@@ -144,7 +144,7 @@ void NBody::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = DefaultFrameCount;
+	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -170,7 +170,7 @@ void NBody::InitializePipeline()
 
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-		rtvHeapDesc.NumDescriptors = DefaultFrameCount;
+		rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		ThrowIfFailed(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap)));
@@ -190,7 +190,7 @@ void NBody::InitializePipeline()
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
 
 		// Create a RTV and a command allocator for each frame.
-		for (UINT i = 0; i < DefaultFrameCount; i++)
+		for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
 		{
 			ThrowIfFailed(swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i])));
 			device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -351,7 +351,7 @@ void NBody::InitializeAssets()
 	}	// 创建计算着色器的常量缓冲区
 
 	{
-		const UINT constantBufferGSSize = sizeof(ConstantBufferGS) * DefaultFrameCount;
+		const UINT constantBufferGSSize = sizeof(ConstantBufferGS) * cnt_r_DefaultFrameCount;
 
 		ThrowIfFailed(device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -407,7 +407,7 @@ void NBody::PopulateCommandList()
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvHandle, cnt_r_ClearColor, 0, nullptr);
 
 	// Render the particles.
 	float viewportHeight = static_cast<float>(static_cast<UINT>(viewport.Height) / heightInstances);

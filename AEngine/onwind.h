@@ -9,7 +9,6 @@
 #include<memory>
 #include<string>
 #include<vector>
-
 using namespace std;
 
 #ifndef GDY
@@ -23,7 +22,7 @@ using namespace std;
 
 #ifdef UNICODE
 
-#define Strcpy(a,b) wcscpy_s(a,b);
+#define Strcpy(a,b) wcscpy_s(a,b)
 #define ERRORBLOCK(a) MessageBox(NULL, ,_T("Error"), ToLPCWSTR("Error"+a),0)
 
 inline LPCWSTR ToLPCWSTR(string& orig)
@@ -144,6 +143,27 @@ inline T* SafeAcquire(T* newObject)
 
 #endif
 #endif // !_WIN64
+
+template<typename T>
+struct Range
+{
+	T maxn, minn;
+
+	Range(T& _maxn, T& _minn)
+	{
+		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long)) 
+			throw exception();
+		maxn = _maxn;
+		minn = _minn;
+	}
+
+	bool in(T& value)
+	{
+		if (value < minn) return false;
+		if (value > maxn) return false;
+		return true;
+	}
+};
 
 inline void randomize()
 {

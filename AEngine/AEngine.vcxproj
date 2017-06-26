@@ -139,6 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="ColorBuffer.h" />
+    <ClInclude Include="DepthBuffer.h" />
+    <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DrawLine.h" />
@@ -148,15 +152,21 @@
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GpuResource.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
     <ClInclude Include="PhysicsCore.h" />
+    <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ColorBuffer.cpp" />
+    <ClCompile Include="DepthBuffer.cpp" />
+    <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
     <ClCompile Include="DrawLine.cpp" />
     <ClCompile Include="DTimer.cpp" />
@@ -165,9 +175,11 @@
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
+    <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="WinMain.cpp" />

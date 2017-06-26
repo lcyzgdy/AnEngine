@@ -86,7 +86,7 @@ void FrameBuffering::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = DefaultFrameCount;
+	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -111,7 +111,7 @@ void FrameBuffering::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -128,7 +128,7 @@ void FrameBuffering::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < DefaultFrameCount; i++)
+	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -230,7 +230,7 @@ void FrameBuffering::InitializeAssets()
 	vertexBufferView.SizeInBytes = vertexBufferSize;
 
 	device->CreateFence(fenceValues[frameIndex], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//Create a fence
+	//Create a m_fence
 
 	fenceValues[frameIndex]++;
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);

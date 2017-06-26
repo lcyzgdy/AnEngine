@@ -3,30 +3,49 @@
 #define __RENDERCORE_H__
 
 #include"onwind.h"
-#include"d3dx12.h"
-#include<dxgi1_4.h>
+#include"DX.h"
+#include<dxgi1_6.h>
 #include<mutex>
 #include<atomic>
+#include"ColorBuffer.h"
+#include"DescriptorHeap.h"
 using namespace Microsoft::WRL;
+using namespace std;
 
 namespace RenderCore
 {
-	static const UINT DefaultFrameCount = 2;
-	static const UINT SwapChainBufferCount = 3;
-	static constexpr UINT DefaultThreadCount = 1;
-	static const float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	static const D3D_FEATURE_LEVEL MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	static const D3D_FEATURE_LEVEL CreatorUpdateD3DFeatureLevel = D3D_FEATURE_LEVEL_12_1;
-	static const bool IsUseWarpDevice = false;
+	namespace Heap
+	{
+		extern DescriptorAllocator r_h_heapDescAllocator;
+	}
+};
+
+namespace RenderCore
+{
+	static const UINT cnt_r_DefaultFrameCount = 2;
+	static const UINT cnt_r_SwapChainBufferCount = 3;
+	static constexpr UINT cnt_r_DefaultThreadCount = 1;
+	static const DXGI_FORMAT cnt_r_DefaultSwapChainFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
+	static const float cnt_r_ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	static const D3D_FEATURE_LEVEL cnt_r_MinD3DFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	static const D3D_FEATURE_LEVEL cnt_r_D3DFeatureLevelWithCreatorUpdate = D3D_FEATURE_LEVEL_12_1;
+	static const bool cnt_r_IsUseWarpDevice = false;
+
+	extern bool r_enableHDROutput;
+
+	namespace Private
+	{
+		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
+	}
 
 	class CommandQueue
 	{
-		ComPtr<ID3D12CommandQueue> commandQueue;
+		ComPtr<ID3D12CommandQueue> m_cp_commandQueue;
 
-		ComPtr<ID3D12Fence> fence;
-		atomic_uint64_t nextFenceValue;
-		atomic_uint64_t lastCompleteFenceValue;
-		HANDLE fenceEvent;
+		ComPtr<ID3D12Fence> m_cp_fence;
+		atomic_uint64_t m_nextFenceValue;
+		atomic_uint64_t m_lastCompleteFenceValue;
+		HANDLE m_fenceEvent;
 
 	public:
 		CommandQueue() = default;
@@ -36,24 +55,24 @@ namespace RenderCore
 		void Release();
 
 		const ID3D12CommandQueue* GetCommandQueue() const;
+		ID3D12CommandQueue* GetCommandQueue();
 		D3D12_COMMAND_LIST_TYPE GetType();
 	};
 
 	// 显卡设备接口。
 	class GraphicCard
 	{
-		ComPtr<ID3D12Device2> device;
+		ComPtr<ID3D12Device2> m_cp_device;
 
-		CommandQueue renderCommandQueue;	// 渲染着色器的命令队列。
-		CommandQueue computeCommandQueue;	// 计算着色器的命令队列。
-		CommandQueue copyCommandQueue;
+		CommandQueue m_renderCommandQueue;	// 渲染着色器的命令队列。
+		CommandQueue m_computeCommandQueue;	// 计算着色器的命令队列。
+		CommandQueue m_copyCommandQueue;
 
-		D3D12_FEATURE_DATA_D3D12_OPTIONS featureDataOptions;
+		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 
-		bool isTypedUAVLoadSupport_R11G11B10_FLOAT;
-		bool isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
-
-		bool stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
+		bool m_isTypedUAVLoadSupport_R11G11B10_FLOAT;
+		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
+		bool m_stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 
 		void CreateDevice();
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -90,17 +109,20 @@ namespace RenderCore
 
 		void Initialize(bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
+		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		const ID3D12Device2* GetDevice() const;
+		ID3D12Device2* GetDevice();
 
 		void IsStable(bool isStable);
 	};
 
 	extern vector<GraphicCard> r_renderCore;
-	extern ComPtr<IDXGISwapChain1> r_swapChain;
+	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
+	extern Resource::ColorBuffer r_displayPlane[cnt_r_SwapChainBufferCount];
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
 
-	void InitializeSwapChain();
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = cnt_r_DefaultSwapChainFormat);
 }
 
 

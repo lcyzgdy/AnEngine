@@ -94,7 +94,7 @@ void DrawCube::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = DefaultFrameCount;
+	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -120,7 +120,7 @@ void DrawCube::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -142,17 +142,17 @@ void DrawCube::InitializePipeline()
 	samDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	samDesc.NumDescriptors;
 	samDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	ThrowIfFailed(device->CreateDescriptorHeap(&samDesc, IID_PPV_ARGS(&samHeap)));*/
+	ThrowIfFailed(m_device->CreateDescriptorHeap(&samDesc, IID_PPV_ARGS(&samHeap)));*/
 
 	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	//rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	//samDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+	//samDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < DefaultFrameCount; i++)
+	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -319,11 +319,11 @@ void DrawCube::WaitForGpu()
 {
 	ThrowIfFailed(commandQueue->Signal(fence.Get(), fenceValues[frameIndex]));
 
-	// Wait until the fence has been processed.
+	// Wait until the m_fence has been processed.
 	ThrowIfFailed(fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent));
 	WaitForSingleObjectEx(fenceEvent, INFINITE, FALSE);
 
-	// Increment the fence value for the current frame.
+	// Increment the m_fence value for the current frame.
 	fenceValues[frameIndex]++;
 }
 
@@ -344,7 +344,7 @@ void DrawCube::PopulateCommandList()
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvHandle, cnt_r_ClearColor, 0, nullptr);
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());

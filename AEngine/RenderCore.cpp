@@ -24,13 +24,13 @@ namespace RenderCore
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 
 		if (m_cp_device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			Private::r_cp_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 		}
 
 		m_cp_device->SetStablePowerState(m_stableFlag);
@@ -263,7 +263,7 @@ namespace RenderCore
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = SwapChainBufferCount;
+		swapChainDesc.BufferCount = cnt_r_SwapChainBufferCount;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		swapChainDesc.Width = width;
@@ -301,11 +301,13 @@ namespace RenderCore
 			}
 		}
 #endif
-		for (UINT i = 0; i < SwapChainBufferCount; ++i)
+		for (UINT i = 0; i < cnt_r_SwapChainBufferCount; ++i)
 		{
 			ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
-			//r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer", DisplayPlane.Detach());
+			r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer",
+				cp_displayPlane.Detach(), r_renderCore[0].GetDevice(),
+				&RenderCore::Heap::r_h_heapDescAllocator);
 		}
 	}
 }

@@ -56,7 +56,7 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	// 每个三角形每帧获得自己的常量缓冲区。
 
 	static const UINT triangleCount = 1024;
-	static const UINT triangleResourceCount = triangleCount*DefaultFrameCount;
+	static const UINT triangleResourceCount = triangleCount*cnt_r_DefaultFrameCount;
 	static const UINT commandSizePerFrame;			// 用于在单个框架中绘制所有三角形的间接命令的大小。
 	static const UINT commandBufferCounterOffset;	// 在处理命令缓冲区uva计数器的偏移量。
 	static const UINT computeThreadBlockSize = 128;	// 应与compute.hlsl中的值匹配。
@@ -75,8 +75,8 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
-	ComPtr<ID3D12Resource> renderTargets[DefaultFrameCount];
-	ComPtr<ID3D12CommandAllocator> commandAllocators[DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
 	UINT rtvDescriptorSize;
 	UINT dsvDescriptorSize;
 	UINT cbvSrvUavDescriptorSize;
@@ -88,20 +88,20 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12GraphicsCommandList> computeCommandList;
 	ComPtr<ID3D12CommandQueue> computeCommandQueue;
-	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[cnt_r_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> computeRootSignature;
 	ComPtr<ID3D12PipelineState> computeState;
 
 	ComPtr<ID3D12Fence> fence;
 	ComPtr<ID3D12Fence> computeFence;
-	UINT64 fenceValues[DefaultFrameCount];
+	UINT64 fenceValues[cnt_r_DefaultFrameCount];
 	HANDLE fenceEvent;
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	ComPtr<ID3D12Resource> constantBuffer;
 	ComPtr<ID3D12Resource> depthStencil;
 	ComPtr<ID3D12Resource> commandBuffer;
-	ComPtr<ID3D12Resource> processedCommandBuffers[DefaultFrameCount];
+	ComPtr<ID3D12Resource> processedCommandBuffers[cnt_r_DefaultFrameCount];
 	ComPtr<ID3D12Resource> processedCommandBufferCounterReset;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 

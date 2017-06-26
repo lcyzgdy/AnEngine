@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorBuffer.h" />
+    <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
     <ClInclude Include="d3dx12.h" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
+    <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
     <ClCompile Include="DrawLine.cpp" />

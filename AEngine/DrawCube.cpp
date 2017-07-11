@@ -94,7 +94,7 @@ void DrawCube::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -120,7 +120,7 @@ void DrawCube::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -152,7 +152,7 @@ void DrawCube::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -344,7 +344,7 @@ void DrawCube::PopulateCommandList()
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	commandList->ClearRenderTargetView(rtvHandle, cnt_r_ClearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvHandle, r_cnt_ClearColor, 0, nullptr);
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());
@@ -371,7 +371,7 @@ void DrawCube::MoveToNextFrame()
 		WaitForSingleObjectEx(fenceEvent, INFINITE, FALSE);
 	}
 
-	fenceValues[frameIndex] = currentFenceValue + 1;
+	fenceValues[frameIndex] = static_cast<uint32_t>(currentFenceValue) + 1;
 }
 
 void DrawCube::WaitForRenderContext()

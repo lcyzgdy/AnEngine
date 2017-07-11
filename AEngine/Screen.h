@@ -17,7 +17,7 @@ class Screen
 		S1440P,
 		S1800P,
 		S2160P
-	};
+	} TargetResolution;
 
 public:
 

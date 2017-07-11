@@ -161,6 +161,7 @@
     <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="RenderCore.h" />
+    <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>

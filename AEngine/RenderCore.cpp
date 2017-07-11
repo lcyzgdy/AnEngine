@@ -24,13 +24,13 @@ namespace RenderCore
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 
 		if (m_cp_device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			Private::r_cp_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 		}
 
 		m_cp_device->SetStablePowerState(m_stableFlag);
@@ -241,7 +241,7 @@ namespace RenderCore
 {
 	vector<GraphicCard> r_renderCore;
 	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
-
+	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
 
 	namespace Private
@@ -263,7 +263,7 @@ namespace RenderCore
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = cnt_r_SwapChainBufferCount;
+		swapChainDesc.BufferCount = r_cnt_SwapChainBufferCount;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		swapChainDesc.Width = width;
@@ -277,7 +277,7 @@ namespace RenderCore
 		ComPtr<IDXGISwapChain1> swapChain1;
 		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
-			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()), 
+			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()),
 			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
 		));
 		swapChain1.As(&r_cp_swapChain);
@@ -301,7 +301,7 @@ namespace RenderCore
 			}
 		}
 #endif
-		for (UINT i = 0; i < cnt_r_SwapChainBufferCount; ++i)
+		for (UINT i = 0; i < r_cnt_SwapChainBufferCount; ++i)
 		{
 			ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));

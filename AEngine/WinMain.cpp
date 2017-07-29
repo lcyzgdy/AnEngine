@@ -32,16 +32,16 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam
 	}
 	case(WM_SETFOCUS):
 	{
-		BaseInput::SetAcquire();
+		BaseInput::GetInstance()->SetAcquire();
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::SetMousePosition(p);
+		BaseInput::GetInstance()->SetMousePosition(p.x, p.y);
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
-		BaseInput::SetUnacquire();
+		BaseInput::GetInstance()->SetUnacquire();
 		break;
 	}
 	case(WM_MOUSEMOVE):
@@ -49,12 +49,12 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::SetMousePosition(p);
-		break; 
+		BaseInput::GetInstance()->SetMousePosition(p.x, p.y);
+		break;
 	}
 	case(WM_PAINT):
 	{
-		BaseInput::Update();
+		//BaseInput::GetInstance()->Update();
 		if (pD3dApp)
 		{
 			pD3dApp->OnUpdate();
@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	screenw = 1280;
 	screenh = 720;
 
-	D3D12AppBase* d3dApp = new NBody(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);
@@ -128,12 +128,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();
-	//POINT curPos;
-	//GetCursorPos(&curPos);
-	//ScreenToClient(window, &curPos);
-	//BaseInput::Initialize(window, hInstance);
-	//BaseInput::SetMousePosition(curPos);
-	BaseInput::Initialize(window, hInstance);
+	BaseInput::GetInstance()->Initialize(window, hInstance);
 	Screen::InitializeScreen(screenw, screenh);
 
 	ShowWindow(window, nCmdShow);
@@ -147,8 +142,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DispatchMessage(&msg);
 		}
 	}
-	
-	BaseInput::Release();
+
+	BaseInput::GetInstance()->Release();
 	d3dApp->OnRelease();
 
 	UnregisterClass(wnd.lpszClassName, hInstance);

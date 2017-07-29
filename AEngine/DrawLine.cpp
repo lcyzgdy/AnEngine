@@ -32,17 +32,17 @@ void DrawLine::OnRelease()
 
 void DrawLine::OnUpdate()
 {
-	if (BaseInput::GetMouseButton(0))
+	if (BaseInput::GetInstance()->GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::GetMouseButtonDown(0))
+		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
 			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
 			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		auto pos = BaseInput::GetM128MousePosition();
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -356,17 +356,17 @@ void DrawLineWithWu::OnRelease()
 
 void DrawLineWithWu::OnUpdate()
 {
-	if (BaseInput::GetMouseButton(0))
+	if (BaseInput::GetInstance()->GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::GetMouseButtonDown(0))
+		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
 			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
 			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		auto pos = BaseInput::GetM128MousePosition();
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -749,11 +749,11 @@ void DrawTriangle::OnRelease()
 
 void DrawTriangle::OnUpdate()
 {
-	if (BaseInput::GetMouseButtonDown(0))
+	if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 	{
 		Vertex v;
 		v.color = { random(0.0f,1.0f), random(0.0f,1.0f) ,random(0.0f,1.0f) ,1.0f };
-		auto pos = BaseInput::GetM128MousePosition();
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		vertex.push_back(v);

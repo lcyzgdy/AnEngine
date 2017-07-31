@@ -196,4 +196,13 @@ inline float random(float a, float b)
 	return scale * range + a;
 }
 
+struct NonCopyable
+{
+	NonCopyable() = default;
+	NonCopyable(const NonCopyable&) = delete;
+	~NonCopyable() = default;
+
+	NonCopyable & operator=(const NonCopyable&) = delete;
+};
+
 #endif // !__ONWIND_H__

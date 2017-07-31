@@ -38,6 +38,7 @@ namespace RenderCore
 		atomic_uint64_t m_nextFenceValue;
 		atomic_uint64_t m_lastCompleteFenceValue;
 		HANDLE m_fenceEvent;
+		D3D12_COMMAND_LIST_TYPE m_type;
 
 	public:
 		CommandQueue() = default;
@@ -58,7 +59,7 @@ namespace RenderCore
 
 		CommandQueue m_renderCommandQueue;	// 渲染着色器的命令队列。
 		CommandQueue m_computeCommandQueue;	// 计算着色器的命令队列。
-		CommandQueue m_copyCommandQueue;
+		CommandQueue m_copyCommandQueue;	// 拷贝命令队列
 
 		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 

@@ -213,27 +213,29 @@ namespace RenderCore
 	{
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+		queueDesc.Type = type;
 		p_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_cp_commandQueue.GetAddressOf()));
+		m_type = type;
 	}
 
 	void CommandQueue::Release()
 	{
+		CloseHandle(m_fenceEvent);
 	}
 
 	const ID3D12CommandQueue* CommandQueue::GetCommandQueue() const
 	{
-		return nullptr;
+		return m_cp_commandQueue.Get();
 	}
 
 	ID3D12CommandQueue * CommandQueue::GetCommandQueue()
 	{
-		return nullptr;
+		return m_cp_commandQueue.Get();
 	}
 
 	D3D12_COMMAND_LIST_TYPE CommandQueue::GetType()
 	{
-		return D3D12_COMMAND_LIST_TYPE();
+		return m_type;
 	}
 }
 

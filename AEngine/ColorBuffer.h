@@ -5,6 +5,7 @@
 #include"DX.h"
 #include"PixelBuffer.h"
 #include"Color.h"
+#include"DescriptorHeap.h"
 using namespace std;
 using namespace RenderCore;
 
@@ -29,9 +30,9 @@ namespace RenderCore
 				uint32_t arraySize, uint32_t numMips = 1);
 
 		public:
-			ColorBuffer() = delete;
+			ColorBuffer();
 			~ColorBuffer() = default;
-			ColorBuffer(Color clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f));
+			ColorBuffer(Color clearColor);
 
 			// 从交换链缓冲区创建颜色缓冲区，无序访问受限。
 			void CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource, 

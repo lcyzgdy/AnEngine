@@ -1,6 +1,6 @@
 #include "ColorBuffer.h"
-#include "DescriptorHeap.h"
-#include "RenderCore.h"
+//#include "DescriptorHeap.h"
+#include "RenderCoreConstants.h"
 using namespace RenderCore;
 using namespace Resource;
 
@@ -8,6 +8,12 @@ namespace RenderCore
 {
 	namespace Resource
 	{
+		ColorBuffer::ColorBuffer() :
+			PixelBuffer(), m_clearColor(Color(0.0f, 0.0f, 0.0f)),
+			m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
+		{
+		}
+
 		ColorBuffer::ColorBuffer(Color clearColor) :
 			m_clearColor(clearColor), m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
 		{

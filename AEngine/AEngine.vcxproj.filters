@@ -93,6 +93,12 @@
     <ClInclude Include="DepthBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CommandContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCoreConstants.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">

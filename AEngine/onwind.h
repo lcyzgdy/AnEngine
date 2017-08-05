@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __ONWIND_H__
+#define __ONWIND_H__
+
 #include<iostream>
 #include<fstream>
 #include<ctime>
@@ -11,9 +14,8 @@
 #include<vector>
 using namespace std;
 
-#ifndef GDY
-#define GDY
 #define var auto
+
 #ifdef _WIN64
 
 #include<windows.h>
@@ -151,13 +153,13 @@ struct Range
 
 	Range(T& _maxn, T& _minn)
 	{
-		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long)) 
+		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long))
 			throw exception();
 		maxn = _maxn;
 		minn = _minn;
 	}
 
-	bool in(T& value)
+	bool has(T& value)
 	{
 		if (value < minn) return false;
 		if (value > maxn) return false;
@@ -194,5 +196,13 @@ inline float random(float a, float b)
 	return scale * range + a;
 }
 
+struct NonCopyable
+{
+	NonCopyable() = default;
+	NonCopyable(const NonCopyable&) = delete;
+	~NonCopyable() = default;
 
-#endif // !GDY
+	NonCopyable & operator=(const NonCopyable&) = delete;
+};
+
+#endif // !__ONWIND_H__

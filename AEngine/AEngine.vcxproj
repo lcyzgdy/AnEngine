@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorBuffer.h" />
+    <ClInclude Include="CommandContext.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="RenderCore.h" />
+    <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>

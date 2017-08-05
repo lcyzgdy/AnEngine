@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef __DX_H__
 #define __DX_H__
 
@@ -63,7 +62,7 @@ public:
 
 	virtual void OnKeyDown(UINT8 key) = 0;
 	virtual void OnKeyUp(UINT8 key) = 0;
-	// ÊÂ¼þºÍÎ¯ÍÐ
+	// ï¿½Â¼ï¿½ï¿½ï¿½Î¯ï¿½ï¿½
 
 	void SetHwnd(const HWND _hwnd);
 

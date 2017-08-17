@@ -129,7 +129,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();
 	BaseInput::GetInstance()->Initialize(window, hInstance);
-	Screen::InitializeScreen(screenw, screenh);
+	Screen::GetInstance()->Initialize(screenw, screenh);
 
 	ShowWindow(window, nCmdShow);
 

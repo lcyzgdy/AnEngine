@@ -19,6 +19,7 @@ class BaseInput
 {
 	friend LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
 	ComPtr<IDirectInput8> m_directInput;
 	ComPtr<IDirectInputDevice8> m_keyboard;

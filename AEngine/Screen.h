@@ -6,10 +6,13 @@
 
 class Screen
 {
-	static atomic<int> width;
-	static atomic<int> height;
+	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
-	static enum TargetResolution :int
+	atomic<int> m_width;
+	atomic<int> m_height;
+
+	enum TargetResolution : int
 	{
 		S720P,
 		S900P,
@@ -19,19 +22,21 @@ class Screen
 		S2160P
 	} TargetResolution;
 
+	void Initialize(const int _width, const int _height);
+
 public:
 
-	static void InitializeScreen(const int _width, const int _height);
-
-	inline static int Width()
+	inline int Width()
 	{
-		return width;
+		return m_width;
 	}
 
-	inline static int Height()
+	inline int Height()
 	{
-		return height;
+		return m_height;
 	}
+
+	inline static Screen* GetInstance();
 };
 
 

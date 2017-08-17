@@ -1,4 +1,5 @@
 #include"RenderCore.h"
+#include"Screen.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -171,6 +172,7 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
 		{
+			return nullptr;
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
@@ -241,18 +243,24 @@ namespace RenderCore
 
 namespace RenderCore
 {
+	thread r_renderMainThread;
+
 	vector<GraphicCard> r_renderCore;
 	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
 	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
+#ifdef _WIN32
+	HWND r_hwnd;
+#endif // _WIN32
 
 	namespace Private
 	{
 		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	void InitializeRender(int graphicCardCount, bool isStable)
+	void InitializeRender(int graphicCardCount, bool isStable, HWND hwnd)
 	{
+		r_hwnd = hwnd;
 		while (graphicCardCount--)
 		{
 			GraphicCard aRender;
@@ -260,6 +268,7 @@ namespace RenderCore
 			aRender.Initialize();
 			r_renderCore.push_back(aRender);
 		}
+		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -277,6 +286,7 @@ namespace RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
+		//Private::r_cp_dxgiFactory->Create
 		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
 			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()),

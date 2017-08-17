@@ -13,7 +13,7 @@ namespace RenderCore
 	{
 		queue<ComPtr<ID3D12CommandList>> m_cp_commandListPool;
 		std::mutex m_mutex;
-		
+
 	public:
 		CommandListPool() = default;
 		~CommandListPool() = default;

@@ -109,9 +109,14 @@ namespace RenderCore
 		void IsStable(bool isStable);
 	};
 
+	extern thread r_renderMainThread;
+
 	extern vector<GraphicCard> r_renderCore;
 	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
 	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+#ifdef _WIN32
+	extern HWND r_hwnd;
+#endif // _WIN32
 
 	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
 

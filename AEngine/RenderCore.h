@@ -19,7 +19,7 @@ namespace RenderCore
 	{
 		extern DescriptorAllocator r_h_heapDescAllocator;
 	}
-};
+}
 
 namespace RenderCore
 {
@@ -112,13 +112,14 @@ namespace RenderCore
 	extern thread r_renderMainThread;
 
 	extern vector<GraphicCard> r_renderCore;
-	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
+	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
 	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern int r_frameIndex;
 #ifdef _WIN32
 	extern HWND r_hwnd;
 #endif // _WIN32
 
-	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
+	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
 }

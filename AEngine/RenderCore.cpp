@@ -246,9 +246,10 @@ namespace RenderCore
 	thread r_renderMainThread;
 
 	vector<GraphicCard> r_renderCore;
-	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
+	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
 	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
+	int r_frameIndex;
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
@@ -258,7 +259,7 @@ namespace RenderCore
 		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	void InitializeRender(int graphicCardCount, bool isStable, HWND hwnd)
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
 		while (graphicCardCount--)
@@ -269,6 +270,7 @@ namespace RenderCore
 			r_renderCore.push_back(aRender);
 		}
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
+
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -321,5 +323,10 @@ namespace RenderCore
 				cp_displayPlane.Detach(), r_renderCore[0].GetDevice(),
 				&RenderCore::Heap::r_h_heapDescAllocator);
 		}
+#ifdef _WIN32
+		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+#endif // _WIN32
+
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
 	}
 }

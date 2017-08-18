@@ -36,7 +36,11 @@ public:
 		return m_height;
 	}
 
-	inline static Screen* GetInstance();
+	inline static Screen* GetInstance()
+	{
+		static Screen screen;
+		return &screen;
+	}
 };
 
 

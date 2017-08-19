@@ -1,23 +1,7 @@
-﻿#include"onwind.h"
-using namespace std;
-
-#ifdef _WINDLL
-
-#include<Windows.h>
-
-bool DllMain(HMODULE hModule, DWORD )
-{
-
-}
-#elif defined _WINEXE
-
-#include"frameBuffering.h"
-#include"NBody.h"
-#include"ExecuteIndirect.h"
+#include"onwind.h"
 #include"DrawLine.h"
-#include"Input.h"
 #include"Screen.h"
-#include"DrawCube.h"
+using namespace std;
 
 WNDCLASSEX wnd;
 HWND window;
@@ -65,7 +49,7 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam
 	}
 	case(WM_PAINT):
 	{
-		//BaseInput::GetInstance()->Update();
+		//BaseInput::GetInstance()->Update();	// 这里已经挪到新的线程执行，在BaseInput.cpp里。
 		if (pD3dApp)
 		{
 			pD3dApp->OnUpdate();
@@ -127,6 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		nullptr,
 		nullptr,
 		hInstance,
+		//nullptr);
 		d3dApp);
 
 	if (window == NULL)
@@ -139,11 +124,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	d3dApp->SetHwnd(window);
 	d3dApp->OnInit();
-	BaseInput::GetInstance()->Initialize(window, hInstance);
 	Screen::GetInstance()->Initialize(screenw, screenh);
+	BaseInput::GetInstance()->Initialize(window, hInstance);
 
+	//if (!ShowWindow(window, nCmdShow))
+	//{
+	//	ERRORBLOCK("WINDOWERROR");
+	//	return 0;
+	//}
 	ShowWindow(window, nCmdShow);
-
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
@@ -156,9 +145,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	BaseInput::GetInstance()->Release();
 	d3dApp->OnRelease();
-
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;
 }
-#endif // _WINDLL
-

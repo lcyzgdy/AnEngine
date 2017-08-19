@@ -51,7 +51,7 @@ void RenderCore::Resource::DepthBuffer::CreateDerviedViews(ID3D12Device * device
 	{
 		m_depthSrvHandle = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, device);
 	}
-	// ´´½¨SRV
+	// åˆ›å»ºSRV
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = GetDepthFormat(format);
 	if (dsvDesc.ViewDimension == D3D12_DSV_DIMENSION_TEXTURE2D)

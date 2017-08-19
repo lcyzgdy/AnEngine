@@ -1,7 +1,7 @@
 #include"RenderCore.h"
 #include"Screen.h"
 
-// ¼ìÑéÊÇ·ñÓÐHDRÊä³ö¹¦ÄÜ
+// æ£€éªŒæ˜¯å¦æœ‰HDRè¾“å‡ºåŠŸèƒ½
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
 namespace RenderCore
@@ -10,7 +10,7 @@ namespace RenderCore
 	{
 		UINT dxgiFactoryFlags = 0;
 
-		// ¿ªÆôDebugÄ£Ê½
+		// å¼€å¯Debugæ¨¡å¼
 #if defined(DEBUG) || defined(_DEBUG)
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
@@ -41,14 +41,14 @@ namespace RenderCore
 		m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
-		// Í¨¹ýIDÀ´±ÜÃâ¸öÈËÏûÏ¢¡£
+		// é€šè¿‡IDæ¥é¿å…ä¸ªäººæ¶ˆæ¯ã€‚
 		D3D12_MESSAGE_ID denyMessageIds[] =
 		{
-			// µ±ÃèÊö·û±íÖÐÓÐÎ´³õÊ¼»¯µÄÃèÊö·ûÊ±£¬¼´Ê¹×ÅÉ«Æ÷²»·ÃÎÊ£¬Ò²»á·¢ÉúÕâÖÖÇé¿ö¡£³£¼ûµÄ×ö·¨ÊÇÇÐ»»×ÅÉ«Æ÷µÄÅÅÁÐ¶ø²»ÊÇ¸Ä±äÌ«¶àµÄ´úÂë¡¢ÖØÐÂ°²ÅÅ×ÊÔ´¡£
+			// å½“æè¿°ç¬¦è¡¨ä¸­æœ‰æœªåˆå§‹åŒ–çš„æè¿°ç¬¦æ—¶ï¼Œå³ä½¿ç€è‰²å™¨ä¸è®¿é—®ï¼Œä¹Ÿä¼šå‘ç”Ÿè¿™ç§æƒ…å†µã€‚å¸¸è§çš„åšæ³•æ˜¯åˆ‡æ¢ç€è‰²å™¨çš„æŽ’åˆ—è€Œä¸æ˜¯æ”¹å˜å¤ªå¤šçš„ä»£ç ã€é‡æ–°å®‰æŽ’èµ„æºã€‚
 			D3D12_MESSAGE_ID_INVALID_DESCRIPTOR_HANDLE,
-			// µ±×ÅÉ«Æ÷²»Êä³öäÖÈ¾Ä¿±êµÄËùÓÐÑÕÉ«·ÖÁ¿£¨ÀýÈç½ö½«RGBÐ´ÈëR10G10B10A2»º³åÇøÊ±£©ºöÂÔAlphaÊ±´¥·¢¡£
+			// å½“ç€è‰²å™¨ä¸è¾“å‡ºæ¸²æŸ“ç›®æ ‡çš„æ‰€æœ‰é¢œè‰²åˆ†é‡ï¼ˆä¾‹å¦‚ä»…å°†RGBå†™å…¥R10G10B10A2ç¼“å†²åŒºæ—¶ï¼‰å¿½ç•¥Alphaæ—¶è§¦å‘ã€‚
 			D3D12_MESSAGE_ID_CREATEGRAPHICSPIPELINESTATE_PS_OUTPUT_RT_OUTPUT_MISMATCH,
-			// ¼´Ê¹µ±×ÅÉ«Æ÷²»·ÃÎÊÈ±ÉÙµÄÃèÊö·û£¬Ò²»áÔÚÃèÊö·û±íÎ´°ó¶¨Ê±´¥·¢¡£²»Í¬µÄ×ÅÉ«Æ÷Ö®¼ä¹²ÏíµÄ¸ùÇ©Ãû²¢²»¶¼ÐèÒªÏàÍ¬ÀàÐÍµÄ×ÊÔ´¡£
+			// å³ä½¿å½“ç€è‰²å™¨ä¸è®¿é—®ç¼ºå°‘çš„æè¿°ç¬¦ï¼Œä¹Ÿä¼šåœ¨æè¿°ç¬¦è¡¨æœªç»‘å®šæ—¶è§¦å‘ã€‚ä¸åŒçš„ç€è‰²å™¨ä¹‹é—´å…±äº«çš„æ ¹ç­¾åå¹¶ä¸éƒ½éœ€è¦ç›¸åŒç±»åž‹çš„èµ„æºã€‚
 			D3D12_MESSAGE_ID_COMMAND_LIST_DESCRIPTOR_TABLE_NOT_SET,
 
 			(D3D12_MESSAGE_ID)1008,

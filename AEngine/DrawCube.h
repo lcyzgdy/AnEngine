@@ -80,7 +80,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	D3D12_VERTEX_BUFFER_VIEW cubeVbv;
 	D3D12_INDEX_BUFFER_VIEW cubeIbv;
 	XMFLOAT4X4  cBMatrix;
-	// 应用程序资源
+	// 搴旂敤绋嬪簭璧勬簮
 
 	vector<VertexPositionColor> vertex;
 
@@ -93,7 +93,7 @@ public:
 	~DrawCube() = default;
 
 
-	// 通过 D3D12AppBase 继承
+	// 閫氳繃 D3D12AppBase 缁ф壙
 	virtual void OnInit() override;
 
 	virtual void OnRelease() override;
@@ -107,7 +107,7 @@ public:
 	virtual void OnKeyUp(UINT8 key) override;
 
 
-	// 通过 D3D12Base 继承
+	// 閫氳繃 D3D12Base 缁ф壙
 	virtual void InitializePipeline() override;
 
 	virtual void InitializeAssets() override;

@@ -49,7 +49,7 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam
 	}
 	case(WM_PAINT):
 	{
-		//BaseInput::GetInstance()->Update();	// 这里已经挪到新的线程执行，在BaseInput.cpp里。
+		//BaseInput::GetInstance()->Update();	// 这里已经移动到新的线程执行，在BaseInput.cpp里。
 		if (pD3dApp)
 		{
 			pD3dApp->OnUpdate();

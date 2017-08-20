@@ -6,7 +6,7 @@
 ### RenderCore
 #### GraphicCard
 与计算机上的显卡进行交互的类。若使用Linked Gpus或者Multi Adapter特性，则每个显卡分别对应一个GraphicCard类。目前只考虑一个显卡的情况。
-* ComPtr<ID3D12Device1> m_device
+* ComPtr< ID3D12Device1 > m_device
 * CommandQueue
 
 

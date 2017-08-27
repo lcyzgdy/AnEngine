@@ -122,6 +122,8 @@ namespace RenderCore
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
+
+	void CreateCommonState();
 }
 
 

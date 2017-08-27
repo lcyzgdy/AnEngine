@@ -161,9 +161,11 @@
     <ClInclude Include="NBody.h" />
     <ClInclude Include="onwind.h" />
     <ClInclude Include="PhysicsCore.h" />
+    <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
+    <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <ItemGroup>
@@ -183,8 +185,10 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
+    <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RenderCore.cpp" />
+    <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>

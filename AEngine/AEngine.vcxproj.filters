@@ -99,6 +99,12 @@
     <ClInclude Include="RenderCoreConstants.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -159,6 +165,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DepthBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineState.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

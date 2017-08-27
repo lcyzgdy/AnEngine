@@ -270,7 +270,8 @@ namespace RenderCore
 			r_renderCore.push_back(aRender);
 		}
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
-
+		CreateCommonState();
+		
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -328,5 +329,10 @@ namespace RenderCore
 #endif // _WIN32
 
 		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+	}
+
+	void CreateCommonState()
+	{
+		return;
 	}
 }

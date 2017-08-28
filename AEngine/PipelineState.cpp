@@ -97,3 +97,7 @@ void RenderCore::GraphicPSO::SetPrimitiveRestart(D3D12_INDEX_BUFFER_STRIP_CUT_VA
 {
 	m_psoDesc.IBStripCutValue = indexBufferProps;
 }
+
+void RenderCore::GraphicPSO::SetVertexShader(void * vertexBinary, size_t size)
+{
+}

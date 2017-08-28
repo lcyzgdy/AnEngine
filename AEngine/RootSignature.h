@@ -15,6 +15,8 @@ namespace RenderCore
 		RootSignature();
 		~RootSignature();
 		void Reset();
+
+		ID3D12RootSignature* GetSignature();
 	};
 }
 

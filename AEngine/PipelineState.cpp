@@ -98,6 +98,57 @@ void RenderCore::GraphicPSO::SetPrimitiveRestart(D3D12_INDEX_BUFFER_STRIP_CUT_VA
 	m_psoDesc.IBStripCutValue = indexBufferProps;
 }
 
-void RenderCore::GraphicPSO::SetVertexShader(void * vertexBinary, size_t size)
+void RenderCore::GraphicPSO::SetVertexShader(const void * binary, size_t size)
 {
+	m_psoDesc.VS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
+}
+
+void RenderCore::GraphicPSO::SetPixelShader(const void * binary, size_t size)
+{
+	m_psoDesc.PS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
+}
+
+void RenderCore::GraphicPSO::SetGeometryShader(const void * binary, size_t size)
+{
+	m_psoDesc.GS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
+}
+
+void RenderCore::GraphicPSO::SetHullShader(const void * binary, size_t size)
+{
+	m_psoDesc.HS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
+}
+
+void RenderCore::GraphicPSO::SetDomainShader(const void * binary, size_t size)
+{
+	m_psoDesc.DS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
+}
+
+void RenderCore::GraphicPSO::SetVertexShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.VS = binary;
+}
+
+void RenderCore::GraphicPSO::SetPixelShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.PS = binary;
+}
+
+void RenderCore::GraphicPSO::SetGeometryShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.GS = binary;
+}
+
+void RenderCore::GraphicPSO::SetHullShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.HS = binary;
+}
+
+void RenderCore::GraphicPSO::SetDomainShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.DS = binary;
+}
+
+void RenderCore::GraphicPSO::Finalize()
+{
+	m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
 }

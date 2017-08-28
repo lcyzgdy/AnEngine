@@ -47,8 +47,19 @@ namespace RenderCore
 		void SetInputLayout(uint32_t elementsNum, const D3D12_INPUT_ELEMENT_DESC* p_inputElementDescs);
 		void SetPrimitiveRestart(D3D12_INDEX_BUFFER_STRIP_CUT_VALUE indexBufferProps);
 
-		void SetVertexShader(void* vertexBinary, size_t size);
-		void SetPixelShader(void* pixelBinary, size_t size);
+		void SetVertexShader(const void* binary, size_t size);
+		void SetPixelShader(const void* binary, size_t size);
+		void SetGeometryShader(const void* binary, size_t size);
+		void SetHullShader(const void* binary, size_t size);
+		void SetDomainShader(const void* binary, size_t size);
+
+		void SetVertexShader(const D3D12_SHADER_BYTECODE& binary);
+		void SetPixelShader(const D3D12_SHADER_BYTECODE& binary);
+		void SetGeometryShader(const D3D12_SHADER_BYTECODE& binary);
+		void SetHullShader(const D3D12_SHADER_BYTECODE& binary);
+		void SetDomainShader(const D3D12_SHADER_BYTECODE& binary);
+
+		void Finalize();
 	};
 
 	class ComputePSO : public PSO

@@ -1,5 +1,6 @@
 #include"onwind.h"
 #include"DrawLine.h"
+#include"NBody.h"
 #include"Screen.h"
 using namespace std;
 
@@ -79,7 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	screenw = 1280;
 	screenh = 720;
 
-	D3D12AppBase* d3dApp = new DrawLine(window, screenw, screenh);
+	D3D12AppBase* d3dApp = new NBody(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	d3dApp->ParseCommandLineArgs(argv, argc);

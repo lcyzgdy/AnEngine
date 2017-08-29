@@ -64,9 +64,17 @@ namespace RenderCore
 
 	class ComputePSO : public PSO
 	{
+	protected:
+		D3D12_COMPUTE_PIPELINE_STATE_DESC m_psoDesc;
+		const RootSignature* m_rootSignature;
 	public:
 		ComputePSO();
 		~ComputePSO() = default;
+
+		void SetComputeShader(const void* binary, size_t size);
+		void SetComputeShader(const D3D12_SHADER_BYTECODE& binary);
+
+		void Finalize(ID3D12Device* device);
 	};
 }
 #endif // !__PIPELINESTATE_H__

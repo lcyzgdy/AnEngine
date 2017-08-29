@@ -25,7 +25,15 @@ using namespace std;
 #ifdef UNICODE
 
 #define Strcpy(a,b) wcscpy_s(a,b)
-#define ERRORBLOCK(a) MessageBox(NULL, _T("Error"), ToLPCWSTR(a), 0)
+#define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
+
+#if defined _DEBUG || defined DEBUG
+#define ERRORBREAK(a) {\
+						ERRORBLOCK(a); \
+						throw std::exception(); \
+					  }
+#endif // _DEBUG || DEBUG
+
 
 inline LPCWSTR ToLPCWSTR(string& orig)
 {

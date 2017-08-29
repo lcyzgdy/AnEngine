@@ -1,5 +1,10 @@
 #include "PipelineState.h"
+#include "Hash.h";
+#include <mutex>
+using namespace std;
 using namespace RenderCore;
+
+
 
 PipelineStateObject::PipelineStateObject() : m_rootSignature(nullptr), m_pipelineState(nullptr)
 {
@@ -151,4 +156,65 @@ void RenderCore::GraphicPSO::SetDomainShader(const D3D12_SHADER_BYTECODE & binar
 void RenderCore::GraphicPSO::Finalize()
 {
 	m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+	if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("pso.rootSignature");
+
+}
+
+
+/*--------------------------==============================----------------------------------*/
+
+
+RenderCore::ComputePSO::ComputePSO()
+{
+	ZeroMemory(&m_psoDesc, sizeof(m_psoDesc));
+	m_psoDesc.NodeMask = 1;
+}
+
+void RenderCore::ComputePSO::SetComputeShader(const void * binary, size_t size)
+{
+	m_psoDesc.CS = CD3DX12_SHADER_BYTECODE(binary, size);
+}
+
+void RenderCore::ComputePSO::SetComputeShader(const D3D12_SHADER_BYTECODE & binary)
+{
+	m_psoDesc.CS = binary;
+}
+
+void RenderCore::ComputePSO::Finalize(ID3D12Device* device)
+{
+	m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+	if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
+
+	size_t hashCode = Utility::GetHash(&m_psoDesc);
+
+	ID3D12PipelineState** psoRef = nullptr;
+	bool firstComplie = false;
+	{
+		static mutex s_hashMapMutex;
+		lock_guard<mutex> lock(s_hashMapMutex);
+		var iter = r_s_computePSOMap.find(hashCode);
+
+		if (iter == r_s_computePSOMap.end())
+		{
+			firstComplie = true;
+			psoRef = r_s_computePSOMap[hashCode].GetAddressOf();
+		}
+		else
+		{
+			psoRef = iter->second.GetAddressOf();
+		}
+	}
+	if (firstComplie)
+	{
+		device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState));
+		r_s_computePSOMap[hashCode].Attach(m_pipelineState);
+	}
+	else
+	{
+		while (*psoRef == nullptr)
+		{
+			this_thread::yield();
+		}
+		m_pipelineState = *psoRef;
+	}
 }

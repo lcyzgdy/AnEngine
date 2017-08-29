@@ -36,9 +36,6 @@
     <ClInclude Include="MCamera.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="onwind.h">
-      <Filter>头文件\UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>

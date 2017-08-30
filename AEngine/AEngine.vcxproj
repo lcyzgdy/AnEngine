@@ -104,6 +104,9 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>
       </LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,6 +170,7 @@
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ShaderClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
@@ -190,6 +194,7 @@
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>

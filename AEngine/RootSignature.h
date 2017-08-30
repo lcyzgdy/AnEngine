@@ -12,8 +12,8 @@ namespace RenderCore
 		ComPtr<ID3D12RootSignature> m_rootSignature;
 
 	public:
-		RootSignature();
-		~RootSignature();
+		RootSignature() = default;
+		~RootSignature() = default;
 		void Reset();
 
 		ID3D12RootSignature* GetSignature() const;

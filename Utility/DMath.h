@@ -7,13 +7,13 @@ namespace DMath
 	template<typename T>
 	__forceinline T AlignUpWithMask(T value, size_t mask)
 	{
-		return static_cast<T>(((size_t)value + mask) & ~mask);
+		return (T)(((size_t)value + mask) & ~mask);
 	}
 
 	template<typename T>
 	__forceinline T AlignDownWithMask(T value, size_t mask)
 	{
-		return static_cast<T>((size_t)value & ~mask);
+		return (T)((size_t)value & ~mask);
 	}
 
 	template<typename T>

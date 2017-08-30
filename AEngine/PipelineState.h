@@ -59,7 +59,7 @@ namespace RenderCore
 		void SetHullShader(const D3D12_SHADER_BYTECODE& binary);
 		void SetDomainShader(const D3D12_SHADER_BYTECODE& binary);
 
-		void Finalize();
+		void Finalize(ID3D12Device* device);
 	};
 
 	class ComputePSO : public PSO

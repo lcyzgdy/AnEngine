@@ -1,5 +1,5 @@
 #include "PipelineState.h"
-#include "Hash.h";
+#include "Hash.h"
 #include <mutex>
 using namespace std;
 using namespace RenderCore;
@@ -153,11 +153,46 @@ void RenderCore::GraphicPSO::SetDomainShader(const D3D12_SHADER_BYTECODE & binar
 	m_psoDesc.DS = binary;
 }
 
-void RenderCore::GraphicPSO::Finalize()
+void RenderCore::GraphicPSO::Finalize(ID3D12Device* device)
 {
 	m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
-	if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("pso.rootSignature");
+	if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
 
+	m_psoDesc.InputLayout.pInputElementDescs = nullptr;
+	uint64_t hashCode = Utility::GetHash(&m_psoDesc);
+	hashCode = Utility::GetHash(m_inputLayouts.get(), m_psoDesc.InputLayout.NumElements, hashCode);
+	m_psoDesc.InputLayout.pInputElementDescs = m_inputLayouts.get();
+
+	ID3D12PipelineState** psoRef = nullptr;
+	bool firstCompile = false;
+	{
+		static mutex s_hashMapMutex;
+		lock_guard<mutex> lock(s_hashMapMutex);
+		var iter = r_s_graphicPSOMap.find(hashCode);
+
+		if (iter == r_s_graphicPSOMap.end())
+		{
+			firstCompile = true;
+			psoRef = r_s_graphicPSOMap[hashCode].GetAddressOf();
+		}
+		else
+		{
+			psoRef = iter->second.GetAddressOf();
+		}
+	}
+	if (firstCompile)
+	{
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+		r_s_graphicPSOMap[hashCode].Attach(m_pipelineState);
+	}
+	else
+	{
+		while (*psoRef == nullptr)
+		{
+			this_thread::yield();
+		}
+		m_pipelineState = *psoRef;
+	}
 }
 
 
@@ -206,7 +241,7 @@ void RenderCore::ComputePSO::Finalize(ID3D12Device* device)
 	}
 	if (firstComplie)
 	{
-		device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState));
+		ThrowIfFailed(device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 		r_s_computePSOMap[hashCode].Attach(m_pipelineState);
 	}
 	else

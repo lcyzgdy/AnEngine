@@ -2,6 +2,7 @@
 #ifndef __HASH_H__
 #define __HASH_H__
 
+#include"onwind.h"
 #include"DMath.h"
 
 #ifdef _M_X64
@@ -48,7 +49,7 @@ namespace Utility
 	}
 
 	template<typename T>
-	inline uint64_t GetHash(const T* stateDesc, size_t count = 1, size_t hash = 2166136261U)
+	inline uint64_t GetHash(const T* stateDesc, size_t count = 1, uint64_t hash = 2166136261U)
 	{
 		static_assert((sizeof(T) & 3) == 0 && alignof(T) >= 4, "Object is not word-aligned");
 		return HashRange((uint32_t*)stateDesc, (uint32_t*)(stateDesc + count), hash);

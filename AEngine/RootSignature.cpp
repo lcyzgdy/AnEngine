@@ -2,11 +2,12 @@
 
 namespace RenderCore
 {
-	RootSignature::RootSignature()
+	void RootSignature::Reset()
 	{
 	}
 
-	RootSignature::~RootSignature()
+	ID3D12RootSignature * RootSignature::GetSignature() const
 	{
+		return m_rootSignature.Get();
 	}
 }

@@ -4,7 +4,7 @@
 #include"onwind.h"
 #include<atomic>
 
-class Screen
+class Screen : public NonCopyable
 {
 	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);

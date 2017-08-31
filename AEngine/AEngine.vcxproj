@@ -148,6 +148,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
+    <ClInclude Include="CommandList.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
@@ -171,6 +172,8 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
@@ -195,6 +198,7 @@
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>

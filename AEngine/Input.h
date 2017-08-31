@@ -15,7 +15,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-class BaseInput
+class BaseInput : public NonCopyable
 {
 	friend LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);

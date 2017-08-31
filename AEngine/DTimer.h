@@ -5,7 +5,7 @@
 #include"onwind.h"
 using namespace std;
 
-class DTimer
+class DTimer : public NonCopyable
 {
 	LARGE_INTEGER qpcFrequency;
 	LARGE_INTEGER qpcLastTime;

@@ -12,6 +12,7 @@ private:
 
 	int m_threadNum;
 	mutex m_mutex;
+	std::condition_variable m_condition;
 
 	ThreadPool();
 	Thread* CreateThread();

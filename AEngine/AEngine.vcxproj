@@ -178,6 +178,7 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
+    <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />

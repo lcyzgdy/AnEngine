@@ -69,7 +69,7 @@ void DrawCube::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// ø™∆ÙDebugƒ£ Ω
+	// ÂºÄÂêØDebugÊ®°Âºè
 
 	ComPtr<IDXGIFactory4> factory;
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
@@ -85,16 +85,16 @@ void DrawCube::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
-	// ¥¥…Ë±∏
+	// ÂàõËÆæÂ§á
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
-	// √Ë ˆ≤¢¥¥Ω®√¸¡Ó∂”¡–
+	// ÊèèËø∞Âπ∂ÂàõÂª∫ÂëΩ‰ª§ÈòüÂàó
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -105,14 +105,14 @@ void DrawCube::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// Ωªªª¡¥–Ë“™∂”¡–£¨“‘±„ø…“‘«ø÷∆À¢–¬À¸
+		commandQueue.Get(),		// ‰∫§Êç¢ÈìæÈúÄË¶ÅÈòüÂàóÔºå‰ª•‰æøÂèØ‰ª•Âº∫Âà∂Âà∑Êñ∞ÂÆÉ
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// √Ë ˆ≤¢¥¥Ω®Ωªªª¡¥
+	// ÊèèËø∞Âπ∂ÂàõÂª∫‰∫§Êç¢Èìæ
 
 	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 	swapChain1.As(&swapChain);
@@ -120,18 +120,18 @@ void DrawCube::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
-	// ¥¥Ω®‰÷»æƒø±Í ”Õº√Ë ˆ∑˚∂—
+	// ÂàõÂª∫Ê∏≤ÊüìÁõÆÊ†áËßÜÂõæÊèèËø∞Á¨¶Â†Ü
 
 	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavDesc = {};
 	cbvSrvUavDesc.NumDescriptors = 1;
 	cbvSrvUavDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvSrvUavDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	device->CreateDescriptorHeap(&cbvSrvUavDesc, IID_PPV_ARGS(&cbvSrvUavHeap));
-	// √Ë ˆ≤¢¥¥Ω®Œ∆¿Ìµƒ◊≈…´∆˜◊ ‘¥ ”Õº∂— [Shader resource view (SRV) heap]
+	// ÊèèËø∞Âπ∂ÂàõÂª∫Á∫πÁêÜÁöÑÁùÄËâ≤Âô®ËµÑÊ∫êËßÜÂõæÂ†Ü [Shader resource view (SRV) heap]
 
 	D3D12_DESCRIPTOR_HEAP_DESC dsvDesc = {};
 	dsvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -149,10 +149,10 @@ void DrawCube::InitializePipeline()
 	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	//samDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
-	// !#1	¥¥Ω®√Ë ˆ∑˚∂—
+	// !#1	ÂàõÂª∫ÊèèËø∞Á¨¶Â†Ü
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -160,8 +160,8 @@ void DrawCube::InitializePipeline()
 
 		ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i])));
 	}
-	// ¥¥Ω®√¸¡Ó∑÷≈‰∆˜
-	// ¥¥Ω®÷°◊ ‘¥
+	// ÂàõÂª∫ÂëΩ‰ª§ÂàÜÈÖçÂô®
+	// ÂàõÂª∫Â∏ßËµÑÊ∫ê
 }
 
 void DrawCube::InitializeAssets()
@@ -232,14 +232,14 @@ void DrawCube::InitializeAssets()
 
 	{
 		VertexPositionColor cubeVertices[] = {
-			{ { -1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Left
-			{ { 1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Right
-			{ { 1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Right
-			{ { -1.0f, 1.0f, 1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Left
-			{ { -1.0f, -1.0f, -1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Left
-			{ { 1.0f, -1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Right
-			{ { 1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Bottom Right
-			{ { -1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f) ,random(0.0f,1.0f) ,random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
+			{ { -1.0f, 1.0f, -1.0f},{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Top Left
+			{ { 1.0f, 1.0f, -1.0f},{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Top Right
+			{ { 1.0f, 1.0f, 1.0f },{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Top Right
+			{ { -1.0f, 1.0f, 1.0f},{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Top Left
+			{ { -1.0f, -1.0f, -1.0f },{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Bottom Left
+			{ { 1.0f, -1.0f, -1.0f},{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Bottom Right
+			{ { 1.0f, -1.0f, 1.0f },{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Bottom Right
+			{ { -1.0f, -1.0f, 1.0f },{ Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,Random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
 		};
 
 		UINT cubeIndices[] =
@@ -344,7 +344,7 @@ void DrawCube::PopulateCommandList()
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
 	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	commandList->ClearRenderTargetView(rtvHandle, cnt_r_ClearColor, 0, nullptr);
+	commandList->ClearRenderTargetView(rtvHandle, r_cnt_ClearColor, 0, nullptr);
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->SetGraphicsRootDescriptorTable(0, cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());
@@ -371,7 +371,7 @@ void DrawCube::MoveToNextFrame()
 		WaitForSingleObjectEx(fenceEvent, INFINITE, FALSE);
 	}
 
-	fenceValues[frameIndex] = currentFenceValue + 1;
+	fenceValues[frameIndex] = static_cast<uint32_t>(currentFenceValue) + 1;
 }
 
 void DrawCube::WaitForRenderContext()

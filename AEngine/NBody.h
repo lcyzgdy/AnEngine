@@ -11,9 +11,9 @@ using namespace RenderCore;
 
 class NBody :public D3D12AppBase, public D3D12Base
 {
-	static const UINT ParticleCount = 8000;
+	static const UINT ParticleCount = 12000;
 	static const float ParticleSpread;
-	static const UINT ThreadCount = cnt_r_DefaultThreadCount;
+	static const UINT ThreadCount = r_cnt_DefaultThreadCount;
 
 	UINT frameIndex;
 
@@ -34,7 +34,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 		XMFLOAT4X4 inverseView;
 
 		float padding[32];
-		// ³£Á¿»º³åÇøÔÚÏÔ´æÖĞÒÔ256×Ö½Ú¶ÔÆë¡£
+		// å¸¸é‡ç¼“å†²åŒºåœ¨æ˜¾å­˜ä¸­ä»¥256å­—èŠ‚å¯¹é½ã€‚
 	};
 
 	struct ConstantBufferCS
@@ -47,42 +47,42 @@ class NBody :public D3D12AppBase, public D3D12Base
 	{
 		NBody* pContext;
 		UINT threadIndex;
-	};	// ´Ë´¦ÖØ¹¹£ºÏß³Ì¹ÜÀíÄ£°å
+	};	// æ­¤å¤„é‡æ„ï¼šçº¿ç¨‹ç®¡ç†æ¨¡æ¿
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	D3D12_RECT cullingScissorRect;	// ÓÃ×÷ÕÚµ²ÌŞ³ı
+	D3D12_RECT cullingScissorRect;	// ç”¨ä½œé®æŒ¡å‰”é™¤
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvUavHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvUavDescriptorSize;
-	// ¹ÜÏß¶ÔÏó
+	// ç®¡çº¿å¯¹è±¡
 
 	ComPtr<ID3D12GraphicsCommandList> commandList;
 	ComPtr<ID3D12PipelineState> pipelineState;
 	ComPtr<ID3D12PipelineState> computeState;
-	// ×ÊÔ´¶ÔÏó
+	// èµ„æºå¯¹è±¡
 
 	ComPtr<ID3D12Fence> fence;
 	ComPtr<ID3D12Fence> computeFence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT64 fenceValues[cnt_r_DefaultFrameCount];
+	UINT64 fenceValues[r_cnt_DefaultFrameCount];
 	UINT64 renderContextFenceValue;
 	HANDLE renderContextFenceEvent;
-	// Í¬²½¶ÔÏó
+	// åŒæ­¥å¯¹è±¡
 
 	ComPtr<ID3D12CommandQueue> computeCommandQueue[ThreadCount];
 	ComPtr<ID3D12GraphicsCommandList> computeCommandList[ThreadCount];
-	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature>	computeRootSignature;
-	// ¼ÆËã¶ÔÏó
+	// è®¡ç®—å¯¹è±¡
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	ComPtr<ID3D12Resource> vertexBufferUpload;
@@ -95,7 +95,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 	UINT8* pConstantBufferGSData;
 	ComPtr<ID3D12Resource> constantBufferCS;
 
-	UINT srvIndex[ThreadCount];		// ±íÊ¾ÄÄ¸öÀı×ÓµÄ»º³å×ÊÔ´ÊÔÍ¼ÊÇSRV£¨0 || 1£©£¨UAV = 1 - SRV£©
+	UINT srvIndex[ThreadCount];		// è¡¨ç¤ºå“ªä¸ªä¾‹å­çš„ç¼“å†²èµ„æºè¯•å›¾æ˜¯SRVï¼ˆ0 || 1ï¼‰ï¼ˆUAV = 1 - SRVï¼‰
 	UINT heightInstances;
 	UINT widthInstances;
 	MCamera camera;
@@ -103,12 +103,12 @@ class NBody :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> threadFences[ThreadCount];
 	volatile HANDLE threadFenceEvents[ThreadCount];
-	// Ïß³ÌÍ¬²½¶ÔÏó
+	// çº¿ç¨‹åŒæ­¥å¯¹è±¡
 
 	LONG volatile terminating;
 	UINT64 volatile renderContextFenceValues[ThreadCount];
 	UINT64 volatile threadFenceValues[ThreadCount];
-	// Ïß³Ì×´Ì¬
+	// çº¿ç¨‹çŠ¶æ€
 
 	ThreadData threadData[ThreadCount];
 	HANDLE threadHandles[ThreadCount];
@@ -135,7 +135,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 		SrvParticlePosVelo0 = UavParticlePosVelo1 + ThreadCount,
 		SrvParticlePosVelo1 = SrvParticlePosVelo0 + ThreadCount,
 		DescriptorCount = SrvParticlePosVelo1 + ThreadCount
-	};	// ×ÅÉ«Æ÷×ÊÔ´µÄË÷Òı
+	};	// ç€è‰²å™¨èµ„æºçš„ç´¢å¼•
 
 	void InitializePipeline();
 	void InitializeAssets();

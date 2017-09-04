@@ -36,9 +36,6 @@
     <ClInclude Include="MCamera.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="onwind.h">
-      <Filter>头文件\UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>头文件\UTIL</Filter>
     </ClInclude>
@@ -91,6 +88,27 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DepthBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCoreConstants.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandList.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -153,6 +171,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DepthBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

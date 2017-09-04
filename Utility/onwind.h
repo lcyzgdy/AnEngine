@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __ONWIND_H__
+#define __ONWIND_H__
+
 #include<iostream>
 #include<fstream>
 #include<ctime>
@@ -11,9 +14,8 @@
 #include<vector>
 using namespace std;
 
-#ifndef GDY
-#define GDY
 #define var auto
+
 #ifdef _WIN64
 
 #include<windows.h>
@@ -23,7 +25,15 @@ using namespace std;
 #ifdef UNICODE
 
 #define Strcpy(a,b) wcscpy_s(a,b)
-#define ERRORBLOCK(a) MessageBox(NULL, ,_T("Error"), ToLPCWSTR("Error"+a),0)
+#define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
+
+#if defined _DEBUG || defined DEBUG
+#define ERRORBREAK(a) {\
+						ERRORBLOCK(a); \
+						throw std::exception(); \
+					  }
+#endif // _DEBUG || DEBUG
+
 
 inline LPCWSTR ToLPCWSTR(string& orig)
 {
@@ -151,13 +161,13 @@ struct Range
 
 	Range(T& _maxn, T& _minn)
 	{
-		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long)) 
+		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long))
 			throw exception();
 		maxn = _maxn;
 		minn = _minn;
 	}
 
-	bool in(T& value)
+	bool Has(T& value)
 	{
 		if (value < minn) return false;
 		if (value > maxn) return false;
@@ -165,34 +175,42 @@ struct Range
 	}
 };
 
-inline void randomize()
+inline void Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-inline int random(int a)
+inline int Random(int a)
 {
 	return rand() % a;
 }
 
-inline float random()
+inline float Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-inline int random(int a, int b)
+inline int Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-inline float random(float a, float b)
+inline float Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;
 	return scale * range + a;
 }
 
+struct NonCopyable
+{
+	NonCopyable() = default;
+	NonCopyable(const NonCopyable&) = delete;
+	~NonCopyable() = default;
 
-#endif // !GDY
+	NonCopyable & operator=(const NonCopyable&) = delete;
+};
+
+#endif // !__ONWIND_H__

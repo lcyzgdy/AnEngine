@@ -73,7 +73,7 @@ VSParticleDrawOut VSParticleDraw(VSParticleIn input)
 
 	return output;
 }
-// ¶¥µã×ÅÉ«Æ÷ÓÃÓÚ»æÖÆµãÁ£×Ó¡£
+// é¡¶ç‚¹ç€è‰²å™¨ç”¨äºç»˜åˆ¶ç‚¹ç²’å­ã€‚
 
 [maxvertexcount(4)]
 void GSParticleDraw(point VSParticleDrawOut input[1], inout TriangleStream<GSParticleDrawOut> SpriteStream)
@@ -89,10 +89,10 @@ void GSParticleDraw(point VSParticleDrawOut input[1], inout TriangleStream<GSPar
 		output.color = input[0].color;
 		output.tex = g_texcoords[i];
 		SpriteStream.Append(output);
-	}	// ´´½¨Á½¸öĞÂÈı½ÇĞÎ
+	}	// åˆ›å»ºä¸¤ä¸ªæ–°ä¸‰è§’å½¢
 	SpriteStream.RestartStrip();
 }
-// GSÓÃÓÚäÖÈ¾µãÁ£×Ó¡£È¡Ò»¸öµã£¬²¢½«Æä±ä³É2¸öÈı½ÇĞÎ£¨¾ØĞÎ£©¡£
+// GSç”¨äºæ¸²æŸ“ç‚¹ç²’å­ã€‚å–ä¸€ä¸ªç‚¹ï¼Œå¹¶å°†å…¶å˜æˆ2ä¸ªä¸‰è§’å½¢ï¼ˆçŸ©å½¢ï¼‰ã€‚
 
 float4 PSParticleDraw(PSParticleDrawIn input) : SV_Target
 {
@@ -100,4 +100,4 @@ float4 PSParticleDraw(PSParticleDrawIn input) : SV_Target
 	intensity = clamp(intensity, 0.0f, 0.5f) * 2.0f;
 	return float4(input.color.xyz, intensity);
 }
-// PS»æÖÆÁ£×Ó¡£ Ê¹ÓÃÎÆÀí×ø±êÉú³É±íÊ¾Á£×ÓµÄ¾¶Ïò½¥±ä
+// PSç»˜åˆ¶ç²’å­ã€‚ ä½¿ç”¨çº¹ç†åæ ‡ç”Ÿæˆè¡¨ç¤ºç²’å­çš„å¾„å‘æ¸å˜

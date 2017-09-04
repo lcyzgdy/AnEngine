@@ -23,10 +23,10 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -36,13 +36,13 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[cnt_r_DefaultFrameCount];
+	UINT fenceValues[r_cnt_DefaultFrameCount];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView;
 	ComPtr<ID3D12Resource> cubeResource;
-	// 应用程序资源
+	// 搴旂敤绋嬪簭璧勬簮
 
 
 public:

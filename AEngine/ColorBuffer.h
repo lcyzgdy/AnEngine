@@ -5,6 +5,7 @@
 #include"DX.h"
 #include"PixelBuffer.h"
 #include"Color.h"
+#include"DescriptorHeap.h"
 using namespace std;
 using namespace RenderCore;
 
@@ -12,46 +13,46 @@ namespace RenderCore
 {
 	namespace Resource
 	{
-		class ColorBuffer: public PixelBuffer
+		class ColorBuffer : public PixelBuffer
 		{
 		protected:
 			Color m_clearColor;
 			D3D12_CPU_DESCRIPTOR_HANDLE m_srvHandle;
 			D3D12_CPU_DESCRIPTOR_HANDLE m_rtvHandle;
 			D3D12_CPU_DESCRIPTOR_HANDLE m_uavHandle[12];
-			uint32_t m_numMipMaps;	//×ÓÎÆÀí²ãÊıÁ¿
+			uint32_t m_numMipMaps;	//å­çº¹ç†å±‚æ•°é‡
 			uint32_t m_fragmentCount;
 			uint32_t m_sampleCount;
 
 			D3D12_RESOURCE_FLAGS CombineResourceFlags() const;
 			static uint32_t ComputeNumMips(uint32_t width, uint32_t height);
-			void CreateDerivedViews(ID3D12Device* device, DXGI_FORMAT& format, 
+			void CreateDerivedViews(ID3D12Device* device, DXGI_FORMAT& format,
 				uint32_t arraySize, uint32_t numMips = 1);
 
 		public:
-			ColorBuffer() = delete;
+			ColorBuffer();
 			~ColorBuffer() = default;
-			ColorBuffer(Color clearColor = Color(0.0f, 0.0f, 0.0f, 0.0f));
+			ColorBuffer(Color clearColor);
 
-			// ´Ó½»»»Á´»º³åÇø´´½¨ÑÕÉ«»º³åÇø£¬ÎŞĞò·ÃÎÊÊÜÏŞ¡£
-			void CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource, 
+			// ä»äº¤æ¢é“¾ç¼“å†²åŒºåˆ›å»ºé¢œè‰²ç¼“å†²åŒºï¼Œæ— åºè®¿é—®å—é™ã€‚
+			void CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
 				ID3D12Device* device, RenderCore::Heap::DescriptorAllocator* heapDescAllocator);
-			// ´´½¨ÑÕÉ«»º³åÇø£¬Èç¹ûÌá¹©ÁËµØÖ·Ôò²»»á·ÖÅäÄÚ´æ¡£ĞéÄâµØÖ·ÔÊĞíÖØÃüÃû»º³åÆ÷£¨¶ÔÓÚ¿çÔ½Ö¡ÖØÓÃESRAMÌØ±ğÓĞÓÃ£©¡££¿£¿
+			// åˆ›å»ºé¢œè‰²ç¼“å†²åŒºï¼Œå¦‚æœæä¾›äº†åœ°å€åˆ™ä¸ä¼šåˆ†é…å†…å­˜ã€‚è™šæ‹Ÿåœ°å€å…è®¸é‡å‘½åç¼“å†²å™¨ï¼ˆå¯¹äºè·¨è¶Šå¸§é‡ç”¨ESRAMç‰¹åˆ«æœ‰ç”¨ï¼‰ã€‚ï¼Ÿï¼Ÿ
 			void Create(const wstring& name, uint32_t _width, uint32_t _height, uint32_t numMips,
 				DXGI_FORMAT& format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = RenderCore::Resource::GpuVirtualAddressUnknown);
-			// ´´½¨ÑÕÉ«»º³åÇø£¬½«ÄÚ´æ·ÖÅäµ½ESRAM£¨Xbox One£©¡£ÔÚWindowsÉÏ£¬Õâ¸ö¹¦ÄÜÓëCreate()Ã»ÓĞÊÓÆµµØÖ·Ê±ÏàÍ¬¡£ ??
+			// åˆ›å»ºé¢œè‰²ç¼“å†²åŒºï¼Œå°†å†…å­˜åˆ†é…åˆ°ESRAMï¼ˆXbox Oneï¼‰ã€‚åœ¨Windowsä¸Šï¼Œè¿™ä¸ªåŠŸèƒ½ä¸Create()æ²¡æœ‰è§†é¢‘åœ°å€æ—¶ç›¸åŒã€‚ ??
 			//void Create(const std::wstring& name, uint32_t _width, uint32_t _height, uint32_t numMips,
 			//	DXGI_FORMAT& format, EsramAllocator& allocator);
 
-			// ´´½¨ÑÕÉ«»º³åÇø£¬Èç¹ûÌá¹©ÁËµØÖ·Ôò²»»á·ÖÅäÄÚ´æ¡£ĞéÄâµØÖ·ÔÊĞíÖØÃüÃû»º³åÆ÷£¨¶ÔÓÚ¿çÔ½Ö¡ÖØÓÃESRAMÌØ±ğÓĞÓÃ£©¡££¿£¿
+			// åˆ›å»ºé¢œè‰²ç¼“å†²åŒºï¼Œå¦‚æœæä¾›äº†åœ°å€åˆ™ä¸ä¼šåˆ†é…å†…å­˜ã€‚è™šæ‹Ÿåœ°å€å…è®¸é‡å‘½åç¼“å†²å™¨ï¼ˆå¯¹äºè·¨è¶Šå¸§é‡ç”¨ESRAMç‰¹åˆ«æœ‰ç”¨ï¼‰ã€‚ï¼Ÿï¼Ÿ
 			void CreateArray(const wstring& name, uint32_t _width, uint32_t _height, uint32_t arrayCount,
 				DXGI_FORMAT& format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = RenderCore::Resource::GpuVirtualAddressUnknown);
 
-			// »ñÈ¡CPU¿É·ÃÎÊµÄ¾ä±ú
+			// è·å–CPUå¯è®¿é—®çš„å¥æŸ„
 			const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV() const;
-			// »ñÈ¡CPU¿É·ÃÎÊµÄ¾ä±ú
+			// è·å–CPUå¯è®¿é—®çš„å¥æŸ„
 			const D3D12_CPU_DESCRIPTOR_HANDLE& GetRTV() const;
-			// »ñÈ¡CPU¿É·ÃÎÊµÄ¾ä±ú
+			// è·å–CPUå¯è®¿é—®çš„å¥æŸ„
 			const D3D12_CPU_DESCRIPTOR_HANDLE& GetUAV() const;
 			void SetClearColor(Color clearColor);
 			void SetMsaaMode(uint32_t numColorSample, uint32_t numCoverageSample);

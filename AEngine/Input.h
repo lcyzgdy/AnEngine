@@ -10,50 +10,67 @@
 #include<xinput.h>
 #include<wrl.h>
 #include<atomic>
+#include<thread>
 #pragma comment(lib, "dinput8.lib")
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-class BaseInput
+class BaseInput : public NonCopyable
 {
-	static ComPtr<IDirectInput8> directInput;
-	static ComPtr<IDirectInputDevice8> keyboard;
-	static ComPtr<IDirectInputDevice8> mouse;
-	static HWND hwnd;
-	static DIMOUSESTATE2 mouseState;
-	static atomic<unsigned char> keyState[256];
-	static atomic<bool> mouseButtonState[10];
-	static atomic<bool> mouseButtonDownState[10];
-	static atomic<bool> mouseButtonDownFlag[10];
-	static atomic<XMVECTOR> curPosition;
+	friend LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
+
+	ComPtr<IDirectInput8> m_directInput;
+	ComPtr<IDirectInputDevice8> m_keyboard;
+	ComPtr<IDirectInputDevice8> m_mouse;
+	HWND m_hwnd;
+	DIMOUSESTATE2 m_mouseState;
+	atomic<unsigned char> m_keyState[256];
+	atomic<bool> m_mouseButtonState[10];
+	atomic<bool> m_mouseButtonDownState[10];
+	atomic<bool> m_mouseButtonDownFlag[10];
+	atomic<XMVECTOR> m_curPosition;
+	atomic<BaseInput*> m_baseInput;
+
+	atomic_bool m_exit;
+	std::chrono::milliseconds m_delta;
+
+	BaseInput();
+	BaseInput(const BaseInput&) = delete;
+	~BaseInput();
+
+	void Initialize(HWND _hwnd, HINSTANCE _hInstance);
+	void InitializeKeyboard(HINSTANCE _hInstance);
+	void InitializeMouse(HINSTANCE _hInstance);
+	void Release();
+	void Update();
+
+	void SetAcquire();
+	void SetUnacquire();
 
 public:
-	static void Initialize(HWND _hwnd, HINSTANCE _hInstance);
-	static void InitializeKeyboard(HINSTANCE _hInstance);
-	static void InitializeMouse(HINSTANCE _hInstance);
-	static void Release();
-	static void Update();
+	bool IsAnyKeyDown();
+	bool IsAnyKey();
+	bool IsAnyKeyUp();
 
-	static bool IsAnyKeyDown();
-	static bool IsAnyKey();
-	static bool IsAnyKeyUp();
+	bool GetKeyDown(int _key);
+	bool GetKey(int _key);
+	bool GetKeyUp(int _key);
 
-	static bool GetKeyDown(int _key);
-	static bool GetKey(int _key);
-	static bool GetKeyUp(int _key);
+	void UpdateMouseButton(int _button, int _action);
+	bool GetMouseButtonDown(int _mouseButton);
+	bool GetMouseButton(int _mouseButton);
+	bool GetMouseButtonUp(int _mouseButton);
+	XMINT2 GetMousePosition();
+	XMVECTOR GetM128MousePosition();
+	void SetMousePosition(int x, int y);
 
-	static void UpdateMouseButton(int _button, int _action);
-	static bool GetMouseButtonDown(int _mouseButton);
-	static bool GetMouseButton(int _mouseButton);
-	static bool GetMouseButtonUp(int _mouseButton);
-	static XMINT2 GetMousePosition();
-	static XMVECTOR GetM128MousePosition();
-	static void SetMousePosition(const POINT& _point);
+	void ZeroInputState();
 
-	static void SetAcquire();
-	static void SetUnacquire();
-
-	static void ZeroInputState();
+	static BaseInput* GetInstance();
 };
+
+
 
 #endif // !__INPUT_H__

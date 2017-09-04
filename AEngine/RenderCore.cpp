@@ -1,6 +1,7 @@
 #include"RenderCore.h"
+#include"Screen.h"
 
-// ºÏ—È «∑Ò”–HDR ‰≥ˆπ¶ƒ‹
+// Ê£ÄÈ™åÊòØÂê¶ÊúâHDRËæìÂá∫ÂäüËÉΩ
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
 namespace RenderCore
@@ -9,7 +10,7 @@ namespace RenderCore
 	{
 		UINT dxgiFactoryFlags = 0;
 
-		// ø™∆ÙDebugƒ£ Ω
+		// ÂºÄÂêØDebugÊ®°Âºè
 #if defined(DEBUG) || defined(_DEBUG)
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
@@ -24,13 +25,13 @@ namespace RenderCore
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), RenderCore::r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 
 		if (m_cp_device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			Private::r_cp_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::cnt_r_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+			D3D12CreateDevice(cp_warpAdapter.Get(), RenderCore::r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
 		}
 
 		m_cp_device->SetStablePowerState(m_stableFlag);
@@ -40,14 +41,14 @@ namespace RenderCore
 		m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
-		// Õ®π˝ID¿¥±‹√‚∏ˆ»Àœ˚œ¢°£
+		// ÈÄöËøáIDÊù•ÈÅøÂÖç‰∏™‰∫∫Ê∂àÊÅØ„ÄÇ
 		D3D12_MESSAGE_ID denyMessageIds[] =
 		{
-			// µ±√Ë ˆ∑˚±Ì÷–”–Œ¥≥ı ºªØµƒ√Ë ˆ∑˚ ±£¨º¥ π◊≈…´∆˜≤ª∑√Œ £¨“≤ª·∑¢…˙’‚÷÷«Èøˆ°£≥£º˚µƒ◊ˆ∑® ««–ªª◊≈…´∆˜µƒ≈≈¡–∂¯≤ª «∏ƒ±‰Ã´∂‡µƒ¥˙¬Î°¢÷ÿ–¬∞≤≈≈◊ ‘¥°£
+			// ÂΩìÊèèËø∞Á¨¶Ë°®‰∏≠ÊúâÊú™ÂàùÂßãÂåñÁöÑÊèèËø∞Á¨¶Êó∂ÔºåÂç≥‰ΩøÁùÄËâ≤Âô®‰∏çËÆøÈóÆÔºå‰πü‰ºöÂèëÁîüËøôÁßçÊÉÖÂÜµ„ÄÇÂ∏∏ËßÅÁöÑÂÅöÊ≥ïÊòØÂàáÊç¢ÁùÄËâ≤Âô®ÁöÑÊéíÂàóËÄå‰∏çÊòØÊîπÂèòÂ§™Â§öÁöÑ‰ª£Á†Å„ÄÅÈáçÊñ∞ÂÆâÊéíËµÑÊ∫ê„ÄÇ
 			D3D12_MESSAGE_ID_INVALID_DESCRIPTOR_HANDLE,
-			// µ±◊≈…´∆˜≤ª ‰≥ˆ‰÷»æƒø±ÍµƒÀ˘”–—’…´∑÷¡ø£®¿˝»ÁΩˆΩ´RGB–¥»ÎR10G10B10A2ª∫≥Â«¯ ±£©∫ˆ¬‘Alpha ±¥•∑¢°£
+			// ÂΩìÁùÄËâ≤Âô®‰∏çËæìÂá∫Ê∏≤ÊüìÁõÆÊ†áÁöÑÊâÄÊúâÈ¢úËâ≤ÂàÜÈáèÔºà‰æãÂ¶Ç‰ªÖÂ∞ÜRGBÂÜôÂÖ•R10G10B10A2ÁºìÂÜ≤Âå∫Êó∂ÔºâÂøΩÁï•AlphaÊó∂Ëß¶Âèë„ÄÇ
 			D3D12_MESSAGE_ID_CREATEGRAPHICSPIPELINESTATE_PS_OUTPUT_RT_OUTPUT_MISMATCH,
-			// º¥ πµ±◊≈…´∆˜≤ª∑√Œ »±…Ÿµƒ√Ë ˆ∑˚£¨“≤ª·‘⁄√Ë ˆ∑˚±ÌŒ¥∞Û∂® ±¥•∑¢°£≤ªÕ¨µƒ◊≈…´∆˜÷Æº‰π≤œÌµƒ∏˘«©√˚≤¢≤ª∂º–Ë“™œ‡Õ¨¿‡–Õµƒ◊ ‘¥°£
+			// Âç≥‰ΩøÂΩìÁùÄËâ≤Âô®‰∏çËÆøÈóÆÁº∫Â∞ëÁöÑÊèèËø∞Á¨¶Ôºå‰πü‰ºöÂú®ÊèèËø∞Á¨¶Ë°®Êú™ÁªëÂÆöÊó∂Ëß¶Âèë„ÄÇ‰∏çÂêåÁöÑÁùÄËâ≤Âô®‰πãÈó¥ÂÖ±‰∫´ÁöÑÊ†πÁ≠æÂêçÂπ∂‰∏çÈÉΩÈúÄË¶ÅÁõ∏ÂêåÁ±ªÂûãÁöÑËµÑÊ∫ê„ÄÇ
 			D3D12_MESSAGE_ID_COMMAND_LIST_DESCRIPTOR_TABLE_NOT_SET,
 
 			(D3D12_MESSAGE_ID)1008,
@@ -171,6 +172,7 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
 		{
+			return nullptr;
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
@@ -213,44 +215,53 @@ namespace RenderCore
 	{
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+		queueDesc.Type = type;
 		p_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_cp_commandQueue.GetAddressOf()));
+		m_type = type;
 	}
 
 	void CommandQueue::Release()
 	{
+		CloseHandle(m_fenceEvent);
 	}
 
 	const ID3D12CommandQueue* CommandQueue::GetCommandQueue() const
 	{
-		return nullptr;
+		return m_cp_commandQueue.Get();
 	}
 
 	ID3D12CommandQueue * CommandQueue::GetCommandQueue()
 	{
-		return nullptr;
+		return m_cp_commandQueue.Get();
 	}
 
 	D3D12_COMMAND_LIST_TYPE CommandQueue::GetType()
 	{
-		return D3D12_COMMAND_LIST_TYPE();
+		return m_type;
 	}
 }
 
 namespace RenderCore
 {
-	vector<GraphicCard> r_renderCore;
-	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
+	thread r_renderMainThread;
 
+	vector<GraphicCard> r_renderCore;
+	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
+	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
+	int r_frameIndex;
+#ifdef _WIN32
+	HWND r_hwnd;
+#endif // _WIN32
 
 	namespace Private
 	{
 		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	void InitializeRender(int graphicCardCount, bool isStable)
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
+		r_hwnd = hwnd;
 		while (graphicCardCount--)
 		{
 			GraphicCard aRender;
@@ -258,12 +269,15 @@ namespace RenderCore
 			aRender.Initialize();
 			r_renderCore.push_back(aRender);
 		}
+		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
+		CreateCommonState();
+		
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = cnt_r_SwapChainBufferCount;
+		swapChainDesc.BufferCount = r_cnt_SwapChainBufferCount;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		swapChainDesc.Width = width;
@@ -275,9 +289,10 @@ namespace RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
+		//Private::r_cp_dxgiFactory->Create
 		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
-			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()), 
+			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()),
 			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
 		));
 		swapChain1.As(&r_cp_swapChain);
@@ -301,7 +316,7 @@ namespace RenderCore
 			}
 		}
 #endif
-		for (UINT i = 0; i < cnt_r_SwapChainBufferCount; ++i)
+		for (UINT i = 0; i < r_cnt_SwapChainBufferCount; ++i)
 		{
 			ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
@@ -309,5 +324,15 @@ namespace RenderCore
 				cp_displayPlane.Detach(), r_renderCore[0].GetDevice(),
 				&RenderCore::Heap::r_h_heapDescAllocator);
 		}
+#ifdef _WIN32
+		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+#endif // _WIN32
+
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+	}
+
+	void CreateCommonState()
+	{
+		return;
 	}
 }

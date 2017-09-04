@@ -19,7 +19,7 @@ void bodyBodyInteraction(inout float3 ai, float4 bj, float4 bi, float mass, int 
 
 	ai += r * s;
 }
-// Á£×ÓÏà»¥×÷ÓÃ£¬Î»ÖÃbi´¦µÄÁ£×ÓµÄ¼ÓËÙ¶È¸üĞÂ
+// ç²’å­ç›¸äº’ä½œç”¨ï¼Œä½ç½®biå¤„çš„ç²’å­çš„åŠ é€Ÿåº¦æ›´æ–°
 
 cbuffer cbCS : register(b0)
 {
@@ -45,13 +45,13 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid
 	float4 vel = oldPosVelo[DTid.x].velo;
 	float3 accel = 0;
 	float mass = g_fParticleMass;
-	// CSµÄÃ¿¸öÏß³Ì¸üĞÂÒ»¸öÁ£×Ó
+	// CSçš„æ¯ä¸ªçº¿ç¨‹æ›´æ–°ä¸€ä¸ªç²’å­
 
 	[loop]
 	for (uint i = 0; i < g_param.y; i++)
 	{
 		sharedPos[GI] = oldPosVelo[i * blocksize + GI].pos;
-		// ½«Á£×Ó»º´æµ½¹²ÏíÄÚ´æÖĞÒÔÌá¸ßIOĞ§ÂÊ
+		// å°†ç²’å­ç¼“å­˜åˆ°å…±äº«å†…å­˜ä¸­ä»¥æé«˜IOæ•ˆç‡
 	   
 		GroupMemoryBarrierWithGroupSync();
 
@@ -70,19 +70,19 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid
 		
 		GroupMemoryBarrierWithGroupSync();
 	} 
-	// Ê¹ÓÃËùÓĞÆäËûÁ£×Ó¸üĞÂµ±Ç°Á£×Ó
+	// ä½¿ç”¨æ‰€æœ‰å…¶ä»–ç²’å­æ›´æ–°å½“å‰ç²’å­
 
 	const int tooManyParticles = g_param.y * blocksize - g_param.x;
-	// g_param.xÊÇÁ£×ÓµÄÊıÄ¿£¬µ«ÊÇÕâ¸öÊı×Ö¿ÉÄÜ²»ÊÇÆ½ÆÌ³ß´çµÄÕûÊı±¶¡£
-	// ÔÚÕâÖÖÇé¿öÏÂ£¬Èç¹ûÔÚÉÏÃæµÄ¹ı³ÌÖĞ·¢ÉúÁËÔ½½ç¶ÁÈ¡£¬Ôò»áÓĞÌ«¶àµÄÁ£×Ó¡°»ÃÓ°¡±ÔÚÎ»ÖÃ£¨0,0,0£©²úÉú¼ÙµÄÖØÁ¦£¬
-	// ËùÒÔ±ØĞëÔÚÕâÀï¼õÈ¥ËüÃÇ¡£ 
-	// ×¢Òâ£¬ÔÚCSÖĞ£¬Ô½½çµÄ¶ÁÈ¡×ÜÊÇ·µ»Ø0¡£
+	// g_param.xæ˜¯ç²’å­çš„æ•°ç›®ï¼Œä½†æ˜¯è¿™ä¸ªæ•°å­—å¯èƒ½ä¸æ˜¯å¹³é“ºå°ºå¯¸çš„æ•´æ•°å€ã€‚
+	// åœ¨è¿™ç§æƒ…å†µä¸‹ï¼Œå¦‚æœåœ¨ä¸Šé¢çš„è¿‡ç¨‹ä¸­å‘ç”Ÿäº†è¶Šç•Œè¯»å–ï¼Œåˆ™ä¼šæœ‰å¤ªå¤šçš„ç²’å­â€œå¹»å½±â€åœ¨ä½ç½®ï¼ˆ0,0,0ï¼‰äº§ç”Ÿå‡çš„é‡åŠ›ï¼Œ
+	// æ‰€ä»¥å¿…é¡»åœ¨è¿™é‡Œå‡å»å®ƒä»¬ã€‚ 
+	// æ³¨æ„ï¼Œåœ¨CSä¸­ï¼Œè¶Šç•Œçš„è¯»å–æ€»æ˜¯è¿”å›0ã€‚
 	bodyBodyInteraction(accel, float4(0, 0, 0, 0), pos, mass, -tooManyParticles);
 
 	vel.xyz += accel.xyz * g_paramf.x;		//deltaTime;
 	vel.xyz *= g_paramf.y;					//damping;
 	pos.xyz += vel.xyz * g_paramf.x;		//deltaTime;
-	// Ê¹ÓÃÉÏÃæ¼ÆËãµÄ¼ÓËÙ¶È¸üĞÂµ±Ç°Á£×ÓµÄËÙ¶ÈºÍÎ»ÖÃ¡£
+	// ä½¿ç”¨ä¸Šé¢è®¡ç®—çš„åŠ é€Ÿåº¦æ›´æ–°å½“å‰ç²’å­çš„é€Ÿåº¦å’Œä½ç½®ã€‚
 
 	if (DTid.x < g_param.x)
 	{

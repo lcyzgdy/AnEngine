@@ -23,7 +23,7 @@ namespace RenderCore
 			D3D12_RESOURCE_STATES m_transitioningState;
 			D3D12_GPU_VIRTUAL_ADDRESS m_gpuVirtualAddress;
 
-			// µ±Ê¹ÓÃVirtualAlloc()ÊÍ·ÅÄÚ´æÊ±´ÓÕâÀï¼ÇÂ¼¡£
+			// å½“ä½¿ç”¨VirtualAlloc()é‡Šæ”¾å†…å­˜æ—¶ä»Žè¿™é‡Œè®°å½•ã€‚
 			void* m_p_userAllocatedMemory;
 		public:
 			GpuResource();

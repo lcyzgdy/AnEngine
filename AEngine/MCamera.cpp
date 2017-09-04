@@ -20,20 +20,20 @@ void MCamera::OnInit(XMFLOAT3 _position)
 void MCamera::OnUpdate(float _elapsedSeconds)
 {
 	XMFLOAT3 move(0, 0, 0);
-	
-	if (BaseInput::GetKey(DIK_A))
+
+	if (BaseInput::GetInstance()->GetKey(DIK_A))
 	{
 		move.x -= 1.0f;
 	}
-	if (BaseInput::GetKey(DIK_D))
+	if (BaseInput::GetInstance()->GetKey(DIK_D))
 	{
 		move.x += 1.0f;
 	}
-	if (BaseInput::GetKey(DIK_W))
+	if (BaseInput::GetInstance()->GetKey(DIK_W))
 	{
 		move.z -= 1.0f;
 	}
-	if (BaseInput::GetKey(DIK_S))
+	if (BaseInput::GetInstance()->GetKey(DIK_S))
 	{
 		move.z += 1.0f;
 	}
@@ -43,43 +43,43 @@ void MCamera::OnUpdate(float _elapsedSeconds)
 		XMVECTOR vector = XMVector3Normalize(XMLoadFloat3(&move));
 		move.x = XMVectorGetX(vector);
 		move.z = XMVectorGetZ(vector);
-	}	// ÏòÁ¿×ªËÄÔªÊı
+	}	// å‘é‡è½¬å››å…ƒæ•°
 
 	float moveDelta = moveSpeed * _elapsedSeconds;
 	float rotateDelta = turnSpeed * _elapsedSeconds;
 
-	if (BaseInput::GetKey(DIK_UP))
+	if (BaseInput::GetInstance()->GetKey(DIK_UP))
 	{
 		pitchRotate += rotateDelta;
 	}
-	if (BaseInput::GetKey(DIK_DOWN))
+	if (BaseInput::GetInstance()->GetKey(DIK_DOWN))
 	{
 		pitchRotate -= rotateDelta;
 	}
-	if (BaseInput::GetKey(DIK_LEFT))
+	if (BaseInput::GetInstance()->GetKey(DIK_LEFT))
 	{
 		yawRotate += rotateDelta;
 	}
-	if (BaseInput::GetKey(DIK_RIGHT))
+	if (BaseInput::GetInstance()->GetKey(DIK_RIGHT))
 	{
 		yawRotate -= rotateDelta;
 	}
 
 	pitchRotate = min(pitchRotate, XM_PIDIV4);
 	pitchRotate = max(-XM_PIDIV4, pitchRotate);
-	// ÏŞÖÆ·¶Î§
+	// é™åˆ¶èŒƒå›´
 
 	float x = move.x * -cosf(yawRotate) - move.z * sinf(yawRotate);
 	float z = move.x * sinf(yawRotate) - move.z * cosf(yawRotate);
 	position.x += x*moveDelta;
 	position.z += z*moveDelta;
-	// ÔÚÄ£ĞÍ¿Õ¼äÖĞÒÆ¶¯ÉãÏñ»ú
+	// åœ¨æ¨¡å‹ç©ºé—´ä¸­ç§»åŠ¨æ‘„åƒæœº
 
 	float r = cosf(pitchRotate);
 	lookDirection.x = r * sinf(yawRotate);
 	lookDirection.y = sinf(pitchRotate);
 	lookDirection.z = r * cosf(yawRotate);
-	// È·¶¨¹Û²ì·½Ïò
+	// ç¡®å®šè§‚å¯Ÿæ–¹å‘
 }
 
 void MCamera::OnRelease()
@@ -160,12 +160,12 @@ void MCamera::OnKeyDown(UINT8 _key)
 	case VK_UP:
 	{
 		keyPressed.up = true;
-		break; 
+		break;
 	}
 	case VK_DOWN:
 	{
 		keyPressed.down = true;
-		break; 
+		break;
 	}
 	case VK_LEFT:
 	{

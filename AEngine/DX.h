@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef __DX_H__
 #define __DX_H__
 
@@ -30,6 +29,14 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 #ifdef _WIN64
+
+inline wstring GetAssetFullPath(LPCWSTR assetName)
+{
+	WCHAR _assetsPath[512];
+	GetAssetsPath(_assetsPath, _countof(_assetsPath));
+	wstring assetsPath = _assetsPath;
+	return assetsPath + wstring(assetName);
+}
 
 class D3D12AppBase
 {
@@ -63,7 +70,6 @@ public:
 
 	virtual void OnKeyDown(UINT8 key) = 0;
 	virtual void OnKeyUp(UINT8 key) = 0;
-	// 事件和委托
 
 	void SetHwnd(const HWND _hwnd);
 

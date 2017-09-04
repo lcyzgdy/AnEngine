@@ -21,7 +21,7 @@ void DrawLine::OnInit()
 	InitializePipeline();
 	InitializeAssets();
 
-	PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
+	//PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
 }
 
 void DrawLine::OnRelease()
@@ -32,17 +32,17 @@ void DrawLine::OnRelease()
 
 void DrawLine::OnUpdate()
 {
-	if (BaseInput::GetMouseButton(0))
+	if (BaseInput::GetInstance()->GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::GetMouseButtonDown(0))
+		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
-			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
-			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
+			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		auto pos = BaseInput::GetM128MousePosition();
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -111,7 +111,7 @@ void DrawLine::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -136,7 +136,7 @@ void DrawLine::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -153,7 +153,7 @@ void DrawLine::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -220,7 +220,7 @@ void DrawLine::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
+	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f} });
 	vertex.push_back({ { 0.0f, 0.3f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } });
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
@@ -356,17 +356,17 @@ void DrawLineWithWu::OnRelease()
 
 void DrawLineWithWu::OnUpdate()
 {
-	if (BaseInput::GetMouseButton(0))
+	if (BaseInput::GetInstance()->GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::GetMouseButtonDown(0))
+		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
-			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
-			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
+			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		auto pos = BaseInput::GetM128MousePosition();
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -435,7 +435,7 @@ void DrawLineWithWu::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -460,7 +460,7 @@ void DrawLineWithWu::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -477,7 +477,7 @@ void DrawLineWithWu::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -544,7 +544,7 @@ void DrawLineWithWu::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-	start = { { 0.0f, 0.0f, 0.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } };
+	start = { { 0.0f, 0.0f, 0.0f },{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } };
 	end = { { 0.0f, 0.3f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } };
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
@@ -697,7 +697,7 @@ void DrawTriangle::Graham()
 	int w = static_cast<int>(vertexIndexStack.size());
 	//vertexIndexStack.push(vertex.size() - 2);
 	if (vertex.size() - 2 <= 0) return;
-	for (int i = vertex.size() - 2; i > 0; i--)
+	for (size_t i = vertex.size() - 2; i > 0; i--)
 	{
 		while (1)
 		{
@@ -715,7 +715,7 @@ void DrawTriangle::Graham()
 				break;
 			}
 		}
-		vertexIndexStack.push(i);
+		vertexIndexStack.push(static_cast<int>(i));
 	}
 }
 
@@ -749,11 +749,11 @@ void DrawTriangle::OnRelease()
 
 void DrawTriangle::OnUpdate()
 {
-	if (BaseInput::GetMouseButtonDown(0))
+	if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 	{
 		Vertex v;
-		v.color = { random(0.0f,1.0f), random(0.0f,1.0f) ,random(0.0f,1.0f) ,1.0f };
-		auto pos = BaseInput::GetM128MousePosition();
+		v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,1.0f };
+		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		vertex.push_back(v);
@@ -854,7 +854,7 @@ void DrawTriangle::InitializePipeline()
 	// 描述并创建命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -880,7 +880,7 @@ void DrawTriangle::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
@@ -897,7 +897,7 @@ void DrawTriangle::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);

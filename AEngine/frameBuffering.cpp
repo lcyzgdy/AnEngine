@@ -28,11 +28,11 @@ void FrameBuffering::OnUpdate()
 
 void FrameBuffering::OnRender()
 {
-	PopulateCommandList();	//ÌîÈëÃüÁî
+	PopulateCommandList();	//å¡«å…¥å‘½ä»¤
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
-	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);	//Ìá½»ÃüÁî
-	swapChain->Present(1, 0);	//½»»»Ç°ºó»º³å
-	MoveToNextFrame();		//µÈ´ıÇ°Ò»Ö¡
+	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);	//æäº¤å‘½ä»¤
+	swapChain->Present(1, 0);	//äº¤æ¢å‰åç¼“å†²
+	MoveToNextFrame();		//ç­‰å¾…å‰ä¸€å¸§
 }
 
 void FrameBuffering::OnRelease()
@@ -61,7 +61,7 @@ void FrameBuffering::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// ¿ªÆôDebugÄ£Ê½
+	// å¼€å¯Debugæ¨¡å¼
 
 	ComPtr<IDXGIFactory4> factory;
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
@@ -77,16 +77,16 @@ void FrameBuffering::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
-	// ´´Éè±¸
+	// åˆ›è®¾å¤‡
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
-	// ÃèÊö²¢´´½¨ÃüÁî¶ÓÁĞ
+	// æè¿°å¹¶åˆ›å»ºå‘½ä»¤é˜Ÿåˆ—
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -96,14 +96,14 @@ void FrameBuffering::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// ½»»»Á´ĞèÒª¶ÓÁĞ£¬ÒÔ±ã¿ÉÒÔÇ¿ÖÆË¢ĞÂËü
+		commandQueue.Get(),		// äº¤æ¢é“¾éœ€è¦é˜Ÿåˆ—ï¼Œä»¥ä¾¿å¯ä»¥å¼ºåˆ¶åˆ·æ–°å®ƒ
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// ÃèÊö²¢´´½¨½»»»Á´
+	// æè¿°å¹¶åˆ›å»ºäº¤æ¢é“¾
 
 	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 	swapChain1.As(&swapChain);
@@ -111,24 +111,24 @@ void FrameBuffering::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
-	// ´´½¨äÖÈ¾Ä¿±êÊÓÍ¼ÃèÊö·û¶Ñ
+	// åˆ›å»ºæ¸²æŸ“ç›®æ ‡è§†å›¾æè¿°ç¬¦å †
 
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 	srvHeapDesc.NumDescriptors = 1;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
-	// ÃèÊö²¢´´½¨ÎÆÀíµÄ×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼¶Ñ [Shader resource view (SRV) heap]
+	// æè¿°å¹¶åˆ›å»ºçº¹ç†çš„ç€è‰²å™¨èµ„æºè§†å›¾å † [Shader resource view (SRV) heap]
 
 	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	// !#1	´´½¨ÃèÊö·û¶Ñ
+	// !#1	åˆ›å»ºæè¿°ç¬¦å †
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -137,8 +137,8 @@ void FrameBuffering::InitializePipeline()
 		device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i]));
 		//// !!!!
 	}
-	// ´´½¨ÃüÁî·ÖÅäÆ÷
-	// ´´½¨Ö¡×ÊÔ´
+	// åˆ›å»ºå‘½ä»¤åˆ†é…å™¨
+	// åˆ›å»ºå¸§èµ„æº
 }
 
 void FrameBuffering::InitializeAssets()
@@ -246,17 +246,17 @@ void FrameBuffering::InitializeAssets()
 void FrameBuffering::PopulateCommandList()
 {
 	commandAllocators[frameIndex]->Reset();
-	// ÃüÁîÁĞ±í·ÖÅäÆ÷Ö»ÄÜÔÚ¹ØÁªµÄÃüÁîÁĞ±íÒÑÔÚGPUÉÏÍê³ÉÖ´ĞĞÊ±ÖØÖÃ; 
-	// Ó¦ÓÃ³ÌĞòÓ¦¸ÃÊ¹ÓÃÕ¤À¸À´È·¶¨GPUÖ´ĞĞ½ø¶È¡£
+	// å‘½ä»¤åˆ—è¡¨åˆ†é…å™¨åªèƒ½åœ¨å…³è”çš„å‘½ä»¤åˆ—è¡¨å·²åœ¨GPUä¸Šå®Œæˆæ‰§è¡Œæ—¶é‡ç½®; 
+	// åº”ç”¨ç¨‹åºåº”è¯¥ä½¿ç”¨æ …æ æ¥ç¡®å®šGPUæ‰§è¡Œè¿›åº¦ã€‚
 
 	commandList->Reset(commandAllocators[frameIndex].Get(), pipelineState.Get());
-	// µ«ÊÇ£¬µ±ÔÚÌØ¶¨ÃüÁîÁĞ±íÉÏµ÷ÓÃExecuteCommandList£¨£©Ê±£¬¸ÃÃüÁîÁĞ±íËæºó¿ÉÒÔÔÚÈÎºÎÊ±¼äÖØÖÃ£¬
-	// µ«ÒªÔÚÖØĞÂ¼ÇÂ¼Ö®Ç°¡£
+	// ä½†æ˜¯ï¼Œå½“åœ¨ç‰¹å®šå‘½ä»¤åˆ—è¡¨ä¸Šè°ƒç”¨ExecuteCommandListï¼ˆï¼‰æ—¶ï¼Œè¯¥å‘½ä»¤åˆ—è¡¨éšåå¯ä»¥åœ¨ä»»ä½•æ—¶é—´é‡ç½®ï¼Œ
+	// ä½†è¦åœ¨é‡æ–°è®°å½•ä¹‹å‰ã€‚
 
 	commandList->SetGraphicsRootSignature(rootSignature.Get());
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
-	// ÉèÖÃ±ØÒªµÄ×´Ì¬¡£
+	// è®¾ç½®å¿…è¦çš„çŠ¶æ€ã€‚
 
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
@@ -271,7 +271,7 @@ void FrameBuffering::PopulateCommandList()
 	commandList->DrawInstanced(7, 1, 0, 0);
 
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-	// Ö¸Ê¾ÏÖÔÚ½«Ê¹ÓÃºó»º³åÀ´³ÊÏÖ
+	// æŒ‡ç¤ºç°åœ¨å°†ä½¿ç”¨åç¼“å†²æ¥å‘ˆç°
 
 	commandList->Close();
 }
@@ -279,7 +279,7 @@ void FrameBuffering::PopulateCommandList()
 void FrameBuffering::WaitForGpu()
 {
 	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
-	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
+	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
 
 	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
@@ -291,16 +291,16 @@ void FrameBuffering::MoveToNextFrame()
 {
 	const UINT64 currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
-	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
+	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
 
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
-	// ¸üĞÂÖ¡±àºÅ
+	// æ›´æ–°å¸§ç¼–å·
 
 	if (fence->GetCompletedValue() < fenceValues[frameIndex])
 	{
 		fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 		WaitForSingleObjectEx(fenceEvent, INFINITE, false);
-	}// Èç¹ûÏÂÒ»Ö¡»¹Ã»ÓĞäÖÈ¾Íê£¬ÔòµÈ´ı
+	}// å¦‚æœä¸‹ä¸€å¸§è¿˜æ²¡æœ‰æ¸²æŸ“å®Œï¼Œåˆ™ç­‰å¾…
 
 	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
 }

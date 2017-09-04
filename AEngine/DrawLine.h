@@ -24,10 +24,10 @@ class DrawLine :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -37,7 +37,7 @@ class DrawLine :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[cnt_r_DefaultFrameCount];
+	UINT fenceValues[r_cnt_DefaultFrameCount];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -94,10 +94,10 @@ class DrawLineWithWu:public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -107,7 +107,7 @@ class DrawLineWithWu:public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[cnt_r_DefaultFrameCount];
+	UINT fenceValues[r_cnt_DefaultFrameCount];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -164,10 +164,10 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -177,7 +177,7 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[cnt_r_DefaultFrameCount];
+	UINT fenceValues[r_cnt_DefaultFrameCount];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;

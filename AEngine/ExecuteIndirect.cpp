@@ -46,14 +46,14 @@ void ExecuteIndirect::OnUpdate()
 		constantBufferData[i].offset.x += constantBufferData[i].velocity.x;
 		if (constantBufferData[i].offset.x > offsetBounds)
 		{
-			constantBufferData[i].velocity.x = random(0.01f, 0.02f);
+			constantBufferData[i].velocity.x = Random(0.01f, 0.02f);
 			constantBufferData[i].offset.x = -offsetBounds;
 		}
 	}
 
 	UINT8* destination = pCbvDataBegin + (triangleCount * frameIndex * sizeof(SceneConstantBuffer));
 	memcpy(destination, &constantBufferData[0], triangleCount * sizeof(SceneConstantBuffer));
-	// ½«Êı¾İ¿½±´µ½³¡¾°³£Á¿»º³åÇø
+	// å°†æ•°æ®æ‹·è´åˆ°åœºæ™¯å¸¸é‡ç¼“å†²åŒº
 }
 
 void ExecuteIndirect::OnRender()
@@ -72,13 +72,13 @@ void ExecuteIndirect::OnRender()
 		computeCommandQueue->Signal(computeFence.Get(), fenceValues[frameIndex]);
 
 		commandQueue->Wait(computeFence.Get(), fenceValues[frameIndex]);
-		// ½öµ±¼ÆËã»ú¹¤×÷Íê³ÉÊ±²ÅÖ´ĞĞäÖÈ¾¹¤×÷
+		// ä»…å½“è®¡ç®—æœºå·¥ä½œå®Œæˆæ—¶æ‰æ‰§è¡Œæ¸²æŸ“å·¥ä½œ
 	}
 	//PIXBeginEvent(commandQueue.Get(), 0, L"Render");	// ??????
 
 	ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-	// Ö´ĞĞäÖÈ¾¹¤×÷
+	// æ‰§è¡Œæ¸²æŸ“å·¥ä½œ
 
 	//PIXEndEvent(commandQueue.Get());
 
@@ -116,7 +116,7 @@ void ExecuteIndirect::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// ¿ªÆôDebugÄ£Ê½
+	// å¼€å¯Debugæ¨¡å¼
 
 	ComPtr<IDXGIFactory4> factory;
 	ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
@@ -132,22 +132,22 @@ void ExecuteIndirect::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		ThrowIfFailed(D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)));
 	}
-	// ´´Éè±¸
+	// åˆ›è®¾å¤‡
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	ThrowIfFailed(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue)));
-	// ÃèÊö²¢´´½¨ÃüÁî¶ÓÁĞ
+	// æè¿°å¹¶åˆ›å»ºå‘½ä»¤é˜Ÿåˆ—
 
 	D3D12_COMMAND_QUEUE_DESC computeQueueDesc = {};
 	computeQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	computeQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
 	ThrowIfFailed(device->CreateCommandQueue(&computeQueueDesc, IID_PPV_ARGS(&computeCommandQueue)));
-	// ÃèÊö²¢´´½¨¼ÆËã×ÅÉ«Æ÷µÄÃüÁî¶ÓÁĞ
+	// æè¿°å¹¶åˆ›å»ºè®¡ç®—ç€è‰²å™¨çš„å‘½ä»¤é˜Ÿåˆ—
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = cnt_r_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -157,14 +157,14 @@ void ExecuteIndirect::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// ½»»»Á´ĞèÒª¶ÓÁĞ£¬ÒÔ±ã¿ÉÒÔÇ¿ÖÆË¢ĞÂËü
+		commandQueue.Get(),		// äº¤æ¢é“¾éœ€è¦é˜Ÿåˆ—ï¼Œä»¥ä¾¿å¯ä»¥å¼ºåˆ¶åˆ·æ–°å®ƒ
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// ÃèÊö²¢´´½¨½»»»Á´
+	// æè¿°å¹¶åˆ›å»ºäº¤æ¢é“¾
 
 	ThrowIfFailed(factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER));
 	ThrowIfFailed(swapChain1.As(&swapChain));
@@ -172,28 +172,28 @@ void ExecuteIndirect::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = cnt_r_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	ThrowIfFailed(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap)));
-	// ´´½¨äÖÈ¾Ä¿±êÊÓÍ¼ÃèÊö·û¶Ñ
+	// åˆ›å»ºæ¸²æŸ“ç›®æ ‡è§†å›¾æè¿°ç¬¦å †
 
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
 	dsvHeapDesc.NumDescriptors = 1;
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	ThrowIfFailed(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap)));
-	// ÃèÊöºÍ´´½¨Éî¶ÈÄ£°åÊÓÍ¼[depth stencil view£¨DSV£©]ÃèÊö·û¶Ñ
+	// æè¿°å’Œåˆ›å»ºæ·±åº¦æ¨¡æ¿è§†å›¾[depth stencil viewï¼ˆDSVï¼‰]æè¿°ç¬¦å †
 
 	// Describe and create a constant buffer view (CBV), Shader resource
 	// view (SRV), and unordered access view (UAV) descriptor heap.
 	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavHeapDesc = {};
-	cbvSrvUavHeapDesc.NumDescriptors = CbvSrvUavDescriptorCountPerFrame * cnt_r_DefaultFrameCount;
+	cbvSrvUavHeapDesc.NumDescriptors = CbvSrvUavDescriptorCountPerFrame * r_cnt_DefaultFrameCount;
 	cbvSrvUavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvSrvUavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(device->CreateDescriptorHeap(&cbvSrvUavHeapDesc, IID_PPV_ARGS(&cbvSrvUavHeap)));
-	// ÃèÊö²¢´´½¨³£Á¿»º³åÊÓÍ¼¡¾constant buffer view (CBV)¡¿¡¢×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼¡¾Shader resource
-	// view (SRV)¡¿¡¢ÎŞĞò·ÃÎÊÊÓÍ¼¡¾unordered access view (UAV)¡¿ÃèÊö·û¶Ñ
+	// æè¿°å¹¶åˆ›å»ºå¸¸é‡ç¼“å†²è§†å›¾ã€constant buffer view (CBV)ã€‘ã€ç€è‰²å™¨èµ„æºè§†å›¾ã€Shader resource
+	// view (SRV)ã€‘ã€æ— åºè®¿é—®è§†å›¾ã€unordered access view (UAV)ã€‘æè¿°ç¬¦å †
 	/*
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 	srvHeapDesc.NumDescriptors = 1;
@@ -201,22 +201,22 @@ void ExecuteIndirect::InitializePipeline()
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
 	//srvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
-	// ÃèÊö²¢´´½¨ÎÆÀíµÄ×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼¶Ñ [Shader resource view (SRV) heap]
+	// æè¿°å¹¶åˆ›å»ºçº¹ç†çš„ç€è‰²å™¨èµ„æºè§†å›¾å † [Shader resource view (SRV) heap]
 
 	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
 	cbvHeapDesc.NumDescriptors = 1;
 	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	m_device->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&cbvHeap));
-	// ÃèÊö²¢´´½¨Ò»¸ö³£Á¿»º³åÇøÊÓÍ¼£¨CBV£©ÃèÊö·û¶Ñ¡£
-	// ±êÖ¾Ö¸Ê¾´ËÃèÊö·û¶Ñ¿ÉÒÔ°ó¶¨µ½Á÷Ë®Ïß£¬²¢ÇÒÆäÖĞ°üº¬µÄÃèÊö·û¿ÉÒÔÓÉ¸ù¶ÑÒıÓÃ¡£
+	// æè¿°å¹¶åˆ›å»ºä¸€ä¸ªå¸¸é‡ç¼“å†²åŒºè§†å›¾ï¼ˆCBVï¼‰æè¿°ç¬¦å †ã€‚
+	// æ ‡å¿—æŒ‡ç¤ºæ­¤æè¿°ç¬¦å †å¯ä»¥ç»‘å®šåˆ°æµæ°´çº¿ï¼Œå¹¶ä¸”å…¶ä¸­åŒ…å«çš„æè¿°ç¬¦å¯ä»¥ç”±æ ¹å †å¼•ç”¨ã€‚
 	*/
 	rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	// !#1	´´½¨ÃèÊö·û¶Ñ
+	// !#1	åˆ›å»ºæè¿°ç¬¦å †
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < cnt_r_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
 	{
 		ThrowIfFailed(swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i])));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -226,8 +226,8 @@ void ExecuteIndirect::InitializePipeline()
 		ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_COMPUTE, IID_PPV_ARGS(&computeCommandAllocators[i])));
 		//// !!!!
 	}
-	// ´´½¨ÃüÁî·ÖÅäÆ÷
-	// ´´½¨Ö¡×ÊÔ´
+	// åˆ›å»ºå‘½ä»¤åˆ†é…å™¨
+	// åˆ›å»ºå¸§èµ„æº
 }
 
 void ExecuteIndirect::InitializeAssets()
@@ -245,7 +245,7 @@ void ExecuteIndirect::InitializeAssets()
 		rootParameters[Cbv].InitAsConstantBufferView(0, 0, D3D12_ROOT_DESCRIPTOR_FLAG_DATA_STATIC, D3D12_SHADER_VISIBILITY_VERTEX);
 
 		D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-		// ÔÊĞíÊäÈë»ã±àÊäÈë²¼¾Ö
+		// å…è®¸è¾“å…¥æ±‡ç¼–è¾“å…¥å¸ƒå±€
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
 		rootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSignatureFlags);
 
@@ -253,7 +253,7 @@ void ExecuteIndirect::InitializeAssets()
 		ComPtr<ID3DBlob> error;
 		D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error);
 		auto hr2 = device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
-		//´´½¨¸ùÇ©Ãû
+		//åˆ›å»ºæ ¹ç­¾å
 
 		CD3DX12_DESCRIPTOR_RANGE1 ranges[2];
 		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
@@ -268,7 +268,7 @@ void ExecuteIndirect::InitializeAssets()
 
 		D3DX12SerializeVersionedRootSignature(&computeRootSignatureDesc, featureData.HighestVersion, &signature, &error);
 		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&computeRootSignature));
-		// ´´½¨¼ÆËã×ÅÉ«Æ÷¸ùÇ©Ãû
+		// åˆ›å»ºè®¡ç®—ç€è‰²å™¨æ ¹ç­¾å
 		// !#1
 	}
 	// #2
@@ -317,13 +317,13 @@ void ExecuteIndirect::InitializeAssets()
 		computePsoDesc.CS = CD3DX12_SHADER_BYTECODE(computeShader.Get());
 
 		device->CreateComputePipelineState(&computePsoDesc, IID_PPV_ARGS(&computeState));
-		// !#2	// ´´½¨¹ÜÏß×´Ì¬£¬°üÀ¨±àÒëºÍ¼ÓÔØ×ÅÉ«Æ÷
+		// !#2	// åˆ›å»ºç®¡çº¿çŠ¶æ€ï¼ŒåŒ…æ‹¬ç¼–è¯‘å’ŒåŠ è½½ç€è‰²å™¨
 	}
 
 	device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocators[frameIndex].Get(), pipelineState.Get(), IID_PPV_ARGS(&commandList));
 	device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_COMPUTE, computeCommandAllocators[frameIndex].Get(), computeState.Get(), IID_PPV_ARGS(&computeCommandList));
 	computeCommandList->Close();
-	// ´´½¨äÖÈ¾ÃüÁîÁ´±íºÍ¼ÆËãÃüÁîÁ´±í
+	// åˆ›å»ºæ¸²æŸ“å‘½ä»¤é“¾è¡¨å’Œè®¡ç®—å‘½ä»¤é“¾è¡¨
 
 	ComPtr<ID3D12Resource> vertexBufferUpload;
 	ComPtr<ID3D12Resource> commandBufferUpload;
@@ -386,7 +386,7 @@ void ExecuteIndirect::InitializeAssets()
 		);
 
 		device->CreateDepthStencilView(depthStencil.Get(), &depthStencilDesc, dsvHeap->GetCPUDescriptorHandleForHeapStart());
-		// !#4	// ´´½¨Éî¶ÈÄ£°åÊÓÍ¼
+		// !#4	// åˆ›å»ºæ·±åº¦æ¨¡æ¿è§†å›¾
 	}
 	// #5
 	{
@@ -402,16 +402,16 @@ void ExecuteIndirect::InitializeAssets()
 
 		for (UINT n = 0; n < triangleCount; n++)
 		{
-			constantBufferData[n].velocity = XMFLOAT4(random(0.01f, 0.02f), 0.0f, 0.0f, 0.0f);
-			constantBufferData[n].offset = XMFLOAT4(random(-5.0f, -1.5f), random(-1.0f, 1.0f), random(0.0f, 2.0f), 0.0f);
-			constantBufferData[n].color = XMFLOAT4(random(0.5f, 1.0f), random(0.5f, 1.0f), random(0.5f, 1.0f), 1.0f);
+			constantBufferData[n].velocity = XMFLOAT4(Random(0.01f, 0.02f), 0.0f, 0.0f, 0.0f);
+			constantBufferData[n].offset = XMFLOAT4(Random(-5.0f, -1.5f), Random(-1.0f, 1.0f), Random(0.0f, 2.0f), 0.0f);
+			constantBufferData[n].color = XMFLOAT4(Random(0.5f, 1.0f), Random(0.5f, 1.0f), Random(0.5f, 1.0f), 1.0f);
 			XMStoreFloat4x4(&constantBufferData[n].projection, XMMatrixTranspose(XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatio, 0.01f, 20.0f)));
-		}	// ÎªÃ¿Ò»¸öÈı½ÇĞÎ³õÊ¼»¯³£Á¿»º³å
+		}	// ä¸ºæ¯ä¸€ä¸ªä¸‰è§’å½¢åˆå§‹åŒ–å¸¸é‡ç¼“å†²
 
 		CD3DX12_RANGE readRange1(0, 0);
 		constantBuffer->Map(0, &readRange1, reinterpret_cast<void**>(&pCbvDataBegin));
 		memcpy(pCbvDataBegin, &constantBufferData[0], triangleCount * sizeof(SceneConstantBuffer));
-		// Ó³ÉäºÍ³õÊ¼»¯³£Á¿»º³å¡£Ó¦ÓÃ³ÌĞò¹Ø±ÕÇ°²»»áÈ¡ÏûÓ³Éä¡£
+		// æ˜ å°„å’Œåˆå§‹åŒ–å¸¸é‡ç¼“å†²ã€‚åº”ç”¨ç¨‹åºå…³é—­å‰ä¸ä¼šå–æ¶ˆæ˜ å°„ã€‚
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc1 = {};
 		srvDesc1.Format = DXGI_FORMAT_UNKNOWN;
@@ -420,10 +420,10 @@ void ExecuteIndirect::InitializeAssets()
 		srvDesc1.Buffer.NumElements = triangleCount;
 		srvDesc1.Buffer.StructureByteStride = sizeof(SceneConstantBuffer);
 		srvDesc1.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-		// ´´½¨³£Á¿»º³åÇøµÄ×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼£¨SRV£©£¬ÒÔ¹©¼ÆËã×ÅÉ«Æ÷¶ÁÈ¡¡£
+		// åˆ›å»ºå¸¸é‡ç¼“å†²åŒºçš„ç€è‰²å™¨èµ„æºè§†å›¾ï¼ˆSRVï¼‰ï¼Œä»¥ä¾›è®¡ç®—ç€è‰²å™¨è¯»å–ã€‚
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CbvSrvOffset, cbvSrvUavDescriptorSize);
-		for (UINT frame = 0; frame < cnt_r_DefaultFrameCount; frame++)
+		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
 		{
 			srvDesc1.Buffer.FirstElement = frame * triangleCount;
 			device->CreateShaderResourceView(constantBuffer.Get(), &srvDesc1, cbvSrvHandle);
@@ -437,7 +437,7 @@ void ExecuteIndirect::InitializeAssets()
 		argumentDescs[0].Type = D3D12_INDIRECT_ARGUMENT_TYPE_CONSTANT_BUFFER_VIEW;
 		argumentDescs[0].ConstantBufferView.RootParameterIndex = Cbv;
 		argumentDescs[1].Type = D3D12_INDIRECT_ARGUMENT_TYPE_DRAW;
-		// Ã¿¸öÃüÁîÓÉCBV¸üĞÂºÍDrawInstancedµÄµ÷ÓÃ×é³É
+		// æ¯ä¸ªå‘½ä»¤ç”±CBVæ›´æ–°å’ŒDrawInstancedçš„è°ƒç”¨ç»„æˆ
 
 		D3D12_COMMAND_SIGNATURE_DESC commandSignatureDesc = {};
 		commandSignatureDesc.pArgumentDescs = argumentDescs;
@@ -445,13 +445,13 @@ void ExecuteIndirect::InitializeAssets()
 		commandSignatureDesc.ByteStride = sizeof(IndirectCommand);
 
 		device->CreateCommandSignature(&commandSignatureDesc, rootSignature.Get(), IID_PPV_ARGS(&commandSignature));
-		// !#6	// ´´½¨ÓÃÓÚ¼ä½Ó»æÍ¼µÄÃüÁîÇ©Ãû¡£
+		// !#6	// åˆ›å»ºç”¨äºé—´æ¥ç»˜å›¾çš„å‘½ä»¤ç­¾åã€‚
 	}
 	// #7
 	{
 		std::vector<IndirectCommand> commands;
 		commands.resize(triangleResourceCount);
-		const UINT commandBufferSize = commandSizePerFrame * cnt_r_DefaultFrameCount;
+		const UINT commandBufferSize = commandSizePerFrame * r_cnt_DefaultFrameCount;
 
 		D3D12_RESOURCE_DESC commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferSize);
 		device->CreateCommittedResource(
@@ -473,7 +473,7 @@ void ExecuteIndirect::InitializeAssets()
 		D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = constantBuffer->GetGPUVirtualAddress();
 		UINT commandIndex = 0;
 
-		for (UINT frame = 0; frame < cnt_r_DefaultFrameCount; frame++)
+		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
 		{
 			for (UINT n = 0; n < triangleCount; n++)
 			{
@@ -492,7 +492,7 @@ void ExecuteIndirect::InitializeAssets()
 		commandData.pData = reinterpret_cast<UINT8*>(&commands[0]);
 		commandData.RowPitch = commandBufferSize;
 		commandData.SlicePitch = commandData.RowPitch;
-		// ½«Êı¾İ¸´ÖÆµ½ÖĞ¼äÉÏ´«¶Ñ£¬È»ºó½«ÉÏ´«¶ÑµÄ¸±±¾¿½±´µ½ÃüÁî»º³åÇø¡£
+		// å°†æ•°æ®å¤åˆ¶åˆ°ä¸­é—´ä¸Šä¼ å †ï¼Œç„¶åå°†ä¸Šä¼ å †çš„å‰¯æœ¬æ‹·è´åˆ°å‘½ä»¤ç¼“å†²åŒºã€‚
 
 		UpdateSubresources<1>(commandList.Get(), commandBuffer.Get(), commandBufferUpload.Get(), 0, 0, 1, &commandData);
 		commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(commandBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
@@ -504,10 +504,10 @@ void ExecuteIndirect::InitializeAssets()
 		srvDesc2.Buffer.NumElements = triangleCount;
 		srvDesc2.Buffer.StructureByteStride = sizeof(IndirectCommand);
 		srvDesc2.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-		// ÎªÃüÁî»º³åÇø´´½¨SRV¡£
+		// ä¸ºå‘½ä»¤ç¼“å†²åŒºåˆ›å»ºSRVã€‚
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE commandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CommandsOffset, cbvSrvUavDescriptorSize);
-		for (UINT frameI = 0; frameI < cnt_r_DefaultFrameCount; frameI++)
+		for (UINT frameI = 0; frameI < r_cnt_DefaultFrameCount; frameI++)
 		{
 			srvDesc2.Buffer.FirstElement = frameI * triangleCount;
 			device->CreateShaderResourceView(commandBuffer.Get(), &srvDesc2, commandsHandle);
@@ -515,8 +515,8 @@ void ExecuteIndirect::InitializeAssets()
 		}
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), ProcessedCommandsOffset, cbvSrvUavDescriptorSize);
-		// ´´½¨´æ´¢¼ÆËã¹¤×÷½á¹ûµÄÎŞĞò·ÃÎÊÊÓÍ¼£¨UAV£©¡£
-		for (UINT frame = 0; frame < cnt_r_DefaultFrameCount; frame++)
+		// åˆ›å»ºå­˜å‚¨è®¡ç®—å·¥ä½œç»“æœçš„æ— åºè®¿é—®è§†å›¾ï¼ˆUAVï¼‰ã€‚
+		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
 		{
 			commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferCounterOffset + sizeof(UINT), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 			device->CreateCommittedResource(
@@ -526,7 +526,7 @@ void ExecuteIndirect::InitializeAssets()
 				D3D12_RESOURCE_STATE_COPY_DEST,
 				nullptr,
 				IID_PPV_ARGS(&processedCommandBuffers[frame]));
-			// ·ÖÅä×ã¹»´óµÄ»º³åÇøÒÔÈİÄÉµ¥¸öÖ¡µÄËùÓĞ¼ä½ÓÃüÁîÒÔ¼°UAV¼ÆÊıÆ÷¡£
+			// åˆ†é…è¶³å¤Ÿå¤§çš„ç¼“å†²åŒºä»¥å®¹çº³å•ä¸ªå¸§çš„æ‰€æœ‰é—´æ¥å‘½ä»¤ä»¥åŠUAVè®¡æ•°å™¨ã€‚
 
 			D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 			uavDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -553,14 +553,14 @@ void ExecuteIndirect::InitializeAssets()
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(&processedCommandBufferCounterReset));
-		// ·ÖÅäÒ»¸ö¿ÉÓÃÓÚÖØÖÃUAV¼ÆÊıÆ÷²¢½«Æä³õÊ¼»¯Îª0µÄ»º³åÇø¡£
+		// åˆ†é…ä¸€ä¸ªå¯ç”¨äºé‡ç½®UAVè®¡æ•°å™¨å¹¶å°†å…¶åˆå§‹åŒ–ä¸º0çš„ç¼“å†²åŒºã€‚
 
 		UINT8* pMappedCounterReset = nullptr;
 		CD3DX12_RANGE readRange2(0, 0);
 		processedCommandBufferCounterReset->Map(0, &readRange2, reinterpret_cast<void**>(&pMappedCounterReset));
 		ZeroMemory(pMappedCounterReset, sizeof(UINT));
 		processedCommandBufferCounterReset->Unmap(0, nullptr);
-		// !#7	//´´½¨ÃüÁî»º³åÇøºÍUAVÒÔ´æ´¢¼ÆËã¹¤×÷µÄ½á¹û¡£
+		// !#7	//åˆ›å»ºå‘½ä»¤ç¼“å†²åŒºå’ŒUAVä»¥å­˜å‚¨è®¡ç®—å·¥ä½œçš„ç»“æœã€‚
 	}
 	// #8
 	{
@@ -610,7 +610,7 @@ void ExecuteIndirect::PopulateCommandList()
 		computeCommandList->SetComputeRoot32BitConstants(RootConstants, 4, reinterpret_cast<void*>(&csRootConstants), 0);
 
 		computeCommandList->CopyBufferRegion(processedCommandBuffers[frameIndex].Get(), commandBufferCounterOffset, processedCommandBufferCounterReset.Get(), 0, sizeof(UINT));
-		// ÎªÕâÒ»Ö¡ÖØÖÃUAV¼ÆÊıÆ÷
+		// ä¸ºè¿™ä¸€å¸§é‡ç½®UAVè®¡æ•°å™¨
 
 		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(processedCommandBuffers[frameIndex].Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		computeCommandList->ResourceBarrier(1, &barrier);
@@ -637,7 +637,7 @@ void ExecuteIndirect::PopulateCommandList()
 			D3D12_RESOURCE_STATE_PRESENT,
 			D3D12_RESOURCE_STATE_RENDER_TARGET)
 	};
-	// Ö¸Ê¾ÃüÁî»º³åÇø½«ÓÃÓÚ¼ä½Ó»æÖÆ£¬²¢ÇÒºó»º³åÇø½«ÓÃ×÷äÖÈ¾Ä¿±ê¡£
+	// æŒ‡ç¤ºå‘½ä»¤ç¼“å†²åŒºå°†ç”¨äºé—´æ¥ç»˜åˆ¶ï¼Œå¹¶ä¸”åç¼“å†²åŒºå°†ç”¨ä½œæ¸²æŸ“ç›®æ ‡ã€‚
 
 	commandList->ResourceBarrier(_countof(barriers), barriers);
 
@@ -664,7 +664,7 @@ void ExecuteIndirect::PopulateCommandList()
 			0,
 			processedCommandBuffers[frameIndex].Get(),
 			commandBufferCounterOffset);
-		// »­Ã»ÓĞ±»ÕÚµ²µÄÈı½ÇĞÎ
+		// ç”»æ²¡æœ‰è¢«é®æŒ¡çš„ä¸‰è§’å½¢
 	}
 	else
 	{
@@ -677,7 +677,7 @@ void ExecuteIndirect::PopulateCommandList()
 			commandSizePerFrame * frameIndex,
 			nullptr,
 			0);
-		// »­ËùÓĞµÄÈı½ÇĞÎ
+		// ç”»æ‰€æœ‰çš„ä¸‰è§’å½¢
 	}
 	//PIXEndEvent(commandList.Get());
 
@@ -685,7 +685,7 @@ void ExecuteIndirect::PopulateCommandList()
 	barriers[0].Transition.StateAfter = enableCulling ? D3D12_RESOURCE_STATE_COPY_DEST : D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
 	barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	// Ö¸Ê¾¼ÆËã×ÅÉ«Æ÷¿ÉÒÔÊ¹ÓÃÃüÁî»º³åÇø£¬²¢ÇÒÏÖÔÚ½«Ê¹ÓÃºó»º³åÇøÀ´äÖÈ¾¡£
+	// æŒ‡ç¤ºè®¡ç®—ç€è‰²å™¨å¯ä»¥ä½¿ç”¨å‘½ä»¤ç¼“å†²åŒºï¼Œå¹¶ä¸”ç°åœ¨å°†ä½¿ç”¨åç¼“å†²åŒºæ¥æ¸²æŸ“ã€‚
 
 	commandList->ResourceBarrier(_countof(barriers), barriers);
 
@@ -695,7 +695,7 @@ void ExecuteIndirect::PopulateCommandList()
 void ExecuteIndirect::WaitForGpu()
 {
 	commandQueue->Signal(fence.Get(), fenceValues[frameIndex]);
-	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
+	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
 
 	fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 	WaitForSingleObjectEx(fenceEvent, INFINITE, false);
@@ -707,16 +707,16 @@ void ExecuteIndirect::MoveToNextFrame()
 {
 	const UINT64 currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
-	// ÔÚ¶ÓÁĞÖĞµ÷¶ÈĞÅºÅÃüÁî¡£
+	// åœ¨é˜Ÿåˆ—ä¸­è°ƒåº¦ä¿¡å·å‘½ä»¤ã€‚
 
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
-	// ¸üĞÂÖ¡±àºÅ
+	// æ›´æ–°å¸§ç¼–å·
 
 	if (fence->GetCompletedValue() < fenceValues[frameIndex])
 	{
 		fence->SetEventOnCompletion(fenceValues[frameIndex], fenceEvent);
 		WaitForSingleObjectEx(fenceEvent, INFINITE, false);
-	}// Èç¹ûÏÂÒ»Ö¡»¹Ã»ÓĞäÖÈ¾Íê£¬ÔòµÈ´ı
+	}// å¦‚æœä¸‹ä¸€å¸§è¿˜æ²¡æœ‰æ¸²æŸ“å®Œï¼Œåˆ™ç­‰å¾…
 
 	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
 }

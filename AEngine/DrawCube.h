@@ -42,12 +42,12 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
 	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	ComPtr<ID3D12DescriptorHeap> samHeap;
-	ComPtr<ID3D12Resource> renderTargets[cnt_r_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize; 
@@ -67,7 +67,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT fenceValues[cnt_r_DefaultFrameCount];
+	UINT fenceValues[r_cnt_DefaultFrameCount];
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleCSU[1];
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleDSV[1];
@@ -80,7 +80,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	D3D12_VERTEX_BUFFER_VIEW cubeVbv;
 	D3D12_INDEX_BUFFER_VIEW cubeIbv;
 	XMFLOAT4X4  cBMatrix;
-	// 应用程序资源
+	// 搴旂敤绋嬪簭璧勬簮
 
 	vector<VertexPositionColor> vertex;
 
@@ -93,7 +93,7 @@ public:
 	~DrawCube() = default;
 
 
-	// 通过 D3D12AppBase 继承
+	// 閫氳繃 D3D12AppBase 缁ф壙
 	virtual void OnInit() override;
 
 	virtual void OnRelease() override;
@@ -107,7 +107,7 @@ public:
 	virtual void OnKeyUp(UINT8 key) override;
 
 
-	// 通过 D3D12Base 继承
+	// 閫氳繃 D3D12Base 缁ф壙
 	virtual void InitializePipeline() override;
 
 	virtual void InitializeAssets() override;

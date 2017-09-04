@@ -94,7 +94,7 @@ void RenderCore::GraphicPSO::SetInputLayout(uint32_t elementsNum, const D3D12_IN
 		D3D12_INPUT_ELEMENT_DESC* newElements = (D3D12_INPUT_ELEMENT_DESC*)malloc(sizeof(D3D12_INPUT_ELEMENT_DESC) * elementsNum);
 		memcpy(newElements, p_inputElementDescs, elementsNum * sizeof(D3D12_INPUT_ELEMENT_DESC));
 		m_inputLayouts.reset(static_cast<const D3D12_INPUT_ELEMENT_DESC*>(newElements));
-		// 拷贝一份，以防原数据更改后导致PSO失效
+		// 鎷疯礉涓�浠斤紝浠ラ槻鍘熸暟鎹洿鏀瑰悗瀵艰嚧PSO澶辨晥
 	}
 }
 

@@ -68,9 +68,9 @@ var ThreadPool<Thread>::Commit(F && f, Args && ...args)
 	{
 		throw exception("Thread pool is stopped");
 	}
-	using RetType = decltype(F(Args ...));
-	var task = std::make_shared<packaged_task<RetType()>>(bind(forward<F>(f), forward<Args>(args)...));
-	future<RetType> awaitFuture = task->get_future();
+	using FuncType = decltype(F(Args ...));
+	var task = std::make_shared<packaged_task<FuncType()>>(bind(forward<F>(f), forward<Args>(args)...));
+	future<FuncType> awaitFuture = task->get_future();
 	{
 		std::lock_guard<mutex> lock(m_mutex);
 		m_tasks.emplace([task]()->{ (*task)(); });

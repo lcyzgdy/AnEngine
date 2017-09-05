@@ -8,6 +8,10 @@
 #include<atomic>
 #include<vector>
 #include<queue>
+#include<functional>
+#include<condition_variable>
+#include<stdexcept>
+#include<future>
 using namespace std;
 
 template<typename Thread>
@@ -23,7 +27,7 @@ private:
 
 	atomic_int m_idleThreadNum;
 	const int m_cnt_maxThreadNum = 8;
-	atomic_bool m_stoped;
+	atomic_bool m_stopped;
 
 	ThreadPool();
 	ThreadPool(int size);
@@ -34,7 +38,7 @@ public:
 	int GetIdleThreadNum();
 
 	template<typename F, typename ... Args>
-	void Commit(F&& f, Args&&... args);
+	var Commit(F&& f, Args&&... args);
 };
 
 #endif // !__THREADPOOL_H__

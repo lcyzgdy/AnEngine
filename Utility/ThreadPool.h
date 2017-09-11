@@ -14,14 +14,13 @@
 #include<future>
 using namespace std;
 
-template<typename Thread>
 class ThreadPool : NonCopyable
 {
 private:
 	using Task = function<void()>;
 
 	mutex m_mutex;
-	vector<Thread> m_pool;
+	vector<thread> m_pool;
 	queue<Task> m_tasks;
 	condition_variable m_cvTask;
 

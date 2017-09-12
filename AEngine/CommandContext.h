@@ -8,12 +8,12 @@
 
 namespace RenderCore
 {
-	// 渲染线程独占一个CommandList
+	// 娓叉煋绾跨▼鐙崰涓�涓狢ommandList
 	class CommandListPool
 	{
 		queue<ComPtr<ID3D12CommandList>> m_cp_commandListPool;
 		std::mutex m_mutex;
-		
+
 	public:
 		CommandListPool() = default;
 		~CommandListPool() = default;

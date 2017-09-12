@@ -25,7 +25,7 @@ namespace RenderCore
 		void ColorBuffer::CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
 			ID3D12Device* device, RenderCore::Heap::DescriptorAllocator* heapDescAllocator)
 		{
-			// ºÍ×ÊÔ´½øÐÐ¹ØÁª£¬×´Ì¬ÊÇpresent£¨³ÊÏÖ£©¡£
+			// å’Œèµ„æºè¿›è¡Œå…³è”ï¼ŒçŠ¶æ€æ˜¯presentï¼ˆå‘ˆçŽ°ï¼‰ã€‚
 			AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
 			m_rtvHandle = heapDescAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, device);
 			device->CreateRenderTargetView(m_cp_resource.Get(), nullptr, m_rtvHandle);

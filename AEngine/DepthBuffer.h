@@ -27,7 +27,7 @@ namespace RenderCore
 			DepthBuffer(float clearDepth = 0.0f, uint8_t clearStencil = 0);
 			~DepthBuffer() = default;
 
-			// ´´½¨ÑÕÉ«»º³åÇø£¬Èç¹ûÌá¹©ÁËµØÖ·Ôò²»»á·ÖÅäÄÚ´æ¡£ĞéÄâµØÖ·ÔÊĞíÖØÃüÃû»º³åÆ÷£¨¶ÔÓÚ¿çÔ½Ö¡ÖØÓÃESRAMÌØ±ğÓĞÓÃ£©¡££¿£¿
+			// åˆ›å»ºé¢œè‰²ç¼“å†²åŒºï¼Œå¦‚æœæä¾›äº†åœ°å€åˆ™ä¸ä¼šåˆ†é…å†…å­˜ã€‚è™šæ‹Ÿåœ°å€å…è®¸é‡å‘½åç¼“å†²å™¨ï¼ˆå¯¹äºè·¨è¶Šå¸§é‡ç”¨ESRAMç‰¹åˆ«æœ‰ç”¨ï¼‰ã€‚ï¼Ÿï¼Ÿ
 			void Create(const wstring& name, uint32_t _width, uint32_t _height, DXGI_FORMAT& format,
 				ID3D12Device* device, RenderCore::Heap::DescriptorAllocator* descAllocator, 
 				uint32_t numSamples = 1,

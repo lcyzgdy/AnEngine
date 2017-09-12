@@ -9,7 +9,7 @@ DTimer::DTimer() :
 	QueryPerformanceCounter(&qpcLastTime);
 
 	qpcMaxDelta = qpcFrequency.QuadPart / 10;
-	// ½«×î´óÔöÁ¿ÉèÖÃÎª0.1s
+	// å°†æœ€å¤§å¢žé‡è®¾ç½®ä¸º0.1s
 }
 
 DTimer::~DTimer()
@@ -93,11 +93,11 @@ void DTimer::Tick(LpUpdateFunc _update)
 	if (delta > qpcMaxDelta)
 	{
 		delta = qpcMaxDelta;
-	}	// ¿ØÖÆ¹ý´óµÄdelta£¬ÀýÈçÔÚdebugÖÐÖÐ¶Ï
+	}	// æŽ§åˆ¶è¿‡å¤§çš„deltaï¼Œä¾‹å¦‚åœ¨debugä¸­ä¸­æ–­
 
 	delta *= TicksPerSecond;
 	delta /= qpcFrequency.QuadPart;
-	// QPCµ¥Î»×ª¹ú¼Êµ¥Î»
+	// QPCå•ä½è½¬å›½é™…å•ä½
 
 	UINT32 lastFrameCount = FrameCount;
 
@@ -108,7 +108,7 @@ void DTimer::Tick(LpUpdateFunc _update)
 			delta = targetElapsedTicks;
 		}
 		leftOverTicks += delta;
-		// ·ÀÖ¹Ê§Ö®ºÁÀåÃýÒÔÇ§Àï¡£¹Ì¶¨Ö¡ÂÊÊ±£¬´ò¿ªÁË´¹Ö±Í¬²½µÄ³ÌÐò»áÓÉÓÚÏÔÊ¾Æ÷µÄÎÊÌâÀÛ»ýÏÂÎ¢Ð¡Îó²î
+		// é˜²æ­¢å¤±ä¹‹æ¯«åŽ˜è°¬ä»¥åƒé‡Œã€‚å›ºå®šå¸§çŽ‡æ—¶ï¼Œæ‰“å¼€äº†åž‚ç›´åŒæ­¥çš„ç¨‹åºä¼šç”±äºŽæ˜¾ç¤ºå™¨çš„é—®é¢˜ç´¯ç§¯ä¸‹å¾®å°è¯¯å·®
 
 		while (leftOverTicks >= targetElapsedTicks)
 		{

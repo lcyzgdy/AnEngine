@@ -19,7 +19,7 @@ namespace RenderCore
 	{
 		extern DescriptorAllocator r_h_heapDescAllocator;
 	}
-};
+}
 
 namespace RenderCore
 {
@@ -52,20 +52,20 @@ namespace RenderCore
 		D3D12_COMMAND_LIST_TYPE GetType();
 	};
 
-	// ÏÔ¿¨Éè±¸½Ó¿Ú¡£
+	// æ˜¾å¡è®¾å¤‡æ¥å£ã€‚
 	class GraphicCard
 	{
 		ComPtr<ID3D12Device2> m_cp_device;
 
-		CommandQueue m_renderCommandQueue;	// äÖÈ¾×ÅÉ«Æ÷µÄÃüÁî¶ÓÁĞ¡£
-		CommandQueue m_computeCommandQueue;	// ¼ÆËã×ÅÉ«Æ÷µÄÃüÁî¶ÓÁĞ¡£
-		CommandQueue m_copyCommandQueue;	// ¿½±´ÃüÁî¶ÓÁĞ
+		CommandQueue m_renderCommandQueue;	// æ¸²æŸ“ç€è‰²å™¨çš„å‘½ä»¤é˜Ÿåˆ—ã€‚
+		CommandQueue m_computeCommandQueue;	// è®¡ç®—ç€è‰²å™¨çš„å‘½ä»¤é˜Ÿåˆ—ã€‚
+		CommandQueue m_copyCommandQueue;	// æ‹·è´å‘½ä»¤é˜Ÿåˆ—
 
 		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 
 		bool m_isTypedUAVLoadSupport_R11G11B10_FLOAT;
 		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
-		bool m_stableFlag;	// ¾ö¶¨GPUÊÇ·ñÎªÎÈ¶¨µÄ£¬ÈôÎªÎÈ¶¨µÄ£¬ÔòÏŞÖÆ¹©µçÒÔ±ÜÃâ³¬Æµ»ò½µÆµ¡£
+		bool m_stableFlag;	// å†³å®šGPUæ˜¯å¦ä¸ºç¨³å®šçš„ï¼Œè‹¥ä¸ºç¨³å®šçš„ï¼Œåˆ™é™åˆ¶ä¾›ç”µä»¥é¿å…è¶…é¢‘æˆ–é™é¢‘ã€‚
 
 		void CreateDevice();
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -82,11 +82,11 @@ namespace RenderCore
 
 				if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 				{
-					// ²»Ñ¡Ôñ»ù±¾ÏÔÊ¾ÊÊÅäÆ÷£¬Èç¹ûÄãÏëÊ¹ÓÃÈí¼şäÖÈ¾£¬ÔÚÃüÁîĞĞÖĞ¼ÓÈë"/warp"
+					// ä¸é€‰æ‹©åŸºæœ¬æ˜¾ç¤ºé€‚é…å™¨ï¼Œå¦‚æœä½ æƒ³ä½¿ç”¨è½¯ä»¶æ¸²æŸ“ï¼Œåœ¨å‘½ä»¤è¡Œä¸­åŠ å…¥"/warp"
 					continue;
 				}
 
-				// ¼ì²éÏÔ¿¨ÊÇ·ñÖ§³ÖDX 12£¬µ«ÊÇ²»´´½¨ÕæÊµµÄÏÔ¿¨
+				// æ£€æŸ¥æ˜¾å¡æ˜¯å¦æ”¯æŒDX 12ï¼Œä½†æ˜¯ä¸åˆ›å»ºçœŸå®çš„æ˜¾å¡
 				if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
 				{
 					break;
@@ -109,13 +109,21 @@ namespace RenderCore
 		void IsStable(bool isStable);
 	};
 
-	extern vector<GraphicCard> r_renderCore;
-	extern ComPtr<IDXGISwapChain1> r_cp_swapChain;
-	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern thread r_renderMainThread;
 
-	void InitializeRender(int graphicCardCount = 1, bool isStable = false);
+	extern vector<GraphicCard> r_renderCore;
+	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
+	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern int r_frameIndex;
+#ifdef _WIN32
+	extern HWND r_hwnd;
+#endif // _WIN32
+
+	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
+
+	void CreateCommonState();
 }
 
 

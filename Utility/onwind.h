@@ -25,7 +25,15 @@ using namespace std;
 #ifdef UNICODE
 
 #define Strcpy(a,b) wcscpy_s(a,b)
-#define ERRORBLOCK(a) MessageBox(NULL, ,_T("Error"), ToLPCWSTR("Error"+a),0)
+#define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
+
+#if defined _DEBUG || defined DEBUG
+#define ERRORBREAK(a) {\
+						ERRORBLOCK(a); \
+						throw std::exception(); \
+					  }
+#endif // _DEBUG || DEBUG
+
 
 inline LPCWSTR ToLPCWSTR(string& orig)
 {
@@ -159,7 +167,7 @@ struct Range
 		minn = _minn;
 	}
 
-	bool has(T& value)
+	bool Has(T& value)
 	{
 		if (value < minn) return false;
 		if (value > maxn) return false;
@@ -167,29 +175,29 @@ struct Range
 	}
 };
 
-inline void randomize()
+inline void Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-inline int random(int a)
+inline int Random(int a)
 {
 	return rand() % a;
 }
 
-inline float random()
+inline float Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-inline int random(int a, int b)
+inline int Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-inline float random(float a, float b)
+inline float Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;

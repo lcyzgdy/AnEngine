@@ -43,7 +43,7 @@ void MCamera::OnUpdate(float _elapsedSeconds)
 		XMVECTOR vector = XMVector3Normalize(XMLoadFloat3(&move));
 		move.x = XMVectorGetX(vector);
 		move.z = XMVectorGetZ(vector);
-	}	// ÏòÁ¿×ªËÄÔªÊı
+	}	// å‘é‡è½¬å››å…ƒæ•°
 
 	float moveDelta = moveSpeed * _elapsedSeconds;
 	float rotateDelta = turnSpeed * _elapsedSeconds;
@@ -67,19 +67,19 @@ void MCamera::OnUpdate(float _elapsedSeconds)
 
 	pitchRotate = min(pitchRotate, XM_PIDIV4);
 	pitchRotate = max(-XM_PIDIV4, pitchRotate);
-	// ÏŞÖÆ·¶Î§
+	// é™åˆ¶èŒƒå›´
 
 	float x = move.x * -cosf(yawRotate) - move.z * sinf(yawRotate);
 	float z = move.x * sinf(yawRotate) - move.z * cosf(yawRotate);
 	position.x += x*moveDelta;
 	position.z += z*moveDelta;
-	// ÔÚÄ£ĞÍ¿Õ¼äÖĞÒÆ¶¯ÉãÏñ»ú
+	// åœ¨æ¨¡å‹ç©ºé—´ä¸­ç§»åŠ¨æ‘„åƒæœº
 
 	float r = cosf(pitchRotate);
 	lookDirection.x = r * sinf(yawRotate);
 	lookDirection.y = sinf(pitchRotate);
 	lookDirection.z = r * cosf(yawRotate);
-	// È·¶¨¹Û²ì·½Ïò
+	// ç¡®å®šè§‚å¯Ÿæ–¹å‘
 }
 
 void MCamera::OnRelease()

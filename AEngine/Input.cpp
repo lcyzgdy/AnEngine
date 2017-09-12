@@ -194,7 +194,7 @@ XMVECTOR BaseInput::GetM128MousePosition()
 
 void BaseInput::SetMousePosition(int x, int y)
 {
-	m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::Height()) * 2 - 1.0f), 0.0f, 0.0f };
+	m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::GetInstance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::GetInstance()->Height()) * 2 - 1.0f), 0.0f, 0.0f };
 }
 
 void BaseInput::SetAcquire()

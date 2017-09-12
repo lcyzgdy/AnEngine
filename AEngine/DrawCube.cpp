@@ -69,7 +69,7 @@ void DrawCube::InitializePipeline()
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 	}
 #endif
-	// ¿ªÆôDebugÄ£Ê½
+	// å¼€å¯Debugæ¨¡å¼
 
 	ComPtr<IDXGIFactory4> factory;
 	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
@@ -85,13 +85,13 @@ void DrawCube::InitializePipeline()
 		GetHardwareAdapter(factory.Get(), &hardwareAdapter);
 		D3D12CreateDevice(hardwareAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 	}
-	// ´´Éè±¸
+	// åˆ›è®¾å¤‡
 
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
-	// ÃèÊö²¢´´½¨ÃüÁî¶ÓÁĞ
+	// æè¿°å¹¶åˆ›å»ºå‘½ä»¤é˜Ÿåˆ—
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
@@ -105,14 +105,14 @@ void DrawCube::InitializePipeline()
 	ComPtr<IDXGISwapChain1> swapChain1;
 	ThrowIfFailed(factory->CreateSwapChainForHwnd
 	(
-		commandQueue.Get(),		// ½»»»Á´ĞèÒª¶ÓÁĞ£¬ÒÔ±ã¿ÉÒÔÇ¿ÖÆË¢ĞÂËü
+		commandQueue.Get(),		// äº¤æ¢é“¾éœ€è¦é˜Ÿåˆ—ï¼Œä»¥ä¾¿å¯ä»¥å¼ºåˆ¶åˆ·æ–°å®ƒ
 		hwnd,
 		&swapChainDesc,
 		nullptr,
 		nullptr,
 		&swapChain1
 	));
-	// ÃèÊö²¢´´½¨½»»»Á´
+	// æè¿°å¹¶åˆ›å»ºäº¤æ¢é“¾
 
 	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 	swapChain1.As(&swapChain);
@@ -124,14 +124,14 @@ void DrawCube::InitializePipeline()
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
-	// ´´½¨äÖÈ¾Ä¿±êÊÓÍ¼ÃèÊö·û¶Ñ
+	// åˆ›å»ºæ¸²æŸ“ç›®æ ‡è§†å›¾æè¿°ç¬¦å †
 
 	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavDesc = {};
 	cbvSrvUavDesc.NumDescriptors = 1;
 	cbvSrvUavDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvSrvUavDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	device->CreateDescriptorHeap(&cbvSrvUavDesc, IID_PPV_ARGS(&cbvSrvUavHeap));
-	// ÃèÊö²¢´´½¨ÎÆÀíµÄ×ÅÉ«Æ÷×ÊÔ´ÊÓÍ¼¶Ñ [Shader resource view (SRV) heap]
+	// æè¿°å¹¶åˆ›å»ºçº¹ç†çš„ç€è‰²å™¨èµ„æºè§†å›¾å † [Shader resource view (SRV) heap]
 
 	D3D12_DESCRIPTOR_HEAP_DESC dsvDesc = {};
 	dsvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -149,7 +149,7 @@ void DrawCube::InitializePipeline()
 	cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	//samDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
-	// !#1	´´½¨ÃèÊö·û¶Ñ
+	// !#1	åˆ›å»ºæè¿°ç¬¦å †
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
 	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
@@ -160,8 +160,8 @@ void DrawCube::InitializePipeline()
 
 		ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i])));
 	}
-	// ´´½¨ÃüÁî·ÖÅäÆ÷
-	// ´´½¨Ö¡×ÊÔ´
+	// åˆ›å»ºå‘½ä»¤åˆ†é…å™¨
+	// åˆ›å»ºå¸§èµ„æº
 }
 
 void DrawCube::InitializeAssets()
@@ -232,14 +232,14 @@ void DrawCube::InitializeAssets()
 
 	{
 		VertexPositionColor cubeVertices[] = {
-			{ { -1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Left
-			{ { 1.0f, 1.0f, -1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Top Right
-			{ { 1.0f, 1.0f, 1.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Right
-			{ { -1.0f, 1.0f, 1.0f},{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Top Left
-			{ { -1.0f, -1.0f, -1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Left
-			{ { 1.0f, -1.0f, -1.0f},{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Back Bottom Right
-			{ { 1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f),random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } },	// Front Bottom Right
-			{ { -1.0f, -1.0f, 1.0f },{ random(0.0f,1.0f) ,random(0.0f,1.0f) ,random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
+			{ { -1.0f, 1.0f, -1.0f},{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Top Left
+			{ { 1.0f, 1.0f, -1.0f},{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Top Right
+			{ { 1.0f, 1.0f, 1.0f },{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Top Right
+			{ { -1.0f, 1.0f, 1.0f},{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Top Left
+			{ { -1.0f, -1.0f, -1.0f },{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Bottom Left
+			{ { 1.0f, -1.0f, -1.0f},{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Back Bottom Right
+			{ { 1.0f, -1.0f, 1.0f },{ Random(0.0f,1.0f),Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } },	// Front Bottom Right
+			{ { -1.0f, -1.0f, 1.0f },{ Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,Random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
 		};
 
 		UINT cubeIndices[] =

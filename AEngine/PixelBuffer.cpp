@@ -37,7 +37,7 @@ namespace RenderCore
 
 		void PixelBuffer::ExportToFile(wstring & filePath, ID3D12Device* device)
 		{
-			// ´´½¨Ò»¸ö×ã¹»´óµÄÎÆÀí»º³åÇø
+			// åˆ›å»ºä¸€ä¸ªè¶³å¤Ÿå¤§çš„çº¹ç†ç¼“å†²åŒº
 			D3D12_HEAP_PROPERTIES heapProps;
 			heapProps.Type = D3D12_HEAP_TYPE_READBACK;
 			heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
@@ -45,7 +45,7 @@ namespace RenderCore
 			heapProps.CreationNodeMask = 1;
 			heapProps.VisibleNodeMask = 1;
 
-			// »º³åÇø±ØĞëÊÇ1Î¬µÄ£¬¶ÔÓÚTexture2DÒª½øĞĞ½µÎ¬¡£
+			// ç¼“å†²åŒºå¿…é¡»æ˜¯1ç»´çš„ï¼Œå¯¹äºTexture2Dè¦è¿›è¡Œé™ç»´ã€‚
 			D3D12_RESOURCE_DESC tempDesc = {};
 			tempDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 			tempDesc.Width = m_width * m_height * BytesPerPixel(m_format);
@@ -58,7 +58,7 @@ namespace RenderCore
 			tempDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 			tempDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-			// ´´½¨»º³å
+			// åˆ›å»ºç¼“å†²
 			ID3D12Resource* p_tempResource;
 			ThrowIfFailed(device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &tempDesc,
 				D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&p_tempResource)));
@@ -67,11 +67,11 @@ namespace RenderCore
 
 			///CommandContext::ReadbackTexture2D(tempResource, *this);
 
-			// Ö¸ÕëÖ¸Ïò»º³åÇø£¬Ö¸ÕëÊÇCPU¿É¶ÁµÄ¡£
+			// æŒ‡é’ˆæŒ‡å‘ç¼“å†²åŒºï¼ŒæŒ‡é’ˆæ˜¯CPUå¯è¯»çš„ã€‚
 			void* p_memory;
 			p_tempResource->Map(0, &CD3DX12_RANGE(0, tempDesc.Width), &p_memory);
 
-			// ´ò¿ªÎÄ¼ş£¬Ğ´Èë±êÌâ£¬ÔÙĞ´ÈëÎÆÀíÊı¾İ¡£
+			// æ‰“å¼€æ–‡ä»¶ï¼Œå†™å…¥æ ‡é¢˜ï¼Œå†å†™å…¥çº¹ç†æ•°æ®ã€‚
 			ofstream outFile(filePath, std::ios::out | std::ios::binary);
 			outFile.write((const char*)&m_format, 4);
 			outFile.write((const char*)&m_width, 4); // Pitch
@@ -80,7 +80,7 @@ namespace RenderCore
 			outFile.write((const char*)p_memory, tempDesc.Width);
 			outFile.close();
 
-			// ÔÚÈ¡ÏûÓ³ÉäµÄÊ±ºòÊ¹ÓÃ¿Õ·¶Î§¡£
+			// åœ¨å–æ¶ˆæ˜ å°„çš„æ—¶å€™ä½¿ç”¨ç©ºèŒƒå›´ã€‚
 			p_tempResource->Unmap(0, &CD3DX12_RANGE(0, 0));
 			p_tempResource->Release();
 		}
@@ -101,27 +101,27 @@ namespace RenderCore
 			case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
 				return DXGI_FORMAT_B8G8R8X8_TYPELESS;
 
-			// 32Î»ZÄ£°å
+			// 32ä½Zæ¨¡æ¿
 			case DXGI_FORMAT_R32G8X24_TYPELESS:
 			case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
 			case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
 			case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
 				return DXGI_FORMAT_R32G8X24_TYPELESS;
 
-			// Ã»ÓĞÄ£°å
+			// æ²¡æœ‰æ¨¡æ¿
 			case DXGI_FORMAT_R32_TYPELESS:
 			case DXGI_FORMAT_D32_FLOAT:
 			case DXGI_FORMAT_R32_FLOAT:
 				return DXGI_FORMAT_R32_TYPELESS;
 
-			// 24Î»ZÄ£°å
+			// 24ä½Zæ¨¡æ¿
 			case DXGI_FORMAT_R24G8_TYPELESS:
 			case DXGI_FORMAT_D24_UNORM_S8_UINT:
 			case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
 			case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
 				return DXGI_FORMAT_R24G8_TYPELESS;
 
-			// 16Î»ZÄ£°å
+			// 16ä½Zæ¨¡æ¿
 			case DXGI_FORMAT_R16_TYPELESS:
 			case DXGI_FORMAT_D16_UNORM:
 			case DXGI_FORMAT_R16_UNORM:
@@ -184,7 +184,7 @@ namespace RenderCore
 			case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
 				return DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
 
-				// ÎŞ
+				// æ— 
 			case DXGI_FORMAT_R32_TYPELESS:
 			case DXGI_FORMAT_D32_FLOAT:
 			case DXGI_FORMAT_R32_FLOAT:
@@ -197,7 +197,7 @@ namespace RenderCore
 			case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
 				return DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-				// 16Î»ZÄ£°å
+				// 16ä½Zæ¨¡æ¿
 			case DXGI_FORMAT_R16_TYPELESS:
 			case DXGI_FORMAT_D16_UNORM:
 			case DXGI_FORMAT_R16_UNORM:
@@ -391,7 +391,7 @@ namespace RenderCore
 
 		void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource * resource, D3D12_RESOURCE_STATES currentState)
 		{
-			(device); // Ö§³Ö¶àÊÊÅäÆ÷Ê±Òª¸ÄÕı!!!
+			(device); // æ”¯æŒå¤šé€‚é…å™¨æ—¶è¦æ”¹æ­£!!!
 
 			if (resource == nullptr) throw exception();
 			D3D12_RESOURCE_DESC ResourceDesc = resource->GetDesc();
@@ -399,7 +399,7 @@ namespace RenderCore
 			m_cp_resource.Attach(resource);
 			m_usageState = currentState;
 
-			m_width = (uint32_t)ResourceDesc.Width;		// ÔİÊ±²»¹ØĞÄ¹ı´óµÄµØÖ·¡£
+			m_width = (uint32_t)ResourceDesc.Width;		// æš‚æ—¶ä¸å…³å¿ƒè¿‡å¤§çš„åœ°å€ã€‚
 			m_height = ResourceDesc.Height;
 			m_size = ResourceDesc.DepthOrArraySize;
 			m_format = ResourceDesc.Format;

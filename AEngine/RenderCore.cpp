@@ -1,6 +1,7 @@
 #include"RenderCore.h"
+#include"Screen.h"
 
-// ¼ìÑéÊÇ·ñÓĞHDRÊä³ö¹¦ÄÜ
+// æ£€éªŒæ˜¯å¦æœ‰HDRè¾“å‡ºåŠŸèƒ½
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
 namespace RenderCore
@@ -9,7 +10,7 @@ namespace RenderCore
 	{
 		UINT dxgiFactoryFlags = 0;
 
-		// ¿ªÆôDebugÄ£Ê½
+		// å¼€å¯Debugæ¨¡å¼
 #if defined(DEBUG) || defined(_DEBUG)
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
@@ -40,14 +41,14 @@ namespace RenderCore
 		m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
-		// Í¨¹ıIDÀ´±ÜÃâ¸öÈËÏûÏ¢¡£
+		// é€šè¿‡IDæ¥é¿å…ä¸ªäººæ¶ˆæ¯ã€‚
 		D3D12_MESSAGE_ID denyMessageIds[] =
 		{
-			// µ±ÃèÊö·û±íÖĞÓĞÎ´³õÊ¼»¯µÄÃèÊö·ûÊ±£¬¼´Ê¹×ÅÉ«Æ÷²»·ÃÎÊ£¬Ò²»á·¢ÉúÕâÖÖÇé¿ö¡£³£¼ûµÄ×ö·¨ÊÇÇĞ»»×ÅÉ«Æ÷µÄÅÅÁĞ¶ø²»ÊÇ¸Ä±äÌ«¶àµÄ´úÂë¡¢ÖØĞÂ°²ÅÅ×ÊÔ´¡£
+			// å½“æè¿°ç¬¦è¡¨ä¸­æœ‰æœªåˆå§‹åŒ–çš„æè¿°ç¬¦æ—¶ï¼Œå³ä½¿ç€è‰²å™¨ä¸è®¿é—®ï¼Œä¹Ÿä¼šå‘ç”Ÿè¿™ç§æƒ…å†µã€‚å¸¸è§çš„åšæ³•æ˜¯åˆ‡æ¢ç€è‰²å™¨çš„æ’åˆ—è€Œä¸æ˜¯æ”¹å˜å¤ªå¤šçš„ä»£ç ã€é‡æ–°å®‰æ’èµ„æºã€‚
 			D3D12_MESSAGE_ID_INVALID_DESCRIPTOR_HANDLE,
-			// µ±×ÅÉ«Æ÷²»Êä³öäÖÈ¾Ä¿±êµÄËùÓĞÑÕÉ«·ÖÁ¿£¨ÀıÈç½ö½«RGBĞ´ÈëR10G10B10A2»º³åÇøÊ±£©ºöÂÔAlphaÊ±´¥·¢¡£
+			// å½“ç€è‰²å™¨ä¸è¾“å‡ºæ¸²æŸ“ç›®æ ‡çš„æ‰€æœ‰é¢œè‰²åˆ†é‡ï¼ˆä¾‹å¦‚ä»…å°†RGBå†™å…¥R10G10B10A2ç¼“å†²åŒºæ—¶ï¼‰å¿½ç•¥Alphaæ—¶è§¦å‘ã€‚
 			D3D12_MESSAGE_ID_CREATEGRAPHICSPIPELINESTATE_PS_OUTPUT_RT_OUTPUT_MISMATCH,
-			// ¼´Ê¹µ±×ÅÉ«Æ÷²»·ÃÎÊÈ±ÉÙµÄÃèÊö·û£¬Ò²»áÔÚÃèÊö·û±íÎ´°ó¶¨Ê±´¥·¢¡£²»Í¬µÄ×ÅÉ«Æ÷Ö®¼ä¹²ÏíµÄ¸ùÇ©Ãû²¢²»¶¼ĞèÒªÏàÍ¬ÀàĞÍµÄ×ÊÔ´¡£
+			// å³ä½¿å½“ç€è‰²å™¨ä¸è®¿é—®ç¼ºå°‘çš„æè¿°ç¬¦ï¼Œä¹Ÿä¼šåœ¨æè¿°ç¬¦è¡¨æœªç»‘å®šæ—¶è§¦å‘ã€‚ä¸åŒçš„ç€è‰²å™¨ä¹‹é—´å…±äº«çš„æ ¹ç­¾åå¹¶ä¸éƒ½éœ€è¦ç›¸åŒç±»å‹çš„èµ„æºã€‚
 			D3D12_MESSAGE_ID_COMMAND_LIST_DESCRIPTOR_TABLE_NOT_SET,
 
 			(D3D12_MESSAGE_ID)1008,
@@ -171,6 +172,7 @@ namespace RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
 		{
+			return nullptr;
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
@@ -241,18 +243,25 @@ namespace RenderCore
 
 namespace RenderCore
 {
+	thread r_renderMainThread;
+
 	vector<GraphicCard> r_renderCore;
-	ComPtr<IDXGISwapChain1> r_cp_swapChain = nullptr;
+	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
 	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
+	int r_frameIndex;
+#ifdef _WIN32
+	HWND r_hwnd;
+#endif // _WIN32
 
 	namespace Private
 	{
 		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	void InitializeRender(int graphicCardCount, bool isStable)
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
+		r_hwnd = hwnd;
 		while (graphicCardCount--)
 		{
 			GraphicCard aRender;
@@ -260,6 +269,9 @@ namespace RenderCore
 			aRender.Initialize();
 			r_renderCore.push_back(aRender);
 		}
+		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
+		CreateCommonState();
+		
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -277,6 +289,7 @@ namespace RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
+		//Private::r_cp_dxgiFactory->Create
 		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
 			const_cast<ID3D12CommandQueue*>(r_renderCore[0].GetCommandQueue()),
@@ -311,5 +324,15 @@ namespace RenderCore
 				cp_displayPlane.Detach(), r_renderCore[0].GetDevice(),
 				&RenderCore::Heap::r_h_heapDescAllocator);
 		}
+#ifdef _WIN32
+		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+#endif // _WIN32
+
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+	}
+
+	void CreateCommonState()
+	{
+		return;
 	}
 }

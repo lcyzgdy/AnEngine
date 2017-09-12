@@ -5,12 +5,12 @@
 #include"onwind.h"
 using namespace std;
 
-class DTimer
+class DTimer : public NonCopyable
 {
 	LARGE_INTEGER qpcFrequency;
 	LARGE_INTEGER qpcLastTime;
 	UINT64 qpcMaxDelta;
-	// Ê±¼äÊı¾İÔ´Ê¹ÓÃQPCµ¥Ôª
+	// æ—¶é—´æ•°æ®æºä½¿ç”¨QPCå•å…ƒ
 
 	UINT64 elapsedTicks;
 	UINT64 totalTicks;
@@ -23,7 +23,7 @@ class DTimer
 
 	bool isFixedTimeStep;
 	UINT64 targetElapsedTicks;
-	// ÓÃÓÚÅäÖÃ¹Ì¶¨Ö¡ÂÊÄ£Ê½
+	// ç”¨äºé…ç½®å›ºå®šå¸§ç‡æ¨¡å¼
 
 public:
 	DTimer();
@@ -31,38 +31,38 @@ public:
 
 	const UINT64 GetElapsedTicks();
 	const double GetElapsedSeconds();
-	// »ñÈ¡×ÔÉÏ´Îµ÷ÓÃÒÔÀ´Ëù¾­¹ıµÄÊ±¼ä
+	// è·å–è‡ªä¸Šæ¬¡è°ƒç”¨ä»¥æ¥æ‰€ç»è¿‡çš„æ—¶é—´
 
 	const UINT64 GetTotalTicks();
 	const double GetTotalSeconds();
-	// »ñÈ¡³ÌĞòÆô¶¯ºóµÄÊ±¼ä
+	// è·å–ç¨‹åºå¯åŠ¨åçš„æ—¶é—´
 
 	UINT32 GetFrameCount();
-	// »ñÈ¡³ÌĞòÆô¶¯ÒÔÀ´¸üĞÂµÄÖ¡Êı
+	// è·å–ç¨‹åºå¯åŠ¨ä»¥æ¥æ›´æ–°çš„å¸§æ•°
 
 	UINT32 GetFramePerSecond();
-	// »ñÈ¡Ö¡ÂÊ
+	// è·å–å¸§ç‡
 
 	void SetFixedFramerate(bool _isFixedTimeStep);
-	// ÉèÖÃÊÇ·ñÊ¹ÓÃ¹Ì¶¨Ö¡ÂÊ
+	// è®¾ç½®æ˜¯å¦ä½¿ç”¨å›ºå®šå¸§ç‡
 
 	void SetTargetElapsedTicks(UINT64 _targetElapsed);
 	void SetTargetElapsedSeconds(double _targetElapsed);
-	// ÉèÖÃ¸üĞÂÆµÂÊ
+	// è®¾ç½®æ›´æ–°é¢‘ç‡
 
 	static const UINT64 TicksPerSecond = 1000000;
-	// ÉèÖÃÃ¿ÃëÊ¹ÓÃ1000000¸öÊ±ÖÓÖÜÆÚ
+	// è®¾ç½®æ¯ç§’ä½¿ç”¨1000000ä¸ªæ—¶é’Ÿå‘¨æœŸ
 
 	static double TicksToSeconds(UINT64 _ticks);
 	static UINT64 SecondsToTicks(double _seconds);
 
 	void ResetElapsedTime();
-	// ÔÚ³¤Ê±¼äÖĞ¶Ï£¨Èç×èÈûIO¡¢Ïß³ÌÖĞ¶Ï£©ºóµ÷ÓÃÒÔ×·¸Ï¸üĞÂ½ø¶È
+	// åœ¨é•¿æ—¶é—´ä¸­æ–­ï¼ˆå¦‚é˜»å¡IOã€çº¿ç¨‹ä¸­æ–­ï¼‰åè°ƒç”¨ä»¥è¿½èµ¶æ›´æ–°è¿›åº¦
 
 	typedef void(*LpUpdateFunc) (void);
 
 	void Tick(LpUpdateFunc _update);
-	// ¸üĞÂ¼ÆÊ±Æ÷×´Ì¬£¬µ÷ÓÃÖ¸¶¨´ÎÊıµÄupdateº¯Êı£¨OnUpdate£©
+	// æ›´æ–°è®¡æ—¶å™¨çŠ¶æ€ï¼Œè°ƒç”¨æŒ‡å®šæ¬¡æ•°çš„updateå‡½æ•°ï¼ˆOnUpdateï¼‰
 };
 
 #endif // !__DTIMER_H__

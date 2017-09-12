@@ -21,7 +21,7 @@ void DrawLine::OnInit()
 	InitializePipeline();
 	InitializeAssets();
 
-	PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
+	//PostMessage(hwnd, WM_USER, 0, device->GetNodeCount());
 }
 
 void DrawLine::OnRelease()
@@ -38,8 +38,8 @@ void DrawLine::OnUpdate()
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
 		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
-			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
-			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
+			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
 		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
@@ -220,7 +220,7 @@ void DrawLine::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f} });
+	vertex.push_back({ { 0.0f, 0.0f, 0.0f }, { Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f} });
 	vertex.push_back({ { 0.0f, 0.3f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } });
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
@@ -362,8 +362,8 @@ void DrawLineWithWu::OnUpdate()
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
 		if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 		{
-			v.color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
-			(*vertex.begin()).color = { random(0.0f,1.0f), random(0.0f,1.0f),random(0.0f,1.0f),1.0f };
+			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
+			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
 		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
@@ -544,7 +544,7 @@ void DrawLineWithWu::InitializeAssets()
 	//To record yet. The main loop expects it to be closed, so close it now.
 	commandList->Close();
 	//Close the command list
-	start = { { 0.0f, 0.0f, 0.0f },{ random(0.0f,1.0f), random(0.0f,1.0f), random(0.0f,1.0f), 1.0f } };
+	start = { { 0.0f, 0.0f, 0.0f },{ Random(0.0f,1.0f), Random(0.0f,1.0f), Random(0.0f,1.0f), 1.0f } };
 	end = { { 0.0f, 0.3f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } };
 
 	const UINT vertexBufferSize = sizeof(Vertex) * 1000;
@@ -697,7 +697,7 @@ void DrawTriangle::Graham()
 	int w = static_cast<int>(vertexIndexStack.size());
 	//vertexIndexStack.push(vertex.size() - 2);
 	if (vertex.size() - 2 <= 0) return;
-	for (int i = vertex.size() - 2; i > 0; i--)
+	for (size_t i = vertex.size() - 2; i > 0; i--)
 	{
 		while (1)
 		{
@@ -715,7 +715,7 @@ void DrawTriangle::Graham()
 				break;
 			}
 		}
-		vertexIndexStack.push(i);
+		vertexIndexStack.push(static_cast<int>(i));
 	}
 }
 
@@ -752,7 +752,7 @@ void DrawTriangle::OnUpdate()
 	if (BaseInput::GetInstance()->GetMouseButtonDown(0))
 	{
 		Vertex v;
-		v.color = { random(0.0f,1.0f), random(0.0f,1.0f) ,random(0.0f,1.0f) ,1.0f };
+		v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,1.0f };
 		auto pos = BaseInput::GetInstance()->GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);

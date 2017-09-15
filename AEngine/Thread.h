@@ -6,12 +6,11 @@
 #include<mutex>
 #include<atomic>
 
-class Thread
+class RenderThread : std::thread
 {
-	std::thread m_thread;
-
+	
 public:
-	Thread() = default;
+	RenderThread() = default;
 };
 
 #endif // !__THREAD_H__

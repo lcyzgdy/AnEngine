@@ -8,33 +8,90 @@
 #include<atomic>
 #include<vector>
 #include<queue>
+#include<functional>
+#include<condition_variable>
+#include<stdexcept>
+#include<future>
 using namespace std;
 
-template<typename Thread>
 class ThreadPool : NonCopyable
 {
 private:
-	using Task = std::function<void()>;
+	using Task = function<void()>;
 
 	mutex m_mutex;
-	vector<Thread> m_pool;
+	vector<thread> m_pool;
 	queue<Task> m_tasks;
-	std::condition_variable m_cvTask;
+	condition_variable m_cvTask;
 
 	atomic_int m_idleThreadNum;
-	const int m_cnt_maxThreadNum = 8;
-	atomic_bool m_stoped;
+	const uint32_t m_cnt_maxThreadNum = thread::hardware_concurrency();
+	atomic_bool m_stopped;
 
-	ThreadPool();
-	ThreadPool(int size);
-	~ThreadPool();
 
 public:
-	ThreadPool* GetInstance();
-	int GetIdleThreadNum();
+	ThreadPool() = default;
+
+	ThreadPool(int size)
+	{
+		m_idleThreadNum = (size < 1) ? 1 : size;
+		for (int i = 0; i < m_idleThreadNum; i++)
+		{
+			m_pool.emplace_back([this]()
+			{
+				function<void()> task;
+				{
+					unique_lock<mutex> lock(this->m_mutex);
+					this->m_cvTask.wait(lock, [this]()
+					{
+						return this->m_stopped.load() || !this->m_tasks.empty();
+					});
+					if (this->m_stopped && this->m_tasks.empty())
+					{
+						return;
+					}
+					task = move(this->m_tasks.front());
+					this->m_tasks.pop();
+				}
+				m_idleThreadNum--;
+				task();
+				m_idleThreadNum++;
+			});
+		}
+	}
+
+	~ThreadPool()
+	{
+		m_stopped.store(true);
+		m_cvTask.notify_all();
+		for (size_t i = 0; i < m_pool.size(); i++)
+		{
+			m_pool[i].detach();
+		}
+	}
+
+	int GetIdleThreadNum()
+	{
+		return m_idleThreadNum;
+	}
 
 	template<typename F, typename ... Args>
-	void Commit(F&& f, Args&&... args);
+	var Commit(F && f, Args && ...args)
+	{
+		if (m_stopped.load())
+		{
+			throw exception("Thread pool is stopped");
+		}
+		using FuncType = decltype(f(args ...));
+		var task = std::make_shared<packaged_task<FuncType()>>(bind(forward<F>(f), forward<Args>(args)...));
+		future<FuncType> awaitFuture = task->get_future();
+		{
+			std::lock_guard<mutex> lock(m_mutex);
+			m_tasks.emplace([task]()->{ (*task)(); });
+		}
+		m_cvTask.notify_one();
+		return awaitFuture;
+	}
 };
 
 #endif // !__THREADPOOL_H__

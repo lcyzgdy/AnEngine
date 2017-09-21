@@ -24,7 +24,7 @@
     <ClInclude Include="DMath.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadPool.h">
+    <ClInclude Include="ThreadPool.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

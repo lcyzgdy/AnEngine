@@ -10,7 +10,8 @@
 #include<xinput.h>
 #include<wrl.h>
 #include<atomic>
-#include<thread>
+#include"ThreadPool.hpp"
+
 #pragma comment(lib, "dinput8.lib")
 using namespace Microsoft::WRL;
 using namespace DirectX;

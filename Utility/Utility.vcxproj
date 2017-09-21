@@ -115,7 +115,7 @@
     <ClInclude Include="DMath.h" />
     <ClInclude Include="Hash.h" />
     <ClInclude Include="onwind.h" />
-    <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="ThreadPool.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

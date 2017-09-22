@@ -36,6 +36,7 @@ class BaseInput : public NonCopyable
 
 	atomic_bool m_exit;
 	std::chrono::milliseconds m_delta;
+	mutex m_mutex;
 
 	BaseInput();
 	BaseInput(const BaseInput&) = delete;

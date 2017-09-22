@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __DMATH_H__
-#define __DMATH_H__
+#ifndef __DMATH_HPP__
+#define __DMATH_HPP__
 
 namespace DMath
 {
@@ -33,6 +33,36 @@ namespace DMath
 	{
 		return 0 == ((size_t)value & (alignment - 1));
 	}
+
+	template<typename T>
+	__forceinline T& Min(T& t ...)
+	{
+		size_t size = sizeof(T);
+		T* args = &t;
+		T* minn = args;
+		args += size;
+		while ((*args) != static_cast<T>(0))
+		{
+			minn = ((*args) < (*minn)) ? args : minn;
+			args += size;
+		}
+		return *minn;
+	}
+
+	template<typename T>
+	__forceinline T& Max(T& t ...)
+	{
+		size_t size = sizeof(T);
+		T* args = &t;
+		T* minn = args;
+		args += size;
+		while ((*args) != static_cast<T>(0))
+		{
+			minn = ((*args) < (*minn)) ? minn : args;
+			args += size;
+		}
+		return *minn;
+	}
 }
 
-#endif // !__DMATH_H__
+#endif // !__DMATH_HPP__

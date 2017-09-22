@@ -112,8 +112,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DMath.h" />
-    <ClInclude Include="Hash.h" />
+    <ClInclude Include="DMath.hpp" />
+    <ClInclude Include="Hash.hpp" />
     <ClInclude Include="onwind.h" />
     <ClInclude Include="ThreadPool.hpp" />
   </ItemGroup>

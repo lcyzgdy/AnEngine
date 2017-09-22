@@ -68,7 +68,7 @@ namespace Utility
 			m_cvTask.notify_all();
 			for (size_t i = 0; i < m_pool.size(); i++)
 			{
-				m_pool[i].detach();
+				m_pool[i].join();
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace Utility
 			future<FuncType> awaitFuture = task->get_future();
 			{
 				std::lock_guard<mutex> lock(m_mutex);
-				m_tasks.emplace([task]{ (*task)(); });
+				m_tasks.emplace([task] { (*task)(); });
 			}
 			m_cvTask.notify_one();
 			return awaitFuture;

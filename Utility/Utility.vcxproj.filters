@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hash.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="onwind.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DMath.h">
+    <ClInclude Include="ThreadPool.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadPool.hpp">
+    <ClInclude Include="Hash.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DMath.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

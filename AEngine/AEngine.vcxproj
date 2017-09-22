@@ -149,6 +149,7 @@
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
+    <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuResource.h" />
+    <ClInclude Include="GraphicCard.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
@@ -178,6 +180,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
     <ClCompile Include="CommandList.cpp" />
+    <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
@@ -189,6 +192,7 @@
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuResource.cpp" />
+    <ClCompile Include="GraphicCard.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />

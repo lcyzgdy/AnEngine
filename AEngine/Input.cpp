@@ -176,7 +176,6 @@ bool BaseInput::GetMouseButton(int _mouseButton)
 
 bool BaseInput::GetMouseButtonUp(int _mouseButton)
 {
-
 	return true;
 }
 
@@ -198,6 +197,7 @@ void BaseInput::SetMousePosition(int x, int y)
 
 void BaseInput::SetAcquire()
 {
+	lock_guard<mutex> lock(m_mutex);
 	if (m_keyboard)
 	{
 		m_keyboard->Acquire();
@@ -210,6 +210,7 @@ void BaseInput::SetAcquire()
 
 void BaseInput::SetUnacquire()
 {
+	lock_guard<mutex> lock(m_mutex);
 	if (m_keyboard)
 	{
 		m_keyboard->Unacquire();

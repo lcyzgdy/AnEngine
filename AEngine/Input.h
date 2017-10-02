@@ -10,7 +10,8 @@
 #include<xinput.h>
 #include<wrl.h>
 #include<atomic>
-#include<thread>
+#include"ThreadPool.hpp"
+
 #pragma comment(lib, "dinput8.lib")
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -35,6 +36,7 @@ class BaseInput : public NonCopyable
 
 	atomic_bool m_exit;
 	std::chrono::milliseconds m_delta;
+	mutex m_mutex;
 
 	BaseInput();
 	BaseInput(const BaseInput&) = delete;

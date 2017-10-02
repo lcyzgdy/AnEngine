@@ -1,9 +1,9 @@
 #pragma once
-#ifndef __HASH_H__
-#define __HASH_H__
+#ifndef __HASH_HPP__
+#define __HASH_HPP__
 
 #include"onwind.h"
-#include"DMath.h"
+#include"DMath.hpp"
 
 #ifdef _M_X64
 #define ENABLE_SSE_CRC32 1
@@ -56,5 +56,5 @@ namespace Utility
 	}
 }
 
-#endif // !__HASH_H__
+#endif // !__HASH_HPP__
 

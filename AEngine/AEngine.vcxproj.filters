@@ -111,6 +111,12 @@
     <ClInclude Include="CommandList.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CommandQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicCard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -183,6 +189,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CommandList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicCard.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

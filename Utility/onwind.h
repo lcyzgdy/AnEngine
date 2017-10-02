@@ -159,7 +159,7 @@ struct Range
 {
 	T maxn, minn;
 
-	Range(T& _maxn, T& _minn)
+	Range(T& _minn, T& _maxn)
 	{
 		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long))
 			throw exception();

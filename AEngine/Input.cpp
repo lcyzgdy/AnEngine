@@ -25,8 +25,7 @@ void BaseInput::Initialize(HWND _hwnd, HINSTANCE _hInstance)
 	memset(m_mouseButtonDownState, 0, sizeof(m_mouseButtonDownState));
 	memset(m_mouseButtonState, 0, sizeof(m_mouseButtonState));
 
-	thread t(&BaseInput::Update, this);
-	t.detach();
+	Utility::u_s_threadPool.Commit(std::bind(&BaseInput::Update, this));
 }
 
 void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)
@@ -177,7 +176,6 @@ bool BaseInput::GetMouseButton(int _mouseButton)
 
 bool BaseInput::GetMouseButtonUp(int _mouseButton)
 {
-
 	return true;
 }
 
@@ -199,6 +197,7 @@ void BaseInput::SetMousePosition(int x, int y)
 
 void BaseInput::SetAcquire()
 {
+	lock_guard<mutex> lock(m_mutex);
 	if (m_keyboard)
 	{
 		m_keyboard->Acquire();
@@ -211,6 +210,7 @@ void BaseInput::SetAcquire()
 
 void BaseInput::SetUnacquire()
 {
+	lock_guard<mutex> lock(m_mutex);
 	if (m_keyboard)
 	{
 		m_keyboard->Unacquire();

@@ -105,9 +105,6 @@
     <ClInclude Include="ShaderClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Thread.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CommandList.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -115,6 +112,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GraphicCard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

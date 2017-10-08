@@ -174,7 +174,7 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
-    <ClInclude Include="Thread.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp" />

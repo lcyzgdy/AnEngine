@@ -4,6 +4,7 @@
 
 #include"onwind.h"
 #include<DirectXMath.h>
+#include"Transform.h"
 using namespace std;
 using namespace DirectX;
 

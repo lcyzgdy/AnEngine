@@ -5,7 +5,7 @@
 #include<DirectXMath.h>
 using namespace DirectX;
 
-namespace PhysicCore
+namespace PhysicsCore
 {
 	class Transform
 	{
@@ -17,57 +17,58 @@ namespace PhysicCore
 		Transform() = default;
 		~Transform() = default;
 
-		XMVECTOR Position()
+		inline XMVECTOR Position()
 		{
 			return m_position;
 		}
 
-		void Position(XMFLOAT3& newPosition)
+		inline void __vectorcall Position(XMFLOAT3& newPosition)
 		{
-			m_position = { newPosition.x, newPosition.y, newPosition.z, 0 };
+			//m_position = { newPosition.x, newPosition.y, newPosition.z, 0 };
+			m_position = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
 		}
 
-		void Position(XMVECTOR& newPosition)
+		inline void __vectorcall Position(XMVECTOR& newPosition)
 		{
 			m_position = newPosition;
 		}
 
-		float PositionX()
+		inline float PositionX()
 		{
 			return m_position.m128_f32[0];
 		}
 
-		float PositionY()
+		inline float PositionY()
 		{
 			return m_position.m128_f32[1];
 		}
 
-		float PositionZ()
+		inline float PositionZ()
 		{
 			return m_position.m128_f32[2];
 		}
 		///////////////////////////////////////////////////////////////
-		XMVECTOR Rotation()
+		inline XMVECTOR Rotation()
 		{
 			return m_rotation;
 		}
 
-		float RotationX()
+		inline float RotationX()
 		{
 			return m_rotation.m128_f32[0];
 		}
 
-		float RotationY()
+		inline float RotationY()
 		{
 			return m_rotation.m128_f32[1];
 		}
 
-		float RotationZ()
+		inline float RotationZ()
 		{
 			return m_rotation.m128_f32[2];
 		}
 
-		float RotationW()
+		inline float RotationW()
 		{
 			return m_rotation.m128_f32[3];
 		}

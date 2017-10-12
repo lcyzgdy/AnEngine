@@ -33,19 +33,22 @@ namespace PhysicsCore
 			m_position = newPosition;
 		}
 
-		inline float PositionX()
+		inline float __vectorcall PositionX()
 		{
-			return m_position.m128_f32[0];
+			//return m_position.m128_f32[0];
+			return XMVectorGetX(m_position);
 		}
 
-		inline float PositionY()
+		inline float __vectorcall PositionY()
 		{
-			return m_position.m128_f32[1];
+			//return m_position.m128_f32[1];
+			return XMVectorGetY(m_position);
 		}
 
-		inline float PositionZ()
+		inline float __vectorcall PositionZ()
 		{
-			return m_position.m128_f32[2];
+			//return m_position.m128_f32[2];
+			return XMVectorGetZ(m_position);
 		}
 		///////////////////////////////////////////////////////////////
 		inline XMVECTOR Rotation()

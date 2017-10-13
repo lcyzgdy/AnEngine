@@ -10,7 +10,7 @@ void GameObject::OnInit()
 
 void GameObject::OnUpdate()
 {
-	int HelloWorld;
+
 }
 
 void GameObject::OnRender()

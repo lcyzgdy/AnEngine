@@ -1,12 +1,12 @@
 #include "DynamicConstantBuffer.h"
 
-static UINT Align(UINT location, UINT align = D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
+static uint32_t Align(uint32_t location, uint32_t align = D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
 {
 	return (location + (align - 1)) & ~(align - 1);
 }
 namespace RenderCore
 {
-	DynamicConstantBuffer::DynamicConstantBuffer(UINT constantSize, UINT maxDrawsPerFrame, UINT frameCount) :
+	DynamicConstantBuffer::DynamicConstantBuffer(uint32_t constantSize, uint32_t maxDrawsPerFrame, uint32_t frameCount) :
 		alignedPerDrawConstantBufferSize(Align(constantSize)),	// Constant buffers must be aligned for hardware requirements.
 		maxDrawsPerFrame(maxDrawsPerFrame),
 		frameCount(frameCount),
@@ -22,7 +22,7 @@ namespace RenderCore
 
 	void DynamicConstantBuffer::Init(ID3D12Device* pDevice)
 	{
-		const UINT bufferSize = perFrameConstantBufferSize * frameCount;
+		const uint32_t bufferSize = perFrameConstantBufferSize * frameCount;
 
 		ThrowIfFailed(pDevice->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -38,19 +38,19 @@ namespace RenderCore
 		ThrowIfFailed(constantBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pMappedConstantBuffer)));
 	}
 
-	void* DynamicConstantBuffer::GetMappedMemory(UINT drawIndex, UINT frameIndex)
+	void* DynamicConstantBuffer::GetMappedMemory(uint32_t drawIndex, uint32_t frameIndex)
 	{
-		UINT constantBufferOffset = (frameIndex * perFrameConstantBufferSize) + (drawIndex * alignedPerDrawConstantBufferSize);
+		uint32_t constantBufferOffset = (frameIndex * perFrameConstantBufferSize) + (drawIndex * alignedPerDrawConstantBufferSize);
 
-		UINT8* temp = reinterpret_cast<UINT8*>(pMappedConstantBuffer);
+		uint8_t* temp = reinterpret_cast<uint8_t*>(pMappedConstantBuffer);
 		temp += constantBufferOffset;
 
 		return temp;
 	}
 
-	D3D12_GPU_VIRTUAL_ADDRESS DynamicConstantBuffer::GetGpuVirtualAddress(UINT drawIndex, UINT frameIndex)
+	D3D12_GPU_VIRTUAL_ADDRESS DynamicConstantBuffer::GetGpuVirtualAddress(uint32_t drawIndex, uint32_t frameIndex)
 	{
-		UINT constantBufferOffset = (frameIndex * perFrameConstantBufferSize) + (drawIndex * alignedPerDrawConstantBufferSize);
+		uint32_t constantBufferOffset = (frameIndex * perFrameConstantBufferSize) + (drawIndex * alignedPerDrawConstantBufferSize);
 		return constantBuffer->GetGPUVirtualAddress() + constantBufferOffset;
 	}
 }

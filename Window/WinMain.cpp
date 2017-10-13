@@ -2,6 +2,7 @@
 #include"DrawLine.h"
 #include"NBody.h"
 #include"Screen.h"
+#include"ThreadPool.hpp"
 using namespace std;
 
 WNDCLASSEX wnd;
@@ -50,7 +51,7 @@ LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam
 	}
 	case(WM_PAINT):
 	{
-		//BaseInput::GetInstance()->Update();	// 这里已经移动到新的线程执行，在BaseInput.cpp里。
+		//BaseInput::GetInstance()->Update();	// 这里已经移动到线程池中执行。
 		if (pD3dApp)
 		{
 			pD3dApp->OnUpdate();

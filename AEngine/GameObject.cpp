@@ -10,6 +10,7 @@ void GameObject::OnInit()
 
 void GameObject::OnUpdate()
 {
+
 }
 
 void GameObject::OnRender()

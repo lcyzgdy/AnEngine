@@ -25,6 +25,9 @@
     <Filter Include="源文件\Demos">
       <UniqueIdentifier>{1ebdceee-48bc-450a-8080-edb7d2ddc89d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Math">
+      <UniqueIdentifier>{e75c2931-c7e4-4edd-866f-785d385f9e8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -105,11 +108,20 @@
     <ClInclude Include="ShaderClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Thread.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CommandList.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicCard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
+      <Filter>头文件\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +195,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CommandList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicCard.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

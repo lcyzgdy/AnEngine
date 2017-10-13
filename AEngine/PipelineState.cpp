@@ -1,5 +1,5 @@
 #include "PipelineState.h"
-#include "Hash.h"
+#include "Hash.hpp"
 #include <mutex>
 using namespace std;
 using namespace RenderCore;

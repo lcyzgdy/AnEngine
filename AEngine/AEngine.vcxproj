@@ -23,7 +23,7 @@
     <ProjectGuid>{9839A870-23AE-44DD-95AA-857EC1119546}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -75,7 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Utility;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Utility\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -107,6 +107,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,6 +152,7 @@
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
+    <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />
@@ -161,6 +165,7 @@
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuResource.h" />
+    <ClInclude Include="GraphicCard.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
@@ -172,12 +177,14 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
-    <ClInclude Include="Thread.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
     <ClCompile Include="CommandList.cpp" />
+    <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
@@ -189,6 +196,7 @@
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuResource.cpp" />
+    <ClCompile Include="GraphicCard.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />

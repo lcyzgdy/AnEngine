@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B0F9295B-ECAE-49AC-BB83-981BFC70E784}</ProjectGuid>
     <RootNamespace>Utility</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -112,13 +112,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DMath.h" />
-    <ClInclude Include="Hash.h" />
+    <ClInclude Include="DMath.hpp" />
+    <ClInclude Include="Hash.hpp" />
     <ClInclude Include="onwind.h" />
-    <ClInclude Include="ThreadPool.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ThreadPool.cpp" />
+    <ClInclude Include="ThreadPool.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

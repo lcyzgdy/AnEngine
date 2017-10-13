@@ -157,14 +157,11 @@ inline T* SafeAcquire(T* newObject)
 template<typename T>
 struct Range
 {
-	T maxn, minn;
+	T m_maxn, m_minn;
 
-	Range(T& _minn, T& _maxn)
+	Range(T& _minn, T& _maxn) :maxn(_maxn), minn(_minn)
 	{
-		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long))
-			throw exception();
-		maxn = _maxn;
-		minn = _minn;
+		if (m_minn > m_maxn) throw std::exception("Min argument is greater than max argument");
 	}
 
 	bool Has(T& value)

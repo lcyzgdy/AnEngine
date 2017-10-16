@@ -26,6 +26,7 @@ using namespace std;
 
 #define Strcpy(a,b) wcscpy_s(a,b)
 #define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
+#define __FasterFunc(func) inline func __vectorcall
 
 #if defined _DEBUG || defined DEBUG
 #define ERRORBREAK(a) {\

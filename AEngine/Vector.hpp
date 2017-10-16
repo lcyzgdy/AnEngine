@@ -42,33 +42,61 @@ namespace Math
 		{
 		}
 
-		inline static Vector2&& __vectorcall Cross(const Vector2& v1, const Vector2& v2)
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		__FasterFunc(float) X()
+		{
+			return m_vector.x;
+		}
+
+		__FasterFunc(void) X(float x)
+		{
+			m_vector.x = x;
+		}
+
+		__FasterFunc(float) Y()
+		{
+			return m_vector.y;
+		}
+
+		__FasterFunc(void) Y(float y)
+		{
+			m_vector.y = y;
+		}
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//																							//
+		//																							//
+		//																							//
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		__FasterFunc(static Vector2&&) Cross(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
 			XMStoreFloat2(&temp.m_vector, XMVector2Cross(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static float __vectorcall Dot(const Vector2& v1, const Vector2& v2)
+		__FasterFunc(float) Dot(const Vector2& v1, const Vector2& v2)
 		{
 			return XMVectorGetX(XMVector2Dot(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
 		}
 
-		inline static Vector2&& __vectorcall Add(const Vector2& v1, const Vector2& v2)
+		__FasterFunc(static Vector2&&) Add(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
 			XMStoreFloat2(&temp.m_vector, XMVectorAdd(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static Vector2&& __vectorcall Subtract(const Vector2& v1, const Vector2& v2)
+		__FasterFunc(static Vector2&&) Subtract(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
 			XMStoreFloat2(&temp.m_vector, XMVectorSubtract(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static Vector2&& __vectorcall Multiply(const Vector2& v, const float n)
+		__FasterFunc(static Vector2&&) Multiply(const Vector2& v, const float n)
 		{
 			Vector2 temp;
 			XMStoreFloat2(&temp.m_vector, XMVectorScale(XMLoadFloat2(&v.m_vector), n));
@@ -77,37 +105,37 @@ namespace Math
 
 		/////////////////////////////////////////////
 
-		inline Vector2& __vectorcall operator+=(const Vector2& v)
+		__FasterFunc(Vector2&) operator+=(const Vector2& v)
 		{
 			XMStoreFloat2(&m_vector, XMVectorAdd(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector2& __vectorcall operator-=(const Vector2& v)
+		__FasterFunc(Vector2&) operator-=(const Vector2& v)
 		{
 			XMStoreFloat2(&m_vector, XMVectorSubtract(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector2& __vectorcall operator*=(const Vector2& v)
+		__FasterFunc(Vector2&) operator*=(const Vector2& v)
 		{
 			XMStoreFloat2(&m_vector, XMVector2Cross(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector2& __vectorcall operator*=(float n)
+		__FasterFunc(Vector2&) operator*=(float n)
 		{
 			XMStoreFloat2(&m_vector, XMVectorScale(XMLoadFloat2(&m_vector), n));
 			return *this;
 		}
 
-		inline Vector2&& __vectorcall operator=(const Vector2& v)
+		__FasterFunc(Vector2&) operator=(const Vector2& v)
 		{
 			Vector2 temp(v);
 			return std::move(temp);
 		}
 
-		///////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////////
 
 		friend inline Vector2&& __vectorcall operator*(const Vector2& v1, const Vector2& v2);
 		friend inline Vector2&& __vectorcall operator+(const Vector2& v1, const Vector2& v2);
@@ -166,7 +194,7 @@ namespace Math
 		XMFLOAT3 m_vector;
 	public:
 		Vector3() = default;
-		Vector3(Vector3&& v) :m_vector(v.m_vector)
+		Vector3(const Vector3& v) :m_vector(v.m_vector)
 		{
 		}
 		Vector3(float x, float y, float z) :m_vector(x, y, z)
@@ -179,56 +207,102 @@ namespace Math
 		{
 		}
 
-		inline static Vector3&& __vectorcall Cross(const Vector3& v1, const Vector3& v2)
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		__FasterFunc(float) X()
+		{
+			return m_vector.x;
+		}
+
+		__FasterFunc(void) X(float x)
+		{
+			m_vector.x = x;
+		}
+
+		__FasterFunc(float) Y()
+		{
+			return m_vector.y;
+		}
+
+		__FasterFunc(void) Y(float y)
+		{
+			m_vector.y = y;
+		}
+
+		__FasterFunc(float) Z()
+		{
+			return m_vector.z;
+		}
+
+		__FasterFunc(void) Z(float z)
+		{
+			m_vector.z = z;
+		}
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//																							//
+		//																							//
+		//																							//
+		//////////////////////////////////////////////////////////////////////////////////////////////
+
+		__FasterFunc(static Vector3&&) Cross(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
 			XMStoreFloat3(&temp.m_vector, XMVector3Cross(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static Vector3&& __vectorcall Dot(const Vector3& v1, const Vector3& v2)
+		__FasterFunc(static Vector3&&) Dot(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
 			XMStoreFloat3(&temp.m_vector, XMVector3Dot(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static Vector3&& __vectorcall Add(const Vector3& v1, const Vector3& v2)
+		__FasterFunc(static Vector3&&) Add(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
 			XMStoreFloat3(&temp.m_vector, XMVectorAdd(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline static Vector3&& __vectorcall Subtract(const Vector3& v1, const Vector3& v2)
+		__FasterFunc(static Vector3&&) Subtract(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
 			XMStoreFloat3(&temp.m_vector, XMVectorSubtract(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
-		inline Vector3& __vectorcall operator+=(const Vector3& v)
+		__FasterFunc(Vector3&) operator+=(const Vector3& v)
 		{
 			XMStoreFloat3(&m_vector, XMVectorAdd(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector3& __vectorcall operator-=(const Vector3& v)
+		__FasterFunc(Vector3&) operator-=(const Vector3& v)
 		{
 			XMStoreFloat3(&m_vector, XMVectorSubtract(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector3& __vectorcall operator*=(const Vector3& v)
+		__FasterFunc(Vector3&) operator*=(const Vector3& v)
 		{
-			XMStoreFloat3(&m_vector, XMVector3Cross(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
+			XMStoreFloat3(&m_vector, XMVector2Cross(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
-		inline Vector3& __vectorcall operator*=(const float n)
+		__FasterFunc(Vector3&) operator*=(float n)
 		{
 			XMStoreFloat3(&m_vector, XMVectorScale(XMLoadFloat3(&m_vector), n));
 			return *this;
+		}
+
+		__FasterFunc(Vector3&) operator=(const Vector3& v)
+		{
+			Vector3 temp(v);
+			return std::move(temp);
 		}
 
 
@@ -237,21 +311,21 @@ namespace Math
 		friend inline Vector3&& __vectorcall operator-(const Vector3& v1, const Vector3& v2);
 	};
 
-	inline Vector3&& __vectorcall operator*(const Vector3& v1, const Vector3& v2)
+	Vector3&& __vectorcall operator*(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
 		XMStoreFloat3(&temp.m_vector, XMVector3Cross(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 		return std::move(temp);
 	}
 
-	inline Vector3&& __vectorcall operator+(const Vector3& v1, const Vector3& v2)
+	Vector3&& __vectorcall operator+(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
 		XMStoreFloat3(&temp.m_vector, XMVectorAdd(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
 		return std::move(temp);
 	}
 
-	inline Vector3&& __vectorcall operator-(const Vector3& v1, const Vector3& v2)
+	Vector3&& __vectorcall operator-(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
 		XMStoreFloat3(&temp.m_vector, XMVectorSubtract(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));

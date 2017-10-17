@@ -7,12 +7,12 @@
 using namespace DirectX;
 
 /*(http://blog.csdn.net/zjjzhaohang/article/details/68936082)
-ÎªÁËÐ§ÂÊÆð¼û£¬ÔÚDX12ÖÐ´«²ÎXMVECTOR Ê±£¬ÓÐÒ»¶¨¹æÔòµÄµ÷ÓÃ·½Ê½£¬ÒÔ±ãÀûÓÃSSE/SSE2Ó²¼þ¼ÓËÙ¡£
-1¡¢Ç°Èý¸öXMVECTOR ²ÎÊýµ÷ÓÃÊ±£¬Ó¦¸ÃÊ¹ÓÃFXMVECTOR
-2¡¢µÚËÄ¸öXMVECTOR²ÎÊý£¬Ó¦¸ÃÊ¹ÓÃGXMVECTOR
-3¡¢µÚÎå¡¢Áù¸öXMVECTOR²ÎÊý£¬Ó¦¸ÃÊ¹ÓÃHXMVECTOR
-4¡¢Ê£ÏÂµÄ¶îÍâµÄ²ÎÊýÊ¹ÓÃCXMVECTOR
-5¡¢ÈôÆäÖÐ´©²åÁËÆäËûÀàÐÍ²ÎÊý£¬¹æÔòºöÂÔÆäËû²ÎÊýÕÕÑùÉúÐ§
+ä¸ºäº†æ•ˆçŽ‡èµ·è§ï¼Œåœ¨DX12ä¸­ä¼ å‚XMVECTOR æ—¶ï¼Œæœ‰ä¸€å®šè§„åˆ™çš„è°ƒç”¨æ–¹å¼ï¼Œä»¥ä¾¿åˆ©ç”¨SSE/SSE2ç¡¬ä»¶åŠ é€Ÿã€‚
+1ã€å‰ä¸‰ä¸ªXMVECTOR å‚æ•°è°ƒç”¨æ—¶ï¼Œåº”è¯¥ä½¿ç”¨FXMVECTOR
+2ã€ç¬¬å››ä¸ªXMVECTORå‚æ•°ï¼Œåº”è¯¥ä½¿ç”¨GXMVECTOR
+3ã€ç¬¬äº”ã€å…­ä¸ªXMVECTORå‚æ•°ï¼Œåº”è¯¥ä½¿ç”¨HXMVECTOR
+4ã€å‰©ä¸‹çš„é¢å¤–çš„å‚æ•°ä½¿ç”¨CXMVECTOR
+5ã€è‹¥å…¶ä¸­ç©¿æ’äº†å…¶ä»–ç±»åž‹å‚æ•°ï¼Œè§„åˆ™å¿½ç•¥å…¶ä»–å‚æ•°ç…§æ ·ç”Ÿæ•ˆ
 */
 
 namespace Math
@@ -23,7 +23,7 @@ namespace Math
 		Vector()
 		{
 			if (n > 4) throw std::exception("Too many number for a sse vector.");
-			if (n <= 0) throw std::exception("Too few number for a sse vector.")
+			if (n <= 0) throw std::exception("Too few number for a sse vector.");
 		}
 	};
 
@@ -142,6 +142,20 @@ namespace Math
 		friend inline Vector2&& __vectorcall operator-(const Vector2& v1, const Vector2& v2);
 		friend inline Vector2&& __vectorcall operator*(const Vector2& v1, const float n);
 		friend inline Vector2&& __vectorcall operator*(const float n, const Vector2& v1);
+
+		///////////////////////////////////////////////////////////////////////////////////
+
+		__FasterFunc(static Vector2&&) Normalize(const Vector2& v)
+		{
+			Vector2 temp;
+			XMStoreFloat2(&temp.m_vector, XMVector2Normalize(XMLoadFloat2(&v.m_vector)));
+			return std::move(temp);
+		}
+
+		__FasterFunc(void) Normalize()
+		{
+			XMStoreFloat2(&m_vector, XMVector2Normalize(XMLoadFloat2(&m_vector)));
+		}
 	};
 
 
@@ -309,6 +323,20 @@ namespace Math
 		friend inline Vector3&& __vectorcall operator*(const Vector3& v1, const Vector3& v2);
 		friend inline Vector3&& __vectorcall operator+(const Vector3& v1, const Vector3& v2);
 		friend inline Vector3&& __vectorcall operator-(const Vector3& v1, const Vector3& v2);
+
+		///////////////////////////////////////////////////////////////////////////////////
+
+		__FasterFunc(static Vector3&&) Normalize(const Vector3& v)
+		{
+			Vector3 temp;
+			XMStoreFloat3(&temp.m_vector, XMVector2Normalize(XMLoadFloat3(&v.m_vector)));
+			return std::move(temp);
+		}
+
+		__FasterFunc(void) Normalize()
+		{
+			XMStoreFloat3(&m_vector, XMVector2Normalize(XMLoadFloat3(&m_vector)));
+		}
 	};
 
 	Vector3&& __vectorcall operator*(const Vector3& v1, const Vector3& v2)

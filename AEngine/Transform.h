@@ -4,6 +4,7 @@
 
 #include<DirectXMath.h>
 #include"Vector.hpp"
+#include"Quaternion.hpp"
 using namespace DirectX;
 using namespace Math;
 
@@ -12,7 +13,7 @@ namespace PhysicsCore
 	class Transform
 	{
 		Vector3 m_position;
-		XMVECTOR m_rotation;
+		Quaternion m_rotation;
 		Vector3 m_scale;
 
 	public:
@@ -30,9 +31,16 @@ namespace PhysicsCore
 			m_position = newPosition;
 		}
 		///////////////////////////////////////////////////////////////
-		inline XMVECTOR Rotation()
+		inline Quaternion Rotation()
 		{
 			return m_rotation;
+		}
+
+		Transform& operator=(const Transform& t)
+		{
+			m_position = t.m_position;
+			m_rotation = t.m_rotation;
+			m_scale = t.m_scale;
 		}
 	};
 }

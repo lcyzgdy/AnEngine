@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __THREADPOOL_H__
-#define __THREADPOOL_H__
+#ifndef __THREADPOOL_HPP__
+#define __THREADPOOL_HPP__
 
 #include"onwind.h"
 #include<thread>

@@ -4,6 +4,8 @@
 
 #include"../Utility/onwind.h"
 #include<DirectXMath.h>
+#include"Vector.hpp"
+#include<cmath>
 using namespace DirectX;
 
 namespace Math
@@ -31,6 +33,49 @@ namespace Math
 			m_quaternion.x = x;
 		}
 
+		__FasterFunc(float) Y()
+		{
+			return m_quaternion.y;
+		}
+
+		__FasterFunc(void) Y(float y)
+		{
+			m_quaternion.y = y;
+		}
+
+		__FasterFunc(float) Z()
+		{
+			return m_quaternion.z;
+		}
+
+		__FasterFunc(void) Z(float z)
+		{
+			m_quaternion.z = z;
+		}
+
+		__FasterFunc(float) W()
+		{
+			return m_quaternion.w;
+		}
+
+		__FasterFunc(void) W(float w)
+		{
+			m_quaternion.w = w;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////
+
+		static Vector3&& Eular()
+		{
+			Vector3 temp;
+			return std::move(temp);
+		}
+
+		static Quaternion&& Eular(const Vector3& v)
+		{
+			Quaternion temp;
+			return std::move(temp);
+		}
 	};
 }
 

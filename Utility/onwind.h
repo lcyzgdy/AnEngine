@@ -24,7 +24,7 @@ using namespace std;
 
 #ifdef UNICODE
 
-#define Strcpy(a,b) wcscpy_s(a,b)
+#define Strcpy(a,b) wcscpy_s(a, b)
 #define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
 #define __FasterFunc(func) inline func __vectorcall
 

@@ -2,13 +2,20 @@
 #ifndef __DMATH_HPP__
 #define __DMATH_HPP__
 #include<algorithm>
+#include<cmath>
+
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
 
 namespace DMath
 {
 	template<typename T>
 	__forceinline T __vectorcall AlignUpWithMask(T value, size_t mask)
 	{
-		var a = std::max(1, 3, 4);
 		return (T)(((size_t)value + mask) & ~mask);
 	}
 

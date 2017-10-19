@@ -5,7 +5,7 @@
 #include"onwind.h"
 #include"DX.h"
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	class DynamicConstantBuffer
 	{

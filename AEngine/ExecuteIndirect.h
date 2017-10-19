@@ -4,7 +4,8 @@
 
 #include"DX.h"
 #include"RenderCore.h"
-using namespace RenderCore;
+using namespace AEngine::RenderCore;
+using namespace AEngine;
 
 class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 {

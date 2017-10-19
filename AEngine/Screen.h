@@ -4,44 +4,46 @@
 #include"onwind.h"
 #include<atomic>
 
-class Screen : public NonCopyable
+namespace AEngine
 {
-	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
-
-	atomic<int> m_width;
-	atomic<int> m_height;
-
-	enum TargetResolution : int
+	class Screen : public NonCopyable
 	{
-		S720P,
-		S900P,
-		S1080P,
-		S1440P,
-		S1800P,
-		S2160P
-	} TargetResolution;
+		friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
-	void Initialize(const int _width, const int _height);
+		std::atomic<int> m_width;
+		std::atomic<int> m_height;
 
-public:
+		enum TargetResolution : int
+		{
+			S720P,
+			S900P,
+			S1080P,
+			S1440P,
+			S1800P,
+			S2160P
+		} TargetResolution;
 
-	inline int Width()
-	{
-		return m_width;
-	}
+		void Initialize(const int _width, const int _height);
 
-	inline int Height()
-	{
-		return m_height;
-	}
+	public:
 
-	inline static Screen* GetInstance()
-	{
-		static Screen screen;
-		return &screen;
-	}
-};
+		inline int Width()
+		{
+			return m_width;
+		}
 
+		inline int Height()
+		{
+			return m_height;
+		}
+
+		inline static Screen* GetInstance()
+		{
+			static Screen screen;
+			return &screen;
+		}
+	};
+}
 
 #endif // !__SCREEN_H__

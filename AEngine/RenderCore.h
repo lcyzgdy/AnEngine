@@ -14,15 +14,12 @@
 using namespace Microsoft::WRL;
 using namespace std;
 
-namespace RenderCore
+namespace AEngine::RenderCore::Heap
 {
-	namespace Heap
-	{
-		extern DescriptorAllocator r_h_heapDescAllocator;
-	}
+	extern DescriptorAllocator r_h_heapDescAllocator;
 }
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	extern bool r_enableHDROutput;
 

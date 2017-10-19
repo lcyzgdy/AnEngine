@@ -15,7 +15,7 @@ using namespace DirectX;
 5、若其中穿插了其他类型参数，规则忽略其他参数照样生效
 */
 
-namespace Math
+namespace AEngine::Math
 {
 	template<size_t n>
 	struct Vector

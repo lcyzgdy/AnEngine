@@ -3,7 +3,6 @@
 #include"NBody.h"
 #include"Screen.h"
 #include"ThreadPool.hpp"
-using namespace std;
 
 WNDCLASSEX wnd;
 HWND window;

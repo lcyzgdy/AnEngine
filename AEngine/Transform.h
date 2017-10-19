@@ -6,9 +6,9 @@
 #include"Vector.hpp"
 #include"Quaternion.hpp"
 using namespace DirectX;
-using namespace Math;
+using namespace AEngine::Math;
 
-namespace PhysicsCore
+namespace AEngine::PhysicsCore
 {
 	class Transform
 	{

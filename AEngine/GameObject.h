@@ -4,7 +4,7 @@
 
 #include"onwind.h"
 #include"PhysicsCore.h"
-using namespace PhysicsCore;
+using namespace AEngine::PhysicsCore;
 using namespace std;
 
 namespace AEngine

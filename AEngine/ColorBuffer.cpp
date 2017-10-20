@@ -1,8 +1,8 @@
 #include "ColorBuffer.h"
 //#include "DescriptorHeap.h"
 #include "RenderCoreConstants.h"
-using namespace RenderCore;
-using namespace Resource;
+using namespace AEngine::RenderCore;
+using namespace AEngine::RenderCore::Resource;
 
 namespace AEngine::RenderCore::Resource
 {

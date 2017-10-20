@@ -128,9 +128,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WinMain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DTimer.cpp">
       <Filter>源文件\UTIL</Filter>
     </ClCompile>

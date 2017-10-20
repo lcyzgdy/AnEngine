@@ -7,7 +7,7 @@
 #include"Color.h"
 #include"DescriptorHeap.h"
 using namespace std;
-using namespace RenderCore;
+using namespace AEngine::RenderCore;
 
 namespace AEngine::RenderCore::Resource
 {

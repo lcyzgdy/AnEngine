@@ -16,12 +16,20 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
+LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+
 namespace AEngine
 {
 	class BaseInput : public NonCopyable
 	{
-		friend LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
-		friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		// 2017.10.20
+		// Friend functions only can be class's friend in same namespace. So I will redesign 
+		// *****************************************************************************************
+		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
+		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		//*/
+
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
 		ComPtr<IDirectInput8> m_directInput;
@@ -47,13 +55,14 @@ namespace AEngine
 		void Initialize(HWND _hwnd, HINSTANCE _hInstance);
 		void InitializeKeyboard(HINSTANCE _hInstance);
 		void InitializeMouse(HINSTANCE _hInstance);
-		void Release();
 		void Update();
+		void Release();
 
 		void SetAcquire();
 		void SetUnacquire();
 
 	public:
+
 		bool IsAnyKeyDown();
 		bool IsAnyKey();
 		bool IsAnyKeyUp();

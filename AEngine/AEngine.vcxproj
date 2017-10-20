@@ -207,7 +207,6 @@
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
-    <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

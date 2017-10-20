@@ -5,6 +5,7 @@
 #include<DirectXMath.h>
 #include"Vector.hpp"
 #include"Quaternion.hpp"
+
 using namespace DirectX;
 using namespace AEngine::Math;
 
@@ -27,7 +28,6 @@ namespace AEngine::PhysicsCore
 
 		__FasterFunc(void) Position(const Vector3& newPosition)
 		{
-			//m_position = { newPosition.x, newPosition.y, newPosition.z, 0 };
 			m_position = newPosition;
 		}
 		///////////////////////////////////////////////////////////////

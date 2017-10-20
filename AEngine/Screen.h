@@ -4,11 +4,17 @@
 #include"onwind.h"
 #include<atomic>
 
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+
 namespace AEngine
 {
 	class Screen : public NonCopyable
 	{
-		friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		// 2017.10.20
+		// Friend functions only can be class's friend in same namespace. So I will redesign
+		// *****************************************************************************************
+		friend int WINAPI::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		// */
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
 		std::atomic<int> m_width;
@@ -20,12 +26,11 @@ namespace AEngine
 			S900P,
 			S1080P,
 			S1440P,
-			S1800P,
-			S2160P
+			S4K,
+			S8K
 		} TargetResolution;
 
 		void Initialize(const int _width, const int _height);
-
 	public:
 
 		inline int Width()
@@ -45,5 +50,6 @@ namespace AEngine
 		}
 	};
 }
+
 
 #endif // !__SCREEN_H__

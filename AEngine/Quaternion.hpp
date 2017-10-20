@@ -68,12 +68,22 @@ namespace AEngine::Math
 		static Vector3&& Eular()
 		{
 			Vector3 temp;
+
 			return std::move(temp);
 		}
 
 		static Quaternion&& Eular(const Vector3& v)
 		{
+			//var vv = Vector3::Normalize(v);
 			Quaternion temp;
+			XMStoreFloat4(&temp.m_quaternion, XMQuaternionRotationRollPitchYawFromVector(XMLoadFloat3(&v.m_vector)));
+			return std::move(temp);
+		}
+
+		static Quaternion&& Eular(float x, float y, float z = 0)
+		{
+			Quaternion temp;
+			XMStoreFloat4(&temp.m_quaternion, XMQuaternionRotationRollPitchYaw(x, y, z));
 			return std::move(temp);
 		}
 	};

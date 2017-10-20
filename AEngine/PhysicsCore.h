@@ -8,7 +8,7 @@
 using namespace std;
 using namespace DirectX;
 
-namespace PhysicsCore
+namespace AEngine::PhysicsCore
 {
 	
 }

@@ -6,7 +6,7 @@
 #include<queue>
 #include<mutex>
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	// 渲染线程独占一个CommandList
 	class CommandListPool

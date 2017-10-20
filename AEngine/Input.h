@@ -16,63 +16,74 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-class BaseInput : public NonCopyable
+LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+
+namespace AEngine
 {
-	friend LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
-	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
+	class BaseInput : public NonCopyable
+	{
+		// 2017.10.20
+		// Friend functions only can be class's friend in same namespace. So I will redesign 
+		// *****************************************************************************************
+		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
+		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		//*/
 
-	ComPtr<IDirectInput8> m_directInput;
-	ComPtr<IDirectInputDevice8> m_keyboard;
-	ComPtr<IDirectInputDevice8> m_mouse;
-	HWND m_hwnd;
-	DIMOUSESTATE2 m_mouseState;
-	atomic<unsigned char> m_keyState[256];
-	atomic<bool> m_mouseButtonState[10];
-	atomic<bool> m_mouseButtonDownState[10];
-	atomic<bool> m_mouseButtonDownFlag[10];
-	atomic<XMVECTOR> m_curPosition;
-	atomic<BaseInput*> m_baseInput;
+		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
-	atomic_bool m_exit;
-	std::chrono::milliseconds m_delta;
-	mutex m_mutex;
+		ComPtr<IDirectInput8> m_directInput;
+		ComPtr<IDirectInputDevice8> m_keyboard;
+		ComPtr<IDirectInputDevice8> m_mouse;
+		HWND m_hwnd;
+		DIMOUSESTATE2 m_mouseState;
+		atomic<unsigned char> m_keyState[256];
+		atomic<bool> m_mouseButtonState[10];
+		atomic<bool> m_mouseButtonDownState[10];
+		atomic<bool> m_mouseButtonDownFlag[10];
+		atomic<XMVECTOR> m_curPosition;
+		atomic<BaseInput*> m_baseInput;
 
-	BaseInput();
-	BaseInput(const BaseInput&) = delete;
-	~BaseInput();
+		atomic_bool m_exit;
+		std::chrono::milliseconds m_delta;
+		mutex m_mutex;
 
-	void Initialize(HWND _hwnd, HINSTANCE _hInstance);
-	void InitializeKeyboard(HINSTANCE _hInstance);
-	void InitializeMouse(HINSTANCE _hInstance);
-	void Release();
-	void Update();
+		BaseInput();
+		BaseInput(const BaseInput&) = delete;
+		~BaseInput();
 
-	void SetAcquire();
-	void SetUnacquire();
+		void Initialize(HWND _hwnd, HINSTANCE _hInstance);
+		void InitializeKeyboard(HINSTANCE _hInstance);
+		void InitializeMouse(HINSTANCE _hInstance);
+		void Update();
+		void Release();
 
-public:
-	bool IsAnyKeyDown();
-	bool IsAnyKey();
-	bool IsAnyKeyUp();
+		void SetAcquire();
+		void SetUnacquire();
 
-	bool GetKeyDown(int _key);
-	bool GetKey(int _key);
-	bool GetKeyUp(int _key);
+	public:
 
-	void UpdateMouseButton(int _button, int _action);
-	bool GetMouseButtonDown(int _mouseButton);
-	bool GetMouseButton(int _mouseButton);
-	bool GetMouseButtonUp(int _mouseButton);
-	XMINT2 GetMousePosition();
-	XMVECTOR GetM128MousePosition();
-	void SetMousePosition(int x, int y);
+		bool IsAnyKeyDown();
+		bool IsAnyKey();
+		bool IsAnyKeyUp();
 
-	void ZeroInputState();
+		bool GetKeyDown(int _key);
+		bool GetKey(int _key);
+		bool GetKeyUp(int _key);
 
-	static BaseInput* GetInstance();
-};
+		void UpdateMouseButton(int _button, int _action);
+		bool GetMouseButtonDown(int _mouseButton);
+		bool GetMouseButton(int _mouseButton);
+		bool GetMouseButtonUp(int _mouseButton);
+		XMINT2 GetMousePosition();
+		XMVECTOR GetM128MousePosition();
+		void SetMousePosition(int x, int y);
 
+		void ZeroInputState();
 
+		static BaseInput* GetInstance();
+	};
+
+}
 
 #endif // !__INPUT_H__

@@ -6,7 +6,8 @@
 #include"DX.h"
 #include"Input.h"
 #include"RenderCore.h"
-using namespace RenderCore;
+using namespace AEngine::RenderCore;
+using namespace AEngine;
 
 class FrameBuffering :public D3D12AppBase, public D3D12Base
 {

@@ -4,44 +4,52 @@
 #include"onwind.h"
 #include<atomic>
 
-class Screen : public NonCopyable
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+
+namespace AEngine
 {
-	friend int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
-
-	atomic<int> m_width;
-	atomic<int> m_height;
-
-	enum TargetResolution : int
+	class Screen : public NonCopyable
 	{
-		S720P,
-		S900P,
-		S1080P,
-		S1440P,
-		S1800P,
-		S2160P
-	} TargetResolution;
+		// 2017.10.20
+		// Friend functions only can be class's friend in same namespace. So I will redesign
+		// *****************************************************************************************
+		friend int WINAPI::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		// */
+		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
-	void Initialize(const int _width, const int _height);
+		std::atomic<int> m_width;
+		std::atomic<int> m_height;
 
-public:
+		enum TargetResolution : int
+		{
+			S720P,
+			S900P,
+			S1080P,
+			S1440P,
+			S4K,
+			S8K
+		} TargetResolution;
 
-	inline int Width()
-	{
-		return m_width;
-	}
+		void Initialize(const int _width, const int _height);
+	public:
 
-	inline int Height()
-	{
-		return m_height;
-	}
+		inline int Width()
+		{
+			return m_width;
+		}
 
-	inline static Screen* GetInstance()
-	{
-		static Screen screen;
-		return &screen;
-	}
-};
+		inline int Height()
+		{
+			return m_height;
+		}
+
+		inline static Screen* GetInstance()
+		{
+			static Screen screen;
+			return &screen;
+		}
+	};
+}
 
 
 #endif // !__SCREEN_H__

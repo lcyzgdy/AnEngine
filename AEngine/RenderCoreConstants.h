@@ -4,7 +4,7 @@
 
 #include"DX.h"
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	static const UINT r_cnt_DefaultFrameCount = 2;
 	static const UINT r_cnt_SwapChainBufferCount = 3;

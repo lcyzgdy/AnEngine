@@ -3,7 +3,7 @@
 #include"NBody.h"
 #include"Screen.h"
 #include"ThreadPool.hpp"
-using namespace std;
+using namespace AEngine;
 
 WNDCLASSEX wnd;
 HWND window;
@@ -11,7 +11,7 @@ int state;
 int screenw;
 int screenh;
 
-LRESULT WINAPI WinProc(HWND hwnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	D3D12AppBase* pD3dApp = reinterpret_cast<D3D12AppBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	switch (msg)

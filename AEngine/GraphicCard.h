@@ -6,7 +6,7 @@
 #include"CommandQueue.h"
 #include"RenderCoreConstants.h"
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	// 显卡设备接口。
 	class GraphicCard

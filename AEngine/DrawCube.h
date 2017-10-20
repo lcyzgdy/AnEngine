@@ -8,7 +8,7 @@
 #include"MCamera.h"
 #include"DTimer.h"
 #include"DynamicConstantBuffer.h"
-using namespace RenderCore;
+using namespace AEngine;
 
 class DrawCube :public D3D12AppBase, public D3D12Base
 {
@@ -50,7 +50,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
-	UINT srvDescriptorSize; 
+	UINT srvDescriptorSize;
 	UINT dsvDescriptorSize;
 	UINT samDescriptorSize;
 	UINT cbvSrvUavDescriptorSize;

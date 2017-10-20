@@ -1,75 +1,76 @@
 #include"DX.h"
 
 
-
-
-D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height) :
-	hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false)
+namespace AEngine
 {
-	WCHAR _assetsPath[512];
-	GetAssetsPath(_assetsPath, _countof(_assetsPath));
-	assetsPath = _assetsPath;
-
-	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-}
-
-D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title) :
-	hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false), title(_title)
-{
-	WCHAR _assetsPath[512];
-	GetAssetsPath(_assetsPath, _countof(_assetsPath));
-	assetsPath = _assetsPath;
-
-	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-}
-
-void D3D12AppBase::GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter)
-{
-	ComPtr<IDXGIAdapter1> adapter;
-	*ppAdapter = nullptr;
-
-	for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != pFactory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex)
+	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height) :
+		hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false)
 	{
-		DXGI_ADAPTER_DESC1 desc;
-		adapter->GetDesc1(&desc);
+		WCHAR _assetsPath[512];
+		GetAssetsPath(_assetsPath, _countof(_assetsPath));
+		assetsPath = _assetsPath;
 
-		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+		aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	}
+
+	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title) :
+		hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false), title(_title)
+	{
+		WCHAR _assetsPath[512];
+		GetAssetsPath(_assetsPath, _countof(_assetsPath));
+		assetsPath = _assetsPath;
+
+		aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	}
+
+	void D3D12AppBase::GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter)
+	{
+		ComPtr<IDXGIAdapter1> adapter;
+		*ppAdapter = nullptr;
+
+		for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != pFactory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex)
 		{
-			// Don't select the Basic Render Driver adapter.
-			// If you want a software adapter, pass in "/warp" on the command line.
-			continue;
+			DXGI_ADAPTER_DESC1 desc;
+			adapter->GetDesc1(&desc);
+
+			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+			{
+				// Don't select the Basic Render Driver adapter.
+				// If you want a software adapter, pass in "/warp" on the command line.
+				continue;
+			}
+
+			// Check to see if the adapter supports Direct3D 12, but don't create the
+			// actual m_device yet.
+			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+			{
+				break;
+			}
 		}
 
-		// Check to see if the adapter supports Direct3D 12, but don't create the
-		// actual m_device yet.
-		if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+		*ppAdapter = adapter.Detach();
+	}
+
+	void D3D12AppBase::ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc)
+	{
+		for (int i = 1; i < argc; ++i)
 		{
-			break;
+			if (_wcsnicmp(argv[i], L"-warp", wcslen(argv[i])) == 0 ||
+				_wcsnicmp(argv[i], L"/warp", wcslen(argv[i])) == 0)
+			{
+				isUseWarpDevice = true;
+			}
 		}
 	}
 
-	*ppAdapter = adapter.Detach();
-}
-
-void D3D12AppBase::ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc)
-{
-	for (int i = 1; i < argc; ++i)
+	void D3D12AppBase::SetHwnd(const HWND _hwnd)
 	{
-		if (_wcsnicmp(argv[i], L"-warp", wcslen(argv[i])) == 0 ||
-			_wcsnicmp(argv[i], L"/warp", wcslen(argv[i])) == 0)
-		{
-			isUseWarpDevice = true;
-		}
+		hwnd = _hwnd;
 	}
-}
 
-void D3D12AppBase::SetHwnd(const HWND _hwnd)
-{
-	hwnd = _hwnd;
-}
-
-void D3D12AppBase::SetWindowTitleText(LPCWSTR text)
-{
-	wstring windowText = title + L": " + text;
-	SetWindowText(hwnd, windowText.c_str());
+	void D3D12AppBase::SetWindowTitleText(LPCWSTR text)
+	{
+		wstring windowText = title + L": " + text;
+		SetWindowText(hwnd, windowText.c_str());
+	}
 }

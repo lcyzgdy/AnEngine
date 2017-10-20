@@ -1,22 +1,25 @@
 #include "GameObject.h"
 
-GameObject::GameObject() :gameObject(this), parentObject(nullptr)
+namespace AEngine
 {
-}
+	GameObject::GameObject() :gameObject(this), parentObject(nullptr)
+	{
+	}
 
-void GameObject::OnInit()
-{
-}
+	void GameObject::OnInit()
+	{
+	}
 
-void GameObject::OnUpdate()
-{
+	void GameObject::OnUpdate()
+	{
 
-}
+	}
 
-void GameObject::OnRender()
-{
-}
+	void GameObject::OnRender()
+	{
+	}
 
-void GameObject::OnRelease()
-{
+	void GameObject::OnRelease()
+	{
+	}
 }

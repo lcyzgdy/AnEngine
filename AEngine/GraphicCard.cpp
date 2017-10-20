@@ -1,7 +1,7 @@
 #include"GraphicCard.h"
 
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	void GraphicCard::CreateDevice(IDXGIFactory4* dxgiFactory)
 	{

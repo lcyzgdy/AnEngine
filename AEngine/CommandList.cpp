@@ -1,6 +1,6 @@
 #include "CommandList.h"
 
-void RenderCore::CommandList::Create(ID3D12Device * device, CommandFormatDesc & formatDesc, D3D12_COMMAND_LIST_TYPE type)
+void AEngine::RenderCore::CommandList::Create(ID3D12Device * device, CommandFormatDesc & formatDesc, D3D12_COMMAND_LIST_TYPE type)
 {
 	ThrowIfFailed(
 		device->CreateCommandList(
@@ -8,7 +8,7 @@ void RenderCore::CommandList::Create(ID3D12Device * device, CommandFormatDesc & 
 			formatDesc.pipelineState, IID_PPV_ARGS(&m_commandList)));
 }
 
-D3D12_COMMAND_LIST_TYPE RenderCore::CommandList::GetType()
+D3D12_COMMAND_LIST_TYPE AEngine::RenderCore::CommandList::GetType()
 {
 	return m_commandList->GetType();
 }

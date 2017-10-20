@@ -4,7 +4,7 @@
 
 #include"DX.h"
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	class Shader
 	{

@@ -12,7 +12,6 @@
 #include<memory>
 #include<string>
 #include<vector>
-using namespace std;
 
 #define var auto
 
@@ -24,8 +23,9 @@ using namespace std;
 
 #ifdef UNICODE
 
-#define Strcpy(a,b) wcscpy_s(a,b)
+#define Strcpy(a,b) wcscpy_s(a, b)
 #define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
+#define __FasterFunc(func) inline func __vectorcall
 
 #if defined _DEBUG || defined DEBUG
 #define ERRORBREAK(a) {\
@@ -35,7 +35,7 @@ using namespace std;
 #endif // _DEBUG || DEBUG
 
 
-inline LPCWSTR ToLPCWSTR(string& orig)
+inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
 	size_t origsize = orig.length() + 1;
 	const size_t newsize = 100;
@@ -47,7 +47,7 @@ inline LPCWSTR ToLPCWSTR(string& orig)
 
 inline LPCWSTR ToLPCWSTR(char* l)
 {
-	string orig(l);
+	std::string orig(l);
 	size_t origsize = orig.length() + 1;
 	const size_t newsize = 100;
 	size_t convertedChars = 0;
@@ -58,7 +58,7 @@ inline LPCWSTR ToLPCWSTR(char* l)
 
 inline LPCWSTR ToLPCWSTR(const char* l)
 {
-	string orig(l);
+	std::string orig(l);
 	size_t origsize = orig.length() + 1;
 	const size_t newsize = 100;
 	size_t convertedChars = 0;

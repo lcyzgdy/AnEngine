@@ -6,7 +6,7 @@
 #include"DX.h"
 #include<atomic>
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	class CommandQueue
 	{

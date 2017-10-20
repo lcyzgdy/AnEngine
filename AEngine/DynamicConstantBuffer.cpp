@@ -4,7 +4,8 @@ static uint32_t Align(uint32_t location, uint32_t align = D3D12_CONSTANT_BUFFER_
 {
 	return (location + (align - 1)) & ~(align - 1);
 }
-namespace RenderCore
+
+namespace AEngine::RenderCore
 {
 	DynamicConstantBuffer::DynamicConstantBuffer(uint32_t constantSize, uint32_t maxDrawsPerFrame, uint32_t frameCount) :
 		alignedPerDrawConstantBufferSize(Align(constantSize)),	// Constant buffers must be aligned for hardware requirements.

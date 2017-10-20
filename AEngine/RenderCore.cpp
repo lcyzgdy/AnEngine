@@ -4,7 +4,7 @@
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	vector<GraphicCard*> r_renderCore;
 	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;

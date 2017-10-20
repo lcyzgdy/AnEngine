@@ -7,7 +7,7 @@
 #include"Input.h"
 #include"RenderCore.h"
 #include<stack>
-using namespace RenderCore;
+using namespace AEngine;
 
 class DrawLine :public D3D12AppBase, public D3D12Base
 {

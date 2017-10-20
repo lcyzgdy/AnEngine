@@ -1,6 +1,6 @@
 #include "RootSignature.h"
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	void RootSignature::Reset()
 	{

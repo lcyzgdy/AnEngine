@@ -6,7 +6,7 @@
 #include<map>
 
 
-namespace RenderCore
+namespace AEngine::RenderCore
 {
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_computePSOMap;

@@ -175,6 +175,7 @@
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
+    <ClInclude Include="Rigidbody3D.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
@@ -209,7 +210,7 @@
     <ClCompile Include="ShaderClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="compute_shader.hlsl">
+    <FxCompile Include="compute_shader.hlsl">
       <FileType>Document</FileType>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Identity)</Outputs>
       <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatOutputAsContent>
@@ -217,7 +218,10 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy %(Identity) "$(OutDir)" &gt; NUL</Command>
       <TreatOutputAsContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatOutputAsContent>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\%(Identity)</Outputs>
-    </CustomBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+    </FxCompile>
     <CustomBuild Include="constbuffers_shaders.hlsl">
       <FileType>Document</FileType>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\%(Identity)</Outputs>

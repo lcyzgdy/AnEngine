@@ -126,6 +126,9 @@
     <ClInclude Include="Quaternion.hpp">
       <Filter>头文件\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Rigidbody3D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -226,11 +229,13 @@
     <CustomBuild Include="constbuffers_shaders.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
-    <CustomBuild Include="compute_shader.hlsl">
-      <Filter>资源文件</Filter>
-    </CustomBuild>
     <CustomBuild Include="cube_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="compute_shader.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

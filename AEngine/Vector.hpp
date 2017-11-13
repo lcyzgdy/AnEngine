@@ -209,6 +209,7 @@ namespace AEngine::Math
 	class Vector3 :Vector<3>
 	{
 		friend class Quaternion;
+
 		XMFLOAT3 m_vector;
 	public:
 		Vector3() = default;

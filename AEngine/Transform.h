@@ -31,7 +31,7 @@ namespace AEngine::PhysicsCore
 			m_position = newPosition;
 		}
 		///////////////////////////////////////////////////////////////
-		inline Quaternion Rotation()
+		__FasterFunc(Quaternion) Rotation()
 		{
 			return m_rotation;
 		}

@@ -18,7 +18,7 @@ namespace AEngine
 	{
 	}
 
-	const UINT64 DTimer::GetElapsedTicks()
+	const uint64_t DTimer::GetElapsedTicks()
 	{
 		return elapsedTicks;
 	}
@@ -28,7 +28,7 @@ namespace AEngine
 		return TicksToSeconds(elapsedTicks);
 	}
 
-	const UINT64 DTimer::GetTotalTicks()
+	const uint64_t DTimer::GetTotalTicks()
 	{
 		return totalTicks;
 	}
@@ -38,12 +38,12 @@ namespace AEngine
 		return TicksToSeconds(totalTicks);
 	}
 
-	UINT32 DTimer::GetFrameCount()
+	uint32_t DTimer::GetFrameCount()
 	{
 		return FrameCount;
 	}
 
-	UINT32 DTimer::GetFramePerSecond()
+	uint32_t DTimer::GetFramePerSecond()
 	{
 		return framesPerSecond;
 	}
@@ -53,7 +53,7 @@ namespace AEngine
 		isFixedTimeStep = _isFixedTimeStep;
 	}
 
-	void DTimer::SetTargetElapsedTicks(UINT64 _targetElapsed)
+	void DTimer::SetTargetElapsedTicks(uint64_t _targetElapsed)
 	{
 		targetElapsedTicks = _targetElapsed;
 	}
@@ -63,14 +63,14 @@ namespace AEngine
 		targetElapsedTicks = SecondsToTicks(_targetElapsed);
 	}
 
-	double DTimer::TicksToSeconds(UINT64 _ticks)
+	double DTimer::TicksToSeconds(uint64_t _ticks)
 	{
 		return static_cast<double>(_ticks) / TicksPerSecond;
 	}
 
-	UINT64 DTimer::SecondsToTicks(double _seconds)
+	uint64_t DTimer::SecondsToTicks(double _seconds)
 	{
-		return static_cast<UINT64>(_seconds * TicksPerSecond);
+		return static_cast<uint64_t>(_seconds * TicksPerSecond);
 	}
 
 	void DTimer::ResetElapsedTime()
@@ -88,7 +88,7 @@ namespace AEngine
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
 
-		UINT64 delta = currentTime.QuadPart - qpcLastTime.QuadPart;
+		uint64_t delta = currentTime.QuadPart - qpcLastTime.QuadPart;
 		qpcLastTime = currentTime;
 		qpcSecondCounter += delta;
 
@@ -101,7 +101,7 @@ namespace AEngine
 		delta /= qpcFrequency.QuadPart;
 		// QPC单位转国际单位
 
-		UINT32 lastFrameCount = FrameCount;
+		uint32_t lastFrameCount = FrameCount;
 
 		if (isFixedTimeStep)
 		{
@@ -141,7 +141,7 @@ namespace AEngine
 		{
 			framesThisSecond++;
 		}
-		if (qpcSecondCounter >= static_cast<UINT64>(qpcFrequency.QuadPart))
+		if (qpcSecondCounter >= static_cast<uint64_t>(qpcFrequency.QuadPart))
 		{
 			framesPerSecond = framesThisSecond;
 			framesThisSecond = 0;

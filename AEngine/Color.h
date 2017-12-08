@@ -8,10 +8,11 @@ namespace AEngine::RenderCore::Resource
 {
 	class Color
 	{
-		XMVECTOR m_color;
+		//XMVECTOR m_color;
+		XMFLOAT4 m_color;
 	public:
 		Color();
-		Color(FXMVECTOR vec);
+		Color(XMVECTOR vec);
 		Color(const XMVECTORF32& vec);
 		Color(float r, float g, float b, float a = 1.0f);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
@@ -24,6 +25,11 @@ namespace AEngine::RenderCore::Resource
 		float B() const;
 		float A() const;
 
+		void R(float r) const;
+		void G(float g) const;
+		void B(float b) const;
+		void A(float a) const;
+
 		bool operator==(const Color& rhs) const;
 		bool operator!=(const Color& rhs) const;
 
@@ -33,7 +39,7 @@ namespace AEngine::RenderCore::Resource
 		void SetA(float a);
 
 		float* GetPtr(void);
-		float& operator[](int index);
+		//float& operator[](int index);
 
 		void SetRGB(float r, float g, float b);
 
@@ -52,46 +58,47 @@ namespace AEngine::RenderCore::Resource
 
 	class Color32
 	{
-		XMVECTOR m_color;
+		//XMVECTOR m_color;
+		XMINT4 m_color;
 	public:
-		Color32();
-		Color32(FXMVECTOR vec);
+		Color32() = default;
+		Color32(XMVECTOR vec);
 		Color32(const XMVECTORF32& vec);
-		Color32(float r, float g, float b, float a = 1.0f);
+		Color32(int r, int g, int b, int a = 255);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color32(uint32_t rgbaLittleEndian);
 
 		~Color32() = default;
 
-		float R() const;
-		float G() const;
-		float B() const;
-		float A() const;
+		int R() const;
+		int G() const;
+		int B() const;
+		int A() const;
 
-		bool operator==(const Color& rhs) const;
-		bool operator!=(const Color& rhs) const;
+		bool operator==(const Color32& rhs) const;
+		bool operator!=(const Color32& rhs) const;
 
-		void SetR(float r);
-		void SetG(float g);
-		void SetB(float b);
-		void SetA(float a);
+		void SetR(int r);
+		void SetG(int g);
+		void SetB(int b);
+		void SetA(int a);
 
-		float* GetPtr(void);
-		float& operator[](int index);
+		int* GetPtr(void);
+		//float& operator[](int index);
 
-		void SetRGB(float r, float g, float b);
+		void SetRGB(int r, int g, int b);
 
 		Color32 ToSRGB() const;
-		Color32 FromSRGB() const;
+		Color32 FromSRGB(Color32& srgb) const;
 		Color32 ToREC709() const;
-		Color32 FromREC709() const;
+		Color32 FromREC709(Color32& srgb) const;
 
 		uint32_t R10G10B10A2() const;
 		uint32_t R8G8B8A8() const;
 
 		uint32_t R11G11B10F(bool RoundToEven = false) const;
 
-		operator XMVECTOR() const;
+		//operator XMVECTOR() const;
 	};
 }
 

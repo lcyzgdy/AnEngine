@@ -24,8 +24,8 @@ namespace AEngine
 	class BaseInput : public NonCopyable
 	{
 		// 2017.10.20
-		// Friend functions only can be class's friend in same namespace. So I will redesign 
-		// *****************************************************************************************
+		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
+		// ************************************************************************************************
 		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
 		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		//*/
@@ -41,15 +41,15 @@ namespace AEngine
 		atomic<bool> m_mouseButtonState[10];
 		atomic<bool> m_mouseButtonDownState[10];
 		atomic<bool> m_mouseButtonDownFlag[10];
-		atomic<XMVECTOR> m_curPosition;
-		atomic<BaseInput*> m_baseInput;
+		//atomic<XMVECTOR> m_curPosition;
+		atomic<XMFLOAT3> m_curPosition;
+		//atomic<BaseInput*> m_baseInput;
 
 		atomic_bool m_exit;
 		std::chrono::milliseconds m_delta;
 		mutex m_mutex;
 
 		BaseInput();
-		BaseInput(const BaseInput&) = delete;
 		~BaseInput();
 
 		void Initialize(HWND _hwnd, HINSTANCE _hInstance);

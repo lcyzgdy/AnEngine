@@ -11,9 +11,9 @@ namespace AEngine
 	class Screen : public NonCopyable
 	{
 		// 2017.10.20
-		// Friend functions only can be class's friend in same namespace. So I will redesign
-		// *****************************************************************************************
-		friend int WINAPI::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
+		// ************************************************************************************************
+		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		// */
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 

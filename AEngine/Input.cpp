@@ -189,12 +189,12 @@ namespace AEngine
 
 	XMVECTOR BaseInput::GetM128MousePosition()
 	{
-		return m_curPosition;
+		return XMLoadFloat3(&m_curPosition.load());
 	}
 
 	void BaseInput::SetMousePosition(int x, int y)
 	{
-		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::GetInstance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::GetInstance()->Height()) * 2 - 1.0f), 0.0f, 0.0f };
+		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::GetInstance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::GetInstance()->Height()) * 2 - 1.0f), 0.0f };
 	}
 
 	void BaseInput::SetAcquire()

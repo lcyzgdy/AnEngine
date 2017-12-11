@@ -25,6 +25,7 @@ namespace AEngine
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
+		// 类的友元函数只能位于同一命名空间下。
 		// ************************************************************************************************
 		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
 		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
@@ -84,6 +85,10 @@ namespace AEngine
 		static BaseInput* GetInstance();
 	};
 
+	enum KeyCode :int
+	{
+
+	};
 }
 
 #endif // !__INPUT_H__

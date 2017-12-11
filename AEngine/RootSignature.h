@@ -6,6 +6,15 @@
 
 namespace AEngine::RenderCore
 {
+	class RootParameter
+	{
+	public:
+		RootParameter() = default;
+		~RootParameter() = default;
+
+		void Clear();
+	};
+
 	class RootSignature
 	{
 	protected:

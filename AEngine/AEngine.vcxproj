@@ -166,6 +166,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuResource.h" />
     <ClInclude Include="GraphicCard.h" />
+    <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />

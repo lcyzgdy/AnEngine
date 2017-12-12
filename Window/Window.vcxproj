@@ -98,6 +98,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableModules>true</EnableModules>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utility\;$(SolutionDir)AEngine\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

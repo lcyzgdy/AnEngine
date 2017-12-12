@@ -1,25 +1,17 @@
 #include"GraphicCard.h"
-
+#include"DebugLog.h"
 
 namespace AEngine::RenderCore
 {
 	void GraphicCard::CreateDevice(IDXGIFactory4* dxgiFactory)
 	{
-		UINT dxgiFactoryFlags = 0;
 		D3D_FEATURE_LEVEL featureLevel;
 
-
-		// 开启Debug模式
-#if defined(DEBUG) || defined(_DEBUG)
-		ComPtr<ID3D12Debug> d3dDebugController;
-		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
-		{
-			d3dDebugController->EnableDebugLayer();
-			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
-		}
-#endif
 		//CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_cp_dxgiFactory.GetAddressOf()));
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
+		//if (dxgiFactory == nullptr)
+		//{
+		//	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
+		//}
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		//GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
@@ -35,9 +27,9 @@ namespace AEngine::RenderCore
 
 		m_cp_device->SetStablePowerState(m_stableFlag);
 
-#if defined(DEBUG) || defined(_DEBUG)
-		ID3D12InfoQueue* p_compInfoQueue;
-		m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue));
+#if defined(DEBUG) //|| defined(_DEBUG)
+		ID3D12InfoQueue* p_compInfoQueue = nullptr;
+		ThrowIfFailed(m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue)));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
 		// 通过ID来避免个人消息。
@@ -192,10 +184,6 @@ namespace AEngine::RenderCore
 
 	GraphicCard::GraphicCard() :
 		m_stableFlag(false)
-	{
-	}
-
-	GraphicCard::GraphicCard(const GraphicCard & graphicCard)
 	{
 	}
 

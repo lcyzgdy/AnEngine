@@ -6,7 +6,7 @@
 
 namespace AEngine::RenderCore
 {
-	vector<GraphicCard*> r_renderCore;
+	vector<GraphicCard*> r_graphicCard;
 	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
 	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
@@ -23,12 +23,25 @@ namespace AEngine::RenderCore
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
+		UINT dxgiFactoryFlags = 0;
+		// 开启Debug模式
+#if defined(DEBUG) || defined(_DEBUG)
+		ComPtr<ID3D12Debug> d3dDebugController;
+		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
+		{
+			d3dDebugController->EnableDebugLayer();
+			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
+		}
+#endif
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_cp_dxgiFactory.GetAddressOf()));
+
+
 		while (graphicCardCount--)
 		{
 			GraphicCard* aRender = new GraphicCard();
 			aRender->IsStable(isStable);
 			aRender->Initialize(Private::r_cp_dxgiFactory.Get());
-			r_renderCore.emplace_back(aRender);
+			r_graphicCard.emplace_back(aRender);
 		}
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
 		CreateCommonState();
@@ -53,7 +66,7 @@ namespace AEngine::RenderCore
 		//Private::r_cp_dxgiFactory->Create
 		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
 		(
-			const_cast<ID3D12CommandQueue*>(r_renderCore[0]->GetCommandQueue()),
+			const_cast<ID3D12CommandQueue*>(r_graphicCard[0]->GetCommandQueue()),
 			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
 		));
 		swapChain1.As(&r_cp_swapChain);
@@ -82,7 +95,7 @@ namespace AEngine::RenderCore
 			ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
 			r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer",
-				cp_displayPlane.Detach(), r_renderCore[0]->GetDevice(),
+				cp_displayPlane.Detach(), r_graphicCard[0]->GetDevice(),
 				&RenderCore::Heap::r_h_heapDescAllocator);
 		}
 #ifdef _WIN32
@@ -90,6 +103,8 @@ namespace AEngine::RenderCore
 #endif // _WIN32
 
 		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+
+
 	}
 
 	void CreateCommonState()

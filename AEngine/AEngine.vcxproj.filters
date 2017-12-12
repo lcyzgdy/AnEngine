@@ -132,6 +132,9 @@
     <ClInclude Include="IEffect.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DebugLog.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">

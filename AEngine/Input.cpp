@@ -189,7 +189,8 @@ namespace AEngine
 
 	XMVECTOR BaseInput::GetM128MousePosition()
 	{
-		return XMLoadFloat3(&m_curPosition.load());
+		//return XMLoadFloat3(&m_curPosition.load());
+		return XMLoadFloat3(&m_curPosition);
 	}
 
 	void BaseInput::SetMousePosition(int x, int y)

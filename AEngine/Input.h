@@ -43,7 +43,8 @@ namespace AEngine
 		atomic<bool> m_mouseButtonDownState[10];
 		atomic<bool> m_mouseButtonDownFlag[10];
 		//atomic<XMVECTOR> m_curPosition;
-		atomic<XMFLOAT3> m_curPosition;
+		//atomic<XMFLOAT3> m_curPosition;
+		XMFLOAT3 m_curPosition;
 		//atomic<BaseInput*> m_baseInput;
 
 		atomic_bool m_exit;

@@ -10,6 +10,7 @@
 #include"DescriptorHeap.h"
 #include"RenderCoreConstants.h"
 #include"GraphicCard.h"
+#include"RootSignature.h"
 
 #if defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 #include <dxgi1_6.h>
@@ -33,10 +34,11 @@ namespace AEngine::RenderCore
 		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	extern vector<GraphicCard*> r_renderCore;
+	extern vector<GraphicCard*> r_graphicCard;
 	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
 	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
 	extern int r_frameIndex;
+	extern RootSignature r_rootSignature;
 #ifdef _WIN32
 	extern HWND r_hwnd;
 #endif // _WIN32

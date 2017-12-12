@@ -153,6 +153,7 @@
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
+    <ClInclude Include="DebugLog.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.h" />
     <ClInclude Include="DrawCube.h" />

@@ -1,8 +1,7 @@
 #include"onwind.h"
 //#include"DrawLine.h"
 //#include"NBody.h"
-#include"Screen.h"
-#include"RenderCore.h"
+#include"Driver.h"
 #include"ThreadPool.hpp"
 #include"Input.h"
 using namespace AEngine;
@@ -116,7 +115,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		nullptr,
 		hInstance,
 		nullptr);
-		//d3dApp);
+	//d3dApp);
 
 	if (window == NULL)
 	{
@@ -126,12 +125,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	Randomize();
 
-	AEngine::RenderCore::InitializeRender(window);
+	AEngine::Driver::GetInstance()->Initialize(window, hInstance, screenw, screenh);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();
-	Screen::GetInstance()->Initialize(screenw, screenh);
-	BaseInput::GetInstance()->Initialize(window, hInstance);
+	//Screen::GetInstance()->Initialize(screenw, screenh);
+	//BaseInput::GetInstance()->Initialize(window, hInstance);
 
 	//if (!ShowWindow(window, nCmdShow))
 	//{
@@ -149,7 +148,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	BaseInput::GetInstance()->Release();
+	//BaseInput::GetInstance()->Release();
+	Driver::GetInstance()->Release();
 	//d3dApp->OnRelease();
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;

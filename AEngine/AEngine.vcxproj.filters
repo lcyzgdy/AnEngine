@@ -28,6 +28,12 @@
     <Filter Include="头文件\Math">
       <UniqueIdentifier>{e75c2931-c7e4-4edd-866f-785d385f9e8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Graphic">
+      <UniqueIdentifier>{3ed055a0-18ad-4126-9eb3-ddc03c4a9a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Graphic">
+      <UniqueIdentifier>{32fd9ebf-eb5f-4709-9774-9e7e4c605e84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -44,9 +50,6 @@
     </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>头文件\UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderCore.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>头文件</Filter>
@@ -69,53 +72,8 @@
     <ClInclude Include="DrawCube.h">
       <Filter>头文件\Demos</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicConstantBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>头文件\UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="GpuResource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PixelBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DescriptorHeap.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthBuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandContext.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderCoreConstants.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RootSignature.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PipelineState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderClass.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandList.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandQueue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicCard.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>头文件</Filter>
@@ -129,11 +87,71 @@
     <ClInclude Include="Rigidbody3D.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="IEffect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="DebugLog.h">
       <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandContext.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandList.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueue.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorHeap.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicConstantBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GpuResource.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicCard.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IEffect.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineState.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCore.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCoreConstants.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClass.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBehaviour.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,9 +166,6 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>源文件\UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderCore.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DrawLine.cpp">
       <Filter>源文件\Demos</Filter>
@@ -167,49 +182,61 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicConstantBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DrawCube.cpp">
       <Filter>源文件\Demos</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>源文件\UTIL</Filter>
     </ClCompile>
-    <ClCompile Include="GpuResource.cpp">
+    <ClCompile Include="Scene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PixelBuffer.cpp">
+    <ClCompile Include="Driver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="ColorBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DescriptorHeap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="RootSignature.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PipelineState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderClass.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="CommandList.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="CommandQueue.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorHeap.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicConstantBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuResource.cpp">
+      <Filter>源文件\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="GraphicCard.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineState.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderCore.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClass.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBehaviour.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,7 +17,7 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 namespace AEngine
 {
@@ -25,10 +25,11 @@ namespace AEngine
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
-		// ÀàµÄÓÑÔªº¯ÊıÖ»ÄÜÎ»ÓÚÍ¬Ò»ÃüÃû¿Õ¼äÏÂ¡£
+		// ç±»çš„å‹å…ƒå‡½æ•°åªèƒ½ä½äºåŒä¸€å‘½åç©ºé—´ä¸‹ã€‚
 		// ************************************************************************************************
 		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
-		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		friend class Driver;
+		//friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		//*/
 
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);

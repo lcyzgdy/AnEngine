@@ -9,7 +9,7 @@
 
 namespace AEngine::Debug
 {
-	std::ofstream out(time(0) + "_log.txt");
+	std::ofstream out(to_string(time(0)) + "_log.txt");
 
 	void Log(std::string l)
 	{

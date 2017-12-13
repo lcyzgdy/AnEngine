@@ -9,7 +9,7 @@ using namespace DirectX;
 
 namespace AEngine
 {
-	class MCamera
+	class MiCamera
 	{
 		struct KeyPressed
 		{
@@ -28,8 +28,8 @@ namespace AEngine
 		void Reset();
 
 	public:
-		MCamera();
-		~MCamera();
+		MiCamera();
+		~MiCamera();
 
 		void OnInit(XMFLOAT3 _position);
 		void OnUpdate(float _elapsedSeconds);

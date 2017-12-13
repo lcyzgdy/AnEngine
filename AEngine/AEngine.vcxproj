@@ -110,6 +110,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utility\;$(SolutionDir)PhyX\PhysX_3.4\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="DrawCube.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DrawLine.h" />
+    <ClInclude Include="Driver.h" />
     <ClInclude Include="DTimer.h" />
     <ClInclude Include="DX.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
+    <ClInclude Include="ObjectBehaviour.h" />
     <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
@@ -179,6 +183,7 @@
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Rigidbody3D.h" />
     <ClInclude Include="RootSignature.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Transform.h" />
@@ -193,6 +198,7 @@
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
     <ClCompile Include="DrawLine.cpp" />
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="DTimer.cpp" />
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
@@ -204,10 +210,12 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
+    <ClCompile Include="ObjectBehaviour.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="RootSignature.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
   </ItemGroup>

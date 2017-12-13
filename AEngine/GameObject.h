@@ -4,14 +4,17 @@
 
 #include"onwind.h"
 #include"PhysicsCore.h"
+#include"BaseBehaviour.h"
 using namespace AEngine::PhysicsCore;
 using namespace std;
 
-namespace AEngine
+namespace AEngine::Game
 {
 	class GameObject
 	{
+	protected:
 		vector<GameObject*> m_children;
+		GameObject* m_parentObject;
 		Transform m_transform;
 
 	public:
@@ -20,19 +23,16 @@ namespace AEngine
 
 		string name;
 		GameObject* const gameObject;
-		GameObject* parentObject;
 
-		virtual void OnInit();
-		virtual void OnUpdate();
-		virtual void OnRender();
-		virtual void OnRelease();
+		GameObject* GetParent();
 
-		template<typename T>
+		template<typename T = GameObject>
 		T* GetChildByName(string& name)
 		{
-			for (auto i = 0; i < m_children.size(); i++)
+			//for (auto i = 0; i < m_children.size(); i++)
+			for (var i : m_children)
 			{
-				if (m_children[i].name == name) return static_cast<T*>(gameObject);
+				if (i->name == name) return static_cast<T*>(gameObject);
 			}
 			return nullptr;
 		}

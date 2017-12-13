@@ -23,7 +23,7 @@ namespace AEngine::RenderCore
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
-		UINT dxgiFactoryFlags = 0;
+		uint32_t dxgiFactoryFlags = 0;
 		// 开启Debug模式
 #if defined(DEBUG) || defined(_DEBUG)
 		ComPtr<ID3D12Debug> d3dDebugController;
@@ -76,7 +76,7 @@ namespace AEngine::RenderCore
 			ComPtr<IDXGIOutput> cp_output;
 			ComPtr<IDXGIOutput6> cp_output6;
 			DXGI_OUTPUT_DESC1 outputDesc;
-			UINT colorSpaceSupport;
+			uint32_t colorSpaceSupport;
 
 			if (SUCCEEDED(p_swapChain->GetContainingOutput(&cp_output)) &&
 				SUCCEEDED(cp_output.As(&cp_output6)) &&
@@ -90,7 +90,7 @@ namespace AEngine::RenderCore
 			}
 		}
 #endif
-		for (UINT i = 0; i < r_cnt_SwapChainBufferCount; ++i)
+		for (uint32_t i = 0; i < r_cnt_SwapChainBufferCount; ++i)
 		{
 			ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));

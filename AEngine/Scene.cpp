@@ -4,13 +4,13 @@ namespace AEngine::Game
 {
 	void Scene::OnInit()
 	{
+		for (var i : m_objects)
+		{
+			i->OnInit();
+		}
 	}
 
-	void Scene::OnUpdate()
-	{
-	}
-
-	void Scene::OnRender()
+	void Scene::OnRunning()
 	{
 	}
 

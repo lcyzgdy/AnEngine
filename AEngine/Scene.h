@@ -10,8 +10,9 @@ namespace AEngine::Game
 {
 	class Scene :public BaseBehaviour, public NonCopyable
 	{
-		std::vector<GameObject*> m_objects;
+		std::vector<BaseBehaviour*> m_objects;
 
+	//protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void OnRunning() override;

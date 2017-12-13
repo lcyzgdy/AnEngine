@@ -12,10 +12,12 @@ namespace AEngine::Game
 	class BaseBehaviour
 	{
 		friend class ::AEngine::Driver;
-
-		virtual void OnInit() = 0;
-		// virtual void OnUpdate() = 0;
+		friend class Scene;
 		// virtual void OnRender() = 0;
+		// virtual void OnUpdate() = 0;
+
+	//protected:
+		virtual void OnInit() = 0;
 		virtual void OnRunning() = 0;
 		virtual void OnRelease() = 0;
 

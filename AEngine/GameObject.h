@@ -6,14 +6,14 @@
 #include"PhysicsCore.h"
 #include"BaseBehaviour.h"
 using namespace AEngine::PhysicsCore;
-using namespace std;
 
 namespace AEngine::Game
 {
 	class GameObject
 	{
+		virtual void DoNothing();
 	protected:
-		vector<GameObject*> m_children;
+		std::vector<GameObject*> m_children;
 		GameObject* m_parentObject;
 		Transform m_transform;
 
@@ -25,6 +25,9 @@ namespace AEngine::Game
 		GameObject* const gameObject;
 
 		GameObject* GetParent();
+		void SetParent(GameObject* newParent);
+
+		std::vector<GameObject*> GetChildren();
 
 		template<typename T = GameObject>
 		T* GetChildByName(string& name)

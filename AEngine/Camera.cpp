@@ -6,10 +6,17 @@ namespace AEngine::Game
 {
 	void Camera::OnInit()
 	{
-
 	}
 
-	void Camera::OnRunning()
+	void Camera::BeforeUpdate()
+	{
+	}
+
+	void Camera::OnUpdate()
+	{
+	}
+
+	void Camera::AfterUpdate()
 	{
 	}
 

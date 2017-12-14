@@ -9,24 +9,30 @@ namespace AEngine::Game
 {
 	class ObjectBehaviour : public BaseBehaviour, public GameObject
 	{
+		bool m_active;
+
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
-		//virtual void OnUpdate() override;
-		//virtual void OnRender() override;
-		virtual void OnRunning() override;
+		virtual void OnUpdate() override;
 		virtual void OnRelease() override;
+		virtual void BeforeUpdate() override;
+		virtual void AfterUpdate() override;
+
+		virtual void BeginUpdate();
 
 	public:
 		ObjectBehaviour() = default;
 		~ObjectBehaviour() = default;
 
-		virtual void OnStart();
-		virtual void OnAwake();
-		virtual void OnEnable();
-		virtual void OnUpdate();
-		virtual void OnFixedUpdate();
-		virtual void OnUnenable();
-		virtual void OnDestory();
+		virtual void Start();
+		virtual void OnActive();
+		virtual void Update();
+		virtual void FixedUpdate();
+		virtual void OnInvalid();
+		virtual void Destory();
+
+		bool Active();
+		void Active(bool b);
 	};
 }
 

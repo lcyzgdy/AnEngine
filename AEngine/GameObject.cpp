@@ -10,4 +10,9 @@ namespace AEngine::Game
 	{
 		return m_parentObject;
 	}
+
+	void GameObject::SetParent(GameObject * newParent)
+	{
+		m_parentObject = newParent;
+	}
 }

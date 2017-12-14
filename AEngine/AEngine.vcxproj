@@ -189,6 +189,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="VirtualBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
+    <ClCompile Include="VirtualBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="compute_shader.hlsl">

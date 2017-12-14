@@ -8,14 +8,20 @@ namespace AEngine::Game
 {
 	class Camera : public BaseBehaviour
 	{
+		uint32_t m_cullingMask;
+		float m_nearDistance;
+		float m_farDistance;
+		float m_viewField;
 
 	public:
 		Camera() = default;
 		~Camera() = default;
 
-		// Í¨¹ý BaseBehaviour ¼Ì³Ð
+		// é€šè¿‡ BaseBehaviour ç»§æ‰¿
 		virtual void OnInit() override;
-		virtual void OnRunning() override;
+		virtual void BeforeUpdate() override;
+		virtual void OnUpdate() override;
+		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
 	};
 }

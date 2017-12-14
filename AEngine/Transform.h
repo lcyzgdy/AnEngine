@@ -42,6 +42,9 @@ namespace AEngine::PhysicsCore
 			m_rotation = t.m_rotation;
 			m_scale = t.m_scale;
 		}
+
+		Transform* GetParent();
+		Transform* GetChildByName(std::string name);
 	};
 }
 #endif // !__TRANSFORM_H__

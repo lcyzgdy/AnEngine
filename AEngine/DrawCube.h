@@ -84,7 +84,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 
 	vector<VertexPositionColor> vertex;
 
-	MCamera camera;
+	MiCamera camera;
 	XMMATRIX projectionMatrix;
 	DTimer timer;
 

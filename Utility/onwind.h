@@ -14,6 +14,7 @@
 #include<vector>
 
 #define var auto
+#define let auto
 
 #ifdef _WIN64
 
@@ -154,12 +155,19 @@ inline T* SafeAcquire(T* newObject)
 #endif
 #endif // !_WIN64
 
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+
 template<typename T>
 struct Range
 {
 	T m_maxn, m_minn;
 
-	Range(T& _minn, T& _maxn) :maxn(_maxn), minn(_minn)
+	Range(const T& _minn, const T& _maxn) :maxn(_maxn), minn(_minn)
 	{
 		if (m_minn > m_maxn) throw std::exception("Min argument is greater than max argument");
 	}
@@ -172,29 +180,29 @@ struct Range
 	}
 };
 
-inline void Randomize()
+__FasterFunc(void) Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-inline int Random(int a)
+__FasterFunc(int) Random(int a)
 {
 	return rand() % a;
 }
 
-inline float Random()
+__FasterFunc(float) Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-inline int Random(int a, int b)
+__FasterFunc(int) Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-inline float Random(float a, float b)
+__FasterFunc(float) Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;

@@ -1,8 +1,9 @@
 #include"onwind.h"
-#include"DrawLine.h"
-#include"NBody.h"
-#include"Screen.h"
+//#include"DrawLine.h"
+//#include"NBody.h"
+#include"Driver.h"
 #include"ThreadPool.hpp"
+#include"Input.h"
 using namespace AEngine;
 
 WNDCLASSEX wnd;
@@ -13,7 +14,7 @@ int screenh;
 
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	D3D12AppBase* pD3dApp = reinterpret_cast<D3D12AppBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	//D3D12AppBase* pD3dApp = reinterpret_cast<D3D12AppBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	switch (msg)
 	{
 	case(WM_CREATE):
@@ -51,11 +52,11 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case(WM_PAINT):
 	{
-		//BaseInput::GetInstance()->Update();	// 这里已经移动到线程池中执行。
-		if (pD3dApp)
+		// BaseInput::GetInstance()->Update();	// 这里已经移动到线程池中执行。
+		//if (pD3dApp)
 		{
-			pD3dApp->OnUpdate();
-			pD3dApp->OnRender();
+			//pD3dApp->OnUpdate();
+			//pD3dApp->OnRender();
 		}
 		break;
 	}
@@ -81,10 +82,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	screenw = 1280;
 	screenh = 720;
 
-	D3D12AppBase* d3dApp = new NBody(window, screenw, screenh);
+	//D3D12AppBase* d3dApp = new NBody(window, screenw, screenh);
 	int argc;
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
-	d3dApp->ParseCommandLineArgs(argv, argc);
+	//d3dApp->ParseCommandLineArgs(argv, argc);
 	LocalFree(argv);
 
 	wnd = { 0 };
@@ -113,8 +114,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		nullptr,
 		nullptr,
 		hInstance,
-		//nullptr);
-		d3dApp);
+		nullptr);
+	//d3dApp);
 
 	if (window == NULL)
 	{
@@ -124,10 +125,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	Randomize();
 
-	d3dApp->SetHwnd(window);
-	d3dApp->OnInit();
-	Screen::GetInstance()->Initialize(screenw, screenh);
-	BaseInput::GetInstance()->Initialize(window, hInstance);
+	AEngine::Driver::GetInstance()->Initialize(window, hInstance, screenw, screenh);
+
+	//d3dApp->SetHwnd(window);
+	//d3dApp->OnInit();
+	//Screen::GetInstance()->Initialize(screenw, screenh);
+	//BaseInput::GetInstance()->Initialize(window, hInstance);
 
 	//if (!ShowWindow(window, nCmdShow))
 	//{
@@ -145,8 +148,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	BaseInput::GetInstance()->Release();
-	d3dApp->OnRelease();
+	//BaseInput::GetInstance()->Release();
+	Driver::GetInstance()->Release();
+	//d3dApp->OnRelease();
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;
 }

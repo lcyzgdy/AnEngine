@@ -1,25 +1,18 @@
 #include "GameObject.h"
 
-namespace AEngine
+namespace AEngine::Game
 {
-	GameObject::GameObject() :gameObject(this), parentObject(nullptr)
+	GameObject::GameObject() :gameObject(this), m_parentObject(nullptr)
 	{
 	}
 
-	void GameObject::OnInit()
+	GameObject * GameObject::GetParent()
 	{
+		return m_parentObject;
 	}
 
-	void GameObject::OnUpdate()
+	void GameObject::SetParent(GameObject * newParent)
 	{
-
-	}
-
-	void GameObject::OnRender()
-	{
-	}
-
-	void GameObject::OnRelease()
-	{
+		m_parentObject = newParent;
 	}
 }

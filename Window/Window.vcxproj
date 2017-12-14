@@ -95,8 +95,10 @@
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableModules>true</EnableModules>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utility\;$(SolutionDir)AEngine\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,12 +153,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AEngine\AEngine.vcxproj">
       <Project>{9839a870-23ae-44dd-95aa-857ec1119546}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

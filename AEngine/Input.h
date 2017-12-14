@@ -17,17 +17,19 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 namespace AEngine
 {
 	class BaseInput : public NonCopyable
 	{
 		// 2017.10.20
-		// Friend functions only can be class's friend in same namespace. So I will redesign 
-		// *****************************************************************************************
+		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
+		// 类的友元函数只能位于同一命名空间下。
+		// ************************************************************************************************
 		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
-		friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+		friend class Driver;
+		//friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		//*/
 
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
@@ -41,15 +43,16 @@ namespace AEngine
 		atomic<bool> m_mouseButtonState[10];
 		atomic<bool> m_mouseButtonDownState[10];
 		atomic<bool> m_mouseButtonDownFlag[10];
-		atomic<XMVECTOR> m_curPosition;
-		atomic<BaseInput*> m_baseInput;
+		//atomic<XMVECTOR> m_curPosition;
+		//atomic<XMFLOAT3> m_curPosition;
+		XMFLOAT3 m_curPosition;
+		//atomic<BaseInput*> m_baseInput;
 
 		atomic_bool m_exit;
 		std::chrono::milliseconds m_delta;
 		mutex m_mutex;
 
 		BaseInput();
-		BaseInput(const BaseInput&) = delete;
 		~BaseInput();
 
 		void Initialize(HWND _hwnd, HINSTANCE _hInstance);
@@ -84,6 +87,10 @@ namespace AEngine
 		static BaseInput* GetInstance();
 	};
 
+	enum KeyCode :int
+	{
+
+	};
 }
 
 #endif // !__INPUT_H__

@@ -98,7 +98,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 	UINT srvIndex[ThreadCount];		// 表示哪个例子的缓冲资源试图是SRV（0 || 1）（UAV = 1 - SRV）
 	UINT heightInstances;
 	UINT widthInstances;
-	MCamera camera;
+	MiCamera camera;
 	DTimer timer;
 
 	ComPtr<ID3D12Fence> threadFences[ThreadCount];

@@ -18,8 +18,9 @@ using namespace DirectX;
 namespace AEngine::Math
 {
 	template<size_t n>
-	struct Vector
+	class Vector
 	{
+	public:
 		Vector()
 		{
 			if (n > 4) throw std::exception("Too many number for a sse vector.");
@@ -208,6 +209,7 @@ namespace AEngine::Math
 	class Vector3 :Vector<3>
 	{
 		friend class Quaternion;
+
 		XMFLOAT3 m_vector;
 	public:
 		Vector3() = default;
@@ -318,8 +320,8 @@ namespace AEngine::Math
 
 		__FasterFunc(Vector3&) operator=(const Vector3& v)
 		{
-			Vector3 temp(v);
-			return std::move(temp);
+			XMStoreFloat3(&m_vector, XMLoadFloat3(&v.m_vector));
+			return *this;
 		}
 
 

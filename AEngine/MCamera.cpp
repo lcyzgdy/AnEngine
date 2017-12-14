@@ -2,24 +2,24 @@
 
 namespace AEngine
 {
-	MCamera::MCamera() :
+	MiCamera::MiCamera() :
 		initialPosition(0, 0, 0), position(initialPosition),
 		yawRotate(XM_PI), pitchRotate(0), lookDirection(0, 0, -1), upDirection(0, 1, 0),
 		moveSpeed(20.0), turnSpeed(XM_PIDIV2), keyPressed{}
 	{
 	}
 
-	MCamera::~MCamera()
+	MiCamera::~MiCamera()
 	{
 	}
 
-	void MCamera::OnInit(XMFLOAT3 _position)
+	void MiCamera::OnInit(XMFLOAT3 _position)
 	{
 		initialPosition = _position;
 		Reset();
 	}
 
-	void MCamera::OnUpdate(float _elapsedSeconds)
+	void MiCamera::OnUpdate(float _elapsedSeconds)
 	{
 		XMFLOAT3 move(0, 0, 0);
 
@@ -84,11 +84,11 @@ namespace AEngine
 		// 确定观察方向
 	}
 
-	void MCamera::OnRelease()
+	void MiCamera::OnRelease()
 	{
 	}
 
-	void MCamera::OnKeyUp(UINT8 _key)
+	void MiCamera::OnKeyUp(UINT8 _key)
 	{
 #define true false
 		switch (_key)
@@ -136,7 +136,7 @@ namespace AEngine
 #undef true
 	}
 
-	void MCamera::OnKeyDown(UINT8 _key)
+	void MiCamera::OnKeyDown(UINT8 _key)
 	{
 		switch (_key)
 		{
@@ -182,7 +182,7 @@ namespace AEngine
 		}
 	}
 
-	void MCamera::Reset()
+	void MiCamera::Reset()
 	{
 		position = initialPosition;
 		yawRotate = XM_PI;
@@ -190,22 +190,22 @@ namespace AEngine
 		lookDirection = { 0,0,-1 };
 	}
 
-	XMMATRIX MCamera::GetViewMatrix()
+	XMMATRIX MiCamera::GetViewMatrix()
 	{
 		return XMMatrixLookToRH(XMLoadFloat3(&position), XMLoadFloat3(&lookDirection), XMLoadFloat3(&upDirection));
 	}
 
-	XMMATRIX MCamera::GetProjectionMatrix(float _fov, float _aspectRatio, float _nearPlane, float _farPlane)
+	XMMATRIX MiCamera::GetProjectionMatrix(float _fov, float _aspectRatio, float _nearPlane, float _farPlane)
 	{
 		return XMMatrixPerspectiveFovRH(_fov, _aspectRatio, _nearPlane, _farPlane);
 	}
 
-	void MCamera::SetMoveSpeed(float v)
+	void MiCamera::SetMoveSpeed(float v)
 	{
 		moveSpeed = v;
 	}
 
-	void MCamera::SetTurnSpeed(float v)
+	void MiCamera::SetTurnSpeed(float v)
 	{
 		turnSpeed = v;
 	}

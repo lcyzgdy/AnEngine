@@ -182,6 +182,7 @@
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rigidbody3D.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Scene.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
+    <ClCompile Include="CommandContext.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
@@ -217,6 +219,7 @@
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RenderCore.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />

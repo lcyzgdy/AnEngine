@@ -11,12 +11,20 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::OnUpdate()
 	{
-		Update();
-		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
+		//Update();
+		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
+		lock_guard<mutex> lock(m_mutex);
+		while (m_active)
+		{
+			BeforeUpdate();
+			Update();
+			AfterUpdate();
+		}
 	}
 
 	void ObjectBehaviour::OnRelease()
 	{
+		lock_guard<mutex> lock(m_mutex);
 		Destory();
 	}
 
@@ -25,15 +33,7 @@ namespace AEngine::Game
 		if (!m_active) throw std::exception("Object is not active");
 		//if (!m_enable) return;
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
-		Utility::u_s_threadPool.Commit([=]()->void
-		{
-			while (m_active)
-			{
-				BeforeUpdate();
-				Update();
-				AfterUpdate();
-			}
-		});
+		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 	}
 
 	void ObjectBehaviour::BeforeUpdate()

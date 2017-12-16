@@ -7,9 +7,13 @@
 
 namespace AEngine::Game
 {
+	class Scene;
+
 	class ObjectBehaviour : public BaseBehaviour, public GameObject
 	{
 		bool m_active;
+		Scene* m_scene;
+		std::mutex m_mutex;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;

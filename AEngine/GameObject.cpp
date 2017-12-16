@@ -15,4 +15,8 @@ namespace AEngine::Game
 	{
 		m_parentObject = newParent;
 	}
+	std::vector<GameObject*> GameObject::GetChildren()
+	{
+		return std::vector<GameObject*>();
+	}
 }

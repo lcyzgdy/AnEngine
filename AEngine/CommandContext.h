@@ -17,6 +17,9 @@ namespace AEngine::RenderCore
 	public:
 		CommandListPool() = default;
 		~CommandListPool() = default;
+
+		static CommandListPool* GetInstance();
+		ID3D12GraphicsCommandList* GetCommandList();
 	};
 }
 

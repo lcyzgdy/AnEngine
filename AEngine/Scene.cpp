@@ -25,7 +25,11 @@ namespace AEngine::Game
 
 	void Scene::AddObject(GameObject * obj)
 	{
+		for (var i : obj->GetChildren())
+		{
+			AddObject(i);
+		}
 		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
-		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(obj));
+		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
 	}
 }

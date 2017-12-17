@@ -25,6 +25,7 @@ namespace AEngine::Game
 		~Scene() = default;
 
 		void AddObject(GameObject* obj);
+		void RemoveObject(GameObject* obj);
 	};
 }
 

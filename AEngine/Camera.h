@@ -2,11 +2,11 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "BaseBehaviour.h"
+#include "ComponentBehaviour.h"
 
 namespace AEngine::Game
 {
-	class Camera : public BaseBehaviour
+	class Camera : public ComponentBehaviour
 	{
 		uint32_t m_cullingMask;
 		float m_nearDistance;

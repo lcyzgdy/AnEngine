@@ -5,21 +5,24 @@
 #include"DX.h"
 #include<queue>
 #include<mutex>
+#include"onwind.h"
 
 namespace AEngine::RenderCore
 {
 	// 渲染线程独占一个CommandList
-	class CommandListPool
+	class GraphicsCommandListPool : public NonCopyable
 	{
-		queue<ComPtr<ID3D12CommandList>> m_cp_commandListPool;
+		queue<ComPtr<ID3D12GraphicsCommandList>> m_cp_commandListPool;
+		ComPtr<ID3D12Fence> m_fence;
 		std::mutex m_mutex;
 
 	public:
-		CommandListPool() = default;
-		~CommandListPool() = default;
+		GraphicsCommandListPool();
+		~GraphicsCommandListPool() = default;
 
-		static CommandListPool* GetInstance();
+		static GraphicsCommandListPool* GetInstance();
 		ID3D12GraphicsCommandList* GetCommandList();
+		void PushCommandList(ID3D12GraphicsCommandList* list);
 	};
 }
 

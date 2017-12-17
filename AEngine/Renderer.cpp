@@ -18,7 +18,7 @@ namespace AEngine::Game
 
 	void Renderer::AfterUpdate()
 	{
-		var i = CommandListPool::GetInstance();
+		var i = GraphicsCommandListPool::GetInstance();
 	}
 
 	void Renderer::OnRelease()

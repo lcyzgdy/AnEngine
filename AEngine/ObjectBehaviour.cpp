@@ -13,9 +13,9 @@ namespace AEngine::Game
 	{
 		//Update();
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
-		lock_guard<mutex> lock(m_mutex);
 		while (m_active)
 		{
+			lock_guard<mutex> lock(m_mutex);
 			BeforeUpdate();
 			Update();
 			AfterUpdate();
@@ -25,6 +25,10 @@ namespace AEngine::Game
 	void ObjectBehaviour::OnRelease()
 	{
 		lock_guard<mutex> lock(m_mutex);
+		for (var i : m_component)
+		{
+			
+		}
 		Destory();
 	}
 
@@ -34,6 +38,11 @@ namespace AEngine::Game
 		//if (!m_enable) return;
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+	}
+
+	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
+	{
+		return std::vector<ObjectBehaviour*>();
 	}
 
 	void ObjectBehaviour::BeforeUpdate()

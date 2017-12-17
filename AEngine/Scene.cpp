@@ -17,9 +17,9 @@ namespace AEngine::Game
 
 	void Scene::OnRelease()
 	{
-		for (let i : m_objects)
+		for (var i : m_objects)
 		{
-			i->OnRelease();
+			RemoveObject(dynamic_cast<GameObject*>(dynamic_cast<ObjectBehaviour*>(i)));
 		}
 	}
 
@@ -29,7 +29,26 @@ namespace AEngine::Game
 		{
 			AddObject(i);
 		}
+
 		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
+		for (var i : behaviour->GetComponents())
+		{
+			if (i)
+			{
+				m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(i));
+			}
+		}
 		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
+	}
+
+	void Scene::RemoveObject(GameObject * obj)
+	{
+		lock_guard<std::mutex> lock(m_mutex);
+		for (var i : obj->GetChildren())
+		{
+			RemoveObject(i);
+		}
+		var behaviour = dynamic_cast<BaseBehaviour*>(dynamic_cast<ObjectBehaviour*>(obj));
+		behaviour->OnRelease();
 	}
 }

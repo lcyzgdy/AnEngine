@@ -2,11 +2,11 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-#include"BaseBehaviour.h"
+#include"ComponentBehaviour.h"
 
 namespace AEngine::Game
 {
-	class Renderer : public BaseBehaviour
+	class Renderer : public ComponentBehaviour
 	{
 		bool m_inView;
 

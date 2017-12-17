@@ -162,6 +162,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -258,6 +261,9 @@
       <Filter>源文件\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBehaviour.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

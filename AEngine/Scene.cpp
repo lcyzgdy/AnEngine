@@ -43,11 +43,11 @@ namespace AEngine::Game
 
 	void Scene::RemoveObject(GameObject * obj)
 	{
-		lock_guard<std::mutex> lock(m_mutex);
 		for (var i : obj->GetChildren())
 		{
 			RemoveObject(i);
 		}
+		lock_guard<std::mutex> lock(m_mutex);
 		var behaviour = dynamic_cast<BaseBehaviour*>(dynamic_cast<ObjectBehaviour*>(obj));
 		behaviour->OnRelease();
 	}

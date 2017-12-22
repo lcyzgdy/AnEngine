@@ -33,11 +33,13 @@ namespace AEngine::Game
 		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
 		for (var i : behaviour->GetComponents())
 		{
+			lock_guard<std::mutex> lock(m_mutex);
 			if (i)
 			{
 				m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(i));
 			}
 		}
+		lock_guard<std::mutex> lock(m_mutex);
 		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
 	}
 

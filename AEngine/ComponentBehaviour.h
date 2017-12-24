@@ -13,12 +13,21 @@ namespace AEngine::Game
 		// 组件所依附的物体
 		const GameObject* m_refObject;
 
+		bool m_enable;
+
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void BeforeUpdate() override;
 		virtual void OnUpdate() override;
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
+
+		virtual void BeginUpdate() = 0;
+		virtual void OnEnable();
+		virtual void OnDisable();
+
+	public:
+		void Enable(bool enable);
 	};
 }
 

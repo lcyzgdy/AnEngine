@@ -23,4 +23,14 @@ namespace AEngine::Game
 	void Camera::OnRelease()
 	{
 	}
+
+	RenderCore::Resource::ColorBuffer * Camera::GetColorBuffer()
+	{
+		return m_colorBuffer;
+	}
+
+	RenderCore::Resource::DepthBuffer * Camera::GetDepthBuffer()
+	{
+		return m_depthBuffer;
+	}
 }

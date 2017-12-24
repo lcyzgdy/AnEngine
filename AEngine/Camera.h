@@ -3,6 +3,8 @@
 #define __CAMERA_H__
 
 #include "ComponentBehaviour.h"
+#include "ColorBuffer.h"
+#include "DepthBuffer.h"
 
 namespace AEngine::Game
 {
@@ -13,9 +15,10 @@ namespace AEngine::Game
 		float m_farDistance;
 		float m_viewField;
 
-	public:
-		Camera() = default;
-		~Camera() = default;
+		RenderCore::Resource::ColorBuffer* m_colorBuffer;
+		RenderCore::Resource::DepthBuffer* m_depthBuffer;
+
+		std::mutex m_mutex;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
@@ -23,6 +26,13 @@ namespace AEngine::Game
 		virtual void OnUpdate() override;
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
+
+	public:
+		Camera() = default;
+		~Camera() = default;
+
+		RenderCore::Resource::ColorBuffer* GetColorBuffer();
+		RenderCore::Resource::DepthBuffer* GetDepthBuffer();
 	};
 }
 

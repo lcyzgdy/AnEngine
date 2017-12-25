@@ -10,10 +10,7 @@ namespace AEngine::Game
 	// 组件的特点是不能脱离物体单独存在。
 	class ComponentBehaviour : public BaseBehaviour
 	{
-		// 组件所依附的物体
-		const GameObject* m_refObject;
-
-		bool m_enable;
+		friend class ObjectBehaviour;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
@@ -23,6 +20,12 @@ namespace AEngine::Game
 		virtual void OnRelease() override;
 
 		virtual void BeginUpdate() = 0;
+
+	protected:
+		// 组件所依附的物体
+		const GameObject* m_refObject;
+		bool m_enable;
+
 		virtual void OnEnable();
 		virtual void OnDisable();
 

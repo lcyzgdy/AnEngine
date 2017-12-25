@@ -27,6 +27,9 @@ namespace AEngine::Game
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
 
+		// 通过 ComponentBehaviour 继承
+		virtual void BeginUpdate() override;
+
 	public:
 		Camera() = default;
 		~Camera() = default;

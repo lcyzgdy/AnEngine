@@ -27,26 +27,9 @@ namespace AEngine::Game
 		virtual void BeforeUpdate() override;
 		virtual void AfterUpdate() override;
 
-		virtual void BeginUpdate();
+		//virtual void BeginUpdate();
 
-	public:
-		ObjectBehaviour() = default;
-		~ObjectBehaviour() = default;
-
-		std::vector<ObjectBehaviour*> GetComponents();
-		template<typename T = ComponentBehaviour>
-		T* GetComponentByName(string name)
-		{
-			for (var i : m_component)
-			{
-				if (i->name == name)
-					return i;
-			}
-		}
-
-		void AddComponent(ComponentBehaviour* component);
-		void RemoveComponentByName(string name);
-
+	protected:
 		// 物体刚刚被加入场景时调用
 		// Call when the object add to scene
 		virtual void Start();
@@ -64,6 +47,24 @@ namespace AEngine::Game
 		// 物体被删除时调用（同时从场景中删除）
 		// Call when object is delete from scene
 		virtual void Destory();
+
+	public:
+		ObjectBehaviour() = default;
+		~ObjectBehaviour() = default;
+
+		std::vector<ObjectBehaviour*> GetComponents();
+		template<typename T = ComponentBehaviour>
+		T* GetComponentByName(string name)
+		{
+			for (var& i : m_component)
+			{
+				if (i->name == name)
+					return i;
+			}
+		}
+
+		void AddComponent(ComponentBehaviour* component);
+		void RemoveComponentByName(string name);
 
 		bool Active();
 		void Active(bool b);

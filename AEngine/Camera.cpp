@@ -6,6 +6,10 @@ namespace AEngine::Game
 {
 	void Camera::OnInit()
 	{
+		if (m_enable)
+		{
+			Utility::u_s_threadPool.Commit(std::bind(Camera::BeginUpdate, this));
+		}
 	}
 
 	void Camera::BeforeUpdate()
@@ -32,5 +36,9 @@ namespace AEngine::Game
 	RenderCore::Resource::DepthBuffer * Camera::GetDepthBuffer()
 	{
 		return m_depthBuffer;
+	}
+
+	void Camera::BeginUpdate()
+	{
 	}
 }

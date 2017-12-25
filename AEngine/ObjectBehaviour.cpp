@@ -5,8 +5,12 @@ namespace AEngine::Game
 {
 	void ObjectBehaviour::OnInit()
 	{
+		lock_guard<mutex> lock(m_mutex);
 		Start();
-		if (m_active) BeginUpdate();
+		if (m_active) //BeginUpdate();
+		{
+			Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+		}
 	}
 
 	void ObjectBehaviour::OnUpdate()
@@ -25,20 +29,20 @@ namespace AEngine::Game
 	void ObjectBehaviour::OnRelease()
 	{
 		lock_guard<mutex> lock(m_mutex);
-		for (var i : m_component)
+		for (var& i : m_component)
 		{
-			
+			i->OnRelease();
 		}
 		Destory();
 	}
 
-	void ObjectBehaviour::BeginUpdate()
+	/*void ObjectBehaviour::BeginUpdate()
 	{
 		if (!m_active) throw std::exception("Object is not active");
 		//if (!m_enable) return;
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
-	}
+	}*/
 
 	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
 	{
@@ -57,6 +61,14 @@ namespace AEngine::Game
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 	}
 
+	void ObjectBehaviour::AddComponent(ComponentBehaviour * component)
+	{
+	}
+
+	void ObjectBehaviour::RemoveComponentByName(string name)
+	{
+	}
+
 	bool ObjectBehaviour::Active()
 	{
 		return m_active;
@@ -68,7 +80,8 @@ namespace AEngine::Game
 		if (b)
 		{
 			OnActive();
-			BeginUpdate();
+			//BeginUpdate();
+			Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 		else
 		{

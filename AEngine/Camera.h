@@ -18,17 +18,12 @@ namespace AEngine::Game
 		RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
-		std::mutex m_mutex;
-
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void BeforeUpdate() override;
-		virtual void OnUpdate() override;
+		virtual void Update() override;
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
-
-		// 通过 ComponentBehaviour 继承
-		virtual void BeginUpdate() override;
 
 	public:
 		Camera() = default;

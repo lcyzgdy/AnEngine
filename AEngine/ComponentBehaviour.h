@@ -12,14 +12,14 @@ namespace AEngine::Game
 	{
 		friend class ObjectBehaviour;
 
+	protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void BeforeUpdate() override;
 		virtual void OnUpdate() override;
+		virtual void Update();
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
-
-		virtual void BeginUpdate() = 0;
 
 	protected:
 		// 组件所依附的物体

@@ -5,7 +5,7 @@ namespace AEngine::Game
 {
 	void ObjectBehaviour::OnInit()
 	{
-		lock_guard<mutex> lock(m_mutex);
+		lock_guard<mutex> lock(m_recursiveMutex);
 		Start();
 		if (m_active) //BeginUpdate();
 		{
@@ -19,7 +19,7 @@ namespace AEngine::Game
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
 		while (m_active)
 		{
-			lock_guard<mutex> lock(m_mutex);
+			lock_guard<mutex> lock(m_recursiveMutex);
 			BeforeUpdate();
 			Update();
 			AfterUpdate();
@@ -28,7 +28,7 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::OnRelease()
 	{
-		lock_guard<mutex> lock(m_mutex);
+		lock_guard<mutex> lock(m_recursiveMutex);
 		for (var& i : m_component)
 		{
 			i->OnRelease();
@@ -44,9 +44,9 @@ namespace AEngine::Game
 		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 	}*/
 
-	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
+	std::vector<ComponentBehaviour*> ObjectBehaviour::GetComponents()
 	{
-		return std::vector<ObjectBehaviour*>();
+		return m_component;
 	}
 
 	void ObjectBehaviour::BeforeUpdate()
@@ -63,10 +63,21 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::AddComponent(ComponentBehaviour * component)
 	{
+		lock_guard<mutex> lock(m_recursiveMutex);
+		m_component.emplace_back(component);
 	}
 
-	void ObjectBehaviour::RemoveComponentByName(string name)
+	void ObjectBehaviour::RemoveComponent(ComponentBehaviour* component)
 	{
+		lock_guard<mutex> lock(m_recursiveMutex);
+		for (var it = m_component.begin(); it != m_component.end(); ++it)
+		{
+			if (*it == component)
+			{
+				m_component.erase(it);
+				break;
+			}
+		}
 	}
 
 	bool ObjectBehaviour::Active()
@@ -76,6 +87,7 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::Active(bool b)
 	{
+		lock_guard<mutex> lock(m_recursiveMutex);
 		m_active = b;
 		if (b)
 		{

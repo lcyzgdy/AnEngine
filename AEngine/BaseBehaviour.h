@@ -25,7 +25,7 @@ namespace AEngine::Game
 		virtual void OnRelease() = 0;
 
 	protected:
-		std::mutex m_mutex;
+		std::recursive_mutex m_recursiveMutex;
 		//bool m_enable;
 
 	public:

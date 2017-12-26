@@ -14,7 +14,7 @@ namespace AEngine::Game
 	{
 		bool m_active;
 		Scene* m_scene;
-		std::mutex m_mutex;
+		std::recursive_mutex m_recursiveMutex;
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
@@ -52,7 +52,7 @@ namespace AEngine::Game
 		ObjectBehaviour() = default;
 		~ObjectBehaviour() = default;
 
-		std::vector<ObjectBehaviour*> GetComponents();
+		std::vector<ComponentBehaviour*> GetComponents();
 		template<typename T = ComponentBehaviour>
 		T* GetComponentByName(string name)
 		{
@@ -64,7 +64,7 @@ namespace AEngine::Game
 		}
 
 		void AddComponent(ComponentBehaviour* component);
-		void RemoveComponentByName(string name);
+		void RemoveComponent(ComponentBehaviour* component);
 
 		bool Active();
 		void Active(bool b);

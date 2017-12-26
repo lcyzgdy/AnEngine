@@ -6,17 +6,11 @@ namespace AEngine::Game
 {
 	void Camera::OnInit()
 	{
-		if (m_enable)
-		{
-			Utility::u_s_threadPool.Commit(std::bind(Camera::BeginUpdate, this));
-		}
+		ComponentBehaviour::OnInit();
+		lock_guard<recursive_mutex> lock(m_recursiveMutex);
 	}
 
 	void Camera::BeforeUpdate()
-	{
-	}
-
-	void Camera::OnUpdate()
 	{
 	}
 

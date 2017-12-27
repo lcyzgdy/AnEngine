@@ -24,7 +24,7 @@ namespace AEngine::Game
 		~GameObject() = default;
 
 		string name;
-		GameObject* const gameObject;
+		GameObject* gameObject;
 
 		GameObject* GetParent();
 		void SetParent(GameObject* newParent);

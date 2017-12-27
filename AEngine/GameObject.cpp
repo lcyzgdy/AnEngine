@@ -2,6 +2,9 @@
 
 namespace AEngine::Game
 {
+	void GameObject::DoNothing()
+	{
+	}
 	GameObject::GameObject() :gameObject(this), m_parentObject(nullptr)
 	{
 	}

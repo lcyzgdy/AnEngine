@@ -30,7 +30,7 @@ namespace AEngine::RenderCore::Resource
 	public:
 		ColorBuffer();
 		~ColorBuffer() = default;
-		ColorBuffer(Color clearColor);
+		ColorBuffer(const Color& clearColor);
 
 		// 从交换链缓冲区创建颜色缓冲区，无序访问受限。
 		void CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,

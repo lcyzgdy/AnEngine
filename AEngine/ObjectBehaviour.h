@@ -4,7 +4,7 @@
 
 #include"BaseBehaviour.h"
 #include"GameObject.h"
-#include"ComponentBehaviour.h"
+//#include"ComponentBehaviour.h"
 
 namespace AEngine::Game
 {
@@ -18,7 +18,7 @@ namespace AEngine::Game
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
-		std::vector<ComponentBehaviour*> m_component;
+		std::vector<ObjectBehaviour*> m_component;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
@@ -52,8 +52,8 @@ namespace AEngine::Game
 		ObjectBehaviour() = default;
 		~ObjectBehaviour() = default;
 
-		std::vector<ComponentBehaviour*> GetComponents();
-		template<typename T = ComponentBehaviour>
+		std::vector<ObjectBehaviour*> GetComponents();
+		template<typename T = ObjectBehaviour>
 		T* GetComponentByName(string name)
 		{
 			for (var& i : m_component)
@@ -63,8 +63,18 @@ namespace AEngine::Game
 			}
 		}
 
-		void AddComponent(ComponentBehaviour* component);
-		void RemoveComponent(ComponentBehaviour* component);
+		template<typename T = ObjectBehaviour>
+		T GetComponent()
+		{
+			for (var& i : m_component)
+			{
+				if (dynamic_cast<T*>(i) != nullptr)
+					return i;
+			}
+		}
+
+		void AddComponent(ObjectBehaviour* component);
+		void RemoveComponent(ObjectBehaviour* component);
 
 		bool Active();
 		void Active(bool b);

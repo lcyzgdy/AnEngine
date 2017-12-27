@@ -2,13 +2,14 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "ComponentBehaviour.h"
+//#include "ComponentBehaviour.h"
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
+#include "ObjectBehaviour.h"
 
 namespace AEngine::Game
 {
-	class Camera : public ComponentBehaviour
+	class Camera : public ObjectBehaviour
 	{
 		uint32_t m_cullingMask;
 		float m_nearDistance;
@@ -18,6 +19,7 @@ namespace AEngine::Game
 		RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
+	protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void BeforeUpdate() override;
@@ -26,7 +28,7 @@ namespace AEngine::Game
 		virtual void OnRelease() override;
 
 	public:
-		Camera() = default;
+		Camera();
 		~Camera() = default;
 
 		RenderCore::Resource::ColorBuffer* GetColorBuffer();

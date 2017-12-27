@@ -27,7 +27,7 @@ namespace AEngine
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
 		// 类的友元函数只能位于同一命名空间下。
 		// ************************************************************************************************
-		friend LRESULT WINAPI ::WinProc(HWND, unsigned int, WPARAM, LPARAM);
+		friend LRESULT WINAPI::WinProc(HWND, unsigned int, WPARAM, LPARAM);
 		friend class Driver;
 		//friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		//*/
@@ -39,18 +39,18 @@ namespace AEngine
 		ComPtr<IDirectInputDevice8> m_mouse;
 		HWND m_hwnd;
 		DIMOUSESTATE2 m_mouseState;
-		atomic<unsigned char> m_keyState[256];
-		atomic<bool> m_mouseButtonState[10];
-		atomic<bool> m_mouseButtonDownState[10];
-		atomic<bool> m_mouseButtonDownFlag[10];
+		std::atomic<unsigned char> m_keyState[256];
+		std::atomic<bool> m_mouseButtonState[10];
+		std::atomic<bool> m_mouseButtonDownState[10];
+		std::atomic<bool> m_mouseButtonDownFlag[10];
 		//atomic<XMVECTOR> m_curPosition;
 		//atomic<XMFLOAT3> m_curPosition;
 		XMFLOAT3 m_curPosition;
 		//atomic<BaseInput*> m_baseInput;
 
-		atomic_bool m_exit;
+		std::atomic_bool m_exit;
 		std::chrono::milliseconds m_delta;
-		mutex m_mutex;
+		std::mutex m_mutex;
 
 		BaseInput();
 		~BaseInput();

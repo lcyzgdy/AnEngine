@@ -11,7 +11,15 @@ namespace AEngine::Game
 		}
 	}
 
+	void Scene::BeforeUpdate()
+	{
+	}
+
 	void Scene::OnUpdate()
+	{
+	}
+
+	void Scene::AfterUpdate()
 	{
 	}
 
@@ -33,13 +41,13 @@ namespace AEngine::Game
 		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
 		for (var& i : behaviour->GetComponents())
 		{
-			lock_guard<std::mutex> lock(m_mutex);
+			lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
 			if (i)
 			{
 				m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(i));
 			}
 		}
-		lock_guard<std::mutex> lock(m_mutex);
+		lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
 		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
 	}
 
@@ -49,7 +57,7 @@ namespace AEngine::Game
 		{
 			RemoveObject(i);
 		}
-		lock_guard<std::mutex> lock(m_mutex);
+		lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
 		var behaviour = dynamic_cast<BaseBehaviour*>(dynamic_cast<ObjectBehaviour*>(obj));
 		behaviour->OnRelease();
 	}

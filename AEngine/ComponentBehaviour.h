@@ -23,11 +23,14 @@ namespace AEngine::Game
 
 	protected:
 		// 组件所依附的物体
-		const GameObject* m_refObject;
+		GameObject * m_refObject;
 		bool m_enable;
+
+		ComponentBehaviour(bool enable);
 
 		virtual void OnEnable();
 		virtual void OnDisable();
+		void SetGameObject(GameObject* gameObject);
 
 	public:
 		void Enable(bool enable);

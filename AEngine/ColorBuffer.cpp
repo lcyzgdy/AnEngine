@@ -12,7 +12,7 @@ namespace AEngine::RenderCore::Resource
 	{
 	}
 
-	ColorBuffer::ColorBuffer(Color clearColor) :
+	ColorBuffer::ColorBuffer(const Color& clearColor) :
 		m_clearColor(clearColor), m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
 	{
 		m_rtvHandle.ptr = GpuVirtualAddressUnknown;

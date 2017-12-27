@@ -10,10 +10,13 @@ namespace AEngine::RenderCore::Resource
 	{
 		//XMVECTOR m_color;
 		XMFLOAT4 m_color;
-	public:
-		Color();
+
 		Color(XMVECTOR vec);
 		Color(const XMVECTORF32& vec);
+
+	public:
+		Color();
+		Color(const Color& color);
 		Color(float r, float g, float b, float a = 1.0f);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color(uint32_t rgbaLittleEndian);
@@ -53,7 +56,13 @@ namespace AEngine::RenderCore::Resource
 
 		uint32_t R11G11B10F(bool RoundToEven = false) const;
 
-		operator XMVECTOR() const;
+		//operator XMVECTOR() const;
+
+		static const Color Black;
+		static const Color White;
+		static const Color Red;
+		static const Color Blue;
+		static const Color Green;
 	};
 
 	class Color32

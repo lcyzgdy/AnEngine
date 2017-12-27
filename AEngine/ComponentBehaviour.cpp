@@ -3,43 +3,50 @@
 
 namespace AEngine::Game
 {
-	/*void ComponentBehaviour::OnInit()
+	void ComponentBehaviour::OnInit()
 	{
-		lock_guard<mutex> lock(m_mutex);
 	}
 
 	void ComponentBehaviour::BeforeUpdate()
 	{
-	}*/
+	}
 
 	void ComponentBehaviour::OnUpdate()
 	{
 		while (this->m_enable)
 		{
-			std::lock_guard<std::mutex> lock(this->m_recursiveMutex);
+			std::lock_guard<std::recursive_mutex> lock(this->m_recursiveMutex);
 			this->BeforeUpdate();
 			this->Update();
 			this->AfterUpdate();
 		}
 	}
 
-	/*void ComponentBehaviour::AfterUpdate()
+	void ComponentBehaviour::Update()
+	{
+	}
+
+	void ComponentBehaviour::AfterUpdate()
 	{
 	}
 
 	void ComponentBehaviour::OnRelease()
 	{
-		lock_guard<mutex> lock(m_mutex);
-	}*/
+	}
 
 	void ComponentBehaviour::OnEnable()
 	{
-		lock_guard<mutex> lock(m_recursiveMutex);
+		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		Utility::u_s_threadPool.Commit(std::bind(&ComponentBehaviour::OnUpdate, this));
 	}
 
 	void ComponentBehaviour::OnDisable()
 	{
-		lock_guard<mutex> lock(m_recursiveMutex);
+		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+	}
+
+	ComponentBehaviour::ComponentBehaviour(bool enable) :m_enable(enable)
+	{
 	}
 
 	void ComponentBehaviour::Enable(bool enable)
@@ -48,7 +55,6 @@ namespace AEngine::Game
 		if (enable)
 		{
 			OnEnable();
-			Utility::u_s_threadPool.Commit(std::bind(&ComponentBehaviour::OnUpdate, this));
 		}
 		else
 		{

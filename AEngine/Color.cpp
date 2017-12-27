@@ -6,6 +6,10 @@ namespace AEngine::RenderCore::Resource
 	{
 	}
 
+	Color::Color(const Color & color) : m_color(color.m_color)
+	{
+	}
+
 	Color::Color(XMVECTOR vec)
 	{
 		//= vec;
@@ -203,10 +207,16 @@ namespace AEngine::RenderCore::Resource
 		return ret.u[0] >> 17 | ret.u[1] >> 6 | ret.u[2] << 4;
 	}
 
-	inline Color::operator XMVECTOR() const
+	/*inline Color::operator XMVECTOR() const
 	{
 		return XMLoadFloat4(&m_color);
-	}
+	}*/
+
+	const Color Color::Black = Color(0, 0, 0, 1);
+	const Color Color::Blue = Color(0, 0, 1, 1);
+	const Color Color::Green = Color(0, 1, 0, 1);
+	const Color Color::Red = Color(1, 0, 0, 1);
+	const Color Color::White = Color(1, 1, 1, 1);
 
 
 

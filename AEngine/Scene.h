@@ -17,7 +17,9 @@ namespace AEngine::Game
 		//protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
+		virtual void BeforeUpdate() override;
 		virtual void OnUpdate() override;
+		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
 
 	public:

@@ -8,22 +8,22 @@ namespace AEngine::RenderCore::Resource
 	{
 	}
 
-	UINT PixelBuffer::GetWidth()
+	uint32_t PixelBuffer::GetWidth()
 	{
 		return m_width;
 	}
 
-	UINT PixelBuffer::GetHeight()
+	uint32_t PixelBuffer::GetHeight()
 	{
 		return m_height;
 	}
 
-	UINT PixelBuffer::GetDepth()
+	uint32_t PixelBuffer::GetDepth()
 	{
 		return m_size;
 	}
 
-	const DXGI_FORMAT & PixelBuffer::GetFormat() const
+	DXGI_FORMAT PixelBuffer::GetFormat()
 	{
 		return m_format;
 	}
@@ -83,7 +83,7 @@ namespace AEngine::RenderCore::Resource
 		p_tempResource->Release();
 	}
 
-	DXGI_FORMAT PixelBuffer::GetBaseFormat(DXGI_FORMAT & format)
+	DXGI_FORMAT PixelBuffer::GetBaseFormat(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -130,7 +130,7 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	DXGI_FORMAT PixelBuffer::GetUAVFormat(DXGI_FORMAT & format)
+	DXGI_FORMAT PixelBuffer::GetUAVFormat(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -171,7 +171,7 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	DXGI_FORMAT PixelBuffer::GetDSVFormat(DXGI_FORMAT & format)
+	DXGI_FORMAT PixelBuffer::GetDSVFormat(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -206,7 +206,7 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	DXGI_FORMAT PixelBuffer::GetDepthFormat(DXGI_FORMAT & format)
+	DXGI_FORMAT PixelBuffer::GetDepthFormat(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -241,7 +241,7 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	DXGI_FORMAT PixelBuffer::GetStencilFormat(DXGI_FORMAT & format)
+	DXGI_FORMAT PixelBuffer::GetStencilFormat(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -264,7 +264,7 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	size_t PixelBuffer::BytesPerPixel(DXGI_FORMAT & format)
+	size_t PixelBuffer::BytesPerPixel(DXGI_FORMAT format)
 	{
 		switch (format)
 		{
@@ -365,7 +365,8 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	D3D12_RESOURCE_DESC PixelBuffer::DescribeTex2D(UINT width, UINT height, UINT depthOrArraySize, UINT numMips, DXGI_FORMAT format, UINT flags)
+	D3D12_RESOURCE_DESC PixelBuffer::DescribeTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips,
+		DXGI_FORMAT format, uint32_t flags)
 	{
 		m_width = width;
 		m_height = height;
@@ -374,20 +375,21 @@ namespace AEngine::RenderCore::Resource
 
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Alignment = 0;
-		desc.DepthOrArraySize = static_cast<UINT16>(depthOrArraySize);
+		desc.DepthOrArraySize = static_cast<uint16_t>(depthOrArraySize);
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Flags = static_cast<D3D12_RESOURCE_FLAGS>(flags);
 		desc.Format = GetBaseFormat(format);
-		desc.Height = static_cast<UINT>(height);
+		desc.Height = static_cast<uint32_t>(height);
 		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 		desc.MipLevels = static_cast<UINT16>(numMips);
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = 0;
-		desc.Width = static_cast<UINT64>(width);
+		desc.Width = static_cast<uint64_t>(width);
 		return desc;
 	}
 
-	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource * resource, D3D12_RESOURCE_STATES currentState)
+	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource * resource,
+		D3D12_RESOURCE_STATES currentState)
 	{
 		(device); // 支持多适配器时要改正!!!
 
@@ -429,7 +431,8 @@ namespace AEngine::RenderCore::Resource
 #endif
 	}
 
-	void PixelBuffer::CreateTextureResource(ID3D12Device * device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc, D3D12_CLEAR_VALUE clearValue)
+	void PixelBuffer::CreateTextureResource(ID3D12Device * device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc,
+		D3D12_CLEAR_VALUE clearValue)
 	{
 		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::GpuVirtualAddressUnknown);
 	}

@@ -14,7 +14,8 @@ namespace AEngine::RenderCore
 	{
 		queue<ComPtr<ID3D12GraphicsCommandList>> m_cp_commandListPool;
 		ComPtr<ID3D12Fence> m_fence;
-		std::mutex m_mutex;
+		std::mutex m_readerMutex;
+		std::mutex m_writerMutex;
 
 	public:
 		GraphicsCommandListPool();

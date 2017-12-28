@@ -1,5 +1,6 @@
 #include "ObjectBehaviour.h"
 #include "ThreadPool.hpp"
+#include "Scene.h"
 
 namespace AEngine::Game
 {
@@ -9,6 +10,7 @@ namespace AEngine::Game
 		Start();
 		if (m_active) //BeginUpdate();
 		{
+			OnActive();
 			Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 	}
@@ -34,6 +36,7 @@ namespace AEngine::Game
 			i->OnRelease();
 		}
 		Destory();
+		m_scene->RemoveObject(this);
 	}
 
 	/*void ObjectBehaviour::BeginUpdate()

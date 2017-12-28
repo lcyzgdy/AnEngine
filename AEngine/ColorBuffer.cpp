@@ -20,6 +20,27 @@ namespace AEngine::RenderCore::Resource
 		memset(m_uavHandle, 0xff, sizeof(m_uavHandle));
 	}
 
+	ColorBuffer::ColorBuffer(const wstring & name, ID3D12Device* device, uint32_t width, uint32_t height, uint32_t numMips,
+		DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips), m_fragmentCount(1)
+	{
+
+	}
+
+	ColorBuffer::ColorBuffer(const wstring & name, ID3D12Device* device, uint32_t width, uint32_t height, uint32_t numMips,
+		uint32_t msaaSampleCount, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) :
+		m_sampleCount(msaaSampleCount), m_numMipMaps(numMips), m_fragmentCount(1)
+	{
+		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl;
+		msaaQl.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		msaaQl.SampleCount = m_sampleCount;
+		msaaQl.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
+		device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msaaQl, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
+
+		CD3DX12_RESOURCE_DESC cdrd;
+
+		device->CreatePlacedResource()
+	}
+
 	void ColorBuffer::CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
 		ID3D12Device* device, RenderCore::Heap::DescriptorAllocator* heapDescAllocator)
 	{
@@ -39,15 +60,15 @@ namespace AEngine::RenderCore::Resource
 		return uint32_t();
 	}
 
-	void ColorBuffer::CreateDerivedViews(ID3D12Device * device, DXGI_FORMAT & format, uint32_t arraySize, uint32_t numMips)
+	void ColorBuffer::CreateDerivedViews(ID3D12Device * device, DXGI_FORMAT format, uint32_t arraySize, uint32_t numMips)
 	{
 	}
 
-	void ColorBuffer::Create(const wstring & name, uint32_t _width, uint32_t _height, uint32_t numMips, DXGI_FORMAT & format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
+	/*void ColorBuffer::Create(const wstring & name, uint32_t _width, uint32_t _height, uint32_t numMips, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
-	}
+	}*/
 
-	void ColorBuffer::CreateArray(const wstring & name, uint32_t _width, uint32_t _height, uint32_t arrayCount, DXGI_FORMAT & format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
+	void ColorBuffer::CreateArray(const wstring & name, uint32_t _width, uint32_t _height, uint32_t arrayCount, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
 	}
 

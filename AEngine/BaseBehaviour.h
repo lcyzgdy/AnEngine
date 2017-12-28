@@ -19,9 +19,9 @@ namespace AEngine::Game
 		// virtual void OnUpdate() = 0;
 
 		virtual void OnInit() = 0;
-		virtual void BeforeUpdate() = 0;
+		//virtual void BeforeUpdate() = 0;
 		virtual void OnUpdate() = 0;
-		virtual void AfterUpdate() = 0;
+		//virtual void AfterUpdate() = 0;
 		virtual void OnRelease() = 0;
 
 	protected:

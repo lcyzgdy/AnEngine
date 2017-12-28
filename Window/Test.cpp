@@ -10,6 +10,7 @@ void LoadScene()
 {
 	testScene = new Scene();
 	testCamera = new Camera();
+	testCamera->ClearFlag();
 	TestCamera* camera = new TestCamera();
 	camera->AddComponent(testCamera);
 	testScene->AddObject(camera);

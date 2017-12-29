@@ -22,7 +22,7 @@ using namespace std;
 
 namespace AEngine::RenderCore::Heap
 {
-	extern DescriptorAllocator r_h_heapDescAllocator;
+	extern DescriptorHeapAllocator r_h_heapDescAllocator;
 }
 
 namespace AEngine::RenderCore

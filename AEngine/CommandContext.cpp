@@ -2,27 +2,37 @@
 
 namespace AEngine::RenderCore
 {
-	GraphicsCommandListPool::GraphicsCommandListPool()
+	GraphicsCommandContext::GraphicsCommandContext()
 	{
-		
+
 	}
 
-	GraphicsCommandListPool * GraphicsCommandListPool::GetInstance()
+	GraphicsCommandContext * GraphicsCommandContext::GetInstance()
 	{
-		static GraphicsCommandListPool listPool;
+		static GraphicsCommandContext listPool;
 		return &listPool;
 	}
-	ID3D12GraphicsCommandList * GraphicsCommandListPool::GetCommandList()
+
+	CommandList * GraphicsCommandContext::GetCommandList()
 	{
+		lock_guard<mutex> lockr(m_readerMutex);
+		while (m_commandListPool.size() <= 0);
 		lock_guard<mutex> lock(m_mutex);
-		var list = m_cp_commandListPool.front();
-		m_cp_commandListPool.pop();
-		return const_cast<ID3D12GraphicsCommandList*>(list.Get());
+		var list = m_commandListPool.front();
+		m_commandListPool.pop();
+		return list;
 	}
 
-	void GraphicsCommandListPool::PushCommandList(ID3D12GraphicsCommandList * list)
+	void GraphicsCommandContext::PushCommandList(CommandList * list)
 	{
+		lock_guard<mutex> lockw(m_writerMutex);
 		lock_guard<std::mutex> lock(m_mutex);
-		m_cp_commandListPool.emplace(list);
+		m_commandListPool.emplace(list);
+	}
+
+	void GraphicsCommandContext::AddNewCommandList()
+	{
+		CommandList* list = new CommandList();
+		this->PushCommandList(list);
 	}
 }

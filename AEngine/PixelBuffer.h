@@ -24,7 +24,10 @@ namespace AEngine::RenderCore::Resource
 		size_t BytesPerPixel(DXGI_FORMAT format);
 
 		D3D12_RESOURCE_DESC DescribeTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize,
-			UINT numMips, DXGI_FORMAT format, uint32_t flags);
+			uint32_t numMips, DXGI_FORMAT format, uint32_t flags);
+
+		D3D12_RESOURCE_DESC DescribeMsaaTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize,
+			uint32_t numMips, DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl);
 
 		void AssociateWithResource(ID3D12Device* p_device, const wstring& name,
 			ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState);
@@ -38,6 +41,7 @@ namespace AEngine::RenderCore::Resource
 
 	public:
 		PixelBuffer();
+		PixelBuffer(uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format);
 		~PixelBuffer() = default;
 
 		uint32_t GetWidth();

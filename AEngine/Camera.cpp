@@ -37,7 +37,7 @@ namespace AEngine::Game
 
 	void Camera::AfterUpdate()
 	{
-		
+
 	}
 
 	void Camera::OnInvalid()
@@ -51,9 +51,10 @@ namespace AEngine::Game
 
 	Camera::Camera() : ObjectBehaviour(), m_clearFlag(ClearFlags::SkyBox)
 	{
-		m_colorBuffer = new ColorBuffer(Color::Blue);
-		m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
-
+		//m_colorBuffer = new ColorBuffer(Color::Blue);
+		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
+		m_colorBuffer = new ColorBuffer(L"", RenderCore::r_graphicCard[0]->GetDevice(), Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}

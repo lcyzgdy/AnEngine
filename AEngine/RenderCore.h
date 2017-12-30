@@ -48,6 +48,15 @@ namespace AEngine::RenderCore
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
 
 	void CreateCommonState();
+
+	
+
+
+
+	void RenderColorBuffer();
+
+	template<int n>
+	void BlendColorBuffer();
 }
 
 

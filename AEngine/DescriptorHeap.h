@@ -44,8 +44,13 @@ namespace AEngine::RenderCore::Heap
 
 	class DescriptorHandle
 	{
+		template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType> friend class DescriptorHeap;
+
 		D3D12_CPU_DESCRIPTOR_HANDLE m_cpuHandle;
 		D3D12_GPU_DESCRIPTOR_HANDLE m_gpuHandle;
+		void SetCpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle);
+		void SetGpuHandle(D3D12_GPU_DESCRIPTOR_HANDLE& gpuHandle);
+
 	public:
 		DescriptorHandle();
 		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle);
@@ -55,6 +60,7 @@ namespace AEngine::RenderCore::Heap
 		D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle();
 		D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHandle();
 
+
 		bool IsNull();
 		bool IsShaderVisible() const;
 
@@ -62,19 +68,82 @@ namespace AEngine::RenderCore::Heap
 		DescriptorHandle operator+(int offsetScaledByDescriptorSize);
 	};
 
-	class BaseDescriptorHeap :NonCopyable
+
+	template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType>
+	class DescriptorHeap : NonCopyable
 	{
-		ComPtr<ID3D12DescriptorHeap> m_heap;
-		D3D12_DESCRIPTOR_HEAP_TYPE m_type;
+		inline static uint32_t m_numDescripotrPerHeap = 256;
+		ComPtr<ID3D12DescriptorHeap> m_descriptorHeap;
+		uint32_t m_referenceCount;
+
+		DescriptorHandle m_handle;
 
 	public:
-		BaseDescriptorHeap() = default;
-		~BaseDescriptorHeap() = default;
-	};
+		explicit DescriptorHeap(ID3D12Device* device)
+		{
+			if (HeapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+			{
+				m_referenceCount++;
+				if (m_referenceCount > 1) return;
+			}
+			D3D12_DESCRIPTOR_HEAP_DESC desc;
+			desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			desc.NodeMask = 1;
+			desc.NumDescriptors = m_numDescripotrPerHeap;
+			desc.Type = HeapType;
+			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(m_descriptorHeap)));
 
-	class RtvDescriptorHeap : BaseDescriptorHeap
-	{
-		public
+			m_handle.SetCpuHandle(m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
+			m_handle.SetGpuHandle(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart());
+		}
+
+		~DescriptorHeap()
+		{
+			if (HeapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+			{
+				m_referenceCount--;
+				if (m_referenceCount > 0) return;
+			}
+			m_descriptorHeap->Release();
+		}
+
+		void* operator new(size_t size) noexcept(false)
+		{
+			if (HeapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+			{
+				static DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV> m_s_rtvDescriptorHeap;
+				return &m_s_rtvDescriptorHeap;
+			}
+			return ::operator new(size);
+		}
+
+		/*static void* operator new(size_t size, void* cachePointer)
+		{
+			return cachePointer;
+		}*/
+
+		void operator delete(void* ptr)
+		{
+			if (HeapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV
+				&& static_cast<DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>*>(ptr)->m_referenceCount > 0)
+				return;
+			::operator delete(ptr);
+		}
+
+		ID3D12DescriptorHeap* GetDescriptorHeap()
+		{
+			return m_descriptorHeap.Get();
+		}
+
+		void SetNumDescriportPerHeap(uint32_t num)
+		{
+			m_numDescripotrPerHeap = num;
+		}
+
+		DescriptorHandle GetHandle()
+		{
+			return m_handle;
+		}
 	};
 }
 #endif // !__DESCRIPTORHEAP_H__

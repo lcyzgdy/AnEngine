@@ -6,6 +6,16 @@ namespace AEngine::RenderCore::Heap
 {
 	DescriptorHeapAllocator r_h_heapDescAllocator;
 
+	void DescriptorHandle::SetCpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle)
+	{
+		m_cpuHandle = cpuHandle;
+	}
+
+	void DescriptorHandle::SetGpuHandle(D3D12_GPU_DESCRIPTOR_HANDLE& gpuHandle)
+	{
+		m_gpuHandle = gpuHandle;
+	}
+
 	DescriptorHandle::DescriptorHandle()
 	{
 		m_cpuHandle.ptr = GpuVirtualAddressUnknown;

@@ -49,7 +49,7 @@ namespace AEngine::RenderCore
 
 	void CreateCommonState();
 
-	
+
 
 
 
@@ -58,7 +58,7 @@ namespace AEngine::RenderCore
 	template<typename... Buffer>
 	void BlendBuffer(Buffer ...)
 	{
-		
+
 	}
 }
 

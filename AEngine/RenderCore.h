@@ -7,7 +7,7 @@
 #include<mutex>
 #include<atomic>
 #include"ColorBuffer.h"
-#include"DescriptorHeap.h"
+#include"DescriptorHeap.hpp"
 #include"RenderCoreConstants.h"
 #include"GraphicCard.h"
 #include"RootSignature.h"
@@ -36,7 +36,7 @@ namespace AEngine::RenderCore
 
 	extern vector<GraphicCard*> r_graphicCard;
 	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
-	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
 	extern int r_frameIndex;
 	extern RootSignature r_rootSignature;
 #ifdef _WIN32
@@ -53,10 +53,13 @@ namespace AEngine::RenderCore
 
 
 
-	void RenderColorBuffer();
+	void RenderColorBuffer(Resource::ColorBuffer* colorBuffer);
 
-	template<int n>
-	void BlendColorBuffer();
+	template<typename... Buffer>
+	void BlendBuffer(Buffer ...)
+	{
+		
+	}
 }
 
 

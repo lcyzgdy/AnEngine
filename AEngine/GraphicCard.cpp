@@ -108,14 +108,19 @@ namespace AEngine::RenderCore
 		}
 	}
 
-	const ID3D12Device2* GraphicCard::GetDevice() const
+	const ID3D12Device* GraphicCard::GetDevice() const
 	{
 		return m_cp_device.Get();
 	}
 
-	ID3D12Device2 * GraphicCard::GetDevice()
+	ID3D12Device * GraphicCard::GetDevice()
 	{
 		return m_cp_device.Get();
+	}
+
+	uint32_t GraphicCard::GetNodeNum()
+	{
+		return m_node;
 	}
 
 	void GraphicCard::IsStable(bool isStable)
@@ -183,7 +188,7 @@ namespace AEngine::RenderCore
 	}
 
 	GraphicCard::GraphicCard() :
-		m_stableFlag(false)
+		m_stableFlag(false), m_node(1)
 	{
 	}
 

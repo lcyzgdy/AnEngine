@@ -26,6 +26,7 @@ namespace AEngine::RenderCore
 		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
 		// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 		bool m_stableFlag;
+		uint32_t m_node;
 
 		void CreateDevice(IDXGIFactory4* dxgiFactory);
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -62,8 +63,9 @@ namespace AEngine::RenderCore
 		void Initialize(IDXGIFactory4* dxgiFactory, bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		const ID3D12Device2* GetDevice() const;
-		ID3D12Device2* GetDevice();
+		const ID3D12Device* GetDevice() const;
+		ID3D12Device* GetDevice();
+		uint32_t GetNodeNum();
 
 		void IsStable(bool isStable);
 	};

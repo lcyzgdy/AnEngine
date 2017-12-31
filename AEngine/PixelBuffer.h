@@ -27,7 +27,7 @@ namespace AEngine::RenderCore::Resource
 			uint32_t numMips, DXGI_FORMAT format, uint32_t flags);
 
 		D3D12_RESOURCE_DESC DescribeMsaaTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize,
-			uint32_t numMips, DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl);
+			uint32_t numMips, DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& msaaQl);
 
 		void AssociateWithResource(ID3D12Device* p_device, const wstring& name,
 			ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState);

@@ -1,19 +1,27 @@
 #include"RenderCore.h"
 #include"Screen.h"
+#include"CommandContext.h"
+#include"DescriptorHeap.hpp"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
+
+using namespace AEngine::RenderCore::Resource;
+using namespace AEngine::RenderCore::Heap;
 
 namespace AEngine::RenderCore
 {
 	vector<GraphicCard*> r_graphicCard;
 	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
-	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
 	int r_frameIndex;
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
+
+	D3D12_RESOURCE_BARRIER renderToCommon;
+	D3D12_RESOURCE_BARRIER commonToRender;
 
 	namespace Private
 	{
@@ -43,9 +51,10 @@ namespace AEngine::RenderCore
 			aRender->Initialize(Private::r_cp_dxgiFactory.Get());
 			r_graphicCard.emplace_back(aRender);
 		}
+		DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>();
+		rtv->Create(r_graphicCard[0]->GetDevice());
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
 		CreateCommonState();
-
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -64,11 +73,9 @@ namespace AEngine::RenderCore
 
 		ComPtr<IDXGISwapChain1> swapChain1;
 		//Private::r_cp_dxgiFactory->Create
-		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
-		(
-			const_cast<ID3D12CommandQueue*>(r_graphicCard[0]->GetCommandQueue()),
-			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
-		));
+		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd(r_graphicCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
+			nullptr, nullptr, swapChain1.GetAddressOf()));
+
 		swapChain1.As(&r_cp_swapChain);
 #if CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 		{
@@ -92,11 +99,14 @@ namespace AEngine::RenderCore
 #endif
 		for (uint32_t i = 0; i < r_cnt_SwapChainBufferCount; ++i)
 		{
-			ComPtr<ID3D12Resource> cp_displayPlane;
+			/*ComPtr<ID3D12Resource> cp_displayPlane;
 			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
 			r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer",
 				cp_displayPlane.Detach(), r_graphicCard[0]->GetDevice(),
-				&RenderCore::Heap::r_h_heapDescAllocator);
+				&RenderCore::Heap::r_h_heapDescAllocator);*/
+			r_displayPlane[i] = new Resource::ColorBuffer(L"Primary SwapChain Buffer", r_graphicCard[0],
+				Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), 1, DXGI_FORMAT_R8G8B8A8_UNORM);
+			r_displayPlane[i]->SetAsRenderTargetView(r_graphicCard[0]);
 		}
 #ifdef _WIN32
 		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
@@ -104,11 +114,46 @@ namespace AEngine::RenderCore
 
 		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
 
-
+		for (int i = 0; i < 8; i++)
+		{
+			CommandAllocator* allocator = new CommandAllocator(r_graphicCard[0]->GetDevice());
+			GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(allocator);
+			CommandFormatDesc desc;
+			desc.allocator = allocator->GetAllocator();
+			desc.nodeMask = 1;
+			desc.pipelineState = nullptr;
+			CommandList* list = new CommandList(r_graphicCard[0]->GetDevice(), desc);
+			GraphicsCommandContext::GetInstance()->AddNewCommandList(list);
+		}
 	}
 
 	void CreateCommonState()
 	{
-		return;
+		commonToRender.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		commonToRender.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		commonToRender.Transition.pResource = nullptr;
+		commonToRender.Transition.Subresource = 0;
+		commonToRender.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		commonToRender.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+		renderToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		renderToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		renderToCommon.Transition.pResource = nullptr;
+		renderToCommon.Transition.Subresource = 0;
+		renderToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		renderToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+	}
+
+
+	void RenderColorBuffer(ColorBuffer* colorBuffer)
+	{
+		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList()->GetCommandList();
+
+		commandList->ResourceBarrier(1, &commonToRender);
+		commandList->ClearRenderTargetView(colorBuffer->GetRTV(), colorBuffer->GetClearColor().GetPtr(), 0, nullptr);
+		commandList->ResourceBarrier(1, &renderToCommon);
+		commandList->Close();
+		r_graphicCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
+		r_cp_swapChain->Present(0, 0);
 	}
 }

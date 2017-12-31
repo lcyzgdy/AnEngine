@@ -389,7 +389,7 @@ namespace AEngine::RenderCore::Resource
 	}
 
 	D3D12_RESOURCE_DESC PixelBuffer::DescribeMsaaTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize, uint32_t numMips,
-		DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl)
+		DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& msaaQl)
 	{
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Alignment = 0;

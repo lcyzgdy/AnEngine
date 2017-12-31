@@ -10,7 +10,7 @@ namespace AEngine::RenderCore::Resource
 	{
 	}
 
-	GpuResource::GpuResource(ID3D12Resource * resource, D3D12_RESOURCE_STATES currentState) :
+	GpuResource::GpuResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState) :
 		m_gpuVirtualAddress(Resource::GpuVirtualAddressNull),
 		m_p_userAllocatedMemory(nullptr),
 		m_cp_resource(resource),
@@ -31,22 +31,22 @@ namespace AEngine::RenderCore::Resource
 		}
 	}
 
-	ID3D12Resource * GpuResource::operator->()
+	ID3D12Resource* GpuResource::operator->()
 	{
 		return m_cp_resource.Get();
 	}
 
-	const ID3D12Resource * GpuResource::operator->() const
+	const ID3D12Resource* GpuResource::operator->() const
 	{
 		return m_cp_resource.Get();
 	}
 
-	ID3D12Resource * GpuResource::GetResource()
+	ID3D12Resource* GpuResource::GetResource()
 	{
 		return m_cp_resource.Get();
 	}
 
-	const ID3D12Resource * GpuResource::GetResource() const
+	const ID3D12Resource* GpuResource::GetResource() const
 	{
 		return m_cp_resource.Get();
 	}

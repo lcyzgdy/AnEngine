@@ -8,6 +8,11 @@
 #include<queue>
 #include"DX.h"
 
+namespace AEngine::RenderCore
+{
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable);
+}
+
 namespace AEngine::RenderCore::Heap
 {
 	class DescriptorHeapAllocator
@@ -72,11 +77,26 @@ namespace AEngine::RenderCore::Heap
 	template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType>
 	class DescriptorHeap : NonCopyable
 	{
+		friend void ::AEngine::RenderCore::InitializeRender(HWND hwnd, int graphicCardCount, bool isStable);
+
 		inline static uint32_t m_numDescripotrPerHeap = 256;
 		ComPtr<ID3D12DescriptorHeap> m_descriptorHeap;
 		uint32_t m_referenceCount;
 
 		DescriptorHandle m_handle;
+
+		void Create(ID3D12Device* device)
+		{
+			D3D12_DESCRIPTOR_HEAP_DESC desc;
+			desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			desc.NodeMask = 1;
+			desc.NumDescriptors = m_numDescripotrPerHeap;
+			desc.Type = HeapType;
+			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_descriptorHeap)));
+
+			m_handle.SetCpuHandle(m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
+			m_handle.SetGpuHandle(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart());
+		}
 
 	public:
 		explicit DescriptorHeap(ID3D12Device* device)
@@ -91,10 +111,19 @@ namespace AEngine::RenderCore::Heap
 			desc.NodeMask = 1;
 			desc.NumDescriptors = m_numDescripotrPerHeap;
 			desc.Type = HeapType;
-			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(m_descriptorHeap)));
+			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_descriptorHeap)));
 
 			m_handle.SetCpuHandle(m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
 			m_handle.SetGpuHandle(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart());
+		}
+
+		explicit DescriptorHeap()
+		{
+			if (HeapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+			{
+				m_referenceCount++;
+				if (m_referenceCount > 1) return;
+			}
 		}
 
 		~DescriptorHeap()
@@ -104,7 +133,7 @@ namespace AEngine::RenderCore::Heap
 				m_referenceCount--;
 				if (m_referenceCount > 0) return;
 			}
-			m_descriptorHeap->Release();
+			//m_descriptorHeap.Release();
 		}
 
 		void* operator new(size_t size) noexcept(false)

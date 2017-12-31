@@ -1,10 +1,10 @@
-#include "DescriptorHeap.h"
+#include "DescriptorHeap.hpp"
 #include "RenderCore.h"
 using namespace AEngine::RenderCore::Resource;
 
 namespace AEngine::RenderCore::Heap
 {
-	DescriptorHeapAllocator r_h_heapDescAllocator;
+	//DescriptorHeapAllocator r_h_heapDescAllocator;
 
 	void DescriptorHandle::SetCpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle)
 	{

@@ -40,69 +40,69 @@ namespace AEngine::RenderCore::Resource
 		XMStoreFloat4(&m_color, XMVectorScale(XMVectorSet(r, g, b, a), 1.0f / 255.0f));
 	}
 
-	inline float Color::R() const
+	float Color::R() const
 	{
 		//return XMVectorGetX(m_color);
 		return m_color.x;
 	}
 
-	inline float Color::G() const
+	float Color::G() const
 	{
 		//return XMVectorGetY(m_color);
 		return m_color.y;
 	}
 
-	inline float Color::B() const
+	float Color::B() const
 	{
 		//return XMVectorGetZ(m_color);
 		return m_color.z;
 	}
 
-	inline float Color::A() const
+	float Color::A() const
 	{
 		//return XMVectorGetW(m_color);
 		return m_color.w;
 	}
 
-	inline bool Color::operator==(const Color & rhs) const
+	bool Color::operator==(const Color & rhs) const
 	{
 		//return XMVector4Equal(m_color, rhs.m_color);
 		return m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w;
 	}
 
-	inline bool Color::operator!=(const Color & rhs) const
+	bool Color::operator!=(const Color & rhs) const
 	{
 		//return !XMVector4Equal(m_color, rhs.m_color);
 		return !(m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w);
 	}
 
-	inline void Color::SetR(float r)
+	void Color::SetR(float r)
 	{
 		//m_color = XMVectorSetX(m_color, r);
 		m_color.x = r;
 	}
 
-	inline void Color::SetG(float g)
+	void Color::SetG(float g)
 	{
 		//m_color = XMVectorSetY(m_color, g);
 		m_color.y = g;
 	}
 
-	inline void Color::SetB(float b)
+	void Color::SetB(float b)
 	{
 		//m_color = XMVectorSetZ(m_color, b);
 		m_color.z = b;
 	}
 
-	inline void Color::SetA(float a)
+	void Color::SetA(float a)
 	{
 		//m_color = XMVectorSetW(m_color, a);
 		m_color.w = a;
 	}
 
-	inline float* Color::GetPtr(void)
+	float* Color::GetPtr(void)
 	{
 		return reinterpret_cast<float*>(&m_color);
 	}
@@ -112,7 +112,7 @@ namespace AEngine::RenderCore::Resource
 		return GetPtr()[index];
 	}*/
 
-	inline void Color::SetRGB(float r, float g, float b)
+	void Color::SetRGB(float r, float g, float b)
 	{
 		//m_color = XMVectorSelect(m_color, XMVectorSet(r, g, b, b), g_XMMask3);
 		m_color.x = r;
@@ -120,7 +120,7 @@ namespace AEngine::RenderCore::Resource
 		m_color.z = b;
 	}
 
-	inline Color Color::ToSRGB() const
+	Color Color::ToSRGB() const
 	{
 		XMVECTOR T = XMVectorSaturate(XMLoadFloat4(&m_color));
 		XMVECTOR result = XMVectorSubtract(XMVectorScale(XMVectorPow(T, XMVectorReplicate(1.0f / 2.4f)), 1.055f), XMVectorReplicate(0.055f));
@@ -128,7 +128,7 @@ namespace AEngine::RenderCore::Resource
 		return XMVectorSelect(T, result, g_XMSelect1110);
 	}
 
-	inline Color Color::FromSRGB() const
+	Color Color::FromSRGB() const
 	{
 		//XMVECTOR T = XMVectorSaturate(m_color);
 		XMVECTOR T = XMVectorSaturate(XMLoadFloat4(&m_color));
@@ -137,7 +137,7 @@ namespace AEngine::RenderCore::Resource
 		return XMVectorSelect(T, result, g_XMSelect1110);
 	}
 
-	inline Color Color::ToREC709() const
+	Color Color::ToREC709() const
 	{
 		//XMVECTOR T = XMVectorSaturate(m_color);
 		XMVECTOR T = XMVectorSaturate(XMLoadFloat4(&m_color));
@@ -146,7 +146,7 @@ namespace AEngine::RenderCore::Resource
 		return XMVectorSelect(T, result, g_XMSelect1110);
 	}
 
-	inline Color Color::FromREC709() const
+	Color Color::FromREC709() const
 	{
 		//XMVECTOR T = XMVectorSaturate(m_color);
 		XMVECTOR T = XMVectorSaturate(XMLoadFloat4(&m_color));
@@ -155,7 +155,7 @@ namespace AEngine::RenderCore::Resource
 		return XMVectorSelect(T, result, g_XMSelect1110);
 	}
 
-	inline uint32_t Color::R10G10B10A2() const
+	uint32_t Color::R10G10B10A2() const
 	{
 		XMVECTOR result = XMVectorRound(XMVectorMultiply(XMVectorSaturate(XMLoadFloat4(&m_color)), XMVectorSet(1023.0f, 1023.0f, 1023.0f, 3.0f)));
 		result = _mm_castsi128_ps(_mm_cvttps_epi32(result));
@@ -166,7 +166,7 @@ namespace AEngine::RenderCore::Resource
 		return a << 30 | b << 20 | g << 10 | r;
 	}
 
-	inline uint32_t Color::R8G8B8A8() const
+	uint32_t Color::R8G8B8A8() const
 	{
 		XMVECTOR result = XMVectorRound(XMVectorMultiply(XMVectorSaturate(XMLoadFloat4(&m_color)), XMVectorReplicate(255.0f)));
 		result = _mm_castsi128_ps(_mm_cvttps_epi32(result));
@@ -177,7 +177,7 @@ namespace AEngine::RenderCore::Resource
 		return a << 24 | b << 16 | g << 8 | r;
 	}
 
-	inline uint32_t Color::R11G11B10F(bool roundToEven) const
+	uint32_t Color::R11G11B10F(bool roundToEven) const
 	{
 		static XMVECTORU32 Scale = { 0x07800000, 0x07800000, 0x07800000, 0 }; // 2^-112
 		static XMVECTORU32 Round1 = { 0x00010000, 0x00010000, 0x00020000, 0 };

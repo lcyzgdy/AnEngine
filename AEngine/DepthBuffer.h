@@ -3,7 +3,7 @@
 #define __DEPTHBUFFER_H__
 #include"DX.h"
 #include"PixelBuffer.h"
-#include"DescriptorHeap.h"
+#include"DescriptorHeap.hpp"
 using namespace std;
 using namespace AEngine::RenderCore::Resource;
 

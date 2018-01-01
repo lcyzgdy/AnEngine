@@ -406,7 +406,7 @@ namespace AEngine::RenderCore::Resource
 		return desc;
 	}
 
-	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource * resource,
+	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource* resource,
 		D3D12_RESOURCE_STATES currentState)
 	{
 		(device); // 支持多适配器时要改正!!!

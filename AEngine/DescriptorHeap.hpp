@@ -17,7 +17,7 @@ namespace AEngine::RenderCore::Heap
 {
 	class DescriptorHeapAllocator
 	{
-		// RTV, SRV, UAV, 
+		static DescriptorHeapAllocator* m_uniqueObj;
 	protected:
 		const uint32_t m_NumDescriptorPerHeap = 256;
 		mutex m_mutex;
@@ -30,15 +30,14 @@ namespace AEngine::RenderCore::Heap
 		uint32_t m_remainingFreeHandles[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
 		ID3D12DescriptorHeap* RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device);
+		void DestoryAll();
+
+		DescriptorHeapAllocator() = default;
+		~DescriptorHeapAllocator();
 
 	public:
-		DescriptorHeapAllocator() = default;
-		DescriptorHeapAllocator(D3D12_DESCRIPTOR_HEAP_TYPE type);
-		~DescriptorHeapAllocator() = default;
-
 		D3D12_CPU_DESCRIPTOR_HANDLE Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device,
 			uint32_t count = 1);
-		void DestoryAll();
 
 		static DescriptorHeapAllocator* GetInstance();
 
@@ -49,7 +48,7 @@ namespace AEngine::RenderCore::Heap
 
 	class DescriptorHandle
 	{
-		template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType> friend class DescriptorHeap;
+		//template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType> friend class DescriptorHeap;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE m_cpuHandle;
 		D3D12_GPU_DESCRIPTOR_HANDLE m_gpuHandle;
@@ -62,8 +61,8 @@ namespace AEngine::RenderCore::Heap
 		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle);
 		~DescriptorHandle() = default;
 
-		D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle();
-		D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHandle();
+		D3D12_CPU_DESCRIPTOR_HANDLE& GetCpuHandle();
+		D3D12_GPU_DESCRIPTOR_HANDLE& GetGpuHandle();
 
 
 		bool IsNull();
@@ -73,7 +72,7 @@ namespace AEngine::RenderCore::Heap
 		DescriptorHandle operator+(int offsetScaledByDescriptorSize);
 	};
 
-
+	/*
 	template<D3D12_DESCRIPTOR_HEAP_TYPE HeapType>
 	class DescriptorHeap : NonCopyable
 	{
@@ -84,6 +83,7 @@ namespace AEngine::RenderCore::Heap
 		uint32_t m_referenceCount;
 
 		DescriptorHandle m_handle;
+		D3D12_CPU_DESCRIPTOR_HANDLE m_cpuHandle;
 
 		void Create(ID3D12Device* device)
 		{
@@ -93,7 +93,7 @@ namespace AEngine::RenderCore::Heap
 			desc.NumDescriptors = m_numDescripotrPerHeap;
 			desc.Type = HeapType;
 			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_descriptorHeap)));
-
+			m_cpuHandle = m_descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 			m_handle.SetCpuHandle(m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
 			m_handle.SetGpuHandle(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart());
 		}
@@ -112,7 +112,7 @@ namespace AEngine::RenderCore::Heap
 			desc.NumDescriptors = m_numDescripotrPerHeap;
 			desc.Type = HeapType;
 			ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_descriptorHeap)));
-
+			m_cpuHandle = m_descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 			m_handle.SetCpuHandle(m_descriptorHeap->GetCPUDescriptorHandleForHeapStart());
 			m_handle.SetGpuHandle(m_descriptorHeap->GetGPUDescriptorHandleForHeapStart());
 		}
@@ -149,7 +149,7 @@ namespace AEngine::RenderCore::Heap
 		/*static void* operator new(size_t size, void* cachePointer)
 		{
 			return cachePointer;
-		}*/
+		}
 
 		void operator delete(void* ptr)
 		{
@@ -173,6 +173,11 @@ namespace AEngine::RenderCore::Heap
 		{
 			return m_handle;
 		}
-	};
+
+		void OffsetHandle(uint32_t size)
+		{
+
+		}
+	};*/
 }
 #endif // !__DESCRIPTORHEAP_H__

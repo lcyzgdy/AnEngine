@@ -20,7 +20,7 @@ namespace AEngine::RenderCore::Resource
 		memset(m_uavHandle, 0xff, sizeof(m_uavHandle));
 	}
 
-	ColorBuffer::ColorBuffer(const wstring & name, GraphicCard* device, uint32_t width, uint32_t height, uint32_t numMips,
+	ColorBuffer::ColorBuffer(const wstring & name, GraphicsCard* device, uint32_t width, uint32_t height, uint32_t numMips,
 		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips), m_fragmentCount(1)
 	{
 		var desc = DescribeTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE);
@@ -42,7 +42,7 @@ namespace AEngine::RenderCore::Resource
 			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf()));
 	}
 
-	ColorBuffer::ColorBuffer(const wstring & name, GraphicCard* device, uint32_t width, uint32_t height, uint32_t numMips,
+	ColorBuffer::ColorBuffer(const wstring & name, GraphicsCard* device, uint32_t width, uint32_t height, uint32_t numMips,
 		uint32_t msaaSampleCount, DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) :
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_sampleCount(msaaSampleCount),
 		m_numMipMaps(numMips), m_fragmentCount(1)
@@ -72,12 +72,11 @@ namespace AEngine::RenderCore::Resource
 			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf()));
 	}
 
-	void ColorBuffer::CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
-		ID3D12Device* device, RenderCore::Heap::DescriptorHeapAllocator* heapDescAllocator)
+	ColorBuffer::ColorBuffer(const wstring & name, ID3D12Resource * baseResource, ID3D12Device * device, D3D12_CPU_DESCRIPTOR_HANDLE handle)
 	{
 		// 和资源进行关联，状态是present（呈现）。
 		AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
-		m_rtvHandle = heapDescAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, device);
+		m_rtvHandle = handle;
 		device->CreateRenderTargetView(m_cp_resource.Get(), nullptr, m_rtvHandle);
 	}
 
@@ -91,7 +90,7 @@ namespace AEngine::RenderCore::Resource
 		return uint32_t();
 	}
 
-	void ColorBuffer::CreateDerivedViews(ID3D12Device * device, DXGI_FORMAT format, uint32_t arraySize, uint32_t numMips)
+	void ColorBuffer::CreateDerivedViews(ID3D12Device* device, DXGI_FORMAT format, uint32_t arraySize, uint32_t numMips)
 	{
 	}
 
@@ -99,7 +98,7 @@ namespace AEngine::RenderCore::Resource
 	{
 	}*/
 
-	void ColorBuffer::CreateArray(const wstring & name, uint32_t _width, uint32_t _height, uint32_t arrayCount, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
+	void ColorBuffer::CreateArray(const wstring& name, uint32_t _width, uint32_t _height, uint32_t arrayCount, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
 	}
 
@@ -133,10 +132,13 @@ namespace AEngine::RenderCore::Resource
 		return m_clearColor;
 	}
 
-	void ColorBuffer::SetAsRenderTargetView(GraphicCard* device)
+	void ColorBuffer::SetAsRenderTargetView(GraphicsCard* device)
 	{
-		Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(device->GetDevice());
-		device->GetDevice()->CreateRenderTargetView(m_cp_resource.Get(), nullptr, rtv->GetHandle().GetCpuHandle());
-		m_rtvHandle = rtv->GetHandle().GetCpuHandle();
+		//Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(device->GetDevice());
+		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, device->GetDevice());
+		device->GetDevice()->CreateRenderTargetView(m_cp_resource.Get(), nullptr, handle);
+		//m_rtvHandle = rtv->GetHandle().GetCpuHandle();
+		m_rtvHandle = handle;
+		//rtv->OffsetHandle(device->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 	}
 }

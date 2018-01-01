@@ -34,7 +34,7 @@ namespace AEngine::RenderCore
 		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	extern vector<GraphicCard*> r_graphicCard;
+	extern vector<GraphicsCard*> r_graphicsCard;
 	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
 	extern Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
 	extern int r_frameIndex;
@@ -45,21 +45,12 @@ namespace AEngine::RenderCore
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
-
 	void CreateCommonState();
-
-
-
 
 
 	void RenderColorBuffer(Resource::ColorBuffer* colorBuffer);
 
-	template<typename... Buffer>
-	void BlendBuffer(Buffer ...)
-	{
-
-	}
+	void BlendColorBuffer();
 }
 
 

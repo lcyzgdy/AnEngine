@@ -9,7 +9,7 @@
 namespace AEngine::RenderCore
 {
 	// 显卡设备接口。
-	class GraphicCard : public NonCopyable
+	class GraphicsCard : public NonCopyable
 	{
 		ComPtr<ID3D12Device2> m_cp_device;
 
@@ -57,8 +57,8 @@ namespace AEngine::RenderCore
 		}
 
 	public:
-		GraphicCard();
-		~GraphicCard() = default;
+		GraphicsCard();
+		~GraphicsCard() = default;
 
 		void Initialize(IDXGIFactory4* dxgiFactory, bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;

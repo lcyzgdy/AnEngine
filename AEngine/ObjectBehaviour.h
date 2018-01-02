@@ -61,7 +61,7 @@ namespace AEngine::Game
 		virtual void Destory();
 
 	public:
-		ObjectBehaviour() = default;
+		ObjectBehaviour(std::wstring name);
 		~ObjectBehaviour() = default;
 
 		std::vector<ObjectBehaviour*> GetComponents();

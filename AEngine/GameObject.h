@@ -19,10 +19,10 @@ namespace AEngine::Game
 		GameObject* m_parentObject;
 
 	public:
-		GameObject();
+		explicit GameObject(std::wstring name);
 		~GameObject() = default;
 
-		string name;
+		wstring name;
 		GameObject* gameObject;
 		Transform transform;
 

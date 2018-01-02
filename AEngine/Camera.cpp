@@ -38,6 +38,7 @@ namespace AEngine::Game
 	void Camera::AfterUpdate()
 	{
 		RenderCore::RenderColorBuffer(m_colorBuffer);
+		RenderCore::BlendBuffer(m_colorBuffer);
 	}
 
 	void Camera::OnInvalid()
@@ -49,19 +50,22 @@ namespace AEngine::Game
 
 	}
 
-	Camera::Camera() : ObjectBehaviour(), m_clearFlag(ClearFlags::SkyBox)
+	Camera::Camera(wstring name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
 	{
 		//m_colorBuffer = new ColorBuffer(Color::Blue);
 		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
 		m_colorBuffer = new ColorBuffer(L"", RenderCore::r_graphicsCard[0], Screen::GetInstance()->Width(),
-			Screen::GetInstance()->Height(), 1, DXGI_FORMAT_R8G8B8A8_UNORM);
-
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetAsRenderTargetView(RenderCore::r_graphicsCard[0]);
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}
 
-	Camera::Camera(ClearFlags clearFlag) : m_clearFlag(clearFlag)
+	Camera::Camera(wstring name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
 	{
-		m_colorBuffer = new ColorBuffer(Color::Blue);
+		m_colorBuffer = new ColorBuffer(L"", RenderCore::r_graphicsCard[0], Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetClearColor(Color::Blue);
+		m_colorBuffer->SetAsRenderTargetView(RenderCore::r_graphicsCard[0]);
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}
 

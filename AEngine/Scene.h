@@ -23,8 +23,10 @@ namespace AEngine::Game
 		virtual void OnRelease() override;
 
 	public:
-		Scene() = default;
+		Scene(std::wstring _name);
 		~Scene() = default;
+
+		std::wstring name;
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);

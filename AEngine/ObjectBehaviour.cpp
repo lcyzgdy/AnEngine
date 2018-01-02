@@ -30,6 +30,7 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::OnRelease()
 	{
+		m_active = false;
 		lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		for (var& i : m_component)
 		{
@@ -81,6 +82,10 @@ namespace AEngine::Game
 	}
 
 	void ObjectBehaviour::Destory()
+	{
+	}
+
+	ObjectBehaviour::ObjectBehaviour(std::wstring name) :GameObject(name), m_active(true)
 	{
 	}
 

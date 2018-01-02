@@ -36,10 +36,10 @@ namespace AEngine::RenderCore::Resource
 		heapDesc.Properties.VisibleNodeMask = device->GetNodeNum();
 		heapDesc.Alignment = allocationInfo.Alignment;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
-		device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf()));
+		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf())));
 
-		device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
-			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf()));
+		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
+			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf())));
 	}
 
 	ColorBuffer::ColorBuffer(const wstring & name, GraphicsCard* device, uint32_t width, uint32_t height, uint32_t numMips,
@@ -51,11 +51,11 @@ namespace AEngine::RenderCore::Resource
 		msaaQl.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		msaaQl.SampleCount = msaaSampleCount;
 		msaaQl.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
-		device->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msaaQl, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
+		ThrowIfFailed(device->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msaaQl, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS)));
 
-		var desc = DescribeMsaaTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE, msaaQl);
+		var desc = DescribeMsaaTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE | 1, msaaQl);
 		// 确定资源大小
-		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetDevice()->GetResourceAllocationInfo(1, 1, &desc);
+		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetDevice()->GetResourceAllocationInfo(0x1, 1, &desc);
 		// 创建资源堆，现在使用默认堆
 		D3D12_HEAP_DESC heapDesc;
 		heapDesc.SizeInBytes = allocationInfo.SizeInBytes;
@@ -66,10 +66,10 @@ namespace AEngine::RenderCore::Resource
 		heapDesc.Properties.VisibleNodeMask = device->GetNodeNum();
 		heapDesc.Alignment = allocationInfo.Alignment;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
-		device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf()));
+		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf())));
 
-		device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
-			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf()));
+		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
+			nullptr, IID_PPV_ARGS(m_cp_resource.GetAddressOf())));
 	}
 
 	ColorBuffer::ColorBuffer(const wstring & name, ID3D12Resource * baseResource, ID3D12Device * device, D3D12_CPU_DESCRIPTOR_HANDLE handle)

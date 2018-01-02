@@ -37,7 +37,7 @@ namespace AEngine::RenderCore
 	extern vector<GraphicsCard*> r_graphicsCard;
 	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
 	extern Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
-	extern int r_frameIndex;
+	extern uint32_t r_frameIndex;
 	extern RootSignature r_rootSignature;
 #ifdef _WIN32
 	extern HWND r_hwnd;
@@ -48,9 +48,9 @@ namespace AEngine::RenderCore
 	void CreateCommonState();
 
 
-	void RenderColorBuffer(Resource::ColorBuffer* colorBuffer);
+	void RenderColorBuffer(Resource::ColorBuffer* destColorBuffer);
 
-	void BlendColorBuffer();
+	void BlendBuffer(Resource::GpuResource* buffer);
 }
 
 

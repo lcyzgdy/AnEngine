@@ -10,4 +10,6 @@ void LoadScene();
 
 class TestCamera :public AEngine::Game::ObjectBehaviour
 {
+public:
+	TestCamera(std::wstring name);
 };

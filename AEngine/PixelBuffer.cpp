@@ -392,7 +392,7 @@ namespace AEngine::RenderCore::Resource
 		DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& msaaQl)
 	{
 		D3D12_RESOURCE_DESC desc = {};
-		desc.Alignment = 0;
+		desc.Alignment = D3D12_DEFAULT_MSAA_RESOURCE_PLACEMENT_ALIGNMENT;
 		desc.DepthOrArraySize = static_cast<uint16_t>(depthOrArraySize);
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Flags = static_cast<D3D12_RESOURCE_FLAGS>(flags);

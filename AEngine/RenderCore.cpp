@@ -15,16 +15,17 @@ namespace AEngine::RenderCore
 	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
 	Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
-	int r_frameIndex;
+	uint32_t r_frameIndex;
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
 
-	D3D12_RESOURCE_BARRIER commonToRender;
-	D3D12_RESOURCE_BARRIER renderToCommon;
-	D3D12_RESOURCE_BARRIER commonToResolveDest;
-	D3D12_RESOURCE_BARRIER resolveDestToCommon;
-	D3D12_RESOURCE_BARRIER renderTargetToResolveDest;
+	D3D12_RESOURCE_BARRIER r_commonToRenderTarget;
+	D3D12_RESOURCE_BARRIER r_renderTargetToCommon;
+	D3D12_RESOURCE_BARRIER r_commonToResolveDest;
+	D3D12_RESOURCE_BARRIER r_resolveDestToCommon;
+	D3D12_RESOURCE_BARRIER r_renderTargetToResolveDest;
+	D3D12_RESOURCE_BARRIER r_resolveSourceToRenderTarget;
 
 	namespace Private
 	{
@@ -140,52 +141,92 @@ namespace AEngine::RenderCore
 
 	void CreateCommonState()
 	{
-		commonToRender.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		commonToRender.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		commonToRender.Transition.pResource = nullptr;
-		commonToRender.Transition.Subresource = 0;
-		commonToRender.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
-		commonToRender.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		r_commonToRenderTarget.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_commonToRenderTarget.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_commonToRenderTarget.Transition.pResource = nullptr;
+		r_commonToRenderTarget.Transition.Subresource = 0;
+		r_commonToRenderTarget.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		r_commonToRenderTarget.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
-		renderToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		renderToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		renderToCommon.Transition.pResource = nullptr;
-		renderToCommon.Transition.Subresource = 0;
-		renderToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		renderToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+		r_renderTargetToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_renderTargetToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_renderTargetToCommon.Transition.pResource = nullptr;
+		r_renderTargetToCommon.Transition.Subresource = 0;
+		r_renderTargetToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		r_renderTargetToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
 
-		commonToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		commonToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		commonToResolveDest.Transition.pResource = nullptr;
-		commonToResolveDest.Transition.Subresource = 0;
-		commonToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
-		commonToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+		r_commonToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_commonToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_commonToResolveDest.Transition.pResource = nullptr;
+		r_commonToResolveDest.Transition.Subresource = 0;
+		r_commonToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		r_commonToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
 
-		resolveDestToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		resolveDestToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		resolveDestToCommon.Transition.pResource = nullptr;
-		resolveDestToCommon.Transition.Subresource = 0;
-		resolveDestToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_DEST;
-		resolveDestToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+		r_resolveDestToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_resolveDestToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_resolveDestToCommon.Transition.pResource = nullptr;
+		r_resolveDestToCommon.Transition.Subresource = 0;
+		r_resolveDestToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+		r_resolveDestToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
 
-		renderTargetToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		renderTargetToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		renderTargetToResolveDest.Transition.pResource = nullptr;
-		renderTargetToResolveDest.Transition.Subresource = 0;
-		renderTargetToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		renderTargetToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+		r_renderTargetToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_renderTargetToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_renderTargetToResolveDest.Transition.pResource = nullptr;
+		r_renderTargetToResolveDest.Transition.Subresource = 0;
+		r_renderTargetToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		r_renderTargetToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+
+		r_resolveSourceToRenderTarget.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_resolveSourceToRenderTarget.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_resolveSourceToRenderTarget.Transition.pResource = nullptr;
+		r_resolveSourceToRenderTarget.Transition.Subresource = 0;
+		r_resolveSourceToRenderTarget.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
+		r_resolveSourceToRenderTarget.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	}
 
 
-	void RenderColorBuffer(ColorBuffer* colorBuffer)
+	void RenderColorBuffer(ColorBuffer* destColorBuffer)
 	{
-		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList()->GetCommandList();
+		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
 
-		commandList->ResourceBarrier(1, &commonToRender);
-		commandList->ClearRenderTargetView(colorBuffer->GetRTV(), colorBuffer->GetClearColor().GetPtr(), 0, nullptr);
-		commandList->ResourceBarrier(1, &renderToCommon);
+		var commonToRenderTarget = r_commonToRenderTarget;
+		var renderTargetToCommon = r_renderTargetToResolveDest;
+		commonToRenderTarget.Transition.pResource = destColorBuffer->GetResource();
+		renderTargetToCommon.Transition.pResource = destColorBuffer->GetResource();
+
+		commandList->ResourceBarrier(1, &commonToRenderTarget);
+		var clearColorTemp = destColorBuffer->GetClearColor();
+		float clearColor[4] = { clearColorTemp.R(), clearColorTemp.G(), clearColorTemp.B(), clearColorTemp.A() };
+		commandList->ClearRenderTargetView(destColorBuffer->GetRTV(), clearColor, 0, nullptr);
+		commandList->ResourceBarrier(1, &renderTargetToCommon);
 		commandList->Close();
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
-		r_cp_swapChain->Present(0, 0);
+		//r_cp_swapChain->Present(0, 0);
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
+	}
+
+	void BlendBuffer(GpuResource* srcBuffer)
+	{
+		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
+
+		var renderTargetToResolveDest = r_renderTargetToResolveDest;
+		var commonToResolveDest = r_commonToResolveDest;
+		var resolveDestToCommon = r_resolveDestToCommon;
+		renderTargetToResolveDest.Transition.pResource = srcBuffer->GetResource();
+		commonToResolveDest.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+		resolveDestToCommon.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+
+		commandList->ResourceBarrier(1, &r_renderTargetToResolveDest);
+		commandList->ResolveSubresource(r_displayPlane[r_frameIndex]->GetResource(), 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
+		commandList->ResourceBarrier(1, &r_resolveDestToCommon);
+		//resolveDestTo
+
+		commandList->Close();
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
+		r_cp_swapChain->Present(1, 0);
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
 	}
 }

@@ -5,7 +5,7 @@ namespace AEngine::Game
 	void GameObject::DoNothing()
 	{
 	}
-	GameObject::GameObject() :gameObject(this), m_parentObject(nullptr)
+	GameObject::GameObject(std::wstring _name) :gameObject(this), m_parentObject(nullptr), name(_name)
 	{
 	}
 

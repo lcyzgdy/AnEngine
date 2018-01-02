@@ -23,11 +23,17 @@ namespace AEngine
 	void Driver::Release()
 	{
 		m_initialized = false;
+		EndBehaviour();
 		BaseInput::GetInstance()->Release();
 	}
 
 	void Driver::BeginBehaviour(Game::BaseBehaviour * behaviour)
 	{
+		m_scene = behaviour;
 		behaviour->OnInit();
+	}
+	void Driver::EndBehaviour()
+	{
+		m_scene->OnRelease();
 	}
 }

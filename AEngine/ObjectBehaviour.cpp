@@ -32,12 +32,12 @@ namespace AEngine::Game
 	{
 		m_active = false;
 		lock_guard<recursive_mutex> lock(m_recursiveMutex);
-		for (var& i : m_component)
+		for (var i : m_component)
 		{
 			i->OnRelease();
 		}
 		Destory();
-		m_scene->RemoveObject(this);
+		//m_scene->RemoveObject(this);
 	}
 
 	/*void ObjectBehaviour::BeginUpdate()
@@ -98,6 +98,7 @@ namespace AEngine::Game
 
 	void ObjectBehaviour::RemoveComponent(ObjectBehaviour* component)
 	{
+		m_scene->RemoveObject(component);
 		lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		for (var it = m_component.begin(); it != m_component.end(); ++it)
 		{

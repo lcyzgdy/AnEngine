@@ -21,6 +21,8 @@ namespace AEngine::RenderCore
 		std::mutex m_writerMutex;
 		std::mutex m_mutex;
 
+		ID3D12Device* m_device;
+
 		GraphicsCommandContext();
 		~GraphicsCommandContext();
 

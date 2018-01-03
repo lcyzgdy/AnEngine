@@ -5,7 +5,7 @@ namespace AEngine::Game
 {
 	void Scene::OnInit()
 	{
-		for (var& i : m_objects)
+		for (var i : m_objects)
 		{
 			i->OnInit();
 		}
@@ -35,7 +35,7 @@ namespace AEngine::Game
 	{
 	}
 
-	void Scene::AddObject(GameObject * obj)
+	void Scene::AddObject(GameObject* obj)
 	{
 		for (var i : obj->GetChildren())
 		{
@@ -55,14 +55,27 @@ namespace AEngine::Game
 		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
 	}
 
-	void Scene::RemoveObject(GameObject * obj)
+	void Scene::RemoveObject(GameObject* obj)
 	{
 		for (var i : obj->GetChildren())
 		{
 			RemoveObject(i);
 		}
+		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
+		for (var i : behaviour->GetComponents())
+		{
+			RemoveObject(i);
+		}
 		lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
-		var behaviour = dynamic_cast<BaseBehaviour*>(dynamic_cast<ObjectBehaviour*>(obj));
-		behaviour->OnRelease();
+		for (var it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (*it == behaviour)
+			{
+				m_objects.erase(it);
+				break;
+			}
+		}
+		dynamic_cast<BaseBehaviour*>(behaviour)->OnRelease();
+		behaviour = nullptr;
 	}
 }

@@ -37,7 +37,7 @@ namespace AEngine::Game
 
 	void Camera::AfterUpdate()
 	{
-		RenderCore::RenderColorBuffer(m_colorBuffer);
+		//RenderCore::RenderColorBuffer(m_colorBuffer);
 		RenderCore::BlendBuffer(m_colorBuffer);
 	}
 
@@ -98,6 +98,11 @@ namespace AEngine::Game
 	void Camera::ClearFlag(ClearFlags flag)
 	{
 		m_clearFlag = flag;
+		if (flag == ClearFlags::SolidColor)
+		{
+			m_clearColor = Color::Blue;
+			m_colorBuffer->SetClearColor(m_clearColor);
+		}
 	}
 
 	Camera::ClearFlags Camera::ClearFlag()
@@ -108,6 +113,7 @@ namespace AEngine::Game
 	void Camera::ClearColor(Color color)
 	{
 		m_clearColor = color;
+		m_colorBuffer->SetClearColor(m_clearColor);
 	}
 
 	Color Camera::ClearColor()

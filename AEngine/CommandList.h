@@ -17,6 +17,7 @@ namespace AEngine::RenderCore
 	{
 		ComPtr<ID3D12GraphicsCommandList> m_commandList;
 		CommandFormatDesc m_desc;
+
 	public:
 		explicit CommandList(ID3D12Device* device, CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		~CommandList();

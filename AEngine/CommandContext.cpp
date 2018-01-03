@@ -28,10 +28,15 @@ namespace AEngine::RenderCore
 		return m_uniqueObj;
 	}
 
-	CommandList * GraphicsCommandContext::GetCommandList()
+	CommandList* GraphicsCommandContext::GetCommandList()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
-		while (m_commandListPool.size() <= 0);
+		//while (m_commandListPool.size() <= 0) this_thread::sleep_for(std::chrono::microseconds(20));
+		if (m_commandListPool.size() <= 0)
+		{
+			CommandList* list = new CommandList();
+			return list;
+		}
 		lock_guard<mutex> lock(m_mutex);
 		var list = m_commandListPool.front();
 		m_commandListPool.pop();
@@ -51,6 +56,12 @@ namespace AEngine::RenderCore
 		this->PushCommandList(newList);
 	}
 }
+
+
+
+
+
+
 namespace AEngine::RenderCore
 {
 	GraphicsCommandAllocator* GraphicsCommandAllocator::m_uniqueObj;

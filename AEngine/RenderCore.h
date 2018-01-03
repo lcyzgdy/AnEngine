@@ -51,6 +51,8 @@ namespace AEngine::RenderCore
 	void RenderColorBuffer(Resource::ColorBuffer* destColorBuffer);
 
 	void BlendBuffer(Resource::GpuResource* buffer);
+
+	//void ClearColorBuffer(Resource::ColorBuffer* destColorBuffer, )
 }
 
 

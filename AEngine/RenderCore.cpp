@@ -89,7 +89,7 @@ namespace AEngine::RenderCore
 		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 #endif // _WIN32
 
-		swapChain1.As(&r_cp_swapChain);
+		ThrowIfFailed(swapChain1.As(&r_cp_swapChain));
 #if !CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 		{
 			IDXGISwapChain4* p_swapChain = static_cast<IDXGISwapChain4*>(r_cp_swapChain.Get());
@@ -209,7 +209,7 @@ namespace AEngine::RenderCore
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		/*var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
 		var commandList = pCommandList->GetCommandList();
 
 		var renderTargetToResolveDest = r_renderTargetToResolveDest;
@@ -228,5 +228,28 @@ namespace AEngine::RenderCore
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
 		r_cp_swapChain->Present(1, 0);
 		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);*/
+
+		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
+
+		var commonToRenderTarget = r_commonToRenderTarget;
+		var renderTargetToCommon = r_renderTargetToResolveDest;
+		commonToRenderTarget.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+		renderTargetToCommon.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+
+		commandList->ResourceBarrier(1, &commonToRenderTarget);
+		var clearColorTemp = r_displayPlane[r_frameIndex]->GetClearColor();
+		float clearColor[4] = { 0, 0, 1, 1 };
+		commandList->ClearRenderTargetView(r_displayPlane[r_frameIndex]->GetRTV(), clearColor, 0, nullptr);
+		commandList->ResourceBarrier(1, &renderTargetToCommon);
+		commandList->Close();
+		ID3D12CommandList* ppcommandList[] = { commandList };
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		ThrowIfFailed(r_cp_swapChain->Present(1, 0));
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
 	}
 }

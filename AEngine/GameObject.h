@@ -9,20 +9,22 @@ using namespace AEngine::PhysicsCore;
 
 namespace AEngine::Game
 {
+	// 一个确定的物体
 	class GameObject
 	{
 		virtual void DoNothing();
-	protected:
+		//protected:
 		std::vector<GameObject*> m_children;
+		// 当前物体的子物体
 		GameObject* m_parentObject;
-		Transform m_transform;
 
 	public:
-		GameObject();
+		explicit GameObject(std::wstring name);
 		~GameObject() = default;
 
-		string name;
-		GameObject* const gameObject;
+		wstring name;
+		GameObject* gameObject;
+		Transform transform;
 
 		GameObject* GetParent();
 		void SetParent(GameObject* newParent);

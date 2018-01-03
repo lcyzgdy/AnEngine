@@ -1,24 +1,39 @@
 #include"RenderCore.h"
 #include"Screen.h"
+#include"CommandContext.h"
+#include"DescriptorHeap.hpp"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
+using namespace AEngine::RenderCore::Resource;
+using namespace AEngine::RenderCore::Heap;
+
 namespace AEngine::RenderCore
 {
-	vector<GraphicCard*> r_graphicCard;
+	vector<GraphicsCard*> r_graphicsCard;
 	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
-	Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
+	Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
 	bool r_enableHDROutput = false;
-	int r_frameIndex;
+	uint32_t r_frameIndex;
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
+
+	D3D12_RESOURCE_BARRIER r_commonToRenderTarget;
+	D3D12_RESOURCE_BARRIER r_renderTargetToCommon;
+	D3D12_RESOURCE_BARRIER r_commonToResolveDest;
+	D3D12_RESOURCE_BARRIER r_resolveDestToCommon;
+	D3D12_RESOURCE_BARRIER r_renderTargetToResolveDest;
+	D3D12_RESOURCE_BARRIER r_resolveSourceToRenderTarget;
 
 	namespace Private
 	{
 		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
+
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
+	void InitializeCommandObject();
 
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
@@ -38,14 +53,17 @@ namespace AEngine::RenderCore
 
 		while (graphicCardCount--)
 		{
-			GraphicCard* aRender = new GraphicCard();
+			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
 			aRender->Initialize(Private::r_cp_dxgiFactory.Get());
-			r_graphicCard.emplace_back(aRender);
+			r_graphicsCard.emplace_back(aRender);
 		}
+		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>();
+		//rtv->Create(r_graphicsCard[0]->GetDevice());
+		DescriptorHeapAllocator::GetInstance();
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
+		InitializeCommandObject();
 		CreateCommonState();
-
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -64,13 +82,15 @@ namespace AEngine::RenderCore
 
 		ComPtr<IDXGISwapChain1> swapChain1;
 		//Private::r_cp_dxgiFactory->Create
-		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd
-		(
-			const_cast<ID3D12CommandQueue*>(r_graphicCard[0]->GetCommandQueue()),
-			hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()
-		));
-		swapChain1.As(&r_cp_swapChain);
-#if CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
+		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
+			nullptr, nullptr, swapChain1.GetAddressOf()));
+
+#ifdef _WIN32
+		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+#endif // _WIN32
+
+		ThrowIfFailed(swapChain1.As(&r_cp_swapChain));
+#if !CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 		{
 			IDXGISwapChain4* p_swapChain = static_cast<IDXGISwapChain4*>(r_cp_swapChain.Get());
 			ComPtr<IDXGIOutput> cp_output;
@@ -90,25 +110,146 @@ namespace AEngine::RenderCore
 			}
 		}
 #endif
+	}
+
+	void InitializeCommandObject()
+	{
+		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(r_graphicsCard[0]->GetDevice());;
 		for (uint32_t i = 0; i < r_cnt_SwapChainBufferCount; ++i)
 		{
-			ComPtr<ID3D12Resource> cp_displayPlane;
-			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&cp_displayPlane)));
-			r_displayPlane[i].CreateFromSwapChain(L"Primary SwapChain Buffer",
-				cp_displayPlane.Detach(), r_graphicCard[0]->GetDevice(),
-				&RenderCore::Heap::r_h_heapDescAllocator);
+			CommandAllocator* allocator = new CommandAllocator(r_graphicsCard[0]->GetDevice());
+			GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(allocator);
+
+			ComPtr<ID3D12Resource> displayPlane;
+			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
+			r_displayPlane[i] = new ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(), r_graphicsCard[0]->GetDevice(),
+				DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, r_graphicsCard[0]->GetDevice()));
 		}
-#ifdef _WIN32
-		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
-#endif // _WIN32
 
 		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
 
-
+		for (int i = 0; i < 1; i++)
+		{
+			CommandFormatDesc desc;
+			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator()->GetAllocator();
+			desc.nodeMask = 1;
+			desc.pipelineState = nullptr;
+			CommandList* list = new CommandList(r_graphicsCard[0]->GetDevice(), desc);
+			GraphicsCommandContext::GetInstance()->AddNewCommandList(list);
+		}
 	}
 
 	void CreateCommonState()
 	{
-		return;
+		r_commonToRenderTarget.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_commonToRenderTarget.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_commonToRenderTarget.Transition.pResource = nullptr;
+		r_commonToRenderTarget.Transition.Subresource = 0;
+		r_commonToRenderTarget.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		r_commonToRenderTarget.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+		r_renderTargetToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_renderTargetToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_renderTargetToCommon.Transition.pResource = nullptr;
+		r_renderTargetToCommon.Transition.Subresource = 0;
+		r_renderTargetToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		r_renderTargetToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+
+		r_commonToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_commonToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_commonToResolveDest.Transition.pResource = nullptr;
+		r_commonToResolveDest.Transition.Subresource = 0;
+		r_commonToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		r_commonToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+
+		r_resolveDestToCommon.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_resolveDestToCommon.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_resolveDestToCommon.Transition.pResource = nullptr;
+		r_resolveDestToCommon.Transition.Subresource = 0;
+		r_resolveDestToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+		r_resolveDestToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+
+		r_renderTargetToResolveDest.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_renderTargetToResolveDest.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_renderTargetToResolveDest.Transition.pResource = nullptr;
+		r_renderTargetToResolveDest.Transition.Subresource = 0;
+		r_renderTargetToResolveDest.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		r_renderTargetToResolveDest.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_DEST;
+
+		r_resolveSourceToRenderTarget.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		r_resolveSourceToRenderTarget.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		r_resolveSourceToRenderTarget.Transition.pResource = nullptr;
+		r_resolveSourceToRenderTarget.Transition.Subresource = 0;
+		r_resolveSourceToRenderTarget.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
+		r_resolveSourceToRenderTarget.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	}
+
+
+	void RenderColorBuffer(ColorBuffer* destColorBuffer)
+	{
+		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
+
+		var commonToRenderTarget = r_commonToRenderTarget;
+		var renderTargetToCommon = r_renderTargetToResolveDest;
+		commonToRenderTarget.Transition.pResource = destColorBuffer->GetResource();
+		renderTargetToCommon.Transition.pResource = destColorBuffer->GetResource();
+
+		commandList->ResourceBarrier(1, &commonToRenderTarget);
+		var clearColorTemp = destColorBuffer->GetClearColor();
+		float clearColor[4] = { clearColorTemp.R(), clearColorTemp.G(), clearColorTemp.B(), clearColorTemp.A() };
+		commandList->ClearRenderTargetView(destColorBuffer->GetRTV(), clearColor, 0, nullptr);
+		commandList->ResourceBarrier(1, &renderTargetToCommon);
+		commandList->Close();
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
+		//r_cp_swapChain->Present(0, 0);
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
+	}
+
+	void BlendBuffer(GpuResource* srcBuffer)
+	{
+		/*var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
+
+		var renderTargetToResolveDest = r_renderTargetToResolveDest;
+		var commonToResolveDest = r_commonToResolveDest;
+		var resolveDestToCommon = r_resolveDestToCommon;
+		renderTargetToResolveDest.Transition.pResource = srcBuffer->GetResource();
+		commonToResolveDest.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+		resolveDestToCommon.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+
+		commandList->ResourceBarrier(1, &r_renderTargetToResolveDest);
+		commandList->ResolveSubresource(r_displayPlane[r_frameIndex]->GetResource(), 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
+		commandList->ResourceBarrier(1, &r_resolveDestToCommon);
+		//resolveDestTo
+
+		commandList->Close();
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
+		r_cp_swapChain->Present(1, 0);
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);*/
+
+		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = pCommandList->GetCommandList();
+
+		var commonToRenderTarget = r_commonToRenderTarget;
+		var renderTargetToCommon = r_renderTargetToResolveDest;
+		commonToRenderTarget.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+		renderTargetToCommon.Transition.pResource = r_displayPlane[r_frameIndex]->GetResource();
+
+		commandList->ResourceBarrier(1, &commonToRenderTarget);
+		var clearColorTemp = r_displayPlane[r_frameIndex]->GetClearColor();
+		float clearColor[4] = { 0, 0, 1, 1 };
+		commandList->ClearRenderTargetView(r_displayPlane[r_frameIndex]->GetRTV(), clearColor, 0, nullptr);
+		commandList->ResourceBarrier(1, &renderTargetToCommon);
+		commandList->Close();
+		ID3D12CommandList* ppcommandList[] = { commandList };
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		ThrowIfFailed(r_cp_swapChain->Present(1, 0));
+		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
 	}
 }

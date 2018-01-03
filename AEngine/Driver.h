@@ -10,6 +10,7 @@ namespace AEngine
 	class Driver :public NonCopyable
 	{
 		bool m_initialized;
+		Game::BaseBehaviour* m_scene;
 
 		Driver() = default;
 		~Driver() = default;

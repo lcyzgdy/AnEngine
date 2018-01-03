@@ -3,7 +3,7 @@
 
 namespace AEngine::RenderCore
 {
-	void GraphicCard::CreateDevice(IDXGIFactory4* dxgiFactory)
+	void GraphicsCard::CreateDevice(IDXGIFactory4* dxgiFactory)
 	{
 		D3D_FEATURE_LEVEL featureLevel;
 
@@ -76,7 +76,7 @@ namespace AEngine::RenderCore
 		}
 	}
 
-	void GraphicCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
+	void GraphicsCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
 		switch (type)
 		{
@@ -108,22 +108,27 @@ namespace AEngine::RenderCore
 		}
 	}
 
-	const ID3D12Device2* GraphicCard::GetDevice() const
+	const ID3D12Device* GraphicsCard::GetDevice() const
 	{
 		return m_cp_device.Get();
 	}
 
-	ID3D12Device2 * GraphicCard::GetDevice()
+	ID3D12Device * GraphicsCard::GetDevice()
 	{
 		return m_cp_device.Get();
 	}
 
-	void GraphicCard::IsStable(bool isStable)
+	uint32_t GraphicsCard::GetNodeNum()
+	{
+		return m_node;
+	}
+
+	void GraphicsCard::IsStable(bool isStable)
 	{
 		m_stableFlag = isStable;
 	}
 
-	const ID3D12CommandQueue* GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
+	const ID3D12CommandQueue* GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
 	{
 		switch (type)
 		{
@@ -152,7 +157,7 @@ namespace AEngine::RenderCore
 		return nullptr;
 	}
 
-	ID3D12CommandQueue * GraphicCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
+	ID3D12CommandQueue * GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
 		switch (type)
 		{
@@ -182,12 +187,12 @@ namespace AEngine::RenderCore
 		return nullptr;
 	}
 
-	GraphicCard::GraphicCard() :
-		m_stableFlag(false)
+	GraphicsCard::GraphicsCard() :
+		m_stableFlag(false), m_node(1)
 	{
 	}
 
-	void GraphicCard::Initialize(IDXGIFactory4* dxgiFactory, bool compute, bool copy)
+	void GraphicsCard::Initialize(IDXGIFactory4* dxgiFactory, bool compute, bool copy)
 	{
 		CreateDevice(dxgiFactory);
 		CreateCommandQueue();

@@ -5,18 +5,51 @@
 #include"DX.h"
 #include<queue>
 #include<mutex>
+#include"onwind.h"
+#include"CommandList.h"
 
 namespace AEngine::RenderCore
 {
 	// 渲染线程独占一个CommandList
-	class CommandListPool
+	class GraphicsCommandContext : public NonCopyable
 	{
-		queue<ComPtr<ID3D12CommandList>> m_cp_commandListPool;
+		static GraphicsCommandContext* m_uniqueObj;
+
+		queue<CommandList*> m_commandListPool;
+		ComPtr<ID3D12Fence> m_fence;
+		std::mutex m_readerMutex;
+		std::mutex m_writerMutex;
 		std::mutex m_mutex;
 
+		ID3D12Device* m_device;
+
+		GraphicsCommandContext();
+		~GraphicsCommandContext();
+
 	public:
-		CommandListPool() = default;
-		~CommandListPool() = default;
+		static GraphicsCommandContext* GetInstance();
+		CommandList* GetCommandList();
+		void PushCommandList(CommandList* list);
+
+		void AddNewCommandList(CommandList* newList);
+	};
+
+	class GraphicsCommandAllocator : public NonCopyable
+	{
+		static GraphicsCommandAllocator* m_uniqueObj;
+
+		queue<CommandAllocator*> m_commandAllocatorPool;
+		ComPtr<ID3D12Fence> m_fence;
+		std::mutex m_readerMutex;
+		std::mutex m_writerMutex;
+		std::mutex m_mutex;
+
+		GraphicsCommandAllocator();
+		~GraphicsCommandAllocator();
+	public:
+		static GraphicsCommandAllocator* GetInstance();
+		CommandAllocator* GetCommandAllocator();
+		void PushCommandAllocator(CommandAllocator* newAllocator);
 	};
 }
 

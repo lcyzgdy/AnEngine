@@ -119,16 +119,9 @@ void DrawLine::InitializePipeline()
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.SampleDesc.Count = 1;
 	ComPtr<IDXGISwapChain1> swapChain1;
-	ThrowIfFailed(factory->CreateSwapChainForHwnd
-	(
-		commandQueue.Get(),		// 交换链需要队列，以便可以强制刷新它
-		hwnd,
-		&swapChainDesc,
-		nullptr,
-		nullptr,
-		&swapChain1
-	));
 	// 描述并创建交换链
+	ThrowIfFailed(factory->CreateSwapChainForHwnd(commandQueue.Get(),		// 交换链需要队列，以便可以强制刷新它
+		hwnd, &swapChainDesc, nullptr, nullptr, &swapChain1));
 
 	factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 	swapChain1.As(&swapChain);

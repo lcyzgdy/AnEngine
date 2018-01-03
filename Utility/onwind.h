@@ -33,6 +33,8 @@
 						ERRORBLOCK(a); \
 						throw std::exception(); \
 					  }
+#else
+#define ERRORBREAK(a) (a)
 #endif // _DEBUG || DEBUG
 
 

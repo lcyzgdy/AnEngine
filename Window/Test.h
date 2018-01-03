@@ -1,14 +1,15 @@
 #pragma once
-#ifndef __TEST_H__
-#define __TEST_H__
-
 #include"Scene.h"
 #include"Camera.h"
+#include"ObjectBehaviour.h"
 
-extern Scene* scene;
-extern Camera* defaultCamera;
+extern AEngine::Game::Scene* testScene;
+extern AEngine::Game::Camera* testCamera;
 
-void CreateScene();
-void CreateCamera();
+void LoadScene();
 
-#endif // !__TEST_H__
+class TestCamera :public AEngine::Game::ObjectBehaviour
+{
+public:
+	TestCamera(std::wstring name);
+};

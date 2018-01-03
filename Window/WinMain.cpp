@@ -6,6 +6,8 @@
 #include"Input.h"
 using namespace AEngine;
 
+#include"Test.h"
+
 WNDCLASSEX wnd;
 HWND window;
 int state;
@@ -77,8 +79,8 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	DeleteFile(_T("log.txt"));
-	wstring windowTitle(_T("AEngine"));
-	wstring windowClassName(_T("AWindow"));
+	std::wstring windowTitle(_T("AEngine"));
+	std::wstring windowClassName(_T("AWindow"));
 	screenw = 1280;
 	screenh = 720;
 
@@ -138,6 +140,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//	return 0;
 	//}
 	ShowWindow(window, nCmdShow);
+
+	LoadScene();
+
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{

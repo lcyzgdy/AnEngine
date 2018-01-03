@@ -23,42 +23,42 @@ namespace AEngine::Math
 		}
 
 		/////////////////////////////////////////////////////////////////////////
-		__FasterFunc(float) X()
+		inline float X()
 		{
 			return m_quaternion.x;
 		}
 
-		__FasterFunc(void) X(float x)
+		inline void X(float x)
 		{
 			m_quaternion.x = x;
 		}
 
-		__FasterFunc(float) Y()
+		inline float Y()
 		{
 			return m_quaternion.y;
 		}
 
-		__FasterFunc(void) Y(float y)
+		inline void Y(float y)
 		{
 			m_quaternion.y = y;
 		}
 
-		__FasterFunc(float) Z()
+		inline float Z()
 		{
 			return m_quaternion.z;
 		}
 
-		__FasterFunc(void) Z(float z)
+		inline void Z(float z)
 		{
 			m_quaternion.z = z;
 		}
 
-		__FasterFunc(float) W()
+		inline float W()
 		{
 			return m_quaternion.w;
 		}
 
-		__FasterFunc(void) W(float w)
+		inline void W(float w)
 		{
 			m_quaternion.w = w;
 		}

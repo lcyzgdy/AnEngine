@@ -17,14 +17,19 @@ namespace AEngine::Game
 		//protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
+		virtual void BeforeUpdate();
 		virtual void OnUpdate() override;
+		virtual void AfterUpdate();
 		virtual void OnRelease() override;
 
 	public:
-		Scene() = default;
+		Scene(std::wstring _name);
 		~Scene() = default;
 
+		std::wstring name;
+
 		void AddObject(GameObject* obj);
+		void RemoveObject(GameObject* obj);
 	};
 }
 

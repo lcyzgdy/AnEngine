@@ -3,7 +3,7 @@
 namespace AEngine::RenderCore::Resource
 {
 	void DepthBuffer::CreateDerviedViews(ID3D12Device * device, DXGI_FORMAT & format,
-		Heap::DescriptorAllocator* descAllocator)
+		Heap::DescriptorHeapAllocator* descAllocator)
 	{
 		ID3D12Resource* resource = m_cp_resource.Get();
 
@@ -91,7 +91,7 @@ namespace AEngine::RenderCore::Resource
 	}
 
 	void DepthBuffer::Create(const wstring & name, uint32_t _width, uint32_t _height,
-		DXGI_FORMAT & format, ID3D12Device* device, Heap::DescriptorAllocator* descAllocator,
+		DXGI_FORMAT & format, ID3D12Device* device, Heap::DescriptorHeapAllocator* descAllocator,
 		uint32_t numSamples, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
 		D3D12_RESOURCE_DESC desc =

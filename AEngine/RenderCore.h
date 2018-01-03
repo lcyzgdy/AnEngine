@@ -7,7 +7,7 @@
 #include<mutex>
 #include<atomic>
 #include"ColorBuffer.h"
-#include"DescriptorHeap.h"
+#include"DescriptorHeap.hpp"
 #include"RenderCoreConstants.h"
 #include"GraphicCard.h"
 #include"RootSignature.h"
@@ -22,7 +22,7 @@ using namespace std;
 
 namespace AEngine::RenderCore::Heap
 {
-	extern DescriptorAllocator r_h_heapDescAllocator;
+	extern DescriptorHeapAllocator r_h_heapDescAllocator;
 }
 
 namespace AEngine::RenderCore
@@ -34,10 +34,10 @@ namespace AEngine::RenderCore
 		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
 	}
 
-	extern vector<GraphicCard*> r_graphicCard;
+	extern vector<GraphicsCard*> r_graphicsCard;
 	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
-	extern Resource::ColorBuffer r_displayPlane[r_cnt_SwapChainBufferCount];
-	extern int r_frameIndex;
+	extern Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern uint32_t r_frameIndex;
 	extern RootSignature r_rootSignature;
 #ifdef _WIN32
 	extern HWND r_hwnd;
@@ -45,9 +45,14 @@ namespace AEngine::RenderCore
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
-
 	void CreateCommonState();
+
+
+	void RenderColorBuffer(Resource::ColorBuffer* destColorBuffer);
+
+	void BlendBuffer(Resource::GpuResource* buffer);
+
+	//void ClearColorBuffer(Resource::ColorBuffer* destColorBuffer, )
 }
 
 

@@ -1,10 +1,20 @@
-#include "DescriptorHeap.h"
+#include "DescriptorHeap.hpp"
 #include "RenderCore.h"
 using namespace AEngine::RenderCore::Resource;
 
 namespace AEngine::RenderCore::Heap
 {
-	DescriptorAllocator r_h_heapDescAllocator;
+	//DescriptorHeapAllocator r_h_heapDescAllocator;
+
+	void DescriptorHandle::SetCpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle)
+	{
+		m_cpuHandle = cpuHandle;
+	}
+
+	void DescriptorHandle::SetGpuHandle(D3D12_GPU_DESCRIPTOR_HANDLE& gpuHandle)
+	{
+		m_gpuHandle = gpuHandle;
+	}
 
 	DescriptorHandle::DescriptorHandle()
 	{
@@ -23,12 +33,12 @@ namespace AEngine::RenderCore::Heap
 	{
 	}
 
-	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHandle::GetCpuHandle()
+	D3D12_CPU_DESCRIPTOR_HANDLE& DescriptorHandle::GetCpuHandle()
 	{
 		return m_cpuHandle;
 	}
 
-	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHandle::GetGpuHandle()
+	D3D12_GPU_DESCRIPTOR_HANDLE& DescriptorHandle::GetGpuHandle()
 	{
 		return m_gpuHandle;
 	}
@@ -62,12 +72,17 @@ namespace AEngine::RenderCore::Heap
 		return t;
 	}
 
+
+
+
+
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	ID3D12DescriptorHeap* DescriptorAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
-	{
-		lock_guard<mutex> lockGuard(m_allocatorMutex);
+	DescriptorHeapAllocator* DescriptorHeapAllocator::m_uniqueObj;
 
+	ID3D12DescriptorHeap* DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
+	{
 		D3D12_DESCRIPTOR_HEAP_DESC desc;
 		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		desc.NodeMask = 1;
@@ -80,15 +95,15 @@ namespace AEngine::RenderCore::Heap
 		return cp_heap.Get();
 	}
 
-	DescriptorAllocator::DescriptorAllocator(D3D12_DESCRIPTOR_HEAP_TYPE type) :
-		m_currentHeap{ nullptr }
+	DescriptorHeapAllocator::~DescriptorHeapAllocator()
 	{
-
+		DestoryAll();
 	}
 
-	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorAllocator::Allocate(
-		D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device, uint32_t count)
+	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapAllocator::Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type,
+		ID3D12Device* device, uint32_t count)
 	{
+		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{
 			m_currentHeap[type] = RequestNewHeap(type, device);
@@ -104,8 +119,17 @@ namespace AEngine::RenderCore::Heap
 		return cpuHandle;
 	}
 
-	void DescriptorAllocator::DestoryAll()
+	void DescriptorHeapAllocator::DestoryAll()
 	{
 		m_cp_descriptorHeapPool.clear();
+	}
+
+	DescriptorHeapAllocator* DescriptorHeapAllocator::GetInstance()
+	{
+		if (m_uniqueObj == nullptr)
+		{
+			m_uniqueObj = new DescriptorHeapAllocator();
+		}
+		return m_uniqueObj;
 	}
 }

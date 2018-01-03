@@ -21,17 +21,17 @@ namespace AEngine::PhysicsCore
 		Transform() = default;
 		~Transform() = default;
 
-		__FasterFunc(Vector3) Position()
+		inline Vector3 Position()
 		{
 			return m_position;
 		}
 
-		__FasterFunc(void) Position(const Vector3& newPosition)
+		inline void Position(const Vector3& newPosition)
 		{
 			m_position = newPosition;
 		}
 		///////////////////////////////////////////////////////////////
-		__FasterFunc(Quaternion) Rotation()
+		inline Quaternion Rotation()
 		{
 			return m_rotation;
 		}
@@ -42,9 +42,6 @@ namespace AEngine::PhysicsCore
 			m_rotation = t.m_rotation;
 			m_scale = t.m_scale;
 		}
-
-		Transform* GetParent();
-		Transform* GetChildByName(std::string name);
 	};
 }
 #endif // !__TRANSFORM_H__

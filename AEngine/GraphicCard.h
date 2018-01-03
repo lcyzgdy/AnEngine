@@ -9,19 +9,24 @@
 namespace AEngine::RenderCore
 {
 	// 显卡设备接口。
-	class GraphicCard : public NonCopyable
+	class GraphicsCard : public NonCopyable
 	{
 		ComPtr<ID3D12Device2> m_cp_device;
 
-		CommandQueue m_renderCommandQueue;	// 渲染着色器的命令队列。
-		CommandQueue m_computeCommandQueue;	// 计算着色器的命令队列。
-		CommandQueue m_copyCommandQueue;	// 拷贝命令队列
+		// 渲染着色器的命令队列。
+		CommandQueue m_renderCommandQueue;
+		// 计算着色器的命令队列。
+		CommandQueue m_computeCommandQueue;
+		// 拷贝命令队列
+		CommandQueue m_copyCommandQueue;
 
 		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 
 		bool m_isTypedUAVLoadSupport_R11G11B10_FLOAT;
 		bool m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT;
-		bool m_stableFlag;	// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
+		// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
+		bool m_stableFlag;
+		uint32_t m_node;
 
 		void CreateDevice(IDXGIFactory4* dxgiFactory);
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -38,7 +43,7 @@ namespace AEngine::RenderCore
 
 				if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 				{
-					// 不选择基本显示适配器，如果你想使用软件渲染，在命令行中加入"/warp"
+					// 不选择基本显示适配器，如果想使用软件渲染，在命令行中加入"/warp"
 					continue;
 				}
 
@@ -52,14 +57,15 @@ namespace AEngine::RenderCore
 		}
 
 	public:
-		GraphicCard();
-		~GraphicCard() = default;
+		GraphicsCard();
+		~GraphicsCard() = default;
 
 		void Initialize(IDXGIFactory4* dxgiFactory, bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		const ID3D12Device2* GetDevice() const;
-		ID3D12Device2* GetDevice();
+		const ID3D12Device* GetDevice() const;
+		ID3D12Device* GetDevice();
+		uint32_t GetNodeNum();
 
 		void IsStable(bool isStable);
 	};

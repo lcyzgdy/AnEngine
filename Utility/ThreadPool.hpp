@@ -12,23 +12,22 @@
 #include<condition_variable>
 #include<stdexcept>
 #include<future>
-using namespace std;
 
 namespace Utility
 {
 	class ThreadPool : NonCopyable
 	{
 	private:
-		using Task = function<void()>;
+		using Task = std::function<void()>;
 
-		mutex m_mutex;
-		vector<thread> m_pool;
-		queue<Task> m_tasks;
-		condition_variable m_cvTask;
+		std::mutex m_mutex;
+		std::vector<std::thread> m_pool;
+		std::queue<Task> m_tasks;
+		std::condition_variable m_cvTask;
 
-		atomic_int m_idleThreadNum;
-		const uint32_t m_cnt_maxThreadNum = thread::hardware_concurrency();
-		atomic_bool m_stopped;
+		std::atomic_int m_idleThreadNum;
+		const uint32_t m_cnt_maxThreadNum = std::thread::hardware_concurrency();
+		std::atomic_bool m_stopped;
 
 
 	public:
@@ -41,9 +40,9 @@ namespace Utility
 			{
 				m_pool.emplace_back([this]()
 				{
-					function<void()> task;
+					std::function<void()> task;
 					{
-						unique_lock<mutex> lock(this->m_mutex);
+						std::unique_lock<std::mutex> lock(this->m_mutex);
 						this->m_cvTask.wait(lock, [this]()
 						{
 							return this->m_stopped.load() || !this->m_tasks.empty();
@@ -85,10 +84,10 @@ namespace Utility
 				throw exception("Thread pool is stopped");
 			}
 			using FuncType = decltype(f(args ...));
-			var task = std::make_shared<packaged_task<FuncType()>>(bind(forward<F>(f), forward<Args>(args)...));
-			future<FuncType> awaitFuture = task->get_future();
+			var task = std::make_shared<std::packaged_task<FuncType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+			std::future<FuncType> awaitFuture = task->get_future();
 			{
-				std::lock_guard<mutex> lock(m_mutex);
+				std::lock_guard<std::mutex> lock(m_mutex);
 				m_tasks.emplace([task] { (*task)(); });
 			}
 			m_cvTask.notify_one();

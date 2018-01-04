@@ -1,4 +1,6 @@
 #include "CommandContext.h"
+#include "GraphicCard.h"
+#include "RenderCore.h"
 
 namespace AEngine::RenderCore
 {
@@ -34,7 +36,11 @@ namespace AEngine::RenderCore
 		//while (m_commandListPool.size() <= 0) this_thread::sleep_for(std::chrono::microseconds(20));
 		if (m_commandListPool.size() <= 0)
 		{
-			CommandList* list = new CommandList();
+			CommandFormatDesc desc;
+			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator()->GetAllocator();
+			desc.nodeMask = 1;
+			desc.pipelineState = nullptr;
+			CommandList* list = new CommandList(r_graphicsCard[0]->GetDevice(), desc);
 			return list;
 		}
 		lock_guard<mutex> lock(m_mutex);
@@ -43,7 +49,7 @@ namespace AEngine::RenderCore
 		return list;
 	}
 
-	void GraphicsCommandContext::PushCommandList(CommandList * list)
+	void GraphicsCommandContext::PushCommandList(CommandList* list)
 	{
 		lock_guard<mutex> lockw(m_writerMutex);
 		lock_guard<std::mutex> lock(m_mutex);
@@ -71,6 +77,15 @@ namespace AEngine::RenderCore
 
 	}
 
+	/*GraphicsCommandAllocator::GraphicsCommandAllocator(GraphicsCard* device, uint32_t n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			CommandAllocator* allocator = new CommandAllocator(device->GetDevice());
+			m_commandAllocatorPool.emplace(allocator);
+		}
+	}*/
+
 	GraphicsCommandAllocator::~GraphicsCommandAllocator()
 	{
 		while (!m_commandAllocatorPool.empty())
@@ -91,10 +106,15 @@ namespace AEngine::RenderCore
 		return m_uniqueObj;
 	}
 
-	CommandAllocator * GraphicsCommandAllocator::GetCommandAllocator()
+	CommandAllocator* GraphicsCommandAllocator::GetCommandAllocator()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
-		while (m_commandAllocatorPool.size() <= 0);
+		//while (m_commandAllocatorPool.size() <= 0);
+		if (m_commandAllocatorPool.size() <= 0)
+		{
+			var allocator = new CommandAllocator(r_graphicsCard[0]->GetDevice());
+			return allocator;
+		}
 		lock_guard<mutex> lock(m_mutex);
 		var allocator = m_commandAllocatorPool.front();
 		m_commandAllocatorPool.pop();

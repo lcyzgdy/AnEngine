@@ -10,6 +10,8 @@
 
 namespace AEngine::RenderCore
 {
+	class GraphicsCard;
+
 	// 渲染线程独占一个CommandList
 	class GraphicsCommandContext : public NonCopyable
 	{
@@ -46,7 +48,9 @@ namespace AEngine::RenderCore
 
 		GraphicsCommandAllocator();
 		~GraphicsCommandAllocator();
+
 	public:
+		//explicit GraphicsCommandAllocator(GraphicsCard* device, uint32_t n = 8);
 		static GraphicsCommandAllocator* GetInstance();
 		CommandAllocator* GetCommandAllocator();
 		void PushCommandAllocator(CommandAllocator* newAllocator);

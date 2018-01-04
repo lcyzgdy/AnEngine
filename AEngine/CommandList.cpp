@@ -35,7 +35,7 @@ namespace AEngine::RenderCore
 
 namespace AEngine::RenderCore
 {
-	CommandAllocator::CommandAllocator(ID3D12Device * device, D3D12_COMMAND_LIST_TYPE type) : m_type(type)
+	CommandAllocator::CommandAllocator(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type) : m_type(type)
 	{
 		if (!SUCCEEDED(device->CreateCommandAllocator(type, IID_PPV_ARGS(&m_allocator))))
 		{
@@ -49,7 +49,7 @@ namespace AEngine::RenderCore
 		return m_type;
 	}
 
-	ID3D12CommandAllocator * CommandAllocator::GetAllocator()
+	ID3D12CommandAllocator* CommandAllocator::GetAllocator()
 	{
 		return m_allocator.Get();
 	}

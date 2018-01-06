@@ -7,22 +7,22 @@ namespace AEngine::RenderCore
 	{
 		D3D_FEATURE_LEVEL featureLevel;
 
-		//CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_cp_dxgiFactory.GetAddressOf()));
+		//CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory_cp.GetAddressOf()));
 		//if (dxgiFactory == nullptr)
 		//{
 		//	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
 		//}
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
-		//GetHardwareAdapter(Private::r_cp_dxgiFactory.Get(), &cp_hardwareAdapter);
+		//GetHardwareAdapter(Private::r_dxgiFactory_cp.Get(), &cp_hardwareAdapter);
 		GetHardwareAdapter(dxgiFactory, &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_cp_device));
 
 		if (m_cp_device.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), r_cnt_MinD3DFeatureLevel, IID_PPV_ARGS(&m_cp_device));
+			D3D12CreateDevice(cp_warpAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_cp_device));
 		}
 
 		m_cp_device->SetStablePowerState(m_stableFlag);

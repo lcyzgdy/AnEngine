@@ -13,7 +13,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 {
 	static const UINT ParticleCount = 12000;
 	static const float ParticleSpread;
-	static const UINT ThreadCount = r_cnt_DefaultThreadCount;
+	static const UINT ThreadCount = r_DefaultThreadCount_const;
 
 	UINT frameIndex;
 
@@ -57,8 +57,8 @@ class NBody :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvUavHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvUavDescriptorSize;
@@ -73,14 +73,14 @@ class NBody :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12Fence> computeFence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT64 fenceValues[r_cnt_DefaultFrameCount];
+	UINT64 fenceValues[r_DefaultFrameCount_const];
 	UINT64 renderContextFenceValue;
 	HANDLE renderContextFenceEvent;
 	// 同步对象
 
 	ComPtr<ID3D12CommandQueue> computeCommandQueue[ThreadCount];
 	ComPtr<ID3D12GraphicsCommandList> computeCommandList[ThreadCount];
-	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_cnt_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_DefaultFrameCount_const];
 	ComPtr<ID3D12RootSignature>	computeRootSignature;
 	// 计算对象
 

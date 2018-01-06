@@ -28,8 +28,7 @@ namespace AEngine::RenderCore::Resource
 
 		// 创建颜色缓冲区，如果提供了地址则不会分配内存。虚拟地址允许重命名缓冲器（对于跨越帧重用ESRAM特别有用）。？？
 		void Create(const wstring& name, uint32_t _width, uint32_t _height, DXGI_FORMAT& format,
-			ID3D12Device* device, RenderCore::Heap::DescriptorHeapAllocator* descAllocator,
-			uint32_t numSamples = 1,
+			RenderCore::Heap::DescriptorHeapAllocator* descAllocator, uint32_t numSamples = 1,
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = RenderCore::Resource::GpuVirtualAddressUnknown);
 
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetDsv() const;

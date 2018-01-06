@@ -19,7 +19,7 @@ namespace AEngine::RenderCore
 		CommandFormatDesc m_desc;
 
 	public:
-		explicit CommandList(ID3D12Device* device, CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		explicit CommandList(CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		~CommandList();
 
 		//void Create(ID3D12Device* device, CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -33,7 +33,7 @@ namespace AEngine::RenderCore
 		ComPtr<ID3D12CommandAllocator> m_allocator;
 		D3D12_COMMAND_LIST_TYPE m_type;
 	public:
-		explicit CommandAllocator(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		explicit CommandAllocator(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		~CommandAllocator() = default;
 
 		D3D12_COMMAND_LIST_TYPE GetGype();

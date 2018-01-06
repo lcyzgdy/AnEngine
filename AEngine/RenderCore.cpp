@@ -12,8 +12,8 @@ using namespace AEngine::RenderCore::Heap;
 namespace AEngine::RenderCore
 {
 	vector<GraphicsCard*> r_graphicsCard;
-	ComPtr<IDXGISwapChain3> r_cp_swapChain = nullptr;
-	Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
+	ComPtr<IDXGISwapChain3> r_swapChain_cp = nullptr;
+	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	bool r_enableHDROutput = false;
 	uint32_t r_frameIndex;
 #ifdef _WIN32
@@ -29,10 +29,10 @@ namespace AEngine::RenderCore
 
 	namespace Private
 	{
-		ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
+		ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
 	}
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_cnt_DefaultSwapChainFormat);
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	void InitializeCommandObject();
 
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
@@ -48,14 +48,14 @@ namespace AEngine::RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 #endif
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_cp_dxgiFactory.GetAddressOf()));
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory_cp.GetAddressOf()));
 
 
 		while (graphicCardCount--)
 		{
 			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
-			aRender->Initialize(Private::r_cp_dxgiFactory.Get());
+			aRender->Initialize(Private::r_dxgiFactory_cp.Get());
 			r_graphicsCard.emplace_back(aRender);
 		}
 		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>();
@@ -69,7 +69,7 @@ namespace AEngine::RenderCore
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = r_cnt_SwapChainBufferCount;
+		swapChainDesc.BufferCount = r_SwapChainBufferCount_const;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		swapChainDesc.Width = width;
@@ -81,18 +81,18 @@ namespace AEngine::RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
-		//Private::r_cp_dxgiFactory->Create
-		ThrowIfFailed(Private::r_cp_dxgiFactory->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
+		//Private::r_dxgiFactory_cp->Create
+		ThrowIfFailed(Private::r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
 			nullptr, nullptr, swapChain1.GetAddressOf()));
 
 #ifdef _WIN32
-		Private::r_cp_dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+		Private::r_dxgiFactory_cp->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 #endif // _WIN32
 
-		ThrowIfFailed(swapChain1.As(&r_cp_swapChain));
+		ThrowIfFailed(swapChain1.As(&r_swapChain_cp));
 #if !CONDITIONALLY_ENABLE_HDR_OUTPUT && defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 		{
-			IDXGISwapChain4* p_swapChain = static_cast<IDXGISwapChain4*>(r_cp_swapChain.Get());
+			IDXGISwapChain4* p_swapChain = static_cast<IDXGISwapChain4*>(r_swapChain_cp.Get());
 			ComPtr<IDXGIOutput> cp_output;
 			ComPtr<IDXGIOutput6> cp_output6;
 			DXGI_OUTPUT_DESC1 outputDesc;
@@ -115,18 +115,18 @@ namespace AEngine::RenderCore
 	void InitializeCommandObject()
 	{
 		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(r_graphicsCard[0]->GetDevice());;
-		for (uint32_t i = 0; i < r_cnt_SwapChainBufferCount; ++i)
+		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
 		{
-			CommandAllocator* allocator = new CommandAllocator(r_graphicsCard[0]->GetDevice());
+			CommandAllocator* allocator = new CommandAllocator();
 			GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(allocator);
 
 			ComPtr<ID3D12Resource> displayPlane;
-			ThrowIfFailed(r_cp_swapChain->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
-			r_displayPlane[i] = new ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(), r_graphicsCard[0]->GetDevice(),
-				DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, r_graphicsCard[0]->GetDevice()));
+			ThrowIfFailed(r_swapChain_cp->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
+			r_displayPlane[i] = new ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(),
+				DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 		}
 
-		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		for (int i = 0; i < 1; i++)
 		{
@@ -134,7 +134,7 @@ namespace AEngine::RenderCore
 			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator()->GetAllocator();
 			desc.nodeMask = 1;
 			desc.pipelineState = nullptr;
-			CommandList* list = new CommandList(r_graphicsCard[0]->GetDevice(), desc);
+			CommandList* list = new CommandList(desc);
 			GraphicsCommandContext::GetInstance()->AddNewCommandList(list);
 		}
 	}
@@ -202,7 +202,7 @@ namespace AEngine::RenderCore
 		commandList->ResourceBarrier(1, &renderTargetToCommon);
 		commandList->Close();
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
-		//r_cp_swapChain->Present(0, 0);
+		//r_swapChain_cp->Present(0, 0);
 
 		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
 	}
@@ -226,13 +226,15 @@ namespace AEngine::RenderCore
 
 		commandList->Close();
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
-		r_cp_swapChain->Present(1, 0);
-		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+		r_swapChain_cp->Present(1, 0);
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);*/
 
 		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
 		var commandList = pCommandList->GetCommandList();
+
+		
 
 		var commonToRenderTarget = r_commonToRenderTarget;
 		var renderTargetToCommon = r_renderTargetToResolveDest;
@@ -247,8 +249,8 @@ namespace AEngine::RenderCore
 		commandList->Close();
 		ID3D12CommandList* ppcommandList[] = { commandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
-		ThrowIfFailed(r_cp_swapChain->Present(1, 0));
-		r_frameIndex = r_cp_swapChain->GetCurrentBackBufferIndex();
+		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
 	}

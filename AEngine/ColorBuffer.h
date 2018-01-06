@@ -6,7 +6,6 @@
 #include"PixelBuffer.h"
 #include"Color.h"
 #include"DescriptorHeap.hpp"
-#include"GraphicCard.h"
 using namespace std;
 using namespace AEngine::RenderCore;
 
@@ -33,15 +32,15 @@ namespace AEngine::RenderCore::Resource
 		~ColorBuffer() = default;
 		ColorBuffer(const Color& clearColor);
 		// 创建颜色缓冲区，如果提供了地址则不会分配内存。虚拟地址允许重命名缓冲器（对于跨越帧重用ESRAM特别有用）。？？
-		ColorBuffer(const wstring& name, GraphicsCard* device, uint32_t width, uint32_t height, uint32_t numMips,
+		ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 			DXGI_FORMAT format, D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT,
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
 		// 创建颜色缓冲区，提供MSAA支持。此时需要先渲染到内存中支持MSAA的一块缓冲区中，然后再提交到交换链中。
-		ColorBuffer(const wstring& name, GraphicsCard* device, uint32_t width, uint32_t height, uint32_t numMips,
+		ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 			uint32_t msaaSampleCount, DXGI_FORMAT format, D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT,
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
 		//ColorBuffer(const wstring& name, GraphicsCard* device, uint32_t frameIndex, IDXGISwapChain3* swapChain);
-		ColorBuffer(const wstring& name, ID3D12Resource* baseResource, ID3D12Device* device, D3D12_CPU_DESCRIPTOR_HANDLE handle);
+		ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
 		// 从交换链缓冲区创建颜色缓冲区，无序访问受限。
 		//void CreateFromSwapChain(const wstring& name, ID3D12Resource* baseResource,
@@ -67,7 +66,7 @@ namespace AEngine::RenderCore::Resource
 		//void SetMsaaMode(uint32_t numColorSample, uint32_t numCoverageSample);
 		Color GetClearColor() const;
 
-		void SetAsRenderTargetView(GraphicsCard* device);
+		void SetAsRenderTargetView();
 	};
 }
 

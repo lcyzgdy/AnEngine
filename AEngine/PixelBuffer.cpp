@@ -414,7 +414,7 @@ namespace AEngine::RenderCore::Resource
 		if (resource == nullptr) throw exception();
 		D3D12_RESOURCE_DESC ResourceDesc = resource->GetDesc();
 
-		m_cp_resource.Attach(resource);
+		m_resource_cp.Attach(resource);
 		m_usageState = currentState;
 
 		m_width = (uint32_t)ResourceDesc.Width;		// 暂时不关心过大的地址。
@@ -423,13 +423,13 @@ namespace AEngine::RenderCore::Resource
 		m_format = ResourceDesc.Format;
 
 #ifndef RELEASE
-		m_cp_resource->SetName(name.c_str());
+		m_resource_cp->SetName(name.c_str());
 #else
 		(name);
 #endif
 	}
 
-	void PixelBuffer::CreateTextureResource(ID3D12Device * device, const wstring & name,
+	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name,
 		const D3D12_RESOURCE_DESC & resourceDesc, D3D12_CLEAR_VALUE clearValue,
 		D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
@@ -437,19 +437,19 @@ namespace AEngine::RenderCore::Resource
 
 		CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
 		ThrowIfFailed(device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE,
-			&resourceDesc, D3D12_RESOURCE_STATE_COMMON, &clearValue, IID_PPV_ARGS(m_cp_resource.GetAddressOf())));
+			&resourceDesc, D3D12_RESOURCE_STATE_COMMON, &clearValue, IID_PPV_ARGS(m_resource_cp.GetAddressOf())));
 
 		m_usageState = D3D12_RESOURCE_STATE_COMMON;
 		m_gpuVirtualAddress = Resource::GpuVirtualAddressNull;
 
 #ifndef RELEASE
-		m_cp_resource->SetName(name.c_str());
+		m_resource_cp->SetName(name.c_str());
 #else
 		(Name);
 #endif
 	}
 
-	void PixelBuffer::CreateTextureResource(ID3D12Device * device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc,
+	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc,
 		D3D12_CLEAR_VALUE clearValue)
 	{
 		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::GpuVirtualAddressUnknown);

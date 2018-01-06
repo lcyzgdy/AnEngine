@@ -147,7 +147,7 @@ void ExecuteIndirect::InitializePipeline()
 	// 描述并创建计算着色器的命令队列
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = r_cnt_DefaultFrameCount;
+	swapChainDesc.BufferCount = r_DefaultFrameCount_const;
 	swapChainDesc.Width = this->width;
 	swapChainDesc.Height = this->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -172,7 +172,7 @@ void ExecuteIndirect::InitializePipeline()
 
 	//#1
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = r_cnt_DefaultFrameCount;
+	rtvHeapDesc.NumDescriptors = r_DefaultFrameCount_const;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	ThrowIfFailed(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap)));
@@ -188,7 +188,7 @@ void ExecuteIndirect::InitializePipeline()
 	// Describe and create a constant buffer view (CBV), Shader resource
 	// view (SRV), and unordered access view (UAV) descriptor heap.
 	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavHeapDesc = {};
-	cbvSrvUavHeapDesc.NumDescriptors = CbvSrvUavDescriptorCountPerFrame * r_cnt_DefaultFrameCount;
+	cbvSrvUavHeapDesc.NumDescriptors = CbvSrvUavDescriptorCountPerFrame * r_DefaultFrameCount_const;
 	cbvSrvUavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvSrvUavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(device->CreateDescriptorHeap(&cbvSrvUavHeapDesc, IID_PPV_ARGS(&cbvSrvUavHeap)));
@@ -216,7 +216,7 @@ void ExecuteIndirect::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < r_cnt_DefaultFrameCount; i++)
+	for (UINT i = 0; i < r_DefaultFrameCount_const; i++)
 	{
 		ThrowIfFailed(swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i])));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -423,7 +423,7 @@ void ExecuteIndirect::InitializeAssets()
 		// 创建常量缓冲区的着色器资源视图（SRV），以供计算着色器读取。
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CbvSrvOffset, cbvSrvUavDescriptorSize);
-		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
+		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
 			srvDesc1.Buffer.FirstElement = frame * triangleCount;
 			device->CreateShaderResourceView(constantBuffer.Get(), &srvDesc1, cbvSrvHandle);
@@ -451,7 +451,7 @@ void ExecuteIndirect::InitializeAssets()
 	{
 		std::vector<IndirectCommand> commands;
 		commands.resize(triangleResourceCount);
-		const UINT commandBufferSize = commandSizePerFrame * r_cnt_DefaultFrameCount;
+		const UINT commandBufferSize = commandSizePerFrame * r_DefaultFrameCount_const;
 
 		D3D12_RESOURCE_DESC commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferSize);
 		device->CreateCommittedResource(
@@ -473,7 +473,7 @@ void ExecuteIndirect::InitializeAssets()
 		D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = constantBuffer->GetGPUVirtualAddress();
 		UINT commandIndex = 0;
 
-		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
+		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
 			for (UINT n = 0; n < triangleCount; n++)
 			{
@@ -507,7 +507,7 @@ void ExecuteIndirect::InitializeAssets()
 		// 为命令缓冲区创建SRV。
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE commandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CommandsOffset, cbvSrvUavDescriptorSize);
-		for (UINT frameI = 0; frameI < r_cnt_DefaultFrameCount; frameI++)
+		for (UINT frameI = 0; frameI < r_DefaultFrameCount_const; frameI++)
 		{
 			srvDesc2.Buffer.FirstElement = frameI * triangleCount;
 			device->CreateShaderResourceView(commandBuffer.Get(), &srvDesc2, commandsHandle);
@@ -516,7 +516,7 @@ void ExecuteIndirect::InitializeAssets()
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), ProcessedCommandsOffset, cbvSrvUavDescriptorSize);
 		// 创建存储计算工作结果的无序访问视图（UAV）。
-		for (UINT frame = 0; frame < r_cnt_DefaultFrameCount; frame++)
+		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
 			commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferCounterOffset + sizeof(UINT), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 			device->CreateCommittedResource(

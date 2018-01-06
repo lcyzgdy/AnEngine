@@ -100,9 +100,9 @@ namespace AEngine::RenderCore::Heap
 		DestoryAll();
 	}
 
-	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapAllocator::Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type,
-		ID3D12Device* device, uint32_t count)
+	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapAllocator::Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count)
 	{
+		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{

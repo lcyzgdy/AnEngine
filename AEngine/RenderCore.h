@@ -31,12 +31,12 @@ namespace AEngine::RenderCore
 
 	namespace Private
 	{
-		extern ComPtr<IDXGIFactory4> r_cp_dxgiFactory;
+		extern ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
 	}
 
 	extern vector<GraphicsCard*> r_graphicsCard;
-	extern ComPtr<IDXGISwapChain3> r_cp_swapChain;
-	extern Resource::ColorBuffer* r_displayPlane[r_cnt_SwapChainBufferCount];
+	extern ComPtr<IDXGISwapChain3> r_swapChain_cp;
+	extern Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	extern uint32_t r_frameIndex;
 	extern RootSignature r_rootSignature;
 #ifdef _WIN32

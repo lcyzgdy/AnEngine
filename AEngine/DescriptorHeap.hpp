@@ -36,8 +36,7 @@ namespace AEngine::RenderCore::Heap
 		~DescriptorHeapAllocator();
 
 	public:
-		D3D12_CPU_DESCRIPTOR_HANDLE Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device,
-			uint32_t count = 1);
+		D3D12_CPU_DESCRIPTOR_HANDLE Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count = 1);
 
 		static DescriptorHeapAllocator* GetInstance();
 

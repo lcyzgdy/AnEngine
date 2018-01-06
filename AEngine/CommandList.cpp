@@ -1,13 +1,11 @@
 #include "CommandList.h"
+#include "RenderCore.h"
 
-/*void AEngine::RenderCore::CommandList::Create(ID3D12Device * device, CommandFormatDesc & formatDesc, D3D12_COMMAND_LIST_TYPE type)
-{
-
-}*/
 namespace AEngine::RenderCore
 {
-	CommandList::CommandList(ID3D12Device* device, CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type) : m_desc(formatDesc)
+	CommandList::CommandList(CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type) : m_desc(formatDesc)
 	{
+		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
 		ThrowIfFailed(device->CreateCommandList(formatDesc.nodeMask, type, formatDesc.allocator,
 			formatDesc.pipelineState, IID_PPV_ARGS(&m_commandList)));
 		m_commandList->Close();
@@ -35,8 +33,9 @@ namespace AEngine::RenderCore
 
 namespace AEngine::RenderCore
 {
-	CommandAllocator::CommandAllocator(ID3D12Device* device, D3D12_COMMAND_LIST_TYPE type) : m_type(type)
+	CommandAllocator::CommandAllocator(D3D12_COMMAND_LIST_TYPE type) : m_type(type)
 	{
+		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
 		if (!SUCCEEDED(device->CreateCommandAllocator(type, IID_PPV_ARGS(&m_allocator))))
 		{
 			var hr = device->GetDeviceRemovedReason();

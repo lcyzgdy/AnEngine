@@ -42,12 +42,12 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_cnt_DefaultFrameCount];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
 	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	ComPtr<ID3D12DescriptorHeap> samHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_cnt_DefaultFrameCount];
+	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -67,7 +67,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT fenceValues[r_cnt_DefaultFrameCount];
+	UINT fenceValues[r_DefaultFrameCount_const];
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleCSU[1];
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleDSV[1];

@@ -21,7 +21,7 @@ namespace AEngine::RenderCore
 		}
 	}
 
-	GraphicsCommandContext * GraphicsCommandContext::GetInstance()
+	GraphicsCommandContext* GraphicsCommandContext::GetInstance()
 	{
 		if (m_uniqueObj == nullptr)
 		{
@@ -40,7 +40,7 @@ namespace AEngine::RenderCore
 			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator()->GetAllocator();
 			desc.nodeMask = 1;
 			desc.pipelineState = nullptr;
-			CommandList* list = new CommandList(r_graphicsCard[0]->GetDevice(), desc);
+			CommandList* list = new CommandList(desc);
 			return list;
 		}
 		lock_guard<mutex> lock(m_mutex);
@@ -112,7 +112,7 @@ namespace AEngine::RenderCore
 		//while (m_commandAllocatorPool.size() <= 0);
 		if (m_commandAllocatorPool.size() <= 0)
 		{
-			var allocator = new CommandAllocator(r_graphicsCard[0]->GetDevice());
+			var allocator = new CommandAllocator();
 			return allocator;
 		}
 		lock_guard<mutex> lock(m_mutex);
@@ -121,7 +121,7 @@ namespace AEngine::RenderCore
 		return allocator;
 	}
 
-	void GraphicsCommandAllocator::PushCommandAllocator(CommandAllocator * newAllocator)
+	void GraphicsCommandAllocator::PushCommandAllocator(CommandAllocator* newAllocator)
 	{
 		lock_guard<mutex> lockw(m_writerMutex);
 		lock_guard<std::mutex> lock(m_mutex);

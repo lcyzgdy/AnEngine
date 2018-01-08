@@ -90,7 +90,7 @@ namespace AEngine::RenderCore::Heap
 		desc.Type = type;
 
 		ComPtr<ID3D12DescriptorHeap> cp_heap;
-		ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(cp_heap.GetAddressOf())));
+		ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&cp_heap)));
 		m_cp_descriptorHeapPool.emplace_back(cp_heap);
 		return cp_heap.Get();
 	}

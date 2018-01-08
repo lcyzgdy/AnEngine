@@ -175,6 +175,7 @@
     <ClInclude Include="DX.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
+    <ClInclude Include="Fence.h" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuResource.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
+    <ClCompile Include="Fence.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuResource.cpp" />

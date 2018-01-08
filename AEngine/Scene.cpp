@@ -46,7 +46,7 @@ namespace AEngine::Game
 		for (var i : behaviour->GetComponents())
 		{
 			lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
-			if (i)
+			if (i != nullptr && std::find(m_objects.begin(), m_objects.end(), i) == m_objects.end())
 			{
 				m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(i));
 			}

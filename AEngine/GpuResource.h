@@ -17,7 +17,7 @@ namespace AEngine::RenderCore::Resource
 	{
 	protected:
 		ComPtr<ID3D12Resource> m_resource_cp;
-		ComPtr<ID3D12Heap> m_cp_heap;
+		ComPtr<ID3D12Heap> m_heap_cp;
 		D3D12_RESOURCE_STATES m_usageState;
 		D3D12_RESOURCE_STATES m_transitioningState;
 		D3D12_GPU_VIRTUAL_ADDRESS m_gpuVirtualAddress;

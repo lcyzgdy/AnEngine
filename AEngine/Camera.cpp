@@ -56,7 +56,7 @@ namespace AEngine::Game
 		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
 		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
-		m_colorBuffer->SetAsRenderTargetView();
+		//m_colorBuffer->SetAsRenderTargetView();
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}
 

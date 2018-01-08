@@ -39,9 +39,9 @@ namespace AEngine::RenderCore::Resource
 		heapDesc.Properties.VisibleNodeMask = device->GetNodeNum();
 		heapDesc.Alignment = allocationInfo.Alignment;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
-		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf())));
+		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_heap_cp.GetAddressOf())));
 
-		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
+		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
 			nullptr, IID_PPV_ARGS(m_resource_cp.GetAddressOf())));
 	}
 
@@ -71,10 +71,10 @@ namespace AEngine::RenderCore::Resource
 		heapDesc.Properties.VisibleNodeMask = device->GetNodeNum();
 		heapDesc.Alignment = allocationInfo.Alignment;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
-		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(m_cp_heap.GetAddressOf())));
+		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
-		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_cp_heap.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
-			nullptr, IID_PPV_ARGS(m_resource_cp.GetAddressOf())));
+		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
+			nullptr, IID_PPV_ARGS(&m_resource_cp)));
 	}
 
 	ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle)
@@ -144,6 +144,7 @@ namespace AEngine::RenderCore::Resource
 
 		//Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(device->GetDevice());
 		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		var aaa = m_resource_cp->GetDesc();
 		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, handle);
 		//m_rtvHandle = rtv->GetHandle().GetCpuHandle();
 		m_rtvHandle = handle;

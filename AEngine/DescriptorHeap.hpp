@@ -24,12 +24,12 @@ namespace AEngine::RenderCore::Heap
 		vector<ComPtr<ID3D12DescriptorHeap>> m_cp_descriptorHeapPool;
 
 		//D3D12_DESCRIPTOR_HEAP_TYPE m_type[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
-		ID3D12DescriptorHeap* m_currentHeap[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
+		ComPtr<ID3D12DescriptorHeap> m_currentHeap[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		D3D12_CPU_DESCRIPTOR_HANDLE m_currentHandle[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_descriptorSize[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_remainingFreeHandles[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
-		ID3D12DescriptorHeap* RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device);
+		void RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device);
 		void DestoryAll();
 
 		DescriptorHeapAllocator() = default;

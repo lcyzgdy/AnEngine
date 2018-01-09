@@ -396,7 +396,8 @@ namespace AEngine::RenderCore::Resource
 		desc.DepthOrArraySize = static_cast<uint16_t>(depthOrArraySize);
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Flags = static_cast<D3D12_RESOURCE_FLAGS>(flags);
-		desc.Format = GetBaseFormat(format);
+		//desc.Format = GetBaseFormat(format);
+		desc.Format = format;
 		desc.Height = static_cast<uint32_t>(height);
 		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 		desc.MipLevels = static_cast<uint16_t>(numMips);

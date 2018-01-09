@@ -81,7 +81,8 @@ namespace AEngine::RenderCore::Heap
 
 	DescriptorHeapAllocator* DescriptorHeapAllocator::m_uniqueObj;
 
-	ID3D12DescriptorHeap* DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
+	//ID3D12DescriptorHeap* DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
+	void DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC desc;
 		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
@@ -92,7 +93,7 @@ namespace AEngine::RenderCore::Heap
 		ComPtr<ID3D12DescriptorHeap> cp_heap;
 		ThrowIfFailed(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&cp_heap)));
 		m_cp_descriptorHeapPool.emplace_back(cp_heap);
-		return cp_heap.Get();
+		ThrowIfFailed(cp_heap.As(&m_currentHeap[type]));
 	}
 
 	DescriptorHeapAllocator::~DescriptorHeapAllocator()
@@ -106,7 +107,8 @@ namespace AEngine::RenderCore::Heap
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{
-			m_currentHeap[type] = RequestNewHeap(type, device);
+			// m_currentHeap[type] = RequestNewHeap(type, device);
+			RequestNewHeap(type, device);
 			m_currentHandle[type] = m_currentHeap[type]->GetCPUDescriptorHandleForHeapStart();
 			m_remainingFreeHandles[type] = m_NumDescriptorPerHeap;
 

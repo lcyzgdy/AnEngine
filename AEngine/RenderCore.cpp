@@ -208,30 +208,38 @@ namespace AEngine::RenderCore
 
 	void RenderColorBuffer(ColorBuffer* destColorBuffer)
 	{
-		var pCommandList = GraphicsCommandContext::GetInstance()->GetCommandList();
-		var commandList = pCommandList->GetCommandList();
+		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
+		var iCommandList = commandList->GetCommandList();
+		var iCommandAllocator = commandAllocator->GetAllocator();
+
+		ThrowIfFailed(iCommandAllocator->Reset());
+		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
 
 		var commonToRenderTarget = r_commonToRenderTarget;
 		var renderTargetToCommon = r_renderTargetToResolveDest;
 		commonToRenderTarget.Transition.pResource = destColorBuffer->GetResource();
 		renderTargetToCommon.Transition.pResource = destColorBuffer->GetResource();
 
-		commandList->ResourceBarrier(1, &commonToRenderTarget);
+		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = destColorBuffer->GetClearColor();
-		float clearColor[4] = { clearColorTemp.R(), clearColorTemp.G(), clearColorTemp.B(), clearColorTemp.A() };
-		commandList->ClearRenderTargetView(destColorBuffer->GetRTV(), clearColor, 0, nullptr);
-		commandList->ResourceBarrier(1, &renderTargetToCommon);
-		commandList->Close();
-		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&commandList));
-		//r_swapChain_cp->Present(0, 0);
+		float clearColor[4] = { 0, 0, 0.6, 1 };
+		iCommandList->ClearRenderTargetView(destColorBuffer->GetRTV(), clearColor, 0, nullptr);
+		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
+		iCommandList->Close();
+		ID3D12CommandList* ppcommandList[] = { iCommandList };
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
-		GraphicsCommandContext::GetInstance()->PushCommandList(pCommandList);
+		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
+		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
 	}
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		/*var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
 		var iCommandList = commandList->GetCommandList();
+		var iCommandAllocator = commandAllocator->GetAllocator();
 
 		var renderTargetToResolveDest = r_renderTargetToResolveDest;
 		var commonToResolveDest = r_commonToResolveDest;
@@ -243,16 +251,19 @@ namespace AEngine::RenderCore
 		iCommandList->ResourceBarrier(1, &r_renderTargetToResolveDest);
 		iCommandList->ResolveSubresource(r_displayPlane[r_frameIndex]->GetResource(), 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 		iCommandList->ResourceBarrier(1, &r_resolveDestToCommon);
-		//resolveDestTo
 
 		iCommandList->Close();
-		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&iCommandList));
-		r_swapChain_cp->Present(1, 0);
+		ID3D12CommandList* ppcommandList[] = { iCommandList };
+		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
+
+		r_fenceForDisplayPlane->Wait();
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
-		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);*/
+		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
+		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
 
-		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		/*var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
@@ -267,7 +278,7 @@ namespace AEngine::RenderCore
 
 		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = r_displayPlane[r_frameIndex]->GetClearColor();
-		float clearColor[4] = { 0, 0, 1, 1 };
+		float clearColor[4] = { 0, 0, 0.6, 1 };
 		iCommandList->ClearRenderTargetView(r_displayPlane[r_frameIndex]->GetRTV(), clearColor, 0, nullptr);
 		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
@@ -279,6 +290,6 @@ namespace AEngine::RenderCore
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
-		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
+		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);*/
 	}
-		}
+}

@@ -1,7 +1,7 @@
 #include "Test.h"
 #include"Driver.h"
-using namespace AEngine;
-using namespace AEngine::Game;
+using namespace AnEngine;
+using namespace AnEngine::Game;
 
 Scene* testScene;
 Camera* testCamera;

@@ -18,6 +18,7 @@ namespace AnEngine::RenderCore
 		static GraphicsCommandContext* m_uniqueObj;
 
 		queue<CommandList*> m_commandListPool;
+		queue<CommandList*> m_readyQueue;
 		ComPtr<ID3D12Fence> m_fence;
 		std::mutex m_readerMutex;
 		std::mutex m_writerMutex;

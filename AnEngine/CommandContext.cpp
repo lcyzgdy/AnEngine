@@ -32,7 +32,7 @@ namespace AnEngine::RenderCore
 
 	CommandList* GraphicsCommandContext::GetCommandList()
 	{
-		lock_guard<mutex> lockr(m_readerMutex);
+		//lock_guard<mutex> lockr(m_readerMutex);
 		//while (m_commandListPool.size() <= 0) this_thread::sleep_for(std::chrono::microseconds(20));
 		if (m_commandListPool.size() <= 0)
 		{
@@ -43,7 +43,8 @@ namespace AnEngine::RenderCore
 			CommandList* list = new CommandList(desc);
 			return list;
 		}
-		lock_guard<mutex> lock(m_mutex);
+		//lock_guard<mutex> lock(m_mutex);
+		lock_guard<mutex> lockr(m_readerMutex);
 		var list = m_commandListPool.front();
 		m_commandListPool.pop();
 		return list;
@@ -52,14 +53,17 @@ namespace AnEngine::RenderCore
 	void GraphicsCommandContext::PushCommandList(CommandList* list)
 	{
 		lock_guard<mutex> lockw(m_writerMutex);
-		lock_guard<std::mutex> lock(m_mutex);
-		m_commandListPool.emplace(list);
+		//lock_guard<std::mutex> lock(m_mutex);
+		//m_commandListPool.emplace(list);
+		m_readyQueue.emplace(list);
 	}
 
 	void GraphicsCommandContext::AddNewCommandList(CommandList* newList)
 	{
 		//CommandList* list = new CommandList();
-		this->PushCommandList(newList);
+		//this->PushCommandList(newList);
+		lock_guard<mutex> lockr(m_readerMutex);
+		m_commandListPool.emplace(newList);
 	}
 }
 

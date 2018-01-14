@@ -67,6 +67,8 @@ namespace AnEngine::RenderCore
 		ID3D12Device* GetDevice();
 		uint32_t GetNodeNum();
 
+		void ExecuteSync(_In_ uint32_t num, _In_reads_(num) ID3D12CommandList *const *ppCommandLists, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+
 		void IsStable(bool isStable);
 	};
 }

@@ -123,6 +123,30 @@ namespace AnEngine::RenderCore
 		return m_node;
 	}
 
+	void GraphicsCard::ExecuteSync(uint32_t num, ID3D12CommandList * const * ppCommandLists, D3D12_COMMAND_LIST_TYPE type)
+	{
+		switch (type)
+		{
+		case D3D12_COMMAND_LIST_TYPE_DIRECT:
+		{
+			m_renderCommandQueue.GetCommandQueue()->ExecuteCommandLists(num, ppCommandLists);
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
+			break;
+		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
+			break;
+		case D3D12_COMMAND_LIST_TYPE_COPY:
+			break;
+		case D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE:
+			break;
+		case D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS:
+			break;
+		default:
+			break;
+		}
+	}
+
 	void GraphicsCard::IsStable(bool isStable)
 	{
 		m_stableFlag = isStable;

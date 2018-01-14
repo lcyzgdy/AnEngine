@@ -48,7 +48,7 @@ namespace AnEngine::RenderCore
 	void CreateCommonState();
 
 
-	void RenderColorBuffer(Resource::ColorBuffer* destColorBuffer);
+	void RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 
 	void BlendBuffer(Resource::GpuResource* buffer);
 

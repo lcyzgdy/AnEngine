@@ -40,25 +40,25 @@ namespace AnEngine::RenderCore::Resource
 		XMStoreFloat4(&m_color, XMVectorScale(XMVectorSet(r, g, b, a), 1.0f / 255.0f));
 	}
 
-	float Color::R() const
+	float Color::GetR() const
 	{
 		//return XMVectorGetX(m_color);
 		return m_color.x;
 	}
 
-	float Color::G() const
+	float Color::GetG() const
 	{
 		//return XMVectorGetY(m_color);
 		return m_color.y;
 	}
 
-	float Color::B() const
+	float Color::GetB() const
 	{
 		//return XMVectorGetZ(m_color);
 		return m_color.z;
 	}
 
-	float Color::A() const
+	float Color::GetA() const
 	{
 		//return XMVectorGetW(m_color);
 		return m_color.w;

@@ -23,15 +23,15 @@ namespace AnEngine::RenderCore::Resource
 
 		~Color() = default;
 
-		float R() const;
-		float G() const;
-		float B() const;
-		float A() const;
+		float GetR() const;
+		float GetG() const;
+		float GetB() const;
+		float GetA() const;
 
-		void R(float r) const;
-		void G(float g) const;
-		void B(float b) const;
-		void A(float a) const;
+		//void R(float r) const;
+		//void G(float g) const;
+		//void B(float b) const;
+		//void A(float a) const;
 
 		bool operator==(const Color& rhs) const;
 		bool operator!=(const Color& rhs) const;

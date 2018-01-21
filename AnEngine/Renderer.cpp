@@ -4,24 +4,16 @@
 
 namespace AnEngine::Game
 {
-	void Renderer::OnInit()
-	{
-	}
-
 	void Renderer::BeforeUpdate()
 	{
 	}
 
-	void Renderer::OnUpdate()
+	void Renderer::Update()
 	{
+
 	}
 
 	void Renderer::AfterUpdate()
-	{
-		var i = GraphicsCommandContext::GetInstance();
-	}
-
-	void Renderer::OnRelease()
 	{
 	}
 }

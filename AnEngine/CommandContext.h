@@ -35,6 +35,8 @@ namespace AnEngine::RenderCore
 		void PushCommandList(CommandList* list);
 
 		void AddNewCommandList(CommandList* newList);
+
+		vector<ID3D12CommandList*>&& GetReadyCommandList();
 	};
 
 	class GraphicsCommandAllocator : public NonCopyable

@@ -2,6 +2,8 @@
 #include "RenderCore.h"
 #include "ThreadPool.hpp"
 #include "Screen.h"
+#include"CommandContext.h"
+
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
 
@@ -33,12 +35,37 @@ namespace AnEngine::Game
 	void Camera::Update()
 	{
 		this_thread::sleep_for(std::chrono::milliseconds(6));
+
+		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
+		var iCommandList = commandList->GetCommandList();
+		var iCommandAllocator = commandAllocator->GetAllocator();
+
+		ThrowIfFailed(iCommandAllocator->Reset());
+		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
+
+		var commonToRenderTarget = CommonState::commonToRenderTarget;
+		var renderTargetToCommon = CommonState::renderTargetToResolveDest;
+		commonToRenderTarget.Transition.pResource = m_colorBuffer->GetResource();
+		renderTargetToCommon.Transition.pResource = m_colorBuffer->GetResource();
+
+		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
+		var clearColorTemp = m_colorBuffer->GetClearColor();
+		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
+		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
+		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
+		iCommandList->Close();
+		//ID3D12CommandList* ppcommandList[] = { iCommandList };
+		//r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+
+		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
+		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
 	}
 
 	void Camera::AfterUpdate()
 	{
-		RenderCore::RenderColorBuffer(m_colorBuffer);
-		RenderCore::BlendBuffer(m_colorBuffer);
+		//RenderColorBuffer(m_colorBuffer);
+		BlendBuffer(m_colorBuffer);
 	}
 
 	void Camera::OnInvalid()

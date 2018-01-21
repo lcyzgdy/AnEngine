@@ -19,7 +19,7 @@ namespace AnEngine::RenderCore
 		D3D12_COMMAND_LIST_TYPE m_type;
 
 	public:
-		// ÕâÀïÒªĞŞ¸Ä
+		// è¿™é‡Œè¦ä¿®æ”¹
 		CommandQueue() = default;
 		~CommandQueue() = default;
 

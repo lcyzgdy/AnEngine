@@ -65,6 +65,18 @@ namespace AnEngine::RenderCore
 		lock_guard<mutex> lockr(m_readerMutex);
 		m_commandListPool.emplace(newList);
 	}
+
+	vector<ID3D12CommandList*>&& GraphicsCommandContext::GetReadyCommandList()
+	{
+		lock_guard<std::mutex> lock(m_writerMutex);
+		vector<ID3D12CommandList*> temp;
+		while (!m_readyQueue.empty())
+		{
+			temp.emplace_back(m_readyQueue.front()->GetCommandList());
+			m_readyQueue.pop();
+		}
+		return std::move(temp);
+	}
 }
 
 

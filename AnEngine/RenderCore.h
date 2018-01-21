@@ -25,6 +25,19 @@ namespace AnEngine::RenderCore::Heap
 	extern DescriptorHeapAllocator r_h_heapDescAllocator;
 }
 
+namespace AnEngine::RenderCore::CommonState
+{
+	extern D3D12_RESOURCE_BARRIER commonToRenderTarget;
+	extern D3D12_RESOURCE_BARRIER renderTargetToCommon;
+	extern D3D12_RESOURCE_BARRIER commonToResolveDest;
+	extern D3D12_RESOURCE_BARRIER resolveDestToCommon;
+	extern D3D12_RESOURCE_BARRIER renderTargetToResolveDest;
+	extern D3D12_RESOURCE_BARRIER resolveSourceToRenderTarget;
+	extern D3D12_RESOURCE_BARRIER presentToRenderTarget;
+	extern D3D12_RESOURCE_BARRIER renderTargetToPresent;
+	extern D3D12_RESOURCE_BARRIER renderTargetToResolveSource;
+}
+
 namespace AnEngine::RenderCore
 {
 	extern bool r_enableHDROutput;
@@ -42,6 +55,7 @@ namespace AnEngine::RenderCore
 #ifdef _WIN32
 	extern HWND r_hwnd;
 #endif // _WIN32
+	extern bool rrrr_runningFlag;
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 

@@ -2,20 +2,19 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-#include"ComponentBehaviour.h"
+#include"ObjectBehaviour.h"
 
 namespace AnEngine::Game
 {
-	class Renderer : public ComponentBehaviour
+	class Renderer : public ObjectBehaviour
 	{
-		bool m_inView;
+	public:
+		Renderer();
+		~Renderer();
 
-		// 通过 BaseBehaviour 继承
-		virtual void OnInit() override;
 		virtual void BeforeUpdate() override;
-		virtual void OnUpdate() override;
+		virtual void Update() override;
 		virtual void AfterUpdate() override;
-		virtual void OnRelease() override;
 	};
 }
 

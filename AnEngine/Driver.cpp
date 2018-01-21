@@ -22,6 +22,7 @@ namespace AnEngine
 
 	void Driver::Release()
 	{
+		RenderCore::rrrr_runningFlag = false;
 		m_initialized = false;
 		EndBehaviour();
 		BaseInput::GetInstance()->Release();

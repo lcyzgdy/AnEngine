@@ -36,8 +36,8 @@ namespace AnEngine::Game
 	{
 		this_thread::sleep_for(std::chrono::milliseconds(6));
 
-		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
+		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -51,15 +51,15 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
+		float clearColor[4] = { 0, 0, 0.1, 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
-		//ID3D12CommandList* ppcommandList[] = { iCommandList };
-		//r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		ID3D12CommandList* ppcommandList[] = { iCommandList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
-		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
+		GraphicsCommandContext::GetInstance()->Push(commandList);
+		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 	}
 
 	void Camera::AfterUpdate()

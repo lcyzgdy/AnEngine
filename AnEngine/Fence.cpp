@@ -3,7 +3,7 @@
 
 namespace AnEngine::RenderCore
 {
-	FenceSync::FenceSync(ID3D12CommandQueue* targetQueue)
+	FenceSync::FenceSync(ID3D12CommandQueue* targetQueue) : m_fenceValue(0)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 		m_commandQueue = targetQueue;
@@ -30,6 +30,7 @@ namespace AnEngine::RenderCore
 		const uint64_t fenceValue = m_fenceValue;
 		ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), fenceValue));
 		m_fenceValue++;
+		int yyyy = m_fence->GetCompletedValue();
 		if (m_fence->GetCompletedValue() < fenceValue)
 		{
 			ThrowIfFailed(m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent));

@@ -125,6 +125,7 @@ namespace AnEngine::RenderCore
 
 	void GraphicsCard::ExecuteSync(uint32_t num, ID3D12CommandList * const * ppCommandLists, D3D12_COMMAND_LIST_TYPE type)
 	{
+		//lock_guard<std::mutex> lock(m_execMutex);
 		switch (type)
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:

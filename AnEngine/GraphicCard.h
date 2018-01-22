@@ -5,6 +5,7 @@
 #include"DX.h"
 #include"CommandQueue.h"
 #include"RenderCoreConstants.h"
+#include<mutex>
 
 namespace AnEngine::RenderCore
 {
@@ -27,6 +28,8 @@ namespace AnEngine::RenderCore
 		// 决定GPU是否为稳定的，若为稳定的，则限制供电以避免超频或降频。
 		bool m_stableFlag;
 		uint32_t m_node;
+
+		std::mutex m_execMutex;
 
 		void CreateDevice(IDXGIFactory4* dxgiFactory);
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);

@@ -18,6 +18,7 @@ namespace AnEngine::RenderCore
 	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	bool r_enableHDROutput = false;
 	uint32_t r_frameIndex;
+	uint64_t r_frameCount;
 
 	FenceSync* r_fenceForDisplayPlane;
 
@@ -81,14 +82,15 @@ namespace AnEngine::RenderCore
 
 		r_fenceForDisplayPlane = new FenceSync(r_graphicsCard[0]->GetCommandQueue());
 		rrrr_runningFlag = true;
-		Utility::u_s_threadPool.Commit([=]
+		r_frameCount = 0;
+		/*Utility::u_s_threadPool.Commit([=]
 		{
 			while (rrrr_runningFlag)
 			{
 				this_thread::sleep_for(std::chrono::milliseconds(100 / 6));
 				PopulateCommandList();
 			}
-		});
+		});*/
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -143,7 +145,7 @@ namespace AnEngine::RenderCore
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
 		{
 			CommandAllocator* allocator = new CommandAllocator();
-			GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(allocator);
+			GraphicsCommandAllocator::GetInstance()->Push(allocator);
 
 			ComPtr<ID3D12Resource> displayPlane;
 			ThrowIfFailed(r_swapChain_cp->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
@@ -156,11 +158,11 @@ namespace AnEngine::RenderCore
 		for (int i = 0; i < 1; i++)
 		{
 			CommandFormatDesc desc;
-			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator()->GetAllocator();
+			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetOne()->GetAllocator();
 			desc.nodeMask = 1;
 			desc.pipelineState = nullptr;
 			CommandList* list = new CommandList(desc);
-			GraphicsCommandContext::GetInstance()->AddNewCommandList(list);
+			GraphicsCommandContext::GetInstance()->AddNew(list);
 		}
 	}
 
@@ -233,20 +235,18 @@ namespace AnEngine::RenderCore
 
 	void PopulateCommandList()
 	{
-		vector<ID3D12CommandList*>&& commandLists = GraphicsCommandContext::GetInstance()->GetReadyCommandList();
-		if (commandLists.size() > 0)
-		{
-			r_graphicsCard[0]->ExecuteSync(commandLists.size(), commandLists.data());
-			r_fenceForDisplayPlane->Wait();
-			ThrowIfFailed(r_swapChain_cp->Present(0, 0));
-			r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-		}
+		//r_graphicsCard[0]->ExecuteSync(commandLists.size(), &commandLists[0]);
+		//GraphicsCommandContext::GetInstance()->PopulateFinished();
+		r_fenceForDisplayPlane->Wait();
+		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		r_frameCount++;
 	}
 
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
 	{
-		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
+		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -267,14 +267,14 @@ namespace AnEngine::RenderCore
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
-		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
-		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
+		GraphicsCommandContext::GetInstance()->Push(commandList);
+		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 	}
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();
+		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -297,17 +297,17 @@ namespace AnEngine::RenderCore
 		iCommandList->ResourceBarrier(1, &resolveSrcToRenderTarget);
 
 		iCommandList->Close();
-		/*ID3D12CommandList* ppcommandList[] = { iCommandList };
+		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		//r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		r_fenceForDisplayPlane->Wait();
 		ThrowIfFailed(r_swapChain_cp->Present(0, 0));
 
-		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();*/
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
-		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);
-		GraphicsCommandAllocator::GetInstance()->PushCommandAllocator(commandAllocator);
+		GraphicsCommandContext::GetInstance()->Push(commandList);
+		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 
 		/*var commandList = GraphicsCommandContext::GetInstance()->GetCommandList();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetCommandAllocator();

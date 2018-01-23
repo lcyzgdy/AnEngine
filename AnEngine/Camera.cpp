@@ -51,7 +51,7 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0, 0, 0.1, 1.0f };
+		float clearColor[4] = { Random(0.1, 0.9f), Random(0.1f, 0.9f), Random(0.1, 0.9f), 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();

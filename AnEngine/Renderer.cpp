@@ -16,4 +16,7 @@ namespace AnEngine::Game
 	void Renderer::AfterUpdate()
 	{
 	}
+	void TrangleRender::OnRender()
+	{
+	}
 }

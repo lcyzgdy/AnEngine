@@ -20,10 +20,13 @@ namespace AnEngine::Game
 		Renderer();
 		~Renderer();
 
+		virtual void Start() override;
+
 		virtual void BeforeUpdate() override;
 		virtual void Update() override;
 		virtual void AfterUpdate() override;
 
+		virtual void LoadAsset() = 0;
 		virtual void OnRender() = 0;
 	};
 
@@ -31,6 +34,7 @@ namespace AnEngine::Game
 	{
 	public:
 		// Í¨¹ý Renderer ¼Ì³Ð
+		virtual void LoadAsset() override;
 		virtual void OnRender() override;
 	};
 }

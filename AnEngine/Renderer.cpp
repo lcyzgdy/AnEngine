@@ -33,6 +33,11 @@ namespace AnEngine::Game
 
 	void TrangleRender::OnRender()
 	{
-
+		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		var pCommandList = commandList->GetCommandList();
+		var pCommandAllocator = commandAllocator->GetAllocator();
+		ThrowIfFailed(pCommandAllocator->Reset());
+		pCommandList->Reset(pCommandAllocator, nullptr);
 	}
 }

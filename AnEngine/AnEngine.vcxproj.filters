@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\UTIL">
+      <UniqueIdentifier>{e07c5751-64ca-4412-8b91-520addc4525f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\UTIL">
+      <UniqueIdentifier>{792a8e2c-343a-410f-89ad-30e401c882f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Demos">
+      <UniqueIdentifier>{c08d3caa-e606-475f-b93f-1b9f262cf62f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Demos">
+      <UniqueIdentifier>{1ebdceee-48bc-450a-8080-edb7d2ddc89d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Math">
+      <UniqueIdentifier>{e75c2931-c7e4-4edd-866f-785d385f9e8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Graphic">
+      <UniqueIdentifier>{3ed055a0-18ad-4126-9eb3-ddc03c4a9a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Graphic">
+      <UniqueIdentifier>{32fd9ebf-eb5f-4709-9774-9e7e4c605e84}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3dx12.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DTimer.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="MCamera.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DX.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteIndirect.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="frameBuffering.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="NBody.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawLine.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsCore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawCube.h">
+      <Filter>头文件\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
+      <Filter>头文件\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.hpp">
+      <Filter>头文件\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody3D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugLog.h">
+      <Filter>头文件\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandContext.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandList.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueue.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicConstantBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GpuResource.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicCard.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IEffect.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineState.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCore.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCoreConstants.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderClass.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBehaviour.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorHeap.hpp">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DTimer.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="MCamera.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="DX.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawLine.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecuteIndirect.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="frameBuffering.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="NBody.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawCube.cpp">
+      <Filter>源文件\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>源文件\UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandList.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueue.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorHeap.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicConstantBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuResource.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicCard.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineState.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderCore.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClass.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBehaviour.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualBehaviour.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandContext.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBehaviour.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Fence.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="triangle_shaders.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="texture_shaders.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ParticleDraw.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="nBodyGravityCS.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="framebuffer_shaders.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="execute_indirect_shaders.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="constbuffers_shaders.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cube_shader.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+    <CustomBuild Include="compute_shader.hlsl">
+      <Filter>资源文件</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

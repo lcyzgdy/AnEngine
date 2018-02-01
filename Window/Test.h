@@ -3,12 +3,12 @@
 #include"Camera.h"
 #include"ObjectBehaviour.h"
 
-extern AEngine::Game::Scene* testScene;
-extern AEngine::Game::Camera* testCamera;
+extern AnEngine::Game::Scene* testScene;
+extern AnEngine::Game::Camera* testCamera;
 
 void LoadScene();
 
-class TestCamera :public AEngine::Game::ObjectBehaviour
+class TestCamera :public AnEngine::Game::ObjectBehaviour
 {
 public:
 	TestCamera(std::wstring name);

@@ -4,7 +4,7 @@
 #include"Driver.h"
 #include"ThreadPool.hpp"
 #include"Input.h"
-using namespace AEngine;
+using namespace AnEngine;
 
 #include"Test.h"
 
@@ -79,7 +79,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	DeleteFile(_T("log.txt"));
-	std::wstring windowTitle(_T("AEngine"));
+	std::wstring windowTitle(_T("AnEngine"));
 	std::wstring windowClassName(_T("AWindow"));
 	screenw = 1280;
 	screenh = 720;
@@ -127,7 +127,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	Randomize();
 
-	AEngine::Driver::GetInstance()->Initialize(window, hInstance, screenw, screenh);
+	AnEngine::Driver::GetInstance()->Initialize(window, hInstance, screenw, screenh);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();

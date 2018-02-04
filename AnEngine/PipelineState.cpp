@@ -6,25 +6,24 @@ using namespace AnEngine::RenderCore;
 
 namespace AnEngine::RenderCore
 {
-	PipelineStateObject::PipelineStateObject() : m_rootSignature(nullptr), m_pipelineState(nullptr)
+	PipelineStateObject::PipelineStateObject() : m_pipelineState(nullptr)
 	{
 	}
 
-	ID3D12PipelineState * PipelineStateObject::GetPSO() const
+	ID3D12PipelineState* PipelineStateObject::GetPSO()
 	{
-		return m_pipelineState;
+		return m_pipelineState.Get();
 	}
 
-	const RootSignature & PipelineStateObject::GetRootSignature()
+	/*RootSignature* PipelineStateObject::GetRootSignature()
 	{
-		if (m_rootSignature == nullptr) throw exception();
-		return *m_rootSignature;
+		return &m_rootSignature;
 	}
 
-	void PipelineStateObject::SetRootSignature(const RootSignature & rootSignature)
+	void PipelineStateObject::SetRootSignature(const RootSignature& rootSignature)
 	{
-		m_rootSignature = &rootSignature;
-	}
+		m_rootSignature = rootSignature;
+	}*/
 
 	GraphicPSO::GraphicPSO()
 	{
@@ -35,17 +34,22 @@ namespace AnEngine::RenderCore
 		m_psoDesc.InputLayout.NumElements = 0;
 	}
 
-	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC & blendDesc)
+	void GraphicPSO::SetRootSignature(ID3D12RootSignature* rootSignature)
+	{
+		m_psoDesc.pRootSignature = rootSignature;
+	}
+
+	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC& blendDesc)
 	{
 		m_psoDesc.BlendState = blendDesc;
 	}
 
-	void GraphicPSO::SetRasterizerState(const D3D12_RASTERIZER_DESC & rasterizerDesc)
+	void GraphicPSO::SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc)
 	{
 		m_psoDesc.RasterizerState = rasterizerDesc;
 	}
 
-	void GraphicPSO::SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC & depthStencilDesc)
+	void GraphicPSO::SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc)
 	{
 		m_psoDesc.DepthStencilState = depthStencilDesc;
 	}
@@ -82,7 +86,7 @@ namespace AnEngine::RenderCore
 		m_psoDesc.SampleDesc.Quality = msaaQuality;
 	}
 
-	void GraphicPSO::SetInputLayout(uint32_t elementsNum, const D3D12_INPUT_ELEMENT_DESC * p_inputElementDescs)
+	void GraphicPSO::SetInputLayout(uint32_t elementsNum, const D3D12_INPUT_ELEMENT_DESC* p_inputElementDescs)
 	{
 		m_psoDesc.InputLayout.NumElements = elementsNum;
 		if (elementsNum == 0)
@@ -155,7 +159,7 @@ namespace AnEngine::RenderCore
 
 	void GraphicPSO::Finalize(ID3D12Device* device)
 	{
-		m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
 
 		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
@@ -183,7 +187,7 @@ namespace AnEngine::RenderCore
 		if (firstCompile)
 		{
 			ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState);
+			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState.Get());
 		}
 		else
 		{
@@ -217,7 +221,7 @@ namespace AnEngine::RenderCore
 
 	void ComputePSO::Finalize(ID3D12Device* device)
 	{
-		m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+		m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
 		size_t hashCode = Utility::GetHash(&m_psoDesc);
@@ -242,7 +246,7 @@ namespace AnEngine::RenderCore
 		if (firstComplie)
 		{
 			ThrowIfFailed(device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_computePSOMap[hashCode].Attach(m_pipelineState);
+			r_s_computePSOMap[hashCode].Attach(m_pipelineState.Get());
 		}
 		else
 		{

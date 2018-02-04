@@ -25,7 +25,7 @@ namespace AnEngine::RenderCore
 		~RootSignature() = default;
 		void Reset();
 
-		ID3D12RootSignature* GetSignature() const;
+		ID3D12RootSignature* GetRootSignature() const;
 	};
 }
 

@@ -3,6 +3,7 @@
 #define __RENDERER_H__
 
 #include"ObjectBehaviour.h"
+#include"PipelineState.h"
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -15,7 +16,10 @@ namespace AnEngine::Game
 
 	class Renderer : public ObjectBehaviour
 	{
+	protected:
 		::AnEngine::RenderCore::Resource::ColorBuffer* m_renderTarget;
+		GraphicPSO m_pso;
+
 	public:
 		Renderer();
 		~Renderer();

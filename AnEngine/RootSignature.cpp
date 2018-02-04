@@ -6,7 +6,7 @@ namespace AnEngine::RenderCore
 	{
 	}
 
-	ID3D12RootSignature * RootSignature::GetSignature() const
+	ID3D12RootSignature * RootSignature::GetRootSignature() const
 	{
 		return m_rootSignature.Get();
 	}

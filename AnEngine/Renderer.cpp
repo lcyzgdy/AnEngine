@@ -38,6 +38,10 @@ namespace AnEngine::Game
 		var pCommandList = commandList->GetCommandList();
 		var pCommandAllocator = commandAllocator->GetAllocator();
 		ThrowIfFailed(pCommandAllocator->Reset());
-		pCommandList->Reset(pCommandAllocator, nullptr);
+		pCommandList->Reset(pCommandAllocator, m_pso.GetPSO());
+
+		pCommandList->SetGraphicsRootSignature(m_pso.Get);
+		pCommandList->RSSetViewports(1, &viewport);
+		pCommandList->RSSetScissorRects(1, &scissorRect);
 	}
 }

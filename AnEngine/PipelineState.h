@@ -11,22 +11,22 @@ namespace AnEngine::RenderCore
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
 
-	typedef class PipelineStateObject PSO;
-
 	class PipelineStateObject
 	{
 	protected:
-		const RootSignature* m_rootSignature;
-		ID3D12PipelineState* m_pipelineState;
+		//RootSignature m_rootSignature;
+		ComPtr<ID3D12PipelineState> m_pipelineState;
 
 	public:
 		PipelineStateObject();
 		~PipelineStateObject() = default;
 
-		ID3D12PipelineState* GetPSO() const;
-		const RootSignature& GetRootSignature();
-		void SetRootSignature(const RootSignature& rootSignature);
+		ID3D12PipelineState* GetPSO();
+		//RootSignature* GetRootSignature();
+		//void SetRootSignature(const RootSignature& rootSignature);
 	};
+
+	using PSO = PipelineStateObject;
 
 	class GraphicPSO : public PSO
 	{
@@ -37,6 +37,7 @@ namespace AnEngine::RenderCore
 		GraphicPSO();
 		~GraphicPSO() = default;
 
+		void SetRootSignature(ID3D12RootSignature* rootSignature);
 		void SetBlendState(const D3D12_BLEND_DESC& blendDesc);
 		void SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc);
 		void SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc);

@@ -24,7 +24,7 @@ namespace AnEngine::RenderCore::Resource
 	ColorBuffer::ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips), m_fragmentCount(1)
 	{
-		GraphicsCard* device = r_graphicsCard[0];
+		GraphicsCard* device = r_graphicsCard[0].get();
 
 		var desc = DescribeTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE);
 		// 确定资源大小
@@ -50,7 +50,7 @@ namespace AnEngine::RenderCore::Resource
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_sampleCount(msaaSampleCount),
 		m_numMipMaps(numMips), m_fragmentCount(1)
 	{
-		GraphicsCard* device = r_graphicsCard[0];
+		GraphicsCard* device = r_graphicsCard[0].get();
 
 		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl;
 		msaaQl.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -108,7 +108,7 @@ namespace AnEngine::RenderCore::Resource
 	{
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetSRV() const
+	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetSrv() const
 	{
 		return m_srvHandle;
 	}
@@ -118,7 +118,7 @@ namespace AnEngine::RenderCore::Resource
 		return m_rtvHandle;
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetUAV() const
+	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetUav() const
 	{
 		return m_uavHandle[0];
 	}

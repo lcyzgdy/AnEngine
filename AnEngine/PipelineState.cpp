@@ -1,6 +1,7 @@
 #include "PipelineState.h"
 #include "Hash.hpp"
 #include <mutex>
+#include "RenderCore.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 
@@ -13,6 +14,11 @@ namespace AnEngine::RenderCore
 	ID3D12PipelineState* PipelineStateObject::GetPSO()
 	{
 		return m_pipelineState.Get();
+	}
+
+	ID3D12PipelineState** PipelineStateObject::operator&()
+	{
+		return &m_pipelineState;
 	}
 
 	/*RootSignature* PipelineStateObject::GetRootSignature()
@@ -34,7 +40,7 @@ namespace AnEngine::RenderCore
 		m_psoDesc.InputLayout.NumElements = 0;
 	}
 
-	void GraphicPSO::SetRootSignature(ID3D12RootSignature* rootSignature)
+	void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
 	}
@@ -157,9 +163,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.DS = binary;
 	}
 
-	void GraphicPSO::Finalize(ID3D12Device* device)
+	void GraphicPSO::Finalize()
 	{
 		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
+		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
 
 		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
@@ -209,6 +216,11 @@ namespace AnEngine::RenderCore
 		m_psoDesc.NodeMask = 1;
 	}
 
+	void ComputePSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	{
+		m_psoDesc.pRootSignature = rootSignature;
+	}
+
 	void ComputePSO::SetComputeShader(const void * binary, size_t size)
 	{
 		m_psoDesc.CS = CD3DX12_SHADER_BYTECODE(binary, size);
@@ -219,9 +231,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.CS = binary;
 	}
 
-	void ComputePSO::Finalize(ID3D12Device* device)
+	void ComputePSO::Finalize()
 	{
-		m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
+		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
+		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
 		size_t hashCode = Utility::GetHash(&m_psoDesc);

@@ -4,6 +4,8 @@
 
 #include"ObjectBehaviour.h"
 #include"PipelineState.h"
+#include"ColorBuffer.h"
+#include"GpuBuffer.h"
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -19,6 +21,7 @@ namespace AnEngine::Game
 	protected:
 		::AnEngine::RenderCore::Resource::ColorBuffer* m_renderTarget;
 		GraphicPSO m_pso;
+		RootSignature m_rootSignature;
 
 	public:
 		Renderer();
@@ -36,7 +39,13 @@ namespace AnEngine::Game
 
 	class TrangleRender : public Renderer
 	{
+		Resource::VertexBuffer m_vertexBuffer;
 	public:
+		struct Vertex
+		{
+			XMFLOAT3 position;
+			XMFLOAT4 color;
+		};
 		// Í¨¹ý Renderer ¼Ì³Ð
 		virtual void LoadAsset() override;
 		virtual void OnRender() override;

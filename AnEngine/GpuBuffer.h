@@ -21,6 +21,7 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_RESOURCE_FLAGS m_resourceFlags;
 	public:
 		GpuBuffer();
+		GpuBuffer(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize, const void* initialData = nullptr);
 		~GpuBuffer();
 
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUav(void) const;
@@ -28,21 +29,13 @@ namespace AnEngine::RenderCore::Resource
 
 		D3D12_GPU_VIRTUAL_ADDRESS RootConstantBufferView(void) const;
 
-		D3D12_CPU_DESCRIPTOR_HANDLE CreateConstantBufferView(uint32_t Offset, uint32_t Size) const;
+		D3D12_CPU_DESCRIPTOR_HANDLE CreateConstantBufferView(uint32_t offset, uint32_t size) const;
 
-		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t Offset, uint32_t Size, uint32_t Stride) const;
-		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t BaseVertexIndex = 0) const
-		{
-			size_t Offset = BaseVertexIndex * m_elementSize;
-			return VertexBufferView(Offset, (uint32_t)(m_bufferSize - Offset), m_elementSize);
-		}
+		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t offset, uint32_t size, uint32_t stride) const;
+		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t baseVertexIndex = 0) const;
 
-		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t Offset, uint32_t Size, bool b32Bit = false) const;
-		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t StartIndex = 0) const
-		{
-			size_t Offset = StartIndex * m_elementSize;
-			return IndexBufferView(Offset, (uint32_t)(m_bufferSize - Offset), m_elementSize == 4);
-		}
+		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t offset, uint32_t Size, bool b32Bit = false) const;
+		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t startIndex = 0) const;
 
 		size_t GetBufferSize() const { return m_bufferSize; }
 		uint32_t GetElementCount() const { return m_elementCount; }

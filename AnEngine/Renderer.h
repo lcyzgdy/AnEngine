@@ -39,7 +39,7 @@ namespace AnEngine::Game
 
 	class TrangleRender : public Renderer
 	{
-		Resource::VertexBuffer m_vertexBuffer;
+		Resource::ByteAddressBuffer* m_vertexBuffer;
 	public:
 		struct Vertex
 		{

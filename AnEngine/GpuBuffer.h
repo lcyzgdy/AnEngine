@@ -20,8 +20,7 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t m_elementSize;
 		D3D12_RESOURCE_FLAGS m_resourceFlags;
 	public:
-		GpuBuffer();
-		GpuBuffer(const std::wstring& name, uint32_t NumElements, uint32_t ElementSize, const void* initialData = nullptr);
+		GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData = nullptr);
 		~GpuBuffer();
 
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUav(void) const;
@@ -34,7 +33,7 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t offset, uint32_t size, uint32_t stride) const;
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView(size_t baseVertexIndex = 0) const;
 
-		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t offset, uint32_t Size, bool b32Bit = false) const;
+		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t offset, uint32_t size, bool b32Bit = false) const;
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView(size_t startIndex = 0) const;
 
 		size_t GetBufferSize() const { return m_bufferSize; }
@@ -42,8 +41,11 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t GetElementSize() const { return m_elementSize; }
 	};
 
-	class VertexBuffer : GpuBuffer
+	class ByteAddressBuffer : GpuBuffer
 	{
+	public:
+		ByteAddressBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData = nullptr);
+		virtual void CreateDerivedViews() override;
 	};
 }
 #endif // !__GPUBUFFER_H__

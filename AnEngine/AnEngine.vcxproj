@@ -200,6 +200,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VirtualBehaviour.h" />
   </ItemGroup>
   <ItemGroup>

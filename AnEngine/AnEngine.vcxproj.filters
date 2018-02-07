@@ -171,6 +171,9 @@
     <ClInclude Include="GpuBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">

@@ -83,18 +83,7 @@ namespace AnEngine::Game
 			{ { 0.3f, 0.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
 			{ { 0.2f, -0.4f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
 		};
-		const UINT vertexBufferSize = sizeof(Vertex) * 3;
-
-		/*ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-			D3D12_HEAP_FLAG_NONE, &CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
-			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexBuffer)));*/
-
-			//Copy the triangle data to the vertex buffer.
-		UINT8* pVertexDataBegin;
-		CD3DX12_RANGE readRange(0, 0);		//We do not intend to read from this resource on the CPU.
-		//vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-		//memcpy(pVertexDataBegin, triangleVertices, sizeof(triangleVertices));
-		//vertexBuffer->Unmap(0, nullptr);
+		m_vertexBuffer = new Resource::ByteAddressBuffer(L"Trangle", 3, sizeof(Vertex), triangleVertices);
 
 		//Initialize the vertex buffer view.
 		//vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();

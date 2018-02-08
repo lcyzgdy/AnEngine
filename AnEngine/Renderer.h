@@ -20,12 +20,12 @@ namespace AnEngine::Game
 	{
 	protected:
 		::AnEngine::RenderCore::Resource::ColorBuffer* m_renderTarget;
-		GraphicPSO m_pso;
-		RootSignature m_rootSignature;
+		GraphicPSO* m_pso;
+		RootSignature* m_rootSignature;
 
 	public:
 		Renderer();
-		~Renderer();
+		virtual ~Renderer() = default;
 
 		virtual void Start() override;
 
@@ -46,9 +46,11 @@ namespace AnEngine::Game
 			XMFLOAT3 position;
 			XMFLOAT4 color;
 		};
-		// Í¨¹ý Renderer ¼Ì³Ð
+		// é€šè¿‡ Renderer ç»§æ‰¿
 		virtual void LoadAsset() override;
 		virtual void OnRender() override;
+
+		virtual void Destory() override;
 	};
 }
 

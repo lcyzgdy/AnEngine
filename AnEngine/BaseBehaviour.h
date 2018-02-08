@@ -30,8 +30,8 @@ namespace AnEngine::Game
 
 	public:
 		BaseBehaviour() = default;
-		BaseBehaviour(const BaseBehaviour& rhs) = default;
-		~BaseBehaviour() = default;
+		BaseBehaviour(const BaseBehaviour& rhs) = delete;
+		virtual ~BaseBehaviour() = default;
 	};
 }
 

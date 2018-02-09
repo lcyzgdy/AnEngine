@@ -1,30 +1,35 @@
 #include "PipelineState.h"
 #include "Hash.hpp"
 #include <mutex>
+#include "RenderCore.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 
 namespace AnEngine::RenderCore
 {
-	PipelineStateObject::PipelineStateObject() : m_rootSignature(nullptr), m_pipelineState(nullptr)
+	PipelineStateObject::PipelineStateObject() : m_pipelineState(nullptr)
 	{
 	}
 
-	ID3D12PipelineState * PipelineStateObject::GetPSO() const
+	ID3D12PipelineState* PipelineStateObject::GetPSO()
 	{
-		return m_pipelineState;
+		return m_pipelineState.Get();
 	}
 
-	const RootSignature & PipelineStateObject::GetRootSignature()
+	ID3D12PipelineState** PipelineStateObject::operator&()
 	{
-		if (m_rootSignature == nullptr) throw exception();
-		return *m_rootSignature;
+		return &m_pipelineState;
 	}
 
-	void PipelineStateObject::SetRootSignature(const RootSignature & rootSignature)
+	/*RootSignature* PipelineStateObject::GetRootSignature()
 	{
-		m_rootSignature = &rootSignature;
+		return &m_rootSignature;
 	}
+
+	void PipelineStateObject::SetRootSignature(const RootSignature& rootSignature)
+	{
+		m_rootSignature = rootSignature;
+	}*/
 
 	GraphicPSO::GraphicPSO()
 	{
@@ -35,17 +40,22 @@ namespace AnEngine::RenderCore
 		m_psoDesc.InputLayout.NumElements = 0;
 	}
 
-	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC & blendDesc)
+	void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	{
+		m_psoDesc.pRootSignature = rootSignature;
+	}
+
+	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC& blendDesc)
 	{
 		m_psoDesc.BlendState = blendDesc;
 	}
 
-	void GraphicPSO::SetRasterizerState(const D3D12_RASTERIZER_DESC & rasterizerDesc)
+	void GraphicPSO::SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc)
 	{
 		m_psoDesc.RasterizerState = rasterizerDesc;
 	}
 
-	void GraphicPSO::SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC & depthStencilDesc)
+	void GraphicPSO::SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc)
 	{
 		m_psoDesc.DepthStencilState = depthStencilDesc;
 	}
@@ -82,7 +92,7 @@ namespace AnEngine::RenderCore
 		m_psoDesc.SampleDesc.Quality = msaaQuality;
 	}
 
-	void GraphicPSO::SetInputLayout(uint32_t elementsNum, const D3D12_INPUT_ELEMENT_DESC * p_inputElementDescs)
+	void GraphicPSO::SetInputLayout(uint32_t elementsNum, const D3D12_INPUT_ELEMENT_DESC* p_inputElementDescs)
 	{
 		m_psoDesc.InputLayout.NumElements = elementsNum;
 		if (elementsNum == 0)
@@ -153,9 +163,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.DS = binary;
 	}
 
-	void GraphicPSO::Finalize(ID3D12Device* device)
+	void GraphicPSO::Finalize()
 	{
-		m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
+		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
 
 		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
@@ -183,7 +194,7 @@ namespace AnEngine::RenderCore
 		if (firstCompile)
 		{
 			ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState);
+			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState.Get());
 		}
 		else
 		{
@@ -205,6 +216,11 @@ namespace AnEngine::RenderCore
 		m_psoDesc.NodeMask = 1;
 	}
 
+	void ComputePSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	{
+		m_psoDesc.pRootSignature = rootSignature;
+	}
+
 	void ComputePSO::SetComputeShader(const void * binary, size_t size)
 	{
 		m_psoDesc.CS = CD3DX12_SHADER_BYTECODE(binary, size);
@@ -215,9 +231,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.CS = binary;
 	}
 
-	void ComputePSO::Finalize(ID3D12Device* device)
+	void ComputePSO::Finalize()
 	{
-		m_psoDesc.pRootSignature = m_rootSignature->GetSignature();
+		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
+		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
 		size_t hashCode = Utility::GetHash(&m_psoDesc);
@@ -242,7 +259,7 @@ namespace AnEngine::RenderCore
 		if (firstComplie)
 		{
 			ThrowIfFailed(device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_computePSOMap[hashCode].Attach(m_pipelineState);
+			r_s_computePSOMap[hashCode].Attach(m_pipelineState.Get());
 		}
 		else
 		{

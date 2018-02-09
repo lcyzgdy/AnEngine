@@ -178,6 +178,7 @@
     <ClInclude Include="Fence.h" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
     <ClInclude Include="GraphicCard.h" />
     <ClInclude Include="IEffect.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VirtualBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +223,7 @@
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GpuBuffer.cpp" />
     <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="GraphicCard.cpp" />
     <ClCompile Include="Input.cpp" />

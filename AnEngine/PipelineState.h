@@ -11,24 +11,25 @@ namespace AnEngine::RenderCore
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
 	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
 
-	typedef class PipelineStateObject PSO;
-
 	class PipelineStateObject
 	{
 	protected:
-		const RootSignature* m_rootSignature;
-		ID3D12PipelineState* m_pipelineState;
+		//RootSignature m_rootSignature;
+		ComPtr<ID3D12PipelineState> m_pipelineState;
 
 	public:
 		PipelineStateObject();
 		~PipelineStateObject() = default;
 
-		ID3D12PipelineState* GetPSO() const;
-		const RootSignature& GetRootSignature();
-		void SetRootSignature(const RootSignature& rootSignature);
+		ID3D12PipelineState* GetPSO();
+		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) = 0;
+
+		ID3D12PipelineState** operator&();
+		//RootSignature* GetRootSignature();
+		//void SetRootSignature(const RootSignature& rootSignature);
 	};
 
-	class GraphicPSO : public PSO
+	class GraphicPSO : public PipelineStateObject
 	{
 	protected:
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC m_psoDesc;
@@ -37,6 +38,7 @@ namespace AnEngine::RenderCore
 		GraphicPSO();
 		~GraphicPSO() = default;
 
+		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
 		void SetBlendState(const D3D12_BLEND_DESC& blendDesc);
 		void SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc);
 		void SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc);
@@ -59,10 +61,10 @@ namespace AnEngine::RenderCore
 		void SetHullShader(const D3D12_SHADER_BYTECODE& binary);
 		void SetDomainShader(const D3D12_SHADER_BYTECODE& binary);
 
-		void Finalize(ID3D12Device* device);
+		void Finalize();
 	};
 
-	class ComputePSO : public PSO
+	class ComputePSO : public PipelineStateObject
 	{
 	protected:
 		D3D12_COMPUTE_PIPELINE_STATE_DESC m_psoDesc;
@@ -71,10 +73,11 @@ namespace AnEngine::RenderCore
 		ComputePSO();
 		~ComputePSO() = default;
 
+		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
 		void SetComputeShader(const void* binary, size_t size);
 		void SetComputeShader(const D3D12_SHADER_BYTECODE& binary);
 
-		void Finalize(ID3D12Device* device);
+		void Finalize();
 	};
 }
 #endif // !__PIPELINESTATE_H__

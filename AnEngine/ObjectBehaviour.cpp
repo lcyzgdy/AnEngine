@@ -35,6 +35,7 @@ namespace AnEngine::Game
 		for (var i : m_component)
 		{
 			i->OnRelease();
+			delete i;
 		}
 		Destory();
 		//m_scene->RemoveObject(this);

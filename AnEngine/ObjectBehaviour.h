@@ -68,7 +68,7 @@ namespace AnEngine::Game
 		template<typename T = ObjectBehaviour>
 		T* GetComponentByName(string name)
 		{
-			for (var& i : m_component)
+			for (var i : m_component)
 			{
 				if (i->name == name)
 					return i;
@@ -78,7 +78,7 @@ namespace AnEngine::Game
 		template<typename T = ObjectBehaviour>
 		T GetComponent()
 		{
-			for (var& i : m_component)
+			for (var i : m_component)
 			{
 				if (dynamic_cast<T*>(i) != nullptr)
 					return i;

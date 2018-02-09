@@ -168,6 +168,12 @@
     <ClInclude Include="Fence.h">
       <Filter>头文件\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="GpuBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -270,6 +276,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Fence.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

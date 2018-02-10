@@ -23,15 +23,16 @@ namespace AnEngine::Game
 		GraphicPSO* m_pso;
 		RootSignature* m_rootSignature;
 
-	public:
-		Renderer();
-		virtual ~Renderer() = default;
-
 		virtual void Start() override;
 
 		virtual void BeforeUpdate() override;
 		virtual void Update() override;
 		virtual void AfterUpdate() override;
+
+	public:
+		Renderer();
+		virtual ~Renderer() = default;
+
 
 		virtual void LoadAsset() = 0;
 		virtual void OnRender() = 0;

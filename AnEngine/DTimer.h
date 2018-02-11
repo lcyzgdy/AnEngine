@@ -10,6 +10,8 @@ namespace AnEngine
 #ifdef WIN32
 	class DTimer : public NonCopyable
 	{
+		static DTimer* m_uniqueObj;
+
 		LARGE_INTEGER qpcFrequency;
 		LARGE_INTEGER qpcLastTime;
 		uint64_t qpcMaxDelta;
@@ -31,6 +33,8 @@ namespace AnEngine
 	public:
 		DTimer();
 		~DTimer();
+
+		static DTimer* GetInstance();
 
 		const uint64_t GetElapsedTicks();
 		const double GetElapsedSeconds();

@@ -18,6 +18,15 @@ namespace AnEngine
 	{
 	}
 
+	DTimer* DTimer::GetInstance()
+	{
+		if (m_uniqueObj == nullptr)
+		{
+			m_uniqueObj = new DTimer();
+		}
+		return m_uniqueObj;;
+	}
+
 	const uint64_t DTimer::GetElapsedTicks()
 	{
 		return elapsedTicks;

@@ -13,7 +13,7 @@ using namespace AnEngine::RenderCore::Heap;
 
 namespace AnEngine::RenderCore
 {
-	vector<GraphicsCard*> r_graphicsCard;
+	vector<unique_ptr<GraphicsCard>> r_graphicsCard;
 	ComPtr<IDXGISwapChain3> r_swapChain_cp = nullptr;
 	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	bool r_enableHDROutput = false;

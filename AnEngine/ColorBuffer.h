@@ -57,11 +57,11 @@ namespace AnEngine::RenderCore::Resource
 			DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
 
 		// 获取CPU可访问的句柄
-		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSRV() const;
+		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSrv() const;
 		// 获取CPU可访问的句柄
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetRTV() const;
 		// 获取CPU可访问的句柄
-		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUAV() const;
+		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUav() const;
 		void SetClearColor(Color clearColor);
 		//void SetMsaaMode(uint32_t numColorSample, uint32_t numCoverageSample);
 		Color GetClearColor() const;

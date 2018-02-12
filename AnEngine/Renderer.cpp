@@ -35,7 +35,7 @@ namespace AnEngine::Game
 
 		m_rootSignature = new RootSignature();
 
-		ComPtr<ID3DBlob> vertexShader;
+		/*ComPtr<ID3DBlob> vertexShader;
 		ComPtr<ID3DBlob> pixelShader;
 #if defined(_DEBUG)
 		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -44,8 +44,9 @@ namespace AnEngine::Game
 #endif
 		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
 		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
-
-		VertexShader* vertexShader = new VertexShader();
+		*/
+		VertexShader* vertexShader = new VertexShader(L"framebuffer_shaders.hlsl");
+		PixelShader* pixelShader = new PixelShader(L"framebuffer_shaders.hlsl");
 
 
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -57,8 +58,9 @@ namespace AnEngine::Game
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
 		//psoDesc.pRootSignature = rootSignature.Get();
-		psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShader.Get());
-		psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
+		psoDesc.VS = vertexShader->GetByteCode();
+		//psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
+		psoDesc.PS = pixelShader->GetByteCode();
 		//psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, FALSE,
 			D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP, D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,

@@ -9,11 +9,11 @@ namespace AnEngine::RenderCore
 	class Shader
 	{
 	protected:
-		ComPtr<ID3DBlob> m_blob;
+		Microsoft::WRL::ComPtr<ID3DBlob> m_blob;
 		uint32_t m_compileFlag;
 	public:
-		Shader(wstring fileName);
-		Shader(wstring fileName, wstring invokeFunction);
+		Shader(const std::wstring& fileName, const std::string& invokeFunction);
+		Shader(std::wstring&& fileName, std::string&& invokeFunction);
 
 		D3D12_SHADER_BYTECODE GetByteCode();
 	};
@@ -21,13 +21,19 @@ namespace AnEngine::RenderCore
 	class VertexShader : public Shader
 	{
 	public:
-		VertexShader() = default;
+		VertexShader(const std::wstring& fileName);
+		VertexShader(std::wstring&& fileName);
+		VertexShader(const std::wstring& fileName, const std::string& invokeFunction);
+		VertexShader(std::wstring&& fileName, std::string&& invokeFunction);
 	};
 
 	class PixelShader : public Shader
 	{
 	public:
-		PixelShader() = default;
+		PixelShader(const std::wstring& fileName);
+		PixelShader(std::wstring&& fileName);
+		PixelShader(const std::wstring& fileName, const std::string& invokeFunction);
+		PixelShader(std::wstring&& fileName, std::string&& invokeFunction);
 	};
 
 	class GeometryShader : public Shader

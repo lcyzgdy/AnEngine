@@ -24,26 +24,32 @@
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
-using namespace std;
-using namespace Microsoft::WRL;
-using namespace DirectX;
 
 #ifdef _WIN64
 
-inline wstring GetAssetFullPath(LPCWSTR assetName)
+inline std::wstring GetAssetFullPath(LPCWSTR assetName)
 {
 	WCHAR _assetsPath[512];
 	GetAssetsPath(_assetsPath, _countof(_assetsPath));
-	wstring assetsPath = _assetsPath;
-	return assetsPath + wstring(assetName);
+	std::wstring assetsPath(_assetsPath);
+	return std::move(assetsPath + std::wstring(assetName));
 }
+
+inline std::wstring GetAssetFullPath(const std::wstring& assetName)
+{
+	WCHAR _assetsPath[512];
+	GetAssetsPath(_assetsPath, _countof(_assetsPath));
+	std::wstring assetPath(_assetsPath);
+	return std::move(assetPath + assetName);
+}
+
 
 namespace AnEngine
 {
 	class D3D12AppBase
 	{
-		wstring assetsPath;
-		wstring title;
+		std::wstring assetsPath;
+		std::wstring title;
 	protected:
 		bool isUseWarpDevice;
 		float aspectRatio;
@@ -51,17 +57,17 @@ namespace AnEngine
 		int width;
 		int height;
 
-		inline wstring GetAssetFullPath(LPCWSTR assetName)
+		inline std::wstring GetAssetFullPath(LPCWSTR assetName)
 		{
-			return assetsPath + wstring(assetName);
+			return assetsPath + std::wstring(assetName);
 		}
 
 		void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter);
 
 	public:
-		D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height);
+		D3D12AppBase(const HWND _hwnd, const uint32_t _width, const uint32_t _height);
 
-		D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title);
+		D3D12AppBase(const HWND _hwnd, const uint32_t _width, const uint32_t _height, const std::wstring& _title);
 
 		virtual ~D3D12AppBase() = default;
 
@@ -70,8 +76,8 @@ namespace AnEngine
 		virtual void OnUpdate() = 0;
 		virtual void OnRender() = 0;
 
-		virtual void OnKeyDown(UINT8 key) = 0;
-		virtual void OnKeyUp(UINT8 key) = 0;
+		virtual void OnKeyDown(uint8_t key) = 0;
+		virtual void OnKeyUp(uint8_t key) = 0;
 
 		void SetHwnd(const HWND _hwnd);
 

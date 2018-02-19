@@ -1,5 +1,6 @@
 #include"DX.h"
-
+using namespace std;
+using namespace Microsoft::WRL;
 
 namespace AnEngine
 {

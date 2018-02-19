@@ -10,11 +10,11 @@ namespace AnEngine::RenderCore
 {
 	class CommandQueue
 	{
-		ComPtr<ID3D12CommandQueue> m_cp_commandQueue;
+		Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_cp_commandQueue;
 
-		ComPtr<ID3D12Fence> m_cp_fence;
-		atomic_uint64_t m_nextFenceValue;
-		atomic_uint64_t m_lastCompleteFenceValue;
+		Microsoft::WRL::ComPtr<ID3D12Fence> m_cp_fence;
+		std::atomic_uint64_t m_nextFenceValue;
+		std::atomic_uint64_t m_lastCompleteFenceValue;
 		HANDLE m_fenceEvent;
 		D3D12_COMMAND_LIST_TYPE m_type;
 

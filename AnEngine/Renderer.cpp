@@ -3,7 +3,6 @@
 #include "RenderCore.h"
 #include "GameObject.h"
 #include "RootSignature.h"
-#include "ShaderClass.h"
 
 namespace AnEngine::Game
 {
@@ -45,8 +44,8 @@ namespace AnEngine::Game
 		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
 		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 		*/
-		VertexShader* vertexShader = new VertexShader(L"framebuffer_shaders.hlsl");
-		PixelShader* pixelShader = new PixelShader(L"framebuffer_shaders.hlsl");
+		m_vertexShader = new VertexShader(L"framebuffer_shaders.hlsl");
+		m_pixelShader = new PixelShader(L"framebuffer_shaders.hlsl");
 
 
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -55,12 +54,12 @@ namespace AnEngine::Game
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
 
-		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+		/*D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
 		//psoDesc.pRootSignature = rootSignature.Get();
-		psoDesc.VS = vertexShader->GetByteCode();
+		psoDesc.VS = m_vertexShader->GetByteCode();
 		//psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
-		psoDesc.PS = pixelShader->GetByteCode();
+		psoDesc.PS = m_pixelShader->GetByteCode();
 		//psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, FALSE,
 			D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP, D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
@@ -74,7 +73,20 @@ namespace AnEngine::Game
 		psoDesc.NumRenderTargets = 1;
 		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		psoDesc.SampleDesc.Count = 1;
-		ThrowIfFailed(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&*m_pso)));
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&*m_pso)));*/
+		m_pso = new GraphicPSO();
+		m_pso->SetInputLayout(_countof(inputElementDescs), inputElementDescs);
+		m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
+		m_pso->SetVertexShader(m_vertexShader->GetByteCode());
+		m_pso->SetPixelShader(m_pixelShader->GetByteCode());
+		m_pso->SetRasterizerState(CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, FALSE,
+			D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP, D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+			FALSE, TRUE, TRUE, 0, D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF));
+		m_pso->SetBlendState(CD3DX12_BLEND_DESC(D3D12_DEFAULT));
+		m_pso->SetDepthStencilState(false, false);
+		m_pso->SetSampleMask(1);
+		m_pso->SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+		m_pso->Finalize();
 
 
 		Vertex triangleVertices[] =
@@ -101,9 +113,7 @@ namespace AnEngine::Game
 		ThrowIfFailed(pCommandAllocator->Reset());
 		pCommandList->Reset(pCommandAllocator, m_pso->GetPSO());
 
-
-
-		//pCommandList->SetGraphicsRootSignature(m_pso.Get);
+		pCommandList->SetGraphicsRootSignature(m_rootSignature->GetRootSignature());
 		//pCommandList->RSSetViewports(1, &viewport);
 		//pCommandList->RSSetScissorRects(1, &scissorRect);
 	}
@@ -113,5 +123,7 @@ namespace AnEngine::Game
 		delete m_pso;
 		delete m_rootSignature;
 		delete m_vertexBuffer;
+		delete m_vertexShader;
+		delete m_pixelShader;
 	}
 }

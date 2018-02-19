@@ -6,6 +6,7 @@
 #include<string>
 #include<mutex>
 #include<ctime>
+using namespace std;
 
 namespace AnEngine::Debug
 {

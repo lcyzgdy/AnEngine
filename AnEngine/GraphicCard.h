@@ -12,7 +12,7 @@ namespace AnEngine::RenderCore
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
-		ComPtr<ID3D12Device2> m_cp_device;
+		Microsoft::WRL::ComPtr<ID3D12Device2> m_cp_device;
 
 		// 渲染着色器的命令队列。
 		CommandQueue m_renderCommandQueue;
@@ -36,7 +36,7 @@ namespace AnEngine::RenderCore
 
 		inline void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter)
 		{
-			ComPtr<IDXGIAdapter1> adapter;
+			Microsoft::WRL::ComPtr<IDXGIAdapter1> adapter;
 			*ppAdapter = nullptr;
 
 			for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != pFactory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex)

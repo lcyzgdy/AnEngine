@@ -60,6 +60,12 @@ namespace AnEngine::RenderCore
 		m_psoDesc.DepthStencilState = depthStencilDesc;
 	}
 
+	void GraphicPSO::SetDepthStencilState(bool depthEnable, bool stencilEnable)
+	{
+		m_psoDesc.DepthStencilState.DepthEnable = depthEnable;
+		m_psoDesc.DepthStencilState.StencilEnable = stencilEnable;
+	}
+
 	void GraphicPSO::SetSampleMask(uint32_t sampleMask)
 	{
 		m_psoDesc.SampleMask = sampleMask;

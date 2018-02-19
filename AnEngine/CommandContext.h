@@ -16,8 +16,8 @@ namespace AnEngine::RenderCore
 	class Context
 	{
 	protected:
-		queue<T> m_pool;
-		vector<T> m_readyQueue;
+		std::queue<T> m_pool;
+		std::vector<T> m_readyQueue;
 
 		std::mutex m_readerMutex;
 		std::mutex m_writerMutex;
@@ -63,7 +63,7 @@ namespace AnEngine::RenderCore
 
 		virtual void AddNew(CommandList*) override;
 
-		vector<ID3D12CommandList*> GetReady();
+		std::vector<ID3D12CommandList*> GetReady();
 
 		virtual void PopulateFinished() override;
 

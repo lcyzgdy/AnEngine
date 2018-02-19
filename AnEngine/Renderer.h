@@ -2,10 +2,11 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-#include"ObjectBehaviour.h"
-#include"PipelineState.h"
-#include"ColorBuffer.h"
-#include"GpuBuffer.h"
+#include "ObjectBehaviour.h"
+#include "PipelineState.h"
+#include "ColorBuffer.h"
+#include "GpuBuffer.h"
+#include "ShaderClass.h"
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -41,6 +42,9 @@ namespace AnEngine::Game
 	class TrangleRender : public Renderer
 	{
 		Resource::ByteAddressBuffer* m_vertexBuffer;
+		VertexShader* m_vertexShader;
+		PixelShader* m_pixelShader;
+
 	public:
 		struct Vertex
 		{

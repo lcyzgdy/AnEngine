@@ -1,5 +1,7 @@
 #include"GraphicCard.h"
 #include"DebugLog.h"
+using namespace std;
+using namespace Microsoft::WRL;
 
 namespace AnEngine::RenderCore
 {

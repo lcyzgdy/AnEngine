@@ -9,7 +9,7 @@ namespace AnEngine::RenderCore
 {
 	class FenceSync
 	{
-		ComPtr<ID3D12Fence> m_fence;
+		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
 		uint64_t m_fenceValue;
 		ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32

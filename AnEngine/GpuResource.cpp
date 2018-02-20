@@ -21,8 +21,8 @@ namespace AnEngine::RenderCore::Resource
 
 	void GpuResource::Release()
 	{
-		delete m_resource_cp.Get();
-		m_resource_cp = nullptr;
+		//delete m_resource_cp.Get();
+		//m_resource_cp = nullptr;
 		m_gpuVirtualAddress = RenderCore::Resource::GpuVirtualAddressNull;
 		if (m_p_userAllocatedMemory != nullptr)
 		{

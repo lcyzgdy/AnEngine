@@ -4,7 +4,7 @@
 #include"ObjectBehaviour.h"
 
 extern AnEngine::Game::Scene* testScene;
-extern AnEngine::Game::Camera* testCamera;
+//extern AnEngine::Game::Camera* testCamera;
 
 void LoadScene();
 

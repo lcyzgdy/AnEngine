@@ -3,6 +3,8 @@
 #include "RenderCore.h"
 #include "GameObject.h"
 #include "RootSignature.h"
+#include "Screen.h"
+using namespace std;
 
 namespace AnEngine::Game
 {
@@ -25,6 +27,28 @@ namespace AnEngine::Game
 	}
 
 	void Renderer::AfterUpdate()
+	{
+	}
+
+	Renderer::Renderer(const std::wstring& name) : ObjectBehaviour(name)
+	{
+	}
+
+	Renderer::Renderer(std::wstring&& name) : ObjectBehaviour(name)
+	{
+	}
+
+	TrangleRender::TrangleRender(const wstring& name) : Renderer(name), m_viewport(0.0f, 0.0f,
+		static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
+		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()),
+			static_cast<long>(Screen::GetInstance()->Height()))
+	{
+	}
+
+	TrangleRender::TrangleRender(std::wstring && name) : Renderer(name), m_viewport(0.0f, 0.0f,
+		static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
+		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()),
+			static_cast<long>(Screen::GetInstance()->Height()))
 	{
 	}
 
@@ -114,8 +138,22 @@ namespace AnEngine::Game
 		pCommandList->Reset(pCommandAllocator, m_pso->GetPSO());
 
 		pCommandList->SetGraphicsRootSignature(m_rootSignature->GetRootSignature());
-		//pCommandList->RSSetViewports(1, &viewport);
-		//pCommandList->RSSetScissorRects(1, &scissorRect);
+		pCommandList->RSSetViewports(1, &m_viewport);
+		pCommandList->RSSetScissorRects(1, &m_scissorRect);
+
+		pCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		pCommandList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
+
+		pCommandList->DrawInstanced(3, 1, 0, 0);
+
+		pCommandList->Close();
+
+		ID3D12CommandList* ppcommandList[] = { pCommandList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+
+		GraphicsCommandContext::GetInstance()->Push(commandList);
+		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 	}
 
 	void TrangleRender::Destory()

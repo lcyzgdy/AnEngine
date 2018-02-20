@@ -3,7 +3,7 @@ using namespace std;
 
 namespace AnEngine::RenderCore
 {
-	Shader::Shader(const wstring& fileName, const string& invokeFunction)
+	Shader::Shader(const wstring& fileName, const string& invokeFunction, string&& shaderVersion)
 	{
 #if defined _DEBUG || defined DEBUG
 		m_compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -11,11 +11,11 @@ namespace AnEngine::RenderCore
 		m_compileFlag = 0;
 #endif // _DEBUG || DEBUG
 
-		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(fileName).c_str(), nullptr, nullptr, invokeFunction.c_str(),
-			"vs_5_0", m_compileFlag, 0, &m_blob, nullptr));
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(fileName).c_str(), nullptr, nullptr,
+			invokeFunction.c_str(), shaderVersion.c_str(), m_compileFlag, 0, &m_blob, nullptr));
 	}
 
-	Shader::Shader(wstring&& fileName, string&& invokeFunction)
+	Shader::Shader(wstring&& fileName, string&& invokeFunction, string&& shaderVersion)
 	{
 #if defined _DEBUG || defined DEBUG
 		m_compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -23,8 +23,8 @@ namespace AnEngine::RenderCore
 		m_compileFlag = 0;
 #endif // _DEBUG || DEBUG
 
-		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(fileName).c_str(), nullptr, nullptr, invokeFunction.c_str(),
-			"vs_5_0", m_compileFlag, 0, &m_blob, nullptr));
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(fileName).c_str(), nullptr, nullptr,
+			invokeFunction.c_str(), shaderVersion.c_str(), m_compileFlag, 0, &m_blob, nullptr));
 	}
 
 	D3D12_SHADER_BYTECODE Shader::GetByteCode()
@@ -32,19 +32,39 @@ namespace AnEngine::RenderCore
 		return std::move(CD3DX12_SHADER_BYTECODE(m_blob.Get()));
 	}
 
-	VertexShader::VertexShader(const wstring& fileName) : Shader(fileName, "VSMain")
+	VertexShader::VertexShader(const wstring& fileName) : Shader(fileName, "VSMain", "vs_5_0")
 	{
 	}
 
-	VertexShader::VertexShader(const wstring& fileName, const string& invokeFunction) : Shader(fileName, invokeFunction)
+	VertexShader::VertexShader(std::wstring&& fileName) : Shader(fileName, "VSMain", "vs_5_0")
 	{
 	}
 
-	PixelShader::PixelShader(const wstring& fileName) : Shader(fileName, "PSMain")
+	VertexShader::VertexShader(const wstring& fileName, const string& invokeFunction) :
+		Shader(fileName, invokeFunction, "vs_5_0")
 	{
 	}
 
-	PixelShader::PixelShader(const wstring& fileName, const string& invokeFunction) : Shader(fileName, invokeFunction)
+	VertexShader::VertexShader(std::wstring&& fileName, std::string && invokeFunction) :
+		Shader(fileName, invokeFunction, "vs_5_0")
+	{
+	}
+
+	PixelShader::PixelShader(const wstring& fileName) : Shader(fileName, "PSMain", "ps_5_0")
+	{
+	}
+
+	PixelShader::PixelShader(std::wstring && fileName) : Shader(fileName, "PSMain", "ps_5_0")
+	{
+	}
+
+	PixelShader::PixelShader(const wstring& fileName, const string& invokeFunction) :
+		Shader(fileName, invokeFunction, "ps_5_0")
+	{
+	}
+
+	PixelShader::PixelShader(std::wstring && fileName, std::string && invokeFunction) :
+		Shader(fileName, invokeFunction, "ps_5_0")
 	{
 	}
 

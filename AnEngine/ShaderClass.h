@@ -12,8 +12,8 @@ namespace AnEngine::RenderCore
 		Microsoft::WRL::ComPtr<ID3DBlob> m_blob;
 		uint32_t m_compileFlag;
 	public:
-		Shader(const std::wstring& fileName, const std::string& invokeFunction);
-		Shader(std::wstring&& fileName, std::string&& invokeFunction);
+		Shader(const std::wstring& fileName, const std::string& invokeFunction, std::string&& shaderVersion);
+		Shader(std::wstring&& fileName, std::string&& invokeFunction, std::string&& shaderVersion);
 
 		D3D12_SHADER_BYTECODE GetByteCode();
 	};

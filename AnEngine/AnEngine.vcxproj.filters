@@ -279,7 +279,7 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GpuBuffer.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

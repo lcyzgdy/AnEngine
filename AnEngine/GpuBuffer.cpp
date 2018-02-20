@@ -24,8 +24,9 @@ namespace AnEngine::RenderCore::Resource
 		return desc;
 	}
 
-	GpuBuffer::GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData) :
-		m_bufferSize(numElements * elementSize), m_elementCount(numElements), m_elementSize(elementSize)
+	GpuBuffer::GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
+		const void* initialData) : GpuResource(), m_bufferSize(numElements * elementSize), 
+		m_elementCount(numElements), m_elementSize(elementSize)
 	{
 		m_resourceFlags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 		m_uav.ptr = GpuVirtualAddressUnknown;
@@ -57,8 +58,8 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
 		ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
-		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &ResourceDesc, m_usageState, nullptr,
-			IID_PPV_ARGS(&m_resource_cp)));
+		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
+			nullptr, IID_PPV_ARGS(&m_resource_cp)));
 
 		m_gpuVirtualAddress = m_resource_cp->GetGPUVirtualAddress();
 
@@ -76,7 +77,7 @@ namespace AnEngine::RenderCore::Resource
 		(name);
 #endif
 
-		CreateDerivedViews();
+		//CreateDerivedViews();
 	}
 
 	GpuBuffer::~GpuBuffer()
@@ -149,6 +150,7 @@ namespace AnEngine::RenderCore::Resource
 	ByteAddressBuffer::ByteAddressBuffer(const std::wstring & name, uint32_t numElements, uint32_t elementSize,
 		const void* initialData) : GpuBuffer(name, numElements, elementSize, initialData)
 	{
+		CreateDerivedViews();
 	}
 
 	void ByteAddressBuffer::CreateDerivedViews()

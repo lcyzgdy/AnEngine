@@ -31,7 +31,8 @@ namespace AnEngine::Game
 		virtual void AfterUpdate() override;
 
 	public:
-		Renderer();
+		Renderer(const std::wstring& name);
+		Renderer(std::wstring&& name);
 		virtual ~Renderer() = default;
 
 
@@ -44,6 +45,8 @@ namespace AnEngine::Game
 		Resource::ByteAddressBuffer* m_vertexBuffer;
 		VertexShader* m_vertexShader;
 		PixelShader* m_pixelShader;
+		CD3DX12_VIEWPORT m_viewport;
+		CD3DX12_RECT m_scissorRect;
 
 	public:
 		struct Vertex
@@ -51,6 +54,9 @@ namespace AnEngine::Game
 			XMFLOAT3 position;
 			XMFLOAT4 color;
 		};
+		TrangleRender(const std::wstring& name);
+		TrangleRender(std::wstring&& name);
+
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;
 		virtual void OnRender() override;

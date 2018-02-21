@@ -8,9 +8,10 @@ using namespace std;
 namespace AnEngine
 {
 #ifdef WIN32
-	class DTimer : public NonCopyable
+	class DTimer : public Singleton<DTimer>
 	{
-		static DTimer* m_uniqueObj;
+		//static DTimer* m_uniqueObj;
+		friend class Singleton<DTimer>;
 
 		LARGE_INTEGER qpcFrequency;
 		LARGE_INTEGER qpcLastTime;
@@ -30,11 +31,11 @@ namespace AnEngine
 		uint64_t targetElapsedTicks;
 		// 用于配置固定帧率模式
 
-	public:
 		DTimer();
 		~DTimer();
 
-		static DTimer* GetInstance();
+	public:
+		//static DTimer* GetInstance();
 
 		const uint64_t GetElapsedTicks();
 		const double GetElapsedSeconds();

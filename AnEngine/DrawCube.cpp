@@ -33,8 +33,8 @@ void DrawCube::OnUpdate()
 {
 	WaitForSingleObjectEx(swapChainEvent, 100, FALSE);
 
-	timer.Tick(NULL);
-	camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
+	DTimer::GetInstance()->Tick(NULL);
+	camera.OnUpdate(static_cast<float>(DTimer::GetInstance()->GetElapsedSeconds()));
 }
 
 void DrawCube::OnRender()

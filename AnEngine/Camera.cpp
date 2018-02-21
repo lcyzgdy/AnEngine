@@ -9,6 +9,7 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
+	static vector<Camera*> cameraPool;
 	/*void Camera::OnInit()
 	{
 		lock_guard<recursive_mutex> lock(m_recursiveMutex);
@@ -26,6 +27,7 @@ namespace AnEngine::Game
 
 	void Camera::Start()
 	{
+		cameraPool.emplace_back(this);
 	}
 
 	void Camera::OnActive()
@@ -51,7 +53,7 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0.1f, 0.1f, 0.5f, 1.0f };
+		float clearColor[4] = { 0.1f, 0.1f, 0.4f, 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
@@ -74,7 +76,7 @@ namespace AnEngine::Game
 
 	void Camera::Destory()
 	{
-
+		cameraPool.erase(find(cameraPool.begin(), cameraPool.end(), this));
 	}
 
 	Camera::Camera(wstring name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
@@ -146,5 +148,14 @@ namespace AnEngine::Game
 	Color Camera::ClearColor()
 	{
 		return m_clearColor;
+	}
+
+	ColorBuffer* Camera::FindForwordTarget(Vector3&& pos)
+	{
+		for (var i : cameraPool)
+		{
+			if (i != nullptr) return i->GetColorBuffer();
+		}
+		return nullptr;
 	}
 }

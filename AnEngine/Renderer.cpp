@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "RootSignature.h"
 #include "Screen.h"
+#include "Camera.h"
 using namespace std;
 
 namespace AnEngine::Game
@@ -15,7 +16,8 @@ namespace AnEngine::Game
 
 	void Renderer::BeforeUpdate()
 	{
-		m_renderTarget = nullptr;
+		//m_renderTarget = nullptr;
+		m_renderTarget = Camera::FindForwordTarget(this->transform.Position());
 	}
 
 	void Renderer::Update()
@@ -142,7 +144,7 @@ namespace AnEngine::Game
 		pCommandList->RSSetScissorRects(1, &m_scissorRect);
 
 		pCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
-		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pCommandList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
 
 		pCommandList->DrawInstanced(3, 1, 0, 0);
@@ -158,10 +160,10 @@ namespace AnEngine::Game
 
 	void TrangleRender::Destory()
 	{
-		delete m_pso;
-		delete m_rootSignature;
 		delete m_vertexBuffer;
 		delete m_vertexShader;
 		delete m_pixelShader;
+		delete m_rootSignature;
+		delete m_pso;
 	}
 }

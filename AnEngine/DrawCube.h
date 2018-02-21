@@ -86,7 +86,7 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 
 	MiCamera camera;
 	XMMATRIX projectionMatrix;
-	DTimer timer;
+	//DTimer timer;
 
 public:
 	DrawCube(const HWND _hwnd, const UINT _width, const UINT _height);

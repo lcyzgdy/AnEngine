@@ -5,9 +5,6 @@
 #include<wrl.h>
 #include"DX.h"
 
-using namespace std;
-using namespace Microsoft::WRL;
-
 namespace AnEngine::RenderCore::Resource
 {
 	static const D3D12_GPU_VIRTUAL_ADDRESS GpuVirtualAddressNull = static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(0);
@@ -16,8 +13,8 @@ namespace AnEngine::RenderCore::Resource
 	class GpuResource
 	{
 	protected:
-		ComPtr<ID3D12Resource> m_resource_cp;
-		ComPtr<ID3D12Heap> m_heap_cp;
+		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource_cp;
+		Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;
 		D3D12_RESOURCE_STATES m_usageState;
 		D3D12_RESOURCE_STATES m_transitioningState;
 		D3D12_GPU_VIRTUAL_ADDRESS m_gpuVirtualAddress;

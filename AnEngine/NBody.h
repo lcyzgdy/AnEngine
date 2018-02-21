@@ -99,7 +99,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 	UINT heightInstances;
 	UINT widthInstances;
 	MiCamera camera;
-	DTimer timer;
+	//DTimer timer;
 
 	ComPtr<ID3D12Fence> threadFences[ThreadCount];
 	volatile HANDLE threadFenceEvents[ThreadCount];

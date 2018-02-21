@@ -103,7 +103,7 @@ namespace AnEngine::RenderCore
 	{
 		return m_rootSignature_cp.Get();
 	}
-	ID3D12RootSignature** RootSignature::operator&()
+	ID3D12RootSignature** RootSignature::operator&() throw()
 	{
 		return &m_rootSignature_cp;
 	}

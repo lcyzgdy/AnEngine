@@ -60,6 +60,8 @@ namespace AnEngine::Game
 		ClearFlags ClearFlag();
 		void ClearColor(Color color);
 		Color ClearColor();
+
+		static ColorBuffer* FindForwordTarget(Vector3&& pos);
 	};
 }
 

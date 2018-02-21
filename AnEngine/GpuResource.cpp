@@ -1,4 +1,6 @@
 #include "GpuResource.h"
+using namespace std;
+using namespace Microsoft::WRL;
 
 namespace AnEngine::RenderCore::Resource
 {

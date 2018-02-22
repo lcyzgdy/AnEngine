@@ -4,6 +4,7 @@
 #include"DescriptorHeap.hpp"
 #include"Fence.h"
 #include"ThreadPool.hpp"
+#include"DTimer.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -20,7 +21,8 @@ namespace AnEngine::RenderCore
 	uint32_t r_frameIndex;
 	uint64_t r_frameCount;
 
-	FenceSync* r_fenceForDisplayPlane;
+	Fence* r_fenceForDisplayPlane;
+	uint64_t r_fenceValueForDisplayPlane[r_SwapChainBufferCount_const];
 
 #ifdef _WIN32
 	HWND r_hwnd;
@@ -80,17 +82,20 @@ namespace AnEngine::RenderCore
 		InitializePipeline();
 		CreateCommonState();
 
-		r_fenceForDisplayPlane = new FenceSync(r_graphicsCard[0]->GetCommandQueue());
+		r_fenceForDisplayPlane = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		memset(r_fenceValueForDisplayPlane, 0, sizeof(r_fenceValueForDisplayPlane));
+		// 帧缓冲之间的资源同步
+
 		rrrr_runningFlag = true;
 		r_frameCount = 0;
-		/*Utility::u_s_threadPool.Commit([=]
+		Utility::u_s_threadPool.Commit([=]
 		{
 			while (rrrr_runningFlag)
 			{
 				this_thread::sleep_for(std::chrono::milliseconds(100 / 6));
 				PopulateCommandList();
 			}
-		});*/
+		});
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -237,10 +242,12 @@ namespace AnEngine::RenderCore
 	{
 		//r_graphicsCard[0]->ExecuteSync(commandLists.size(), &commandLists[0]);
 		//GraphicsCommandContext::GetInstance()->PopulateFinished();
-		r_fenceForDisplayPlane->Wait();
+		//r_fenceForDisplayPlane->CpuWait();
+		r_fenceForDisplayPlane->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 		r_frameCount++;
+		r_fenceValueForDisplayPlane[r_frameIndex] = DTimer::GetInstance()->GetTotalTicks();
 	}
 
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
@@ -301,10 +308,11 @@ namespace AnEngine::RenderCore
 		//r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		r_fenceForDisplayPlane->Wait();
-		ThrowIfFailed(r_swapChain_cp->Present(0, 0));
+		r_fenceForDisplayPlane->GpuSignal(r_fenceValueForDisplayPlane[r_frameIndex]);
+		//r_fenceForDisplayPlane->CpuWait();
+		//ThrowIfFailed(r_swapChain_cp->Present(0, 0));
 
-		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		//r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		GraphicsCommandContext::GetInstance()->Push(commandList);
 		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
@@ -332,7 +340,7 @@ namespace AnEngine::RenderCore
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
 
-		r_fenceForDisplayPlane->Wait();
+		r_fenceForDisplayPlane->CpuWait();
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
 		GraphicsCommandContext::GetInstance()->PushCommandList(commandList);

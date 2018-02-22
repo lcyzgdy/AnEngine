@@ -1,4 +1,7 @@
 #include "NBody.h"
+using namespace std;
+using namespace AnEngine::RenderCore;
+
 const float NBody::ParticleSpread = 400.0f;
 
 NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :

@@ -111,6 +111,8 @@ namespace AnEngine::RenderCore
 			memcpy(newElements, p_inputElementDescs, elementsNum * sizeof(D3D12_INPUT_ELEMENT_DESC));
 			m_inputLayouts.reset(static_cast<const D3D12_INPUT_ELEMENT_DESC*>(newElements));
 			// 拷贝一份，以防原数据更改后导致PSO失效
+
+			m_psoDesc.InputLayout.pInputElementDescs = &(*m_inputLayouts);
 		}
 	}
 
@@ -173,7 +175,7 @@ namespace AnEngine::RenderCore
 	{
 		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
 		var device = r_graphicsCard[0]->GetDevice();
-		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
+		/*if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
 
 		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
 		uint64_t hashCode = Utility::GetHash(&m_psoDesc);
@@ -209,7 +211,9 @@ namespace AnEngine::RenderCore
 				this_thread::yield();
 			}
 			m_pipelineState = *psoRef;
-		}
+		}*/
+
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
 

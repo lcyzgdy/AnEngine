@@ -91,8 +91,8 @@ namespace AnEngine::RenderCore
 		ComPtr<ID3DBlob> error;
 		ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
 
-		device->CreateRootSignature(r_graphicsCard[0]->GetNodeNum(), signature->GetBufferPointer(), 
-			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp));
+		ThrowIfFailed(device->CreateRootSignature(r_graphicsCard[0]->GetNodeNum(), signature->GetBufferPointer(),
+			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp)));
 	}
 
 	void RootSignature::Reset()

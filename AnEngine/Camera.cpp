@@ -3,6 +3,7 @@
 #include "ThreadPool.hpp"
 #include "Screen.h"
 #include"CommandContext.h"
+#include"DTimer.h"
 
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
@@ -36,7 +37,8 @@ namespace AnEngine::Game
 
 	void Camera::Update()
 	{
-		this_thread::sleep_for(std::chrono::milliseconds(60));
+		lock_guard<mutex> lock(m_rtvMutex);
+		m_colorBuffer->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalSeconds());
 
 		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
@@ -53,12 +55,13 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0.1f, 0.1f, 0.4f, 1.0f };
+		float clearColor[4] = { 0.0f, 0.2f, Random(0.1f, 0.9f), 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		m_colorBuffer->GetFence()->GpuSignal(DTimer::GetInstance()->GetTotalTicks());
 
 		GraphicsCommandContext::GetInstance()->Push(commandList);
 		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
@@ -67,6 +70,7 @@ namespace AnEngine::Game
 	void Camera::AfterUpdate()
 	{
 		//RenderColorBuffer(m_colorBuffer);
+		this_thread::sleep_for(std::chrono::milliseconds(60));
 		BlendBuffer(m_colorBuffer);
 	}
 
@@ -116,6 +120,7 @@ namespace AnEngine::Game
 
 	RenderCore::Resource::ColorBuffer * Camera::GetColorBuffer()
 	{
+		lock_guard<mutex> lock(m_rtvMutex);
 		return m_colorBuffer;
 	}
 

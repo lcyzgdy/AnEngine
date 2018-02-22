@@ -21,8 +21,8 @@ namespace AnEngine::Game
 	{
 	protected:
 		::AnEngine::RenderCore::Resource::ColorBuffer* m_renderTarget;
-		GraphicPSO* m_pso;
-		RootSignature* m_rootSignature;
+		::AnEngine::RenderCore::GraphicPSO* m_pso;
+		::AnEngine::RenderCore::RootSignature* m_rootSignature;
 
 		virtual void Start() override;
 
@@ -42,9 +42,9 @@ namespace AnEngine::Game
 
 	class TrangleRender : public Renderer
 	{
-		Resource::ByteAddressBuffer* m_vertexBuffer;
-		VertexShader* m_vertexShader;
-		PixelShader* m_pixelShader;
+		::AnEngine::RenderCore::Resource::ByteAddressBuffer* m_vertexBuffer;
+		::AnEngine::RenderCore::VertexShader* m_vertexShader;
+		::AnEngine::RenderCore::PixelShader* m_pixelShader;
 		CD3DX12_VIEWPORT m_viewport;
 		CD3DX12_RECT m_scissorRect;
 

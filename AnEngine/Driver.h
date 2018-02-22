@@ -7,7 +7,7 @@
 
 namespace AnEngine
 {
-	class Driver :public NonCopyable
+	class Driver
 	{
 		bool m_initialized;
 		Game::BaseBehaviour* m_scene;

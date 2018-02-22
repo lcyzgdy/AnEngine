@@ -38,7 +38,7 @@ namespace AnEngine::RenderCore
 
 		//queue<CommandList*> m_commandListPool;
 		//vector<CommandList*> m_readyQueue;
-		//ComPtr<ID3D12Fence> m_fence;
+		//ComPtr<ID3D12Fence> m_fence_cp;
 		//std::mutex m_readerMutex;
 		//std::mutex m_writerMutex;
 		//std::mutex m_mutex;
@@ -76,7 +76,7 @@ namespace AnEngine::RenderCore
 		static GraphicsCommandAllocator* m_uniqueObj;
 
 		//queue<CommandAllocator*> m_commandAllocatorPool;
-		//ComPtr<ID3D12Fence> m_fence;
+		//ComPtr<ID3D12Fence> m_fence_cp;
 		//std::mutex m_readerMutex;
 		//std::mutex m_writerMutex;
 		//std::mutex m_mutex;

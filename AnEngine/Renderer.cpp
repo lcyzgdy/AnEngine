@@ -5,7 +5,9 @@
 #include "RootSignature.h"
 #include "Screen.h"
 #include "Camera.h"
+#include "DTimer.h"
 using namespace std;
+using namespace AnEngine::RenderCore;
 
 namespace AnEngine::Game
 {
@@ -80,26 +82,6 @@ namespace AnEngine::Game
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
 
-		/*D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-		psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
-		//psoDesc.pRootSignature = rootSignature.Get();
-		psoDesc.VS = m_vertexShader->GetByteCode();
-		//psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
-		psoDesc.PS = m_pixelShader->GetByteCode();
-		//psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, FALSE,
-			D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP, D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
-			FALSE, TRUE, TRUE, 0, D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF);
-		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		psoDesc.DepthStencilState.DepthEnable = FALSE;
-		psoDesc.DepthStencilState.StencilEnable = FALSE;
-		psoDesc.SampleMask = UINT_MAX;
-		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-		//psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
-		psoDesc.NumRenderTargets = 1;
-		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		psoDesc.SampleDesc.Count = 1;
-		ThrowIfFailed(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&*m_pso)));*/
 		m_pso = new GraphicPSO();
 		m_pso->SetInputLayout(_countof(inputElementDescs), inputElementDescs);
 		m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
@@ -111,13 +93,13 @@ namespace AnEngine::Game
 		m_pso->SetBlendState(CD3DX12_BLEND_DESC(D3D12_DEFAULT));
 		m_pso->SetDepthStencilState(false, false);
 		m_pso->SetSampleMask(1);
-		m_pso->SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+		m_pso->SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		m_pso->SetRenderTargetFormat(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM);
 		m_pso->Finalize();
 
 
 		Vertex triangleVertices[] =
 		{
-			//{ { -0.3f, 0.0f * aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
 			{ { 0.0f, 0.3f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
 			{ { 0.3f, 0.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
 			{ { 0.2f, -0.4f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
@@ -132,6 +114,8 @@ namespace AnEngine::Game
 
 	void TrangleRender::OnRender()
 	{
+		m_renderTarget->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalTicks());
+
 		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var pCommandList = commandList->GetCommandList();
@@ -144,9 +128,12 @@ namespace AnEngine::Game
 		pCommandList->RSSetScissorRects(1, &m_scissorRect);
 
 		pCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+
+		//float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
+		//pCommandList->ClearRenderTargetView(m_renderTarget->GetRTV(), clearColor, 0, nullptr);
+
 		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pCommandList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
-
 		pCommandList->DrawInstanced(3, 1, 0, 0);
 
 		pCommandList->Close();

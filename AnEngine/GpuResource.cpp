@@ -1,4 +1,5 @@
 #include "GpuResource.h"
+#include "RenderCore.h"
 using namespace std;
 using namespace Microsoft::WRL;
 
@@ -10,6 +11,7 @@ namespace AnEngine::RenderCore::Resource
 		m_usageState(D3D12_RESOURCE_STATE_COMMON),
 		m_transitioningState((D3D12_RESOURCE_STATES)-1)
 	{
+		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
 	GpuResource::GpuResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState) :
@@ -19,6 +21,7 @@ namespace AnEngine::RenderCore::Resource
 		m_usageState(currentState),
 		m_transitioningState(static_cast<D3D12_RESOURCE_STATES>(-1))
 	{
+		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
 	void GpuResource::Release()
@@ -31,6 +34,7 @@ namespace AnEngine::RenderCore::Resource
 			VirtualFree(m_p_userAllocatedMemory, 0, MEM_RELEASE);
 			m_p_userAllocatedMemory = nullptr;
 		}
+		delete m_fence;
 	}
 
 	ID3D12Resource* GpuResource::operator->()
@@ -56,5 +60,10 @@ namespace AnEngine::RenderCore::Resource
 	D3D12_GPU_VIRTUAL_ADDRESS GpuResource::GetGpuVirtualAddress() const
 	{
 		return m_gpuVirtualAddress;
+	}
+
+	Fence* GpuResource::GetFence()
+	{
+		return m_fence;
 	}
 }

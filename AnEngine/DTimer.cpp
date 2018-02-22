@@ -1,21 +1,31 @@
 #include "DTimer.h"
+#include "ThreadPool.hpp"
 
 namespace AnEngine
 {
 	DTimer::DTimer() :
-		elapsedTicks(0), FrameCount(0), framesPerSecond(0), framesThisSecond(0),
-		isFixedTimeStep(false), leftOverTicks(false), qpcSecondCounter(0),
-		targetElapsedTicks(TicksPerSecond / 60), totalTicks(0)
+		m_elapsedTicks(0), m_frameCount(0), m_framesPerSecond(0), m_framesThisSecond(0),
+		m_isFixedTimeStep(false), m_leftOverTicks(false), m_qpcSecondCounter(0),
+		m_targetElapsedTicks(TicksPerSecond / 60), m_totalTicks(0)
 	{
-		QueryPerformanceFrequency(&qpcFrequency);
-		QueryPerformanceCounter(&qpcLastTime);
+		QueryPerformanceFrequency(&m_qpcFrequency);
+		QueryPerformanceCounter(&m_qpcLastTime);
 
-		qpcMaxDelta = qpcFrequency.QuadPart / 10;
+		m_qpcMaxDelta = m_qpcFrequency.QuadPart / 10;
 		// 将最大增量设置为0.1s
+		/*Utility::u_s_threadPool.Commit([this]()
+		{
+			while (this->m_running)
+			{
+				this_thread::sleep_for(std::chrono::milliseconds(1));
+				this->Tick(nullptr);
+			}
+		})*/;
 	}
 
 	DTimer::~DTimer()
 	{
+		m_running = false;
 	}
 
 	/*DTimer* DTimer::GetInstance()
@@ -29,47 +39,49 @@ namespace AnEngine
 
 	const uint64_t DTimer::GetElapsedTicks()
 	{
-		return elapsedTicks;
+		Tick(nullptr);
+		return m_elapsedTicks;
 	}
 
 	const double DTimer::GetElapsedSeconds()
 	{
-		return TicksToSeconds(elapsedTicks);
+		return TicksToSeconds(m_elapsedTicks);
 	}
 
 	const uint64_t DTimer::GetTotalTicks()
 	{
-		return totalTicks;
+		Tick(nullptr);
+		return m_totalTicks;
 	}
 
 	const double DTimer::GetTotalSeconds()
 	{
-		return TicksToSeconds(totalTicks);
+		return TicksToSeconds(m_totalTicks);
 	}
 
 	uint32_t DTimer::GetFrameCount()
 	{
-		return FrameCount;
+		return m_frameCount;
 	}
 
 	uint32_t DTimer::GetFramePerSecond()
 	{
-		return framesPerSecond;
+		return m_framesPerSecond;
 	}
 
 	void DTimer::SetFixedFramerate(bool _isFixedTimeStep)
 	{
-		isFixedTimeStep = _isFixedTimeStep;
+		m_isFixedTimeStep = _isFixedTimeStep;
 	}
 
 	void DTimer::SetTargetElapsedTicks(uint64_t _targetElapsed)
 	{
-		targetElapsedTicks = _targetElapsed;
+		m_targetElapsedTicks = _targetElapsed;
 	}
 
 	void DTimer::SetTargetElapsedSeconds(double _targetElapsed)
 	{
-		targetElapsedTicks = SecondsToTicks(_targetElapsed);
+		m_targetElapsedTicks = SecondsToTicks(_targetElapsed);
 	}
 
 	double DTimer::TicksToSeconds(uint64_t _ticks)
@@ -84,12 +96,12 @@ namespace AnEngine
 
 	void DTimer::ResetElapsedTime()
 	{
-		QueryPerformanceCounter(&qpcLastTime);
+		QueryPerformanceCounter(&m_qpcLastTime);
 
-		leftOverTicks = 0;
-		framesPerSecond = 0;
-		framesThisSecond = 0;
-		qpcSecondCounter = 0;
+		m_leftOverTicks = 0;
+		m_framesPerSecond = 0;
+		m_framesThisSecond = 0;
+		m_qpcSecondCounter = 0;
 	}
 
 	void DTimer::Tick(LpUpdateFunc _update)
@@ -97,36 +109,36 @@ namespace AnEngine
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
 
-		uint64_t delta = currentTime.QuadPart - qpcLastTime.QuadPart;
-		qpcLastTime = currentTime;
-		qpcSecondCounter += delta;
+		uint64_t delta = currentTime.QuadPart - m_qpcLastTime.QuadPart;
+		m_qpcLastTime = currentTime;
+		m_qpcSecondCounter += delta;
 
-		if (delta > qpcMaxDelta)
+		if (delta > m_qpcMaxDelta)
 		{
-			delta = qpcMaxDelta;
+			delta = m_qpcMaxDelta;
 		}	// 控制过大的delta，例如在debug中中断
 
 		delta *= TicksPerSecond;
-		delta /= qpcFrequency.QuadPart;
+		delta /= m_qpcFrequency.QuadPart;
 		// QPC单位转国际单位
 
-		uint32_t lastFrameCount = FrameCount;
+		uint32_t lastFrameCount = m_frameCount;
 
-		if (isFixedTimeStep)
+		if (m_isFixedTimeStep)
 		{
-			if (abs(static_cast<int>(delta - targetElapsedTicks)) < TicksPerSecond / 4000)	// ??
+			if (abs(static_cast<int>(delta - m_targetElapsedTicks)) < TicksPerSecond / 4000)	// ??
 			{
-				delta = targetElapsedTicks;
+				delta = m_targetElapsedTicks;
 			}
-			leftOverTicks += delta;
+			m_leftOverTicks += delta;
 			// 防止失之毫厘谬以千里。固定帧率时，打开了垂直同步的程序会由于显示器的问题累积下微小误差
 
-			while (leftOverTicks >= targetElapsedTicks)
+			while (m_leftOverTicks >= m_targetElapsedTicks)
 			{
-				elapsedTicks = targetElapsedTicks;
-				totalTicks += targetElapsedTicks;
-				leftOverTicks -= targetElapsedTicks;
-				FrameCount++;
+				m_elapsedTicks = m_targetElapsedTicks;
+				m_totalTicks += m_targetElapsedTicks;
+				m_leftOverTicks -= m_targetElapsedTicks;
+				m_frameCount++;
 
 				if (_update)
 				{
@@ -136,25 +148,25 @@ namespace AnEngine
 		}
 		else
 		{
-			elapsedTicks = delta;
-			totalTicks += delta;
-			leftOverTicks = 0;
-			FrameCount++;
+			m_elapsedTicks = delta;
+			m_totalTicks += delta;
+			m_leftOverTicks = 0;
+			m_frameCount++;
 			if (_update)
 			{
 				_update();
 			}
 		}
 
-		if (FrameCount != lastFrameCount)
+		if (m_frameCount != lastFrameCount)
 		{
-			framesThisSecond++;
+			m_framesThisSecond++;
 		}
-		if (qpcSecondCounter >= static_cast<uint64_t>(qpcFrequency.QuadPart))
+		if (m_qpcSecondCounter >= static_cast<uint64_t>(m_qpcFrequency.QuadPart))
 		{
-			framesPerSecond = framesThisSecond;
-			framesThisSecond = 0;
-			qpcSecondCounter %= qpcFrequency.QuadPart;
+			m_framesPerSecond = m_framesThisSecond;
+			m_framesThisSecond = 0;
+			m_qpcSecondCounter %= m_qpcFrequency.QuadPart;
 		}
 	}
 }

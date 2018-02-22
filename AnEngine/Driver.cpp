@@ -5,7 +5,7 @@
 
 namespace AnEngine
 {
-	Driver * Driver::GetInstance()
+	Driver* Driver::GetInstance()
 	{
 		static Driver driver;
 		return &driver;
@@ -33,6 +33,7 @@ namespace AnEngine
 		m_scene = behaviour;
 		behaviour->OnInit();
 	}
+
 	void Driver::EndBehaviour()
 	{
 		m_scene->OnRelease();

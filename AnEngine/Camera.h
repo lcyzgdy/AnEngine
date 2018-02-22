@@ -33,6 +33,8 @@ namespace AnEngine::Game
 		RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
+		std::mutex m_rtvMutex;
+
 	protected:
 		// 通过 BaseBehaviour 继承
 		/*virtual void OnInit() override;

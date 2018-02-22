@@ -13,7 +13,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 {
 	static const UINT ParticleCount = 12000;
 	static const float ParticleSpread;
-	static const UINT ThreadCount = r_DefaultThreadCount_const;
+	static const UINT ThreadCount = RenderCore::r_DefaultThreadCount_const;
 
 	UINT frameIndex;
 
@@ -52,48 +52,48 @@ class NBody :public D3D12AppBase, public D3D12Base
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
 	D3D12_RECT cullingScissorRect;	// 用作遮挡剔除
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> srvUavHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvUavHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvUavDescriptorSize;
 	// 管线对象
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
-	ComPtr<ID3D12PipelineState> computeState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> computeState;
 	// 资源对象
 
-	ComPtr<ID3D12Fence> fence;
-	ComPtr<ID3D12Fence> computeFence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> computeFence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT64 fenceValues[r_DefaultFrameCount_const];
+	UINT64 fenceValues[RenderCore::r_DefaultFrameCount_const];
 	UINT64 renderContextFenceValue;
 	HANDLE renderContextFenceEvent;
 	// 同步对象
 
-	ComPtr<ID3D12CommandQueue> computeCommandQueue[ThreadCount];
-	ComPtr<ID3D12GraphicsCommandList> computeCommandList[ThreadCount];
-	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature>	computeRootSignature;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> computeCommandQueue[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> computeCommandList[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> computeCommandAllocators[RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>	computeRootSignature;
 	// 计算对象
 
-	ComPtr<ID3D12Resource> vertexBuffer;
-	ComPtr<ID3D12Resource> vertexBufferUpload;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBufferUpload;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-	ComPtr<ID3D12Resource> particleBuffer0[ThreadCount];
-	ComPtr<ID3D12Resource> particleBuffer1[ThreadCount];
-	ComPtr<ID3D12Resource> particleBuffer0Upload[ThreadCount];
-	ComPtr<ID3D12Resource> particleBuffer1Upload[ThreadCount];
-	ComPtr<ID3D12Resource> constantBufferGS;
+	Microsoft::WRL::ComPtr<ID3D12Resource> particleBuffer0[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12Resource> particleBuffer1[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12Resource> particleBuffer0Upload[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12Resource> particleBuffer1Upload[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferGS;
 	UINT8* pConstantBufferGSData;
-	ComPtr<ID3D12Resource> constantBufferCS;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferCS;
 
 	UINT srvIndex[ThreadCount];		// 表示哪个例子的缓冲资源试图是SRV（0 || 1）（UAV = 1 - SRV）
 	UINT heightInstances;
@@ -101,7 +101,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 	MiCamera camera;
 	//DTimer timer;
 
-	ComPtr<ID3D12Fence> threadFences[ThreadCount];
+	Microsoft::WRL::ComPtr<ID3D12Fence> threadFences[ThreadCount];
 	volatile HANDLE threadFenceEvents[ThreadCount];
 	// 线程同步对象
 

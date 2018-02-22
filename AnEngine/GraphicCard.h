@@ -6,13 +6,14 @@
 #include"CommandQueue.h"
 #include"RenderCoreConstants.h"
 #include<mutex>
+//#include"Fence.h"
 
 namespace AnEngine::RenderCore
 {
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
-		Microsoft::WRL::ComPtr<ID3D12Device2> m_cp_device;
+		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
 
 		// 渲染着色器的命令队列。
 		CommandQueue m_renderCommandQueue;
@@ -20,6 +21,9 @@ namespace AnEngine::RenderCore
 		CommandQueue m_computeCommandQueue;
 		// 拷贝命令队列
 		CommandQueue m_copyCommandQueue;
+
+		//Fence m_fence;
+		//Microsoft::WRL::ComPtr<ID3D12Fence> m_fence_cp;
 
 		D3D12_FEATURE_DATA_D3D12_OPTIONS m_featureDataOptions;
 
@@ -73,6 +77,9 @@ namespace AnEngine::RenderCore
 		void ExecuteSync(_In_ uint32_t num, _In_reads_(num) ID3D12CommandList *const *ppCommandLists, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 		void IsStable(bool isStable);
+
+		void GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		void GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 	};
 }
 

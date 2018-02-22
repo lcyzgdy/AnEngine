@@ -28,7 +28,7 @@ namespace AnEngine::RenderCore::Resource
 		const void* initialData) : m_bufferSize(numElements * elementSize),
 		m_elementCount(numElements), m_elementSize(elementSize)
 	{
-		m_resourceFlags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+		m_resourceFlags = D3D12_RESOURCE_FLAG_NONE;
 		m_uav.ptr = GpuVirtualAddressUnknown;
 		m_srv.ptr = GpuVirtualAddressUnknown;
 
@@ -48,6 +48,7 @@ namespace AnEngine::RenderCore::Resource
 		//	&ResourceDesc, m_usageState, nullptr, IID_PPV_ARGS(&m_resource_cp));
 		var desc = DescribeBuffer();
 		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetResourceAllocationInfo(1, 1, &desc);
+
 		D3D12_HEAP_DESC heapDesc;
 		heapDesc.SizeInBytes = allocationInfo.SizeInBytes;
 		heapDesc.Properties.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -59,16 +60,16 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE;
 		ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
-		/*ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
-			nullptr, IID_PPV_ARGS(&m_resource_cp)));*/
+		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
+			nullptr, IID_PPV_ARGS(&m_resource_cp)));
 
-		ThrowIfFailed(device->CreateCommittedResource(
+		/*ThrowIfFailed(device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(m_bufferSize),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
-			IID_PPV_ARGS(&m_resource_cp)));
+			IID_PPV_ARGS(&m_resource_cp)));*/
 
 		m_gpuVirtualAddress = m_resource_cp->GetGPUVirtualAddress();
 
@@ -77,7 +78,7 @@ namespace AnEngine::RenderCore::Resource
 			std::byte* pVertexDataBegin;
 			CD3DX12_RANGE readRange(0, 0);		//We do not intend to read from this resource on the CPU.
 			m_resource_cp->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-			memcpy(pVertexDataBegin, initialData, sizeof(m_bufferSize));
+			memcpy(pVertexDataBegin, initialData, m_bufferSize);
 			m_resource_cp->Unmap(0, nullptr);
 		}
 #if defined _DEBUG || defined DEBUG

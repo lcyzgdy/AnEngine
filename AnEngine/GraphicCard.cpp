@@ -1,5 +1,6 @@
 #include"GraphicCard.h"
 #include"DebugLog.h"
+#include"DTimer.h"
 using namespace std;
 using namespace Microsoft::WRL;
 
@@ -18,20 +19,20 @@ namespace AnEngine::RenderCore
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		//GetHardwareAdapter(Private::r_dxgiFactory_cp.Get(), &cp_hardwareAdapter);
 		GetHardwareAdapter(dxgiFactory, &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_cp_device));
+		D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp));
 
-		if (m_cp_device.Get() == nullptr)
+		if (m_device_cp.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_cp_device));
+			D3D12CreateDevice(cp_warpAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp));
 		}
 
-		m_cp_device->SetStablePowerState(m_stableFlag);
+		m_device_cp->SetStablePowerState(m_stableFlag);
 
 #if defined(DEBUG) //|| defined(_DEBUG)
 		ID3D12InfoQueue* p_compInfoQueue = nullptr;
-		ThrowIfFailed(m_cp_device->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue)));
+		ThrowIfFailed(m_device_cp->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue)));
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 
 		// 通过ID来避免个人消息。
@@ -55,7 +56,7 @@ namespace AnEngine::RenderCore
 		p_compInfoQueue->PushStorageFilter(&newFilter);
 		p_compInfoQueue->Release();
 #endif
-		if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
+		if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
 		{
 			if (m_featureDataOptions.TypedUAVLoadAdditionalFormats)
 			{
@@ -65,12 +66,12 @@ namespace AnEngine::RenderCore
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
 				};
-				if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
 				}
 				formatSupport.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-				if (SUCCEEDED(m_cp_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
@@ -84,7 +85,7 @@ namespace AnEngine::RenderCore
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			m_renderCommandQueue.Initialize(m_cp_device.Get());
+			m_renderCommandQueue.Initialize(m_device_cp.Get());
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -97,12 +98,12 @@ namespace AnEngine::RenderCore
 			//queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 			//queueDesc.Type = D3D12_COMMAND_LIST_TYPE_COMPUTE;
 			//m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(m_computeCommandQueue.GetAddressOf()));
-			m_computeCommandQueue.Initialize(m_cp_device.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			m_computeCommandQueue.Initialize(m_device_cp.Get(), D3D12_COMMAND_LIST_TYPE_COMPUTE);
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			m_copyCommandQueue.Initialize(m_cp_device.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
+			m_copyCommandQueue.Initialize(m_device_cp.Get(), D3D12_COMMAND_LIST_TYPE_COPY);
 			break;
 		}
 		default:
@@ -112,12 +113,12 @@ namespace AnEngine::RenderCore
 
 	const ID3D12Device* GraphicsCard::GetDevice() const
 	{
-		return m_cp_device.Get();
+		return m_device_cp.Get();
 	}
 
 	ID3D12Device * GraphicsCard::GetDevice()
 	{
-		return m_cp_device.Get();
+		return m_device_cp.Get();
 	}
 
 	uint32_t GraphicsCard::GetNodeNum()
@@ -153,6 +154,18 @@ namespace AnEngine::RenderCore
 	void GraphicsCard::IsStable(bool isStable)
 	{
 		m_stableFlag = isStable;
+	}
+
+	void GraphicsCard::GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type)
+	{
+		ID3D12CommandQueue* commandQueue = GetCommandQueue(type);
+		commandQueue->Wait(fence, value);
+	}
+
+	void GraphicsCard::GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type)
+	{
+		ID3D12CommandQueue* commandQueue = GetCommandQueue(type);
+		commandQueue->Signal(fence, value);
 	}
 
 	const ID3D12CommandQueue* GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
@@ -225,5 +238,8 @@ namespace AnEngine::RenderCore
 		CreateCommandQueue();
 		if (compute) CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		if (copy) CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
+
+		/*m_device_cp->CreateFence(DTimer::GetInstance()->GetTotalTicks(), D3D12_FENCE_FLAG_NONE,
+			IID_PPV_ARGS(&m_fence_cp));*/
 	}
 }

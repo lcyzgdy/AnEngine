@@ -55,7 +55,7 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0.0f, 0.2f, Random(0.1f, 0.9f), 1.0f };
+		float clearColor[4] = { 0.0f, 0.2f, sin((double)DTimer::GetInstance()->GetTotalTicks() / 10000), 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
@@ -80,10 +80,22 @@ namespace AnEngine::Game
 
 	void Camera::Destory()
 	{
-		cameraPool.erase(find(cameraPool.begin(), cameraPool.end(), this));
+		var it = find(cameraPool.begin(), cameraPool.end(), this);
+		if (it != cameraPool.end() && cameraPool.size() > 0)
+		{
+			cameraPool.erase(it);
+		}
 	}
 
-	Camera::Camera(wstring name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
+	Camera::Camera(const std::wstring& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
+	{
+		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetAsRenderTargetView();
+		m_depthBuffer = new DepthBuffer(0, 0);
+	}
+
+	Camera::Camera(wstring&& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
 	{
 		//m_colorBuffer = new ColorBuffer(Color::Blue);
 		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
@@ -93,7 +105,16 @@ namespace AnEngine::Game
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}
 
-	Camera::Camera(wstring name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
+	Camera::Camera(wstring&& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
+	{
+		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetClearColor(Color::Blue);
+		m_colorBuffer->SetAsRenderTargetView();
+		m_depthBuffer = new DepthBuffer(0, 0);
+	}
+
+	Camera::Camera(const std::wstring& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
 	{
 		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);

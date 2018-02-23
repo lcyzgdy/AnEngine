@@ -1,6 +1,4 @@
 #include "Test.h"
-#include"Driver.h"
-#include"Renderer.h"
 using namespace AnEngine;
 using namespace AnEngine::Game;
 using namespace AnEngine::RenderCore;
@@ -25,6 +23,6 @@ void LoadScene()
 	Driver::GetInstance()->BeginBehaviour(testScene);
 }
 
-TestCamera::TestCamera(std::wstring name) :ObjectBehaviour(name)
+TestCamera::TestCamera(std::wstring&& name) :ObjectBehaviour(name)
 {
 }

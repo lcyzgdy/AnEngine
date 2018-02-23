@@ -19,7 +19,8 @@ namespace AnEngine::Game
 		GameObject* m_parentObject;
 
 	public:
-		explicit GameObject(std::wstring name);
+		explicit GameObject(const std::wstring& name);
+		explicit GameObject(std::wstring&& name);
 		~GameObject() = default;
 
 		wstring name;

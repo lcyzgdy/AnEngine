@@ -6,7 +6,8 @@ namespace AnEngine::Game
 {
 	void ObjectBehaviour::OnInit()
 	{
-		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		lock_guard<mutex> lock(m_mutex);
 		Start();
 		if (m_active) //BeginUpdate();
 		{
@@ -21,7 +22,8 @@ namespace AnEngine::Game
 		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
 		while (m_active)
 		{
-			lock_guard<recursive_mutex> lock(m_recursiveMutex);
+			//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+			lock_guard<mutex> lock(m_mutex);
 			BeforeUpdate();
 			Update();
 			AfterUpdate();
@@ -31,7 +33,8 @@ namespace AnEngine::Game
 	void ObjectBehaviour::OnRelease()
 	{
 		m_active = false;
-		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		lock_guard<mutex> lock(m_mutex);
 		for (var i : m_component)
 		{
 			i->OnRelease();
@@ -86,13 +89,18 @@ namespace AnEngine::Game
 	{
 	}
 
-	ObjectBehaviour::ObjectBehaviour(std::wstring name) :GameObject(name), m_active(true)
+	ObjectBehaviour::ObjectBehaviour(const std::wstring & name) : GameObject(name), m_active(true)
+	{
+	}
+
+	ObjectBehaviour::ObjectBehaviour(std::wstring&& name) : GameObject(name), m_active(true)
 	{
 	}
 
 	void ObjectBehaviour::AddComponent(ObjectBehaviour * component)
 	{
-		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		lock_guard<mutex> lock(m_mutex);
 		component->gameObject = this;
 		m_component.emplace_back(component);
 	}
@@ -100,7 +108,8 @@ namespace AnEngine::Game
 	void ObjectBehaviour::RemoveComponent(ObjectBehaviour* component)
 	{
 		m_scene->RemoveObject(component);
-		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		lock_guard<mutex> lock(m_mutex);
 		for (var it = m_component.begin(); it != m_component.end(); ++it)
 		{
 			if (*it == component)
@@ -119,7 +128,8 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Active(bool b)
 	{
-		lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
+		lock_guard<mutex> lock(m_mutex);
 		m_active = b;
 		if (b)
 		{

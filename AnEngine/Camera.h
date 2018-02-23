@@ -51,8 +51,10 @@ namespace AnEngine::Game
 		virtual void Destory() override;
 
 	public:
-		Camera(std::wstring name);
-		Camera(std::wstring name, ClearFlags clearFlag);
+		Camera(const std::wstring& name);
+		Camera(std::wstring&& name);
+		Camera(const std::wstring& name, ClearFlags clearFlag);
+		Camera(std::wstring&& name, ClearFlags clearFlag);
 		~Camera();
 
 		RenderCore::Resource::ColorBuffer* GetColorBuffer();

@@ -1,4 +1,7 @@
 #include "NBody.h"
+using namespace std;
+using namespace AnEngine::RenderCore;
+
 const float NBody::ParticleSpread = 400.0f;
 
 NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :
@@ -15,7 +18,7 @@ NBody::NBody(const HWND _hwnd, const UINT _width, const UINT _height) :
 		renderContextFenceValues[i] = 0;
 		threadFenceValues[i] = 0;
 	}
-	
+
 	float sqRootAsyncContextsNum = sqrt(static_cast<float>(ThreadCount));
 	heightInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
 	widthInstances = static_cast<UINT>(ceil(sqRootAsyncContextsNum));
@@ -44,13 +47,15 @@ void NBody::OnInit()
 void NBody::OnUpdate()
 {
 	WaitForSingleObjectEx(swapChainEvent, 100, false);
-	timer.Tick(nullptr);
-	camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
+	//timer.Tick(nullptr);
+	DTimer::GetInstance()->Tick(nullptr);
+	//camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
+	camera.OnUpdate(static_cast<float>(DTimer::GetInstance()->GetElapsedSeconds()));
 
 	ConstantBufferGS vConstantBufferGS = {};
 	XMStoreFloat4x4(&vConstantBufferGS.worldViewProjection, XMMatrixMultiply(camera.GetViewMatrix(), camera.GetProjectionMatrix(0.8f, aspectRatio, 1.0f, 5000.0f)));
 	XMStoreFloat4x4(&vConstantBufferGS.inverseView, XMMatrixInverse(nullptr, camera.GetViewMatrix()));
-	
+
 	UINT8* destination = pConstantBufferGSData + sizeof(ConstantBufferGS) * frameIndex;
 	memcpy(destination, &vConstantBufferGS, sizeof(ConstantBufferGS));
 }
@@ -65,7 +70,7 @@ void NBody::OnRender()
 
 	for (int i = 0; i < ThreadCount; i++)
 	{
-		UINT64 threadFenceValue = InterlockedGetValue(&threadFenceValues[i]);										
+		UINT64 threadFenceValue = InterlockedGetValue(&threadFenceValues[i]);
 		if (threadFences[i]->GetCompletedValue() < threadFenceValue)
 		{
 			ThrowIfFailed(commandQueue->Wait(threadFences[i].Get(), threadFenceValue));

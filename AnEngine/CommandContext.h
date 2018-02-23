@@ -16,8 +16,8 @@ namespace AnEngine::RenderCore
 	class Context
 	{
 	protected:
-		queue<T> m_pool;
-		vector<T> m_readyQueue;
+		std::queue<T> m_pool;
+		std::vector<T> m_readyQueue;
 
 		std::mutex m_readerMutex;
 		std::mutex m_writerMutex;
@@ -38,7 +38,7 @@ namespace AnEngine::RenderCore
 
 		//queue<CommandList*> m_commandListPool;
 		//vector<CommandList*> m_readyQueue;
-		//ComPtr<ID3D12Fence> m_fence;
+		//ComPtr<ID3D12Fence> m_fence_cp;
 		//std::mutex m_readerMutex;
 		//std::mutex m_writerMutex;
 		//std::mutex m_mutex;
@@ -63,7 +63,7 @@ namespace AnEngine::RenderCore
 
 		virtual void AddNew(CommandList*) override;
 
-		vector<ID3D12CommandList*> GetReady();
+		std::vector<ID3D12CommandList*> GetReady();
 
 		virtual void PopulateFinished() override;
 
@@ -76,7 +76,7 @@ namespace AnEngine::RenderCore
 		static GraphicsCommandAllocator* m_uniqueObj;
 
 		//queue<CommandAllocator*> m_commandAllocatorPool;
-		//ComPtr<ID3D12Fence> m_fence;
+		//ComPtr<ID3D12Fence> m_fence_cp;
 		//std::mutex m_readerMutex;
 		//std::mutex m_writerMutex;
 		//std::mutex m_mutex;

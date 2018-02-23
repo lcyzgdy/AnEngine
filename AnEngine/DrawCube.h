@@ -39,54 +39,54 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
-	ComPtr<ID3D12DescriptorHeap> dsvHeap;
-	ComPtr<ID3D12DescriptorHeap> samHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> samHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
 	UINT dsvDescriptorSize;
 	UINT samDescriptorSize;
 	UINT cbvSrvUavDescriptorSize;
 
-	ComPtr<IDCompositionDevice> dCompositionDevice;
-	ComPtr<IDCompositionTarget> dCompositionTarget;
-	ComPtr<IDCompositionVisual> dCompositionVisual;
+	Microsoft::WRL::ComPtr<IDCompositionDevice> dCompositionDevice;
+	Microsoft::WRL::ComPtr<IDCompositionTarget> dCompositionTarget;
+	Microsoft::WRL::ComPtr<IDCompositionVisual> dCompositionVisual;
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
 	UINT frameIndex;
 
-	ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
 	HANDLE swapChainEvent;
-	UINT fenceValues[r_DefaultFrameCount_const];
+	UINT fenceValues[AnEngine::RenderCore::r_DefaultFrameCount_const];
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleCSU[1];
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandleDSV[1];
 
-	ComPtr<ID3D12Resource> cube;
-	ComPtr<ID3D12Resource> vertexBuffer;
-	ComPtr<ID3D12Resource> vertexIndexBuffer;
-	ComPtr<ID3D12Resource> cBufferMatrix;
-	ComPtr<ID3D12Resource> depthBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> cube;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexIndexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> cBufferMatrix;
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer;
 	D3D12_VERTEX_BUFFER_VIEW cubeVbv;
 	D3D12_INDEX_BUFFER_VIEW cubeIbv;
 	XMFLOAT4X4  cBMatrix;
 	// 应用程序资源
 
-	vector<VertexPositionColor> vertex;
+	std::vector<VertexPositionColor> vertex;
 
 	MiCamera camera;
 	XMMATRIX projectionMatrix;
-	DTimer timer;
+	//DTimer timer;
 
 public:
 	DrawCube(const HWND _hwnd, const UINT _width, const UINT _height);

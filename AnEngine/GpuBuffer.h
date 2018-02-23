@@ -9,8 +9,8 @@ namespace AnEngine::RenderCore::Resource
 	class GpuBuffer : public GpuResource
 	{
 	protected:
-		D3D12_RESOURCE_DESC DescribeBuffer(void);
-		virtual void CreateDerivedViews(void) = 0;
+		D3D12_RESOURCE_DESC DescribeBuffer();
+		virtual void CreateDerivedViews() = 0;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE m_uav;
 		D3D12_CPU_DESCRIPTOR_HANDLE m_srv;
@@ -20,13 +20,14 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t m_elementSize;
 		D3D12_RESOURCE_FLAGS m_resourceFlags;
 	public:
-		GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData = nullptr);
+		GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
+			const void* initialData = nullptr);
 		~GpuBuffer();
 
-		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUav(void) const;
-		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSrv(void) const;
+		const D3D12_CPU_DESCRIPTOR_HANDLE& GetUav() const;
+		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSrv() const;
 
-		D3D12_GPU_VIRTUAL_ADDRESS RootConstantBufferView(void) const;
+		D3D12_GPU_VIRTUAL_ADDRESS RootConstantBufferView() const;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE CreateConstantBufferView(uint32_t offset, uint32_t size) const;
 
@@ -41,11 +42,13 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t GetElementSize() const { return m_elementSize; }
 	};
 
-	class ByteAddressBuffer : GpuBuffer
+	class ByteAddressBuffer : public GpuBuffer
 	{
-	public:
-		ByteAddressBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData = nullptr);
+	protected:
 		virtual void CreateDerivedViews() override;
+	public:
+		ByteAddressBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
+			const void* initialData = nullptr);
 	};
 }
 #endif // !__GPUBUFFER_H__

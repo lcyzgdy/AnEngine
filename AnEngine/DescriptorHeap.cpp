@@ -1,6 +1,7 @@
 #include "DescriptorHeap.hpp"
 #include "RenderCore.h"
 using namespace AnEngine::RenderCore::Resource;
+using namespace std;
 
 namespace AnEngine::RenderCore::Heap
 {

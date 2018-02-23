@@ -21,29 +21,29 @@ class DrawLine :public D3D12AppBase, public D3D12Base
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
-	ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[r_DefaultFrameCount_const];
+	UINT fenceValues[AnEngine::RenderCore::r_DefaultFrameCount_const];
 
-	ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	// 应用程序资源
 
-	vector<Vertex> vertex;
+	std::vector<Vertex> vertex;
 
 public:
 	DrawLine(const HWND _hwnd, const UINT _width, const UINT _height);
@@ -79,7 +79,7 @@ public:
 
 };
 
-class DrawLineWithWu:public D3D12AppBase, public D3D12Base
+class DrawLineWithWu :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
@@ -91,30 +91,30 @@ class DrawLineWithWu:public D3D12AppBase, public D3D12Base
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[AnEngine::RenderCore::r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
-	ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[r_DefaultFrameCount_const];
+	UINT fenceValues[AnEngine::RenderCore::r_DefaultFrameCount_const];
 
-	ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	// 应用程序资源
 	Vertex start;
 	Vertex end;
-	vector<Vertex> vertex;
+	std::vector<Vertex> vertex;
 
 public:
 	DrawLineWithWu(const HWND _hwnd, const UINT _width, const UINT _height);
@@ -164,10 +164,10 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 	ComPtr<IDXGISwapChain3> swapChain;
 	ComPtr<ID3D12Device> device;
 	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
+	ComPtr<ID3D12CommandAllocator> commandAllocators[AnEngine::RenderCore::r_DefaultFrameCount_const];
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
+	ComPtr<ID3D12Resource> renderTargets[AnEngine::RenderCore::r_DefaultFrameCount_const];
 	ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -177,7 +177,7 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 
 	ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[r_DefaultFrameCount_const];
+	UINT fenceValues[AnEngine::RenderCore::r_DefaultFrameCount_const];
 
 	ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
@@ -191,7 +191,7 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 	float Cross(Vertex& a, Vertex& b, Vertex& c);
 
 	void Graham();
-	
+
 
 public:
 	DrawTriangle(const HWND _hwnd, const UINT _width, const UINT _height);

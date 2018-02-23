@@ -18,7 +18,7 @@ namespace AnEngine::RenderCore
 		D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress(uint32_t drawIndex, uint32_t frameIndex);
 
 	private:
-		ComPtr<ID3D12Resource> constantBuffer;
+		Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer;
 		void* pMappedConstantBuffer;
 		uint32_t  alignedPerDrawConstantBufferSize;
 		uint32_t  perFrameConstantBufferSize;

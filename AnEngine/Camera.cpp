@@ -3,12 +3,14 @@
 #include "ThreadPool.hpp"
 #include "Screen.h"
 #include"CommandContext.h"
+#include"DTimer.h"
 
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
+	static vector<Camera*> cameraPool;
 	/*void Camera::OnInit()
 	{
 		lock_guard<recursive_mutex> lock(m_recursiveMutex);
@@ -26,6 +28,7 @@ namespace AnEngine::Game
 
 	void Camera::Start()
 	{
+		cameraPool.emplace_back(this);
 	}
 
 	void Camera::OnActive()
@@ -34,7 +37,8 @@ namespace AnEngine::Game
 
 	void Camera::Update()
 	{
-		this_thread::sleep_for(std::chrono::milliseconds(6));
+		lock_guard<mutex> lock(m_rtvMutex);
+		m_colorBuffer->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalSeconds());
 
 		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
@@ -51,12 +55,13 @@ namespace AnEngine::Game
 
 		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { Random(0.1, 0.9f), Random(0.1f, 0.9f), Random(0.1f, 0.9f), 1.0f };
+		float clearColor[4] = { 0.0f, 0.2f, sin((double)DTimer::GetInstance()->GetTotalTicks() / 10000), 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		m_colorBuffer->GetFence()->GpuSignal(DTimer::GetInstance()->GetTotalTicks());
 
 		GraphicsCommandContext::GetInstance()->Push(commandList);
 		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
@@ -65,6 +70,7 @@ namespace AnEngine::Game
 	void Camera::AfterUpdate()
 	{
 		//RenderColorBuffer(m_colorBuffer);
+		this_thread::sleep_for(std::chrono::milliseconds(60));
 		BlendBuffer(m_colorBuffer);
 	}
 
@@ -74,10 +80,22 @@ namespace AnEngine::Game
 
 	void Camera::Destory()
 	{
-
+		var it = find(cameraPool.begin(), cameraPool.end(), this);
+		if (it != cameraPool.end() && cameraPool.size() > 0)
+		{
+			cameraPool.erase(it);
+		}
 	}
 
-	Camera::Camera(wstring name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
+	Camera::Camera(const std::wstring& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
+	{
+		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetAsRenderTargetView();
+		m_depthBuffer = new DepthBuffer(0, 0);
+	}
+
+	Camera::Camera(wstring&& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
 	{
 		//m_colorBuffer = new ColorBuffer(Color::Blue);
 		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
@@ -87,7 +105,16 @@ namespace AnEngine::Game
 		m_depthBuffer = new DepthBuffer(0, 0);
 	}
 
-	Camera::Camera(wstring name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
+	Camera::Camera(wstring&& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
+	{
+		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		m_colorBuffer->SetClearColor(Color::Blue);
+		m_colorBuffer->SetAsRenderTargetView();
+		m_depthBuffer = new DepthBuffer(0, 0);
+	}
+
+	Camera::Camera(const std::wstring& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
 	{
 		m_colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
@@ -114,6 +141,7 @@ namespace AnEngine::Game
 
 	RenderCore::Resource::ColorBuffer * Camera::GetColorBuffer()
 	{
+		lock_guard<mutex> lock(m_rtvMutex);
 		return m_colorBuffer;
 	}
 
@@ -146,5 +174,14 @@ namespace AnEngine::Game
 	Color Camera::ClearColor()
 	{
 		return m_clearColor;
+	}
+
+	ColorBuffer* Camera::FindForwordTarget(Vector3&& pos)
+	{
+		for (var i : cameraPool)
+		{
+			if (i != nullptr) return i->GetColorBuffer();
+		}
+		return nullptr;
 	}
 }

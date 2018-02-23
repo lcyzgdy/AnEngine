@@ -217,7 +217,23 @@ struct NonCopyable
 	NonCopyable(const NonCopyable&) = delete;
 	~NonCopyable() = default;
 
-	NonCopyable & operator=(const NonCopyable&) = delete;
+	NonCopyable& operator=(const NonCopyable&) = delete;
+};
+
+template<typename T>
+class Singleton : public NonCopyable
+{
+	inline static T* m_uniqueObj = nullptr;
+
+public:
+	static T* GetInstance()
+	{
+		if (m_uniqueObj == nullptr)
+		{
+			m_uniqueObj = new T();
+		}
+		return m_uniqueObj;
+	}
 };
 
 #endif // !__ONWIND_H__

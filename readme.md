@@ -21,8 +21,73 @@
 * 绘制顶点为随机颜色的立方体
 
 ## 开始
-在Window项目中新建头文件和源文件，头文件中引用 RenderCore.h、Driver.h。
-```cplusplus
+在Window项目中新建头文件和源文件（Test.h，Test.cpp），头文件中引用 Driver.h。
+* Test.h
+``` cpp
+#pragma once
+#include "Driver.h"
+
+void LoadScene();
+
+class TestCamera :public AnEngine::Game::ObjectBehaviour
+{
+public:
+	TestCamera(std::wstring&& name);
+};
 
 ```
+&#8195;&#8195;为了保证最基本的图形渲染，我们需要一个场景，并在场景中添加一个三角形网格渲染器和一个照相机。因此在Test.h中声明了一个函数LoadScene()和一个类TestCamera。TestCamera继承自ObjectBehaviour，表示这是场景中一个活动的对象。由于ObjectBehaviour继承自GameObject和BaseBehaviour，而GameObject的构造函数显式声明为需要一个name作为参数，因此TestCamera也需要显式声明一个wstring作为参数的构造函数。注意，GameObject的name变量支持const wstring&和右值引用wstring&&，此处使用右值。
+* Test.cpp
+``` cpp
+#include "Test.h"
+using namespace AnEngine;
+using namespace AnEngine::Game;
+using namespace AnEngine::RenderCore;
 
+Scene* testScene;
+Camera* testCamera;
+
+void LoadScene()
+{
+	testScene = new Scene(L"Test Scene");
+	testCamera = new Camera(L"Test Camera");
+	testCamera->ClearFlag(Camera::ClearFlags::SolidColor);
+	testCamera->ClearColor(Color::Blue);
+
+	TestCamera* camera = new TestCamera(L"Test Camera Object");
+	camera->AddComponent(testCamera);
+
+	TrangleRender* trangleRender = new TrangleRender(L"Test Render");
+	camera->AddComponent(trangleRender);
+
+	testScene->AddObject(camera);
+	Driver::GetInstance()->BeginBehaviour(testScene);
+}
+
+TestCamera::TestCamera(std::wstring name) : ObjectBehaviour(name)
+{
+}
+```
+&#8195;&#8195;在CPP文件中对TestCamera的构造函数进行定义，这个对象并没有什么用，所以不需要在构造函数中做任何事情，只需要调用基类构造函数即可。<br/>
+&#8195;&#8195;在LoadScene()中，我们创建了一个空场景testScene，一个照相机testCamera，将清空标志设置为纯色，填充颜色为蓝色（注：这里为了Debug在Camera代码中没有使用ClearColor变量作为填充，下一版本会修改）。然后实例化一个TestCamera对象camera，将照相机作为该对象的组件，即调用camera的AddComponent方法将testCamera挂上去。然后创建一个三角形网格渲染器，也作为组件挂到camera上。最后，将camera对象加入到场景中，使用Driver的BeginBehaviour()方法加载场景。
+
+* WinMain.cpp：
+```cpp
+......
+ShowWindow(window, nCmdShow);
+
+LoadScene();
+
+MSG msg = {};
+while (msg.message != WM_QUIT)
+{
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+......
+```
+在WinMain.cpp的合适位置调用LoadSence()，可看到运行效果如图：
+![image](./Blogs/Demo.png)

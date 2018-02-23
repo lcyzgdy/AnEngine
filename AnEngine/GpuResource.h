@@ -4,9 +4,7 @@
 
 #include<wrl.h>
 #include"DX.h"
-
-using namespace std;
-using namespace Microsoft::WRL;
+#include"Fence.h"
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -15,9 +13,10 @@ namespace AnEngine::RenderCore::Resource
 
 	class GpuResource
 	{
+		Fence* m_fence;
 	protected:
-		ComPtr<ID3D12Resource> m_resource_cp;
-		ComPtr<ID3D12Heap> m_heap_cp;
+		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource_cp;
+		Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;
 		D3D12_RESOURCE_STATES m_usageState;
 		D3D12_RESOURCE_STATES m_transitioningState;
 		D3D12_GPU_VIRTUAL_ADDRESS m_gpuVirtualAddress;
@@ -38,6 +37,8 @@ namespace AnEngine::RenderCore::Resource
 		const ID3D12Resource* GetResource() const;
 
 		D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress() const;
+
+		Fence* GetFence();
 	};
 }
 #endif // !__GPURESOURCE_H__

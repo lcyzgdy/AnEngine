@@ -32,10 +32,10 @@ namespace AnEngine::RenderCore
 	class RootSignature
 	{
 	protected:
-		ComPtr<ID3D12RootSignature> m_rootSignature;
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature_cp;
 
 	public:
-		RootSignature() = default;
+		RootSignature();
 		~RootSignature() = default;
 		void Reset();
 

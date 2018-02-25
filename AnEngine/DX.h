@@ -83,7 +83,7 @@ namespace AnEngine
 
 		void ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc);
 
-		void D3D12AppBase::SetWindowTitleText(LPCWSTR text);
+		void SetWindowTitleText(LPCWSTR text);
 	};
 #endif // !_WIN64
 

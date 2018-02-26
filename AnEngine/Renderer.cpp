@@ -42,6 +42,14 @@ namespace AnEngine::Game
 	{
 	}
 
+	void Renderer::Destory()
+	{
+		ObjectBehaviour::Destory();
+		delete m_pso;
+		delete m_rootSignature;
+		m_renderTarget = nullptr;
+	}
+
 	TrangleRender::TrangleRender(const wstring& name) : Renderer(name), m_viewport(0.0f, 0.0f,
 		static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
 		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()),
@@ -114,7 +122,7 @@ namespace AnEngine::Game
 
 	void TrangleRender::OnRender()
 	{
-		m_renderTarget->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalTicks());
+		m_renderTarget->GetFence()->CpuWait(Timer::GetTotalTicks());
 
 		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();

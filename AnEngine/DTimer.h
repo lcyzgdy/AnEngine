@@ -77,5 +77,11 @@ namespace AnEngine
 
 	using StepTimer = DTimer;
 #endif
+
+	class Timer
+	{
+	public:
+		static __FasterFunc(uint64_t) GetTotalTicks();
+	};
 }
 #endif // !__DTIMER_H__

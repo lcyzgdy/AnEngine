@@ -1,6 +1,8 @@
 #include "ObjectBehaviour.h"
 #include "ThreadPool.hpp"
 #include "Scene.h"
+#include "DebugLog.h"
+using namespace AnEngine::Debug;
 
 namespace AnEngine::Game
 {
@@ -24,9 +26,22 @@ namespace AnEngine::Game
 		{
 			//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 			lock_guard<mutex> lock(m_mutex);
+#if defined(_DEBUG) || defined(DEBUG)
+			try
+			{
+				BeforeUpdate();
+				Update();
+				AfterUpdate();
+			}
+			catch (exception e)
+			{
+				Debug::Debug::Log(e.what());
+			}
+#else 
 			BeforeUpdate();
 			Update();
 			AfterUpdate();
+#endif
 		}
 	}
 
@@ -116,6 +131,7 @@ namespace AnEngine::Game
 			{
 				(*it)->OnRelease();
 				m_component.erase(it);
+				delete *it;
 				break;
 			}
 		}

@@ -56,7 +56,7 @@ namespace AnEngine::RenderCore
 
 	void Fence::WaitForGpu()
 	{
-		uint64_t fenceValue = DTimer::GetInstance()->GetTotalTicks();
+		uint64_t fenceValue = Timer::GetTotalTicks();
 		m_commandQueue->Signal(m_fence.Get(), fenceValue);
 
 		int yyyy = m_fence->GetCompletedValue();

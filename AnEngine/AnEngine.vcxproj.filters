@@ -174,6 +174,15 @@
     <ClInclude Include="GpuBuffer.h">
       <Filter>头文件\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dds.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -275,10 +284,16 @@
     <ClCompile Include="ComponentBehaviour.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Fence.cpp">
+    <ClCompile Include="GpuBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GpuBuffer.cpp">
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Fence.cpp">
       <Filter>源文件\Graphic</Filter>
     </ClCompile>
   </ItemGroup>

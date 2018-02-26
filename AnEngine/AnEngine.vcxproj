@@ -164,6 +164,7 @@
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="ComponentBehaviour.h" />
+    <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />
@@ -198,6 +199,8 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
+    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
@@ -211,6 +214,7 @@
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="ComponentBehaviour.cpp" />
+    <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
@@ -238,6 +242,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="VirtualBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>

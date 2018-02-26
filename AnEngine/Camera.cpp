@@ -70,6 +70,7 @@ namespace AnEngine::Game
 	void Camera::AfterUpdate()
 	{
 		//RenderColorBuffer(m_colorBuffer);
+		if (m_postProcessShader != nullptr) PostProcess();
 		this_thread::sleep_for(std::chrono::milliseconds(60));
 		BlendBuffer(m_colorBuffer);
 	}
@@ -85,6 +86,10 @@ namespace AnEngine::Game
 		{
 			cameraPool.erase(it);
 		}
+	}
+
+	void Camera::PostProcess()
+	{
 	}
 
 	Camera::Camera(const std::wstring& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)

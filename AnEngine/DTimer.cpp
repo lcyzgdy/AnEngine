@@ -169,4 +169,9 @@ namespace AnEngine
 			m_qpcSecondCounter %= m_qpcFrequency.QuadPart;
 		}
 	}
+
+	uint64_t Timer::GetTotalTicks()
+	{
+		return DTimer::GetInstance()->GetTotalTicks();
+	}
 }

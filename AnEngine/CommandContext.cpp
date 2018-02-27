@@ -6,11 +6,11 @@
 
 namespace AnEngine::RenderCore
 {
-	GraphicsCommandContext* GraphicsCommandContext::m_uniqueObj;
+	//GraphicsCommandContext* GraphicsCommandContext::m_uniqueObj;
 
 	GraphicsCommandContext::GraphicsCommandContext()
 	{
-
+		
 	}
 
 	GraphicsCommandContext::~GraphicsCommandContext()
@@ -29,14 +29,14 @@ namespace AnEngine::RenderCore
 		m_readyQueue.clear();
 	}
 
-	GraphicsCommandContext* GraphicsCommandContext::GetInstance()
+	/*GraphicsCommandContext* GraphicsCommandContext::GetInstance()
 	{
 		if (m_uniqueObj == nullptr)
 		{
 			m_uniqueObj = new GraphicsCommandContext();
 		}
 		return m_uniqueObj;
-	}
+	}*/
 
 	CommandList* GraphicsCommandContext::GetOne()
 	{
@@ -70,7 +70,7 @@ namespace AnEngine::RenderCore
 		m_pool.emplace(list);
 	}
 
-	vector<ID3D12CommandList*> GraphicsCommandContext::GetReady()
+	/*vector<ID3D12CommandList*> GraphicsCommandContext::GetReady()
 	{
 		lock_guard<std::mutex> lock(m_writerMutex);
 		vector<ID3D12CommandList*> temp;
@@ -80,7 +80,7 @@ namespace AnEngine::RenderCore
 		}
 		return std::move(temp);
 		//return temp;
-	}
+	}*/
 
 	void GraphicsCommandContext::PopulateFinished()
 	{

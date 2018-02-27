@@ -27,6 +27,10 @@ namespace AnEngine::Game
 			//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 			lock_guard<mutex> lock(m_mutex);
 #if defined(_DEBUG) || defined(DEBUG)
+			BeforeUpdate();
+			Update();
+			AfterUpdate();
+#else 			
 			try
 			{
 				BeforeUpdate();
@@ -37,10 +41,6 @@ namespace AnEngine::Game
 			{
 				Debug::Debug::Log(e.what());
 			}
-#else 
-			BeforeUpdate();
-			Update();
-			AfterUpdate();
 #endif
 		}
 	}

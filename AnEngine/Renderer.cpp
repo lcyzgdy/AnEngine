@@ -131,23 +131,31 @@ namespace AnEngine::Game
 		ThrowIfFailed(pCommandAllocator->Reset());
 		pCommandList->Reset(pCommandAllocator, m_pso->GetPSO());
 
+		var commonToRenderTarget = CommonState::commonToRenderTarget;
+		var renderTargetToCommon = CommonState::renderTargetToCommon;
+		commonToRenderTarget.Transition.pResource = m_renderTarget->GetResource();
+		renderTargetToCommon.Transition.pResource = m_renderTarget->GetResource();
+
+		pCommandList->ResourceBarrier(1, &commonToRenderTarget);
+
 		pCommandList->SetGraphicsRootSignature(m_rootSignature->GetRootSignature());
 		pCommandList->RSSetViewports(1, &m_viewport);
 		pCommandList->RSSetScissorRects(1, &m_scissorRect);
 
 		pCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
 
-		//float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
-		//pCommandList->ClearRenderTargetView(m_renderTarget->GetRTV(), clearColor, 0, nullptr);
-
 		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pCommandList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
 		pCommandList->DrawInstanced(3, 1, 0, 0);
+
+		pCommandList->ResourceBarrier(1, &renderTargetToCommon);
 
 		pCommandList->Close();
 
 		ID3D12CommandList* ppcommandList[] = { pCommandList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+
+		m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
 		GraphicsCommandContext::GetInstance()->Push(commandList);
 		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);

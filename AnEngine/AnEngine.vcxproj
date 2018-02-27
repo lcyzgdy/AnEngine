@@ -164,6 +164,7 @@
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="ComponentBehaviour.h" />
+    <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="DepthBuffer.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="ComponentBehaviour.cpp" />
+    <ClCompile Include="ComputeUnit.cpp" />
     <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />

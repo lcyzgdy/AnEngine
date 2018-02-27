@@ -9,7 +9,7 @@
 
 namespace AnEngine::Game
 {
-	class Scene :public BaseBehaviour, public NonCopyable
+	class Scene :public BaseBehaviour//, public NonCopyable
 	{
 		std::vector<BaseBehaviour*> m_objects;
 		Camera* defaultCamera;

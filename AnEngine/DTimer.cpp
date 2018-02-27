@@ -56,6 +56,7 @@ namespace AnEngine
 
 	const double DTimer::GetTotalSeconds()
 	{
+		Tick(nullptr);
 		return TicksToSeconds(m_totalTicks);
 	}
 
@@ -173,5 +174,9 @@ namespace AnEngine
 	uint64_t Timer::GetTotalTicks()
 	{
 		return DTimer::GetInstance()->GetTotalTicks();
+	}
+	double Timer::GetTotalSeconds()
+	{
+		return DTimer::GetInstance()->GetTotalSeconds();
 	}
 }

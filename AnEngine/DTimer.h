@@ -3,15 +3,14 @@
 #define __DTIMER_H__
 
 #include"onwind.h"
-using namespace std;
 
 namespace AnEngine
 {
 #ifdef WIN32
-	class DTimer : public Singleton<DTimer>
+	class DTimer : public ::Singleton<DTimer>
 	{
 		//static DTimer* m_uniqueObj;
-		friend class Singleton<DTimer>;
+		friend class ::Singleton<DTimer>;
 
 		LARGE_INTEGER m_qpcFrequency;
 		LARGE_INTEGER m_qpcLastTime;
@@ -64,7 +63,7 @@ namespace AnEngine
 		// 设置每秒使用1000000个时钟周期
 
 		static double TicksToSeconds(uint64_t _ticks);
-		static UINT64 SecondsToTicks(double _seconds);
+		static uint64_t SecondsToTicks(double _seconds);
 
 		void ResetElapsedTime();
 		// 在长时间中断（如阻塞IO、线程中断）后调用以追赶更新进度
@@ -81,7 +80,8 @@ namespace AnEngine
 	class Timer
 	{
 	public:
-		static __FasterFunc(uint64_t) GetTotalTicks();
+		static uint64_t _vectorcall GetTotalTicks();
+		static double _vectorcall GetTotalSeconds();
 	};
 }
 #endif // !__DTIMER_H__

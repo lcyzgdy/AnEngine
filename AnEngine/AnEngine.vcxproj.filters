@@ -183,6 +183,9 @@
     <ClInclude Include="dds.h">
       <Filter>头文件\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeUnit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -295,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="Fence.cpp">
       <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeUnit.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

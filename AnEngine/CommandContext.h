@@ -27,14 +27,14 @@ namespace AnEngine::RenderCore
 		virtual T GetOne() = 0;
 		virtual void Push(T) = 0;
 		virtual void AddNew(T) = 0;
-		//virtual vector<var> GetReady() = 0;
 		virtual void PopulateFinished() = 0;
 	};
 
 	// 渲染线程独占一个CommandList
-	class GraphicsCommandContext : public NonCopyable, public Context<CommandList*>
+	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public Context<CommandList*>
 	{
-		static GraphicsCommandContext* m_uniqueObj;
+		friend class ::Singleton<GraphicsCommandContext>;
+		//static GraphicsCommandContext* m_uniqueObj;
 
 		//queue<CommandList*> m_commandListPool;
 		//vector<CommandList*> m_readyQueue;
@@ -49,7 +49,7 @@ namespace AnEngine::RenderCore
 		~GraphicsCommandContext();
 
 	public:
-		static GraphicsCommandContext* GetInstance();
+		//static GraphicsCommandContext* GetInstance();
 		//CommandList* GetCommandList();
 		//void PushCommandList(CommandList* list);
 
@@ -58,13 +58,8 @@ namespace AnEngine::RenderCore
 
 		// 通过 Context 继承
 		virtual CommandList* GetOne() override;
-
 		virtual void Push(CommandList*) override;
-
 		virtual void AddNew(CommandList*) override;
-
-		std::vector<ID3D12CommandList*> GetReady();
-
 		virtual void PopulateFinished() override;
 
 		//vector<ID3D12CommandList*> GetReadyCommandList();

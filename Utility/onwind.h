@@ -135,7 +135,7 @@ inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
 	{
-		throw std::exception("Ò»¸öÆæ¹ÖµÄ´íÎó");
+		throw std::exception("ä¸€ä¸ªå¥‡æ€ªçš„é”™è¯¯");
 	}
 }
 

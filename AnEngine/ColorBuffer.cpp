@@ -2,6 +2,7 @@
 #include "DescriptorHeap.hpp"
 #include "RenderCoreConstants.h"
 #include "RenderCore.h"
+using namespace std;
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
 
@@ -22,7 +23,8 @@ namespace AnEngine::RenderCore::Resource
 	}
 
 	ColorBuffer::ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
-		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips), m_fragmentCount(1)
+		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips),
+		m_fragmentCount(1)
 	{
 		GraphicsCard* device = r_graphicsCard[0].get();
 
@@ -108,17 +110,17 @@ namespace AnEngine::RenderCore::Resource
 	{
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetSrv() const
+	const D3D12_CPU_DESCRIPTOR_HANDLE& ColorBuffer::GetSrv() const
 	{
 		return m_srvHandle;
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetRTV() const
+	const D3D12_CPU_DESCRIPTOR_HANDLE& ColorBuffer::GetRTV() const
 	{
 		return m_rtvHandle;
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & ColorBuffer::GetUav() const
+	const D3D12_CPU_DESCRIPTOR_HANDLE& ColorBuffer::GetUav() const
 	{
 		return m_uavHandle[0];
 	}
@@ -149,5 +151,7 @@ namespace AnEngine::RenderCore::Resource
 		//m_rtvHandle = rtv->GetHandle().GetCpuHandle();
 		m_rtvHandle = handle;
 		//rtv->OffsetHandle(device->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 }

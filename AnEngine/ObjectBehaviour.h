@@ -22,7 +22,8 @@ namespace AnEngine::Game
 	protected:
 		bool m_active;
 		Scene* m_scene;
-		std::recursive_mutex m_recursiveMutex;
+		//std::recursive_mutex m_recursiveMutex;
+		//std::mutex m_mutex;
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
@@ -61,7 +62,8 @@ namespace AnEngine::Game
 		virtual void Destory();
 
 	public:
-		ObjectBehaviour(std::wstring name);
+		ObjectBehaviour(const std::wstring& name);
+		ObjectBehaviour(std::wstring&& name);
 		~ObjectBehaviour() = default;
 
 		std::vector<ObjectBehaviour*> GetComponents();

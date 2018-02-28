@@ -8,33 +8,36 @@ using namespace std;
 namespace AnEngine
 {
 #ifdef WIN32
-	class DTimer : public NonCopyable
+	class DTimer : public Singleton<DTimer>
 	{
-		static DTimer* m_uniqueObj;
+		//static DTimer* m_uniqueObj;
+		friend class Singleton<DTimer>;
 
-		LARGE_INTEGER qpcFrequency;
-		LARGE_INTEGER qpcLastTime;
-		uint64_t qpcMaxDelta;
+		LARGE_INTEGER m_qpcFrequency;
+		LARGE_INTEGER m_qpcLastTime;
+		uint64_t m_qpcMaxDelta;
 		// 时间数据源使用QPC单元
 
-		uint64_t elapsedTicks;
-		uint64_t totalTicks;
-		uint64_t leftOverTicks;	// ???
+		uint64_t m_elapsedTicks;
+		uint64_t m_totalTicks;
+		uint64_t m_leftOverTicks;	// ???
 
-		uint64_t qpcSecondCounter;
-		uint32_t FrameCount;
-		uint32_t framesPerSecond;
-		uint32_t framesThisSecond;
+		uint64_t m_qpcSecondCounter;
+		uint32_t m_frameCount;
+		uint32_t m_framesPerSecond;
+		uint32_t m_framesThisSecond;
 
-		bool isFixedTimeStep;
-		uint64_t targetElapsedTicks;
+		bool m_running;
+
+		bool m_isFixedTimeStep;
+		uint64_t m_targetElapsedTicks;
 		// 用于配置固定帧率模式
 
-	public:
 		DTimer();
 		~DTimer();
 
-		static DTimer* GetInstance();
+	public:
+		//static DTimer* GetInstance();
 
 		const uint64_t GetElapsedTicks();
 		const double GetElapsedSeconds();

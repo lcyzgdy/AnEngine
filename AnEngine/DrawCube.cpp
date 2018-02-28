@@ -1,4 +1,5 @@
 #include "DrawCube.h"
+using namespace AnEngine::RenderCore;
 
 DrawCube::DrawCube(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
@@ -33,8 +34,8 @@ void DrawCube::OnUpdate()
 {
 	WaitForSingleObjectEx(swapChainEvent, 100, FALSE);
 
-	timer.Tick(NULL);
-	camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
+	DTimer::GetInstance()->Tick(NULL);
+	camera.OnUpdate(static_cast<float>(DTimer::GetInstance()->GetElapsedSeconds()));
 }
 
 void DrawCube::OnRender()

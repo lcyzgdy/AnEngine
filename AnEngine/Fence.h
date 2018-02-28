@@ -7,21 +7,26 @@
 
 namespace AnEngine::RenderCore
 {
-	class FenceSync
+	class Fence
 	{
-		ComPtr<ID3D12Fence> m_fence;
-		uint64_t m_fenceValue;
+		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
+		//uint64_t m_fenceValue;
 		ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32
 		HANDLE m_fenceEvent;
 #endif // _WIN32
 
-
 	public:
-		explicit FenceSync(ID3D12CommandQueue* targetQueue);
-		~FenceSync();
+		explicit Fence(ID3D12CommandQueue* targetQueue);
+		~Fence();
 
-		void Wait();
+		void CpuWait(uint64_t semap);
+		void CpuSignal(uint64_t semap);
+
+		void GpuWait(uint64_t semap);
+		void GpuSignal(uint64_t semap);
+
+		void WaitForGpu();
 	};
 }
 

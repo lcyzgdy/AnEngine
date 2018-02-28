@@ -1,6 +1,8 @@
 #include "Input.h"
 #include "Screen.h"
 using namespace std;
+using namespace Microsoft::WRL;
+using namespace DirectX;
 #define KeyPress(a) ((m_keyState[a]) & 0x80)
 
 namespace AnEngine

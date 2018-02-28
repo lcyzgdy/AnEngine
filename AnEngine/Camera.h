@@ -33,6 +33,8 @@ namespace AnEngine::Game
 		RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
+		std::mutex m_rtvMutex;
+
 	protected:
 		// 通过 BaseBehaviour 继承
 		/*virtual void OnInit() override;
@@ -49,8 +51,10 @@ namespace AnEngine::Game
 		virtual void Destory() override;
 
 	public:
-		Camera(std::wstring name);
-		Camera(std::wstring name, ClearFlags clearFlag);
+		Camera(const std::wstring& name);
+		Camera(std::wstring&& name);
+		Camera(const std::wstring& name, ClearFlags clearFlag);
+		Camera(std::wstring&& name, ClearFlags clearFlag);
 		~Camera();
 
 		RenderCore::Resource::ColorBuffer* GetColorBuffer();
@@ -60,6 +64,8 @@ namespace AnEngine::Game
 		ClearFlags ClearFlag();
 		void ClearColor(Color color);
 		Color ClearColor();
+
+		static ColorBuffer* FindForwordTarget(Vector3&& pos);
 	};
 }
 

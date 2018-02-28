@@ -8,14 +8,14 @@
 
 namespace AnEngine::RenderCore
 {
-	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
-	static map<uint32_t, ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
 
 	class PipelineStateObject
 	{
 	protected:
 		//RootSignature m_rootSignature;
-		ComPtr<ID3D12PipelineState> m_pipelineState;
+		Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState;
 
 	public:
 		PipelineStateObject();
@@ -33,7 +33,7 @@ namespace AnEngine::RenderCore
 	{
 	protected:
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC m_psoDesc;
-		shared_ptr<const D3D12_INPUT_ELEMENT_DESC> m_inputLayouts;
+		std::shared_ptr<const D3D12_INPUT_ELEMENT_DESC> m_inputLayouts;
 	public:
 		GraphicPSO();
 		~GraphicPSO() = default;
@@ -42,6 +42,7 @@ namespace AnEngine::RenderCore
 		void SetBlendState(const D3D12_BLEND_DESC& blendDesc);
 		void SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc);
 		void SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc);
+		void SetDepthStencilState(bool DepthEnable, bool StencilEnable);
 		void SetSampleMask(uint32_t sampleMask);
 		void SetPrimitiveTopologyType(D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType);
 		void SetRenderTargetFormat(DXGI_FORMAT rtvFormat, DXGI_FORMAT dsvFormat, uint32_t msaaCount = 1, uint32_t msaaQuality = 0);

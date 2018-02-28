@@ -40,6 +40,7 @@ namespace AnEngine::RenderCore
 
 	CommandList* GraphicsCommandContext::GetOne()
 	{
+		lock_guard<mutex> lockr(m_readerMutex);
 		if (m_pool.size() <= 0)
 		{
 			CommandFormatDesc desc;
@@ -50,7 +51,6 @@ namespace AnEngine::RenderCore
 			return list;
 		}
 		//lock_guard<mutex> lock(m_mutex);
-		lock_guard<mutex> lockr(m_readerMutex);
 		var list = m_pool.front();
 		m_pool.pop();
 		return list;

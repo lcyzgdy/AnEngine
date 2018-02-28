@@ -1,4 +1,5 @@
 #include "MCamera.h"
+using namespace std;
 
 namespace AnEngine
 {

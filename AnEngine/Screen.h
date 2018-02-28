@@ -8,7 +8,7 @@
 
 namespace AnEngine
 {
-	class Screen : public NonCopyable
+	class Screen : public Singleton<Screen>
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
@@ -44,11 +44,11 @@ namespace AnEngine
 			return m_height;
 		}
 
-		inline static Screen* GetInstance()
+		/*inline static Screen* GetInstance()
 		{
 			static Screen screen;
 			return &screen;
-		}
+		}*/
 	};
 }
 

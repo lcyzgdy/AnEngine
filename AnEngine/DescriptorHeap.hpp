@@ -20,11 +20,11 @@ namespace AnEngine::RenderCore::Heap
 		static DescriptorHeapAllocator* m_uniqueObj;
 	protected:
 		const uint32_t m_NumDescriptorPerHeap = 256;
-		mutex m_mutex;
-		vector<ComPtr<ID3D12DescriptorHeap>> m_cp_descriptorHeapPool;
+		std::mutex m_mutex;
+		std::vector<Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>> m_cp_descriptorHeapPool;
 
 		//D3D12_DESCRIPTOR_HEAP_TYPE m_type[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
-		ComPtr<ID3D12DescriptorHeap> m_currentHeap[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_currentHeap[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		D3D12_CPU_DESCRIPTOR_HANDLE m_currentHandle[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_descriptorSize[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_remainingFreeHandles[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];

@@ -13,15 +13,13 @@
 #include"ThreadPool.hpp"
 
 #pragma comment(lib, "dinput8.lib")
-using namespace Microsoft::WRL;
-using namespace DirectX;
 
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 namespace AnEngine
 {
-	class BaseInput : public NonCopyable
+	class BaseInput
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
@@ -34,9 +32,9 @@ namespace AnEngine
 
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 
-		ComPtr<IDirectInput8> m_directInput;
-		ComPtr<IDirectInputDevice8> m_keyboard;
-		ComPtr<IDirectInputDevice8> m_mouse;
+		Microsoft::WRL::ComPtr<IDirectInput8> m_directInput;
+		Microsoft::WRL::ComPtr<IDirectInputDevice8> m_keyboard;
+		Microsoft::WRL::ComPtr<IDirectInputDevice8> m_mouse;
 		HWND m_hwnd;
 		DIMOUSESTATE2 m_mouseState;
 		std::atomic<unsigned char> m_keyState[256];
@@ -45,16 +43,16 @@ namespace AnEngine
 		std::atomic<bool> m_mouseButtonDownFlag[10];
 		//atomic<XMVECTOR> m_curPosition;
 		//atomic<XMFLOAT3> m_curPosition;
-		XMFLOAT3 m_curPosition;
+		DirectX::XMFLOAT3 m_curPosition;
 		//atomic<BaseInput*> m_baseInput;
 
 		std::atomic_bool m_exit;
 		std::chrono::milliseconds m_delta;
 		std::mutex m_mutex;
-
+	public:
 		BaseInput();
 		~BaseInput();
-
+	private:
 		void Initialize(HWND _hwnd, HINSTANCE _hInstance);
 		void InitializeKeyboard(HINSTANCE _hInstance);
 		void InitializeMouse(HINSTANCE _hInstance);
@@ -78,8 +76,8 @@ namespace AnEngine
 		bool GetMouseButtonDown(int _mouseButton);
 		bool GetMouseButton(int _mouseButton);
 		bool GetMouseButtonUp(int _mouseButton);
-		XMINT2 GetMousePosition();
-		XMVECTOR GetM128MousePosition();
+		DirectX::XMINT2 GetMousePosition();
+		DirectX::XMVECTOR GetM128MousePosition();
 		void SetMousePosition(int x, int y);
 
 		void ZeroInputState();

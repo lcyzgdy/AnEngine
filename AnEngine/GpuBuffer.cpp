@@ -20,20 +20,22 @@ namespace AnEngine::RenderCore::Resource
 		desc.MipLevels = 1;
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = 0;
-		desc.Width = (UINT64)m_bufferSize;
+		desc.Width = (uint64_t)m_bufferSize;
 		return desc;
 	}
 
-	GpuBuffer::GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize, const void* initialData) :
-		m_bufferSize(numElements * elementSize), m_elementCount(numElements), m_elementSize(elementSize)
+	GpuBuffer::GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
+		const void* initialData) : m_bufferSize(numElements * elementSize),
+		m_elementCount(numElements), m_elementSize(elementSize)
 	{
-		m_resourceFlags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+		m_resourceFlags = D3D12_RESOURCE_FLAG_NONE;
 		m_uav.ptr = GpuVirtualAddressUnknown;
 		m_srv.ptr = GpuVirtualAddressUnknown;
 
 		var device = r_graphicsCard[0]->GetDevice();
-		D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
-		m_usageState = D3D12_RESOURCE_STATE_COMMON;
+		//D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
+		//m_usageState = D3D12_RESOURCE_STATE_COMMON;
+		m_usageState = D3D12_RESOURCE_STATE_GENERIC_READ;
 
 		/*D3D12_HEAP_PROPERTIES heapProps;
 		heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
@@ -46,6 +48,7 @@ namespace AnEngine::RenderCore::Resource
 		//	&ResourceDesc, m_usageState, nullptr, IID_PPV_ARGS(&m_resource_cp));
 		var desc = DescribeBuffer();
 		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetResourceAllocationInfo(1, 1, &desc);
+
 		D3D12_HEAP_DESC heapDesc;
 		heapDesc.SizeInBytes = allocationInfo.SizeInBytes;
 		heapDesc.Properties.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -53,12 +56,20 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 		heapDesc.Properties.CreationNodeMask = r_graphicsCard[0]->GetNodeNum();
 		heapDesc.Properties.VisibleNodeMask = r_graphicsCard[0]->GetNodeNum();
-		heapDesc.Alignment = allocationInfo.Alignment;
-		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
+		heapDesc.Alignment = 0;
+		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE;
 		ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
-		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &ResourceDesc, m_usageState, nullptr,
-			IID_PPV_ARGS(&m_resource_cp)));
+		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
+			nullptr, IID_PPV_ARGS(&m_resource_cp)));
+
+		/*ThrowIfFailed(device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(m_bufferSize),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&m_resource_cp)));*/
 
 		m_gpuVirtualAddress = m_resource_cp->GetGPUVirtualAddress();
 
@@ -67,7 +78,7 @@ namespace AnEngine::RenderCore::Resource
 			std::byte* pVertexDataBegin;
 			CD3DX12_RANGE readRange(0, 0);		//We do not intend to read from this resource on the CPU.
 			m_resource_cp->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-			memcpy(pVertexDataBegin, initialData, sizeof(m_bufferSize));
+			memcpy(pVertexDataBegin, initialData, m_bufferSize);
 			m_resource_cp->Unmap(0, nullptr);
 		}
 #if defined _DEBUG || defined DEBUG
@@ -76,7 +87,7 @@ namespace AnEngine::RenderCore::Resource
 		(name);
 #endif
 
-		CreateDerivedViews();
+		//CreateDerivedViews();
 	}
 
 	GpuBuffer::~GpuBuffer()
@@ -149,33 +160,34 @@ namespace AnEngine::RenderCore::Resource
 	ByteAddressBuffer::ByteAddressBuffer(const std::wstring & name, uint32_t numElements, uint32_t elementSize,
 		const void* initialData) : GpuBuffer(name, numElements, elementSize, initialData)
 	{
+		//CreateDerivedViews();
 	}
 
 	void ByteAddressBuffer::CreateDerivedViews()
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 
-		D3D12_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
-		SRVDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-		SRVDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-		SRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		SRVDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
-		SRVDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srvDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
+		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
 
 		if (m_srv.ptr == GpuVirtualAddressUnknown)
 		{
 			m_srv = DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		}
-		device->CreateShaderResourceView(m_resource_cp.Get(), &SRVDesc, m_uav);
+		device->CreateShaderResourceView(m_resource_cp.Get(), &srvDesc, m_uav);
 
-		D3D12_UNORDERED_ACCESS_VIEW_DESC UAVDesc = {};
-		UAVDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-		UAVDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-		UAVDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
-		UAVDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
+		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+		uavDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+		uavDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
+		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
 
 		if (m_uav.ptr == GpuVirtualAddressUnknown)
 			m_uav = DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		device->CreateUnorderedAccessView(m_resource_cp.Get(), nullptr, &UAVDesc, m_uav);
+		device->CreateUnorderedAccessView(m_resource_cp.Get(), nullptr, &uavDesc, m_uav);
 	}
 }

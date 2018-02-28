@@ -5,7 +5,12 @@ namespace AnEngine::Game
 	void GameObject::DoNothing()
 	{
 	}
-	GameObject::GameObject(std::wstring _name) :gameObject(this), m_parentObject(nullptr), name(_name)
+
+	GameObject::GameObject(const std::wstring& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
+	{
+	}
+
+	GameObject::GameObject(std::wstring&& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
 	{
 	}
 
@@ -14,7 +19,7 @@ namespace AnEngine::Game
 		return m_parentObject;
 	}
 
-	void GameObject::SetParent(GameObject * newParent)
+	void GameObject::SetParent(GameObject* newParent)
 	{
 		m_parentObject = newParent;
 	}

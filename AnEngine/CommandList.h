@@ -15,7 +15,7 @@ namespace AnEngine::RenderCore
 
 	class CommandList
 	{
-		ComPtr<ID3D12GraphicsCommandList> m_commandList;
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_commandList;
 		CommandFormatDesc m_desc;
 
 	public:
@@ -30,7 +30,7 @@ namespace AnEngine::RenderCore
 
 	class CommandAllocator
 	{
-		ComPtr<ID3D12CommandAllocator> m_allocator;
+		Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_allocator;
 		D3D12_COMMAND_LIST_TYPE m_type;
 	public:
 		explicit CommandAllocator(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);

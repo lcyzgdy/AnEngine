@@ -4,10 +4,14 @@
 
 #include"onwind.h"
 #include"BaseBehaviour.h"
+#include"Scene.h"
+#include"Camera.h"
+#include"ObjectBehaviour.h"
+#include"Renderer.h"
 
 namespace AnEngine
 {
-	class Driver :public NonCopyable
+	class Driver
 	{
 		bool m_initialized;
 		Game::BaseBehaviour* m_scene;

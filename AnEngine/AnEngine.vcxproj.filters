@@ -186,6 +186,9 @@
     <ClInclude Include="ComputeUnit.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MatrixBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">

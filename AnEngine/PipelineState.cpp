@@ -226,17 +226,17 @@ namespace AnEngine::RenderCore
 		m_psoDesc.NodeMask = 1;
 	}
 
-	void ComputePSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
 	}
 
-	void ComputePSO::SetComputeShader(const void * binary, size_t size)
+	void ComputePSO::SetComputeShader(const void* binary, size_t size)
 	{
 		m_psoDesc.CS = CD3DX12_SHADER_BYTECODE(binary, size);
 	}
 
-	void ComputePSO::SetComputeShader(const D3D12_SHADER_BYTECODE & binary)
+	void ComputePSO::SetComputeShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.CS = binary;
 	}
@@ -247,16 +247,15 @@ namespace AnEngine::RenderCore
 		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
-		size_t hashCode = Utility::GetHash(&m_psoDesc);
+		/*size_t hashCode = Utility::GetHash(&m_psoDesc);
 
 		ID3D12PipelineState** psoRef = nullptr;
 		bool firstComplie = false;
 		{
 			static mutex s_hashMapMutex;
 			lock_guard<mutex> lock(s_hashMapMutex);
-			var iter = r_s_computePSOMap.find(hashCode);
 
-			if (iter == r_s_computePSOMap.end())
+			if (var iter = r_s_computePSOMap.find(hashCode); iter == r_s_computePSOMap.end())
 			{
 				firstComplie = true;
 				psoRef = r_s_computePSOMap[hashCode].GetAddressOf();
@@ -278,6 +277,8 @@ namespace AnEngine::RenderCore
 				this_thread::yield();
 			}
 			m_pipelineState = *psoRef;
-		}
+		}*/
+
+		ThrowIfFailed(device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 }

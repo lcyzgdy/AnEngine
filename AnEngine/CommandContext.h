@@ -5,6 +5,7 @@
 #include"DX.h"
 #include<queue>
 #include<mutex>
+#include<tuple>
 #include"onwind.h"
 #include"CommandList.h"
 
@@ -90,6 +91,45 @@ namespace AnEngine::RenderCore
 		virtual void Push(CommandAllocator*) override;
 		virtual void AddNew(CommandAllocator*) override;
 		virtual void PopulateFinished() override;
+	};
+}
+namespace AnEngine::RenderCore::Private
+{
+	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public Context<CommandList*>
+	{
+	public:
+		// 通过 Context 继承
+		virtual CommandList* GetOne() override;
+		virtual void Push(CommandList* list) override;
+		virtual void AddNew(CommandList* list) override;
+		virtual void PopulateFinished() override;
+	};
+
+	class ComputeCommandAllocator : public ::Singleton<ComputeCommandAllocator>, public Context<CommandAllocator*>
+	{
+	public:
+		// 通过 Context 继承
+		virtual CommandAllocator* GetOne() override;
+		virtual void Push(CommandAllocator* allocator) override;
+		virtual void AddNew(CommandAllocator* allocator) override;
+		virtual void PopulateFinished() override;
+	};
+}
+
+namespace AnEngine::RenderCore
+{
+	class ComputeContext
+	{
+	public:
+		static std::tuple<CommandList*, CommandAllocator*> GetOne();
+		static void Push(CommandList* list, CommandAllocator* allocator);
+	};
+
+	class GraphicsContext
+	{
+	public:
+		static std::tuple<CommandList*, CommandAllocator*> GetOne();
+		static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 }
 

@@ -185,6 +185,7 @@
     <ClInclude Include="GraphicCard.h" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="ObjectBehaviour.h" />

@@ -332,10 +332,12 @@ namespace AnEngine::RenderCore
 
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
+#ifdef _DEBUG
 		if (frameIndex != r_frameIndex)
 		{
 			throw exception();
 		}
+#endif // _DEBUG
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		r_fenceForDisplayPlane->GpuSignal(r_fenceValueForDisplayPlane[frameIndex]);

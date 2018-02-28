@@ -69,7 +69,6 @@ namespace AnEngine::RenderCore
 	{
 	protected:
 		D3D12_COMPUTE_PIPELINE_STATE_DESC m_psoDesc;
-		const RootSignature* m_rootSignature;
 	public:
 		ComputePSO();
 		~ComputePSO() = default;

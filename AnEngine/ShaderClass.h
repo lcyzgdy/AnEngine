@@ -45,7 +45,10 @@ namespace AnEngine::RenderCore
 	class ComputeShader : public Shader
 	{
 	public:
-		ComputeShader() = default;
+		ComputeShader(const std::wstring& fileName);
+		ComputeShader(std::wstring&& fileName);
+		ComputeShader(const std::wstring& fileName, const std::string& invokeFunction);
+		ComputeShader(std::wstring&& fileName, std::string&& invokeFunction);
 	};
 }
 

@@ -5,6 +5,7 @@
 #include"DX.h"
 #include"PipelineState.h"
 #include"ShaderClass.h"
+#include"Fence.h"
 
 namespace AnEngine::Game
 {
@@ -12,9 +13,14 @@ namespace AnEngine::Game
 	{
 		RenderCore::ComputePSO* m_pso;
 		RenderCore::RootSignature* m_rootSignature;
+		RenderCore::ComputeShader* m_cs;
+
+		RenderCore::Fence* m_fence;
 
 	public:
-		ComputeUnit();
+		ComputeUnit(std::wstring&& csFileName);
+		ComputeUnit(const std::wstring& csFileName);
+		~ComputeUnit();
 
 		void Dispatch(uint32_t threadGroupX, uint32_t threadGroupY, uint32_t threadGroupZ);
 	};

@@ -234,6 +234,7 @@
     <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="GraphicCard.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="MatrixBuffer.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
     <ClCompile Include="ObjectBehaviour.cpp" />

@@ -7,6 +7,7 @@
 #include<string>
 #include<queue>
 #include"DX.h"
+#include<tuple>
 
 namespace AnEngine::RenderCore
 {
@@ -37,6 +38,8 @@ namespace AnEngine::RenderCore::Heap
 
 	public:
 		D3D12_CPU_DESCRIPTOR_HANDLE Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count = 1);
+		std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> Allocator(D3D12_DESCRIPTOR_HEAP_TYPE type,
+			uint32_t count = 1);
 
 		static DescriptorHeapAllocator* GetInstance();
 

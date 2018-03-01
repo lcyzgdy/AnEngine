@@ -122,6 +122,25 @@ namespace AnEngine::RenderCore::Heap
 		return cpuHandle;
 	}
 
+	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocator(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count)
+	{
+		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		lock_guard<mutex> lock(m_mutex);
+		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
+		{
+			// m_currentHeap[type] = RequestNewHeap(type, device);
+			RequestNewHeap(type, device);
+			m_currentHandle[type] = m_currentHeap[type]->GetCPUDescriptorHandleForHeapStart();
+			m_remainingFreeHandles[type] = m_NumDescriptorPerHeap;
+
+			(m_descriptorSize[type] == 0) ? m_descriptorSize[type] = device->GetDescriptorHandleIncrementSize(type) : (0);
+		}
+
+		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_currentHandle[type];
+		m_currentHandle[type].ptr += count * m_descriptorSize[type];
+		m_remainingFreeHandles[type] -= count;
+	}
+
 	void DescriptorHeapAllocator::DestoryAll()
 	{
 		m_cp_descriptorHeapPool.clear();

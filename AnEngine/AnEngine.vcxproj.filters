@@ -305,6 +305,9 @@
     <ClCompile Include="ComputeUnit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

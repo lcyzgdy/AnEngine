@@ -198,6 +198,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rigidbody3D.h" />
     <ClInclude Include="RootSignature.h" />
+    <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />

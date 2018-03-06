@@ -35,7 +35,9 @@ namespace AnEngine::RenderCore::CommonState
 	extern D3D12_RESOURCE_BARRIER resolveSourceToRenderTarget;
 	extern D3D12_RESOURCE_BARRIER presentToRenderTarget;
 	extern D3D12_RESOURCE_BARRIER renderTargetToPresent;
-	extern D3D12_RESOURCE_BARRIER renderTargetToResolveSource;
+	extern D3D12_RESOURCE_BARRIER renderTarget2ResolveSource;
+	extern D3D12_RESOURCE_BARRIER depthWrite2PsResource;
+	extern D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 }
 
 namespace AnEngine::RenderCore

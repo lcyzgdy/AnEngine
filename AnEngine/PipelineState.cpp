@@ -179,6 +179,29 @@ namespace AnEngine::RenderCore
 
 	void GraphicPSO::Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc)
 	{
+		/*m_psoDesc.BlendState.AlphaToCoverageEnable = desc.BlendState.AlphaToCoverageEnable;
+		m_psoDesc.BlendState.IndependentBlendEnable = desc.BlendState.IndependentBlendEnable;
+		for (int i = 0; i < 8; i++) m_psoDesc.BlendState.RenderTarget[i] = desc.BlendState.RenderTarget[i];
+		m_psoDesc.CachedPSO = desc.CachedPSO;
+		m_psoDesc.DepthStencilState = desc.DepthStencilState;
+		m_psoDesc.DS = desc.DS;
+		m_psoDesc.DSVFormat = desc.DSVFormat;
+		m_psoDesc.Flags = desc.Flags;
+		m_psoDesc.GS = desc.GS;
+		m_psoDesc.HS = desc.HS;
+		m_psoDesc.IBStripCutValue = desc.IBStripCutValue;
+		SetInputLayout(desc.InputLayout.NumElements, desc.InputLayout.pInputElementDescs);
+		m_psoDesc.NodeMask = desc.NodeMask;
+		m_psoDesc.NumRenderTargets = desc.NumRenderTargets;
+		m_psoDesc.PrimitiveTopologyType = desc.PrimitiveTopologyType;
+		m_psoDesc.pRootSignature = desc.pRootSignature;
+		m_psoDesc.PS = desc.PS;
+		m_psoDesc.RasterizerState = desc.RasterizerState;
+		for (int i = 0; i < 8; i++) m_psoDesc.RTVFormats[i] = desc.RTVFormats[i];
+		m_psoDesc.SampleDesc = desc.SampleDesc;
+		m_psoDesc.SampleMask = desc.SampleMask;
+		m_psoDesc.StreamOutput = desc.StreamOutput;
+		m_psoDesc.VS = desc.VS;*/
 		m_psoDesc = desc;
 
 		var device = r_graphicsCard[0]->GetDevice();

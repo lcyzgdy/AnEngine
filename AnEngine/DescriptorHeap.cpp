@@ -83,10 +83,10 @@ namespace AnEngine::RenderCore::Heap
 	DescriptorHeapAllocator* DescriptorHeapAllocator::m_uniqueObj;
 
 	//ID3D12DescriptorHeap* DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
-	void DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device)
+	void DescriptorHeapAllocator::RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_FLAGS flag)
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC desc;
-		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		desc.Flags = flag;
 		desc.NodeMask = 1;
 		desc.NumDescriptors = m_NumDescriptorPerHeap;
 		desc.Type = type;
@@ -111,6 +111,7 @@ namespace AnEngine::RenderCore::Heap
 			// m_currentHeap[type] = RequestNewHeap(type, device);
 			RequestNewHeap(type, device);
 			m_currentHandle[type] = m_currentHeap[type]->GetCPUDescriptorHandleForHeapStart();
+			m_currentGpuHandle[type] = m_currentHeap[type]->GetGPUDescriptorHandleForHeapStart();
 			m_remainingFreeHandles[type] = m_NumDescriptorPerHeap;
 
 			(m_descriptorSize[type] == 0) ? m_descriptorSize[type] = device->GetDescriptorHandleIncrementSize(type) : (0);
@@ -118,12 +119,13 @@ namespace AnEngine::RenderCore::Heap
 
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_currentHandle[type];
 		m_currentHandle[type].ptr += count * m_descriptorSize[type];
+		m_currentGpuHandle[type].ptr += count * m_descriptorSize[type];
 		m_remainingFreeHandles[type] -= count;
 		return cpuHandle;
 	}
 
-	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type, 
-		uint32_t count)
+	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type,
+		uint32_t count, D3D12_DESCRIPTOR_HEAP_FLAGS flag)
 	{
 		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
 		lock_guard<mutex> lock(m_mutex);
@@ -132,16 +134,19 @@ namespace AnEngine::RenderCore::Heap
 			// m_currentHeap[type] = RequestNewHeap(type, device);
 			RequestNewHeap(type, device);
 			m_currentHandle[type] = m_currentHeap[type]->GetCPUDescriptorHandleForHeapStart();
+			m_currentGpuHandle[type] = m_currentHeap[type]->GetGPUDescriptorHandleForHeapStart();
 			m_remainingFreeHandles[type] = m_NumDescriptorPerHeap;
 
 			(m_descriptorSize[type] == 0) ? m_descriptorSize[type] = device->GetDescriptorHandleIncrementSize(type) : (0);
 		}
 
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_currentHandle[type];
+		D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = m_currentGpuHandle[type];
 		ID3D12DescriptorHeap* currHeap = m_currentHeap[type].Get();
 		m_currentHandle[type].ptr += count * m_descriptorSize[type];
+		m_currentGpuHandle[type].ptr += count * m_descriptorSize[type];
 		m_remainingFreeHandles[type] -= count;
-		return { currHeap, cpuHandle };
+		return { currHeap, cpuHandle ,gpuHandle };
 	}
 
 	void DescriptorHeapAllocator::DestoryAll()

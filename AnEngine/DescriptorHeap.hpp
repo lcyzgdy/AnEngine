@@ -27,10 +27,11 @@ namespace AnEngine::RenderCore::Heap
 		//D3D12_DESCRIPTOR_HEAP_TYPE m_type[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_currentHeap[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		D3D12_CPU_DESCRIPTOR_HANDLE m_currentHandle[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
+		D3D12_GPU_DESCRIPTOR_HANDLE m_currentGpuHandle[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_descriptorSize[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 		uint32_t m_remainingFreeHandles[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
-		void RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device);
+		void RequestNewHeap(D3D12_DESCRIPTOR_HEAP_TYPE type, ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_FLAGS flag = D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
 		void DestoryAll();
 
 		DescriptorHeapAllocator() = default;
@@ -38,8 +39,8 @@ namespace AnEngine::RenderCore::Heap
 
 	public:
 		D3D12_CPU_DESCRIPTOR_HANDLE Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count = 1);
-		std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type,
-			uint32_t count = 1);
+		std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type,
+			uint32_t count = 1, D3D12_DESCRIPTOR_HEAP_FLAGS flag = D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
 
 		static DescriptorHeapAllocator* GetInstance();
 

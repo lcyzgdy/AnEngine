@@ -42,9 +42,11 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER resolveSourceToRenderTarget;
 		D3D12_RESOURCE_BARRIER presentToRenderTarget;
 		D3D12_RESOURCE_BARRIER renderTargetToPresent;
-		D3D12_RESOURCE_BARRIER renderTargetToResolveSource;
+		D3D12_RESOURCE_BARRIER renderTarget2ResolveSource;
 		D3D12_RESOURCE_BARRIER commonToResolveSource;
 		D3D12_RESOURCE_BARRIER resolveSourceToCommon;
+		D3D12_RESOURCE_BARRIER depthWrite2PsResource;
+		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
 	namespace Private
@@ -235,12 +237,12 @@ namespace AnEngine::RenderCore
 		renderTargetToPresent.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 		renderTargetToPresent.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 
-		renderTargetToResolveSource.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		renderTargetToResolveSource.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		renderTargetToResolveSource.Transition.pResource = nullptr;
-		renderTargetToResolveSource.Transition.Subresource = 0;
-		renderTargetToResolveSource.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		renderTargetToResolveSource.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
+		renderTarget2ResolveSource.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		renderTarget2ResolveSource.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		renderTarget2ResolveSource.Transition.pResource = nullptr;
+		renderTarget2ResolveSource.Transition.Subresource = 0;
+		renderTarget2ResolveSource.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		renderTarget2ResolveSource.Transition.StateAfter = D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
 
 		commonToResolveSource.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 		commonToResolveSource.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -255,6 +257,20 @@ namespace AnEngine::RenderCore
 		resolveSourceToCommon.Transition.Subresource = 0;
 		resolveSourceToCommon.Transition.StateBefore = D3D12_RESOURCE_STATE_RESOLVE_SOURCE;
 		resolveSourceToCommon.Transition.StateAfter = D3D12_RESOURCE_STATE_COMMON;
+
+		depthWrite2PsResource.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		depthWrite2PsResource.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		depthWrite2PsResource.Transition.pResource = nullptr;
+		depthWrite2PsResource.Transition.Subresource = 0;
+		depthWrite2PsResource.Transition.StateBefore = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+		depthWrite2PsResource.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+
+		psResource2DepthWrite.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		psResource2DepthWrite.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		psResource2DepthWrite.Transition.pResource = nullptr;
+		psResource2DepthWrite.Transition.Subresource = 0;
+		psResource2DepthWrite.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+		psResource2DepthWrite.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 	}
 
 	void PopulateCommandList()
@@ -309,7 +325,7 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(iCommandAllocator->Reset());
 		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
 
-		//var renderTargetToResolveSrc = CommonState::renderTargetToResolveSource;
+		//var renderTargetToResolveSrc = CommonState::renderTarget2ResolveSource;
 		var commonToResolveSrc = CommonState::commonToResolveSource;
 		var commonToResolveDst = CommonState::commonToResolveDest;
 		//var resolveSrcToRenderTarget = CommonState::resolveSourceToRenderTarget;

@@ -44,5 +44,17 @@ namespace AnEngine::RenderCore::Resource
 		iList->Close();
 		ID3D12CommandList* ppCommandLists[] = { iList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+
+		GraphicsContext::Push(commandList, commandAllocator);
+	}
+
+	D3D12_VERTEX_BUFFER_VIEW VertexBuffer::GetVbv()
+	{
+		return m_vbv;
+	}
+
+	D3D12_INDEX_BUFFER_VIEW VertexBuffer::GetIbv()
+	{
+		return m_ibv;
 	}
 }

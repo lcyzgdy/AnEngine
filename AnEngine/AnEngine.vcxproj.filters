@@ -189,6 +189,9 @@
     <ClInclude Include="MatrixBuffer.h">
       <Filter>头文件\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="SampleMeshRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -308,6 +311,12 @@
     <ClCompile Include="MatrixBuffer.cpp">
       <Filter>源文件\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="SampleMeshRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">
@@ -337,5 +346,13 @@
     <CustomBuild Include="compute_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Assets\test.hlsli">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\test.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

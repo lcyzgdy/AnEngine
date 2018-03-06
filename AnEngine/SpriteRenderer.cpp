@@ -30,6 +30,9 @@ namespace AnEngine::Game
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
+		iCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+		
+
 		ThrowIfFailed(iCommandAllocator->Reset());
 		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, m_pso->GetPSO()));
 	}

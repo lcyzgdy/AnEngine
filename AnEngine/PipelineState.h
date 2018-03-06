@@ -63,6 +63,7 @@ namespace AnEngine::RenderCore
 		void SetDomainShader(const D3D12_SHADER_BYTECODE& binary);
 
 		void Finalize();
+		void Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc);
 	};
 
 	class ComputePSO : public PipelineStateObject

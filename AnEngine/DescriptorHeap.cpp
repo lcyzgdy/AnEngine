@@ -122,7 +122,8 @@ namespace AnEngine::RenderCore::Heap
 		return cpuHandle;
 	}
 
-	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocator(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count)
+	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type, 
+		uint32_t count)
 	{
 		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
 		lock_guard<mutex> lock(m_mutex);
@@ -137,8 +138,10 @@ namespace AnEngine::RenderCore::Heap
 		}
 
 		D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = m_currentHandle[type];
+		ID3D12DescriptorHeap* currHeap = m_currentHeap[type].Get();
 		m_currentHandle[type].ptr += count * m_descriptorSize[type];
 		m_remainingFreeHandles[type] -= count;
+		return { currHeap, cpuHandle };
 	}
 
 	void DescriptorHeapAllocator::DestoryAll()

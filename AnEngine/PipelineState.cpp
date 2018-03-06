@@ -173,46 +173,15 @@ namespace AnEngine::RenderCore
 
 	void GraphicPSO::Finalize()
 	{
-		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
 		var device = r_graphicsCard[0]->GetDevice();
-		/*if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+	}
 
-		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
-		uint64_t hashCode = Utility::GetHash(&m_psoDesc);
-		hashCode = Utility::GetHash(m_inputLayouts.get(), m_psoDesc.InputLayout.NumElements, hashCode);
-		m_psoDesc.InputLayout.pInputElementDescs = m_inputLayouts.get();
+	void GraphicPSO::Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc)
+	{
+		m_psoDesc = desc;
 
-		ID3D12PipelineState** psoRef = nullptr;
-		bool firstCompile = false;
-		{
-			static mutex s_hashMapMutex;
-			lock_guard<mutex> lock(s_hashMapMutex);
-			var iter = r_s_graphicPSOMap.find(hashCode);
-
-			if (iter == r_s_graphicPSOMap.end())
-			{
-				firstCompile = true;
-				psoRef = r_s_graphicPSOMap[hashCode].GetAddressOf();
-			}
-			else
-			{
-				psoRef = iter->second.GetAddressOf();
-			}
-		}
-		if (firstCompile)
-		{
-			ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState.Get());
-		}
-		else
-		{
-			while (*psoRef == nullptr)
-			{
-				this_thread::yield();
-			}
-			m_pipelineState = *psoRef;
-		}*/
-
+		var device = r_graphicsCard[0]->GetDevice();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 

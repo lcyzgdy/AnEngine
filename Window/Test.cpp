@@ -1,4 +1,7 @@
 #include "Test.h"
+#include "onwind.h"
+#include "SampleMeshRender.h"
+#include "ParticlesRenderer.h"
 using namespace AnEngine;
 using namespace AnEngine::Game;
 using namespace AnEngine::RenderCore;
@@ -16,8 +19,10 @@ void LoadScene()
 	TestCamera* camera = new TestCamera(L"Test Camera Object");
 	camera->AddComponent(testCamera);
 
-	TrangleRender* trangleRender = new TrangleRender(L"Test Render");
-	camera->AddComponent(trangleRender);
+	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
+	//camera->AddComponent(trangleRender);
+	ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
+	camera->AddComponent(nBody);
 
 	testScene->AddObject(camera);
 	Driver::GetInstance()->BeginBehaviour(testScene);

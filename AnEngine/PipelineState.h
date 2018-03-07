@@ -63,13 +63,13 @@ namespace AnEngine::RenderCore
 		void SetDomainShader(const D3D12_SHADER_BYTECODE& binary);
 
 		void Finalize();
+		void Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc);
 	};
 
 	class ComputePSO : public PipelineStateObject
 	{
 	protected:
 		D3D12_COMPUTE_PIPELINE_STATE_DESC m_psoDesc;
-		const RootSignature* m_rootSignature;
 	public:
 		ComputePSO();
 		~ComputePSO() = default;

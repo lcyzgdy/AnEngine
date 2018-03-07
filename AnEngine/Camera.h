@@ -6,6 +6,7 @@
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
 #include "ObjectBehaviour.h"
+#include "ShaderClass.h"
 
 namespace AnEngine::Game
 {
@@ -35,6 +36,8 @@ namespace AnEngine::Game
 
 		std::mutex m_rtvMutex;
 
+		RenderCore::PixelShader* m_postProcessShader;
+
 	protected:
 		// 通过 BaseBehaviour 继承
 		/*virtual void OnInit() override;
@@ -49,6 +52,8 @@ namespace AnEngine::Game
 		virtual void AfterUpdate() override;
 		virtual void OnInvalid() override;
 		virtual void Destory() override;
+
+		void PostProcess();
 
 	public:
 		Camera(const std::wstring& name);

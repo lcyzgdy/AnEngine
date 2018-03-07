@@ -3,6 +3,7 @@
 #define __BASEBEHAVIOUR_H__
 
 #include<mutex>
+#include"onwind.h"
 
 namespace AnEngine
 {
@@ -11,7 +12,7 @@ namespace AnEngine
 
 namespace AnEngine::Game
 {
-	class BaseBehaviour
+	class BaseBehaviour : NonCopyable
 	{
 		friend class ::AnEngine::Driver;
 		friend class Scene;
@@ -31,7 +32,6 @@ namespace AnEngine::Game
 
 	public:
 		BaseBehaviour() = default;
-		BaseBehaviour(const BaseBehaviour& rhs) = delete;
 		virtual ~BaseBehaviour() = default;
 	};
 }

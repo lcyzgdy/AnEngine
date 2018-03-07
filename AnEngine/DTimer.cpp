@@ -3,6 +3,8 @@
 
 namespace AnEngine
 {
+	DTimer* DTimer::m_uniqueObj = nullptr;
+
 	DTimer::DTimer() :
 		m_elapsedTicks(0), m_frameCount(0), m_framesPerSecond(0), m_framesThisSecond(0),
 		m_isFixedTimeStep(false), m_leftOverTicks(false), m_qpcSecondCounter(0),
@@ -28,14 +30,14 @@ namespace AnEngine
 		m_running = false;
 	}
 
-	/*DTimer* DTimer::GetInstance()
+	DTimer* DTimer::GetInstance()
 	{
 		if (m_uniqueObj == nullptr)
 		{
 			m_uniqueObj = new DTimer();
 		}
 		return m_uniqueObj;
-	}*/
+	}
 
 	const uint64_t DTimer::GetElapsedTicks()
 	{
@@ -56,6 +58,7 @@ namespace AnEngine
 
 	const double DTimer::GetTotalSeconds()
 	{
+		Tick(nullptr);
 		return TicksToSeconds(m_totalTicks);
 	}
 
@@ -168,5 +171,14 @@ namespace AnEngine
 			m_framesThisSecond = 0;
 			m_qpcSecondCounter %= m_qpcFrequency.QuadPart;
 		}
+	}
+
+	uint64_t Timer::GetTotalTicks()
+	{
+		return DTimer::GetInstance()->GetTotalTicks();
+	}
+	double Timer::GetTotalSeconds()
+	{
+		return DTimer::GetInstance()->GetTotalSeconds();
 	}
 }

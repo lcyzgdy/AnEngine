@@ -80,6 +80,8 @@ namespace AnEngine::RenderCore
 
 		void GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		void GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+
+		HRESULT GetDeviceRemovedReason();
 	};
 }
 

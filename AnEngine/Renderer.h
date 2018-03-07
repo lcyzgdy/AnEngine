@@ -20,9 +20,9 @@ namespace AnEngine::Game
 	class Renderer : public ObjectBehaviour
 	{
 	protected:
-		::AnEngine::RenderCore::Resource::ColorBuffer* m_renderTarget;
-		::AnEngine::RenderCore::GraphicPSO* m_pso;
-		::AnEngine::RenderCore::RootSignature* m_rootSignature;
+		RenderCore::Resource::ColorBuffer* m_renderTarget;
+		RenderCore::GraphicPSO* m_pso;
+		RenderCore::RootSignature* m_rootSignature;
 
 		virtual void Start() override;
 
@@ -31,13 +31,14 @@ namespace AnEngine::Game
 		virtual void AfterUpdate() override;
 
 	public:
-		Renderer(const std::wstring& name);
-		Renderer(std::wstring&& name);
+		explicit Renderer(const std::wstring& name);
+		explicit Renderer(std::wstring&& name);
 		virtual ~Renderer() = default;
 
+		virtual void Destory() override;
 
 		virtual void LoadAsset() = 0;
-		virtual void OnRender() = 0;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) = 0;
 	};
 
 	class TrangleRender : public Renderer
@@ -59,7 +60,7 @@ namespace AnEngine::Game
 
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;
-		virtual void OnRender() override;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) override;
 
 		virtual void Destory() override;
 	};

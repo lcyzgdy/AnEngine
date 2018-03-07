@@ -87,4 +87,22 @@ namespace AnEngine::RenderCore
 	{
 		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(ToLPCWSTR(fileName)).c_str(), nullptr, nullptr, "CSMain", "cs_5_0", m_compileFlag, 0, &m_blob, nullptr));
 	}*/
+
+	ComputeShader::ComputeShader(const std::wstring& fileName) : Shader(fileName, "CSMain", "cs_5_0")
+	{
+	}
+
+	ComputeShader::ComputeShader(std::wstring&& fileName) : Shader(fileName, "CSMain", "cs_5_0")
+	{
+	}
+
+	ComputeShader::ComputeShader(const std::wstring& fileName, const std::string& invokeFunction) :
+		Shader(fileName, invokeFunction, "cs_5_0")
+	{
+	}
+
+	ComputeShader::ComputeShader(std::wstring && fileName, std::string && invokeFunction) :
+		Shader(fileName, invokeFunction, "cs_5_0")
+	{
+	}
 }

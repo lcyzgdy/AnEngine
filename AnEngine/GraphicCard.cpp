@@ -168,6 +168,11 @@ namespace AnEngine::RenderCore
 		commandQueue->Signal(fence, value);
 	}
 
+	HRESULT GraphicsCard::GetDeviceRemovedReason()
+	{
+		return m_device_cp->GetDeviceRemovedReason();
+	}
+
 	const ID3D12CommandQueue* GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
 	{
 		switch (type)

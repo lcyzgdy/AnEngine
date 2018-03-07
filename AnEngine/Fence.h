@@ -3,7 +3,9 @@
 #define __FENCE_H__
 
 #include "DX.h"
-#include <functional>
+//#include <functional>
+#include<atomic>
+#include<mutex>
 
 namespace AnEngine::RenderCore
 {
@@ -15,6 +17,12 @@ namespace AnEngine::RenderCore
 #ifdef _WIN32
 		HANDLE m_fenceEvent;
 #endif // _WIN32
+		//uint64_t m_fenceValue;
+		//uint64_t m_curFenceValue;
+		std::atomic_uint64_t m_fenceValue;
+		std::atomic_uint64_t m_curFenceValue;
+
+		std::mutex m_mutex;
 
 	public:
 		explicit Fence(ID3D12CommandQueue* targetQueue);

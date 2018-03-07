@@ -25,7 +25,7 @@ namespace AnEngine::RenderCore::Resource
 		vertices.resize(ParticleCount);
 		for (int i = 0; i < ParticleCount; i++)
 		{
-			vertices[i].color = XMFLOAT4(Random(), Random(), Random(), 1.0f);
+			vertices[i].color = XMFLOAT4(Random(0.0f, 1.0f), Random(0.0f, 1.0f), Random(0.0f, 1.0f), 1.0f);
 		}
 		const uint32_t bufferSize = ParticleCount * sizeof(ParticleVertex);
 
@@ -34,7 +34,7 @@ namespace AnEngine::RenderCore::Resource
 		vertexData.RowPitch = bufferSize;
 		vertexData.SlicePitch = vertexData.RowPitch;
 
-		m_vertexBuffer = new VertexBuffer(vertexData, bufferSize, sizeof(Particle));
+		m_vertexBuffer = new VertexBuffer(vertexData, bufferSize, sizeof(ParticleVertex));
 
 		vector<Particle> data;
 		data.resize(ParticleCount);

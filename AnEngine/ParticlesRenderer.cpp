@@ -100,7 +100,7 @@ namespace AnEngine::Game
 				ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error));
 				ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(),
 					IID_PPV_ARGS(&m_rootSignature1)));
-			}	// 图形根签名
+			}
 
 			{
 				CD3DX12_DESCRIPTOR_RANGE1 ranges[2];
@@ -120,8 +120,8 @@ namespace AnEngine::Game
 				ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&computeRootSignatureDesc, featureData.HighestVersion, &signature, &error));
 				ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(),
 					IID_PPV_ARGS(&m_computeRootSignature)));
-			}	// 计算根签名
-		}	// 创建根签名
+			}
+		}
 		{
 			ComPtr<ID3DBlob> vertexShader;
 			ComPtr<ID3DBlob> geometryShader;
@@ -170,6 +170,7 @@ namespace AnEngine::Game
 			psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 			psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 			psoDesc.SampleDesc.Count = 1;
+			psoDesc.NodeMask = 1;
 
 			m_pso = new GraphicPSO();
 			m_pso->Finalize(psoDesc);
@@ -184,22 +185,10 @@ namespace AnEngine::Game
 		{
 			const UINT bufferSize = sizeof(ConstantBufferCS);
 
-			ThrowIfFailed(device->CreateCommittedResource(
-				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-				D3D12_HEAP_FLAG_NONE,
-				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
-				D3D12_RESOURCE_STATE_COPY_DEST,
-				nullptr,
-				IID_PPV_ARGS(&m_constantBufferCS)));
-
-			ThrowIfFailed(device->CreateCommittedResource(
-				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-				D3D12_HEAP_FLAG_NONE,
-				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
-				D3D12_RESOURCE_STATE_GENERIC_READ,
-				nullptr,
-				IID_PPV_ARGS(&constantBufferCSUpload)));
-
+			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
+				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize), D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_constantBufferCS)));
+			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
+				&CD3DX12_RESOURCE_DESC::Buffer(bufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&constantBufferCSUpload)));
 
 			ConstantBufferCS vConstantBufferCS = {};
 			vConstantBufferCS.param[0] = m_particles->GetParticleCount();
@@ -285,7 +274,7 @@ namespace AnEngine::Game
 		CD3DX12_GPU_DESCRIPTOR_HANDLE srvHandle(srvUavGpuHandle);
 		iList->SetGraphicsRootDescriptorTable(GraphicsRootSrvTable, srvHandle);
 		iList->DrawInstanced(m_particles->GetParticleCount(), 1, 0, 0);
-		iList->RSSetViewports(1, &m_viewport);
+		//iList->RSSetViewports(1, &m_viewport);
 
 		iList->ResourceBarrier(1, &renderTargetToCommon);
 		ThrowIfFailed(iList->Close());

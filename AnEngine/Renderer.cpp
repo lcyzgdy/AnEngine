@@ -31,15 +31,11 @@ namespace AnEngine::Game
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
-		m_renderTarget->GetFence()->CpuWait(0);
 		if (m_renderTarget != nullptr)
 		{
+			//m_renderTarget->GetFence()->CpuWait(0);
 			OnRender(iList, iAllocator);
 		}
-
-		ID3D12CommandList* ppcommandList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_renderTarget->GetFence()->GpuSignal(0);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -156,6 +152,9 @@ namespace AnEngine::Game
 		iList->ResourceBarrier(1, &renderTargetToCommon);
 
 		iList->Close();
+
+		ID3D12CommandList* ppcommandList[] = { iList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
 	}

@@ -78,7 +78,7 @@ namespace AnEngine::RenderCore
 		{
 			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
-			aRender->Initialize(Private::r_dxgiFactory_cp.Get());
+			aRender->Initialize(Private::r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
 		}
 		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>();
@@ -312,7 +312,7 @@ namespace AnEngine::RenderCore
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
+		//srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 		//r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		uint32_t frameIndex = r_frameIndex;
 		var frame = r_displayPlane[frameIndex]->GetResource();

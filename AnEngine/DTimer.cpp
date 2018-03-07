@@ -47,6 +47,7 @@ namespace AnEngine
 
 	const double DTimer::GetElapsedSeconds()
 	{
+		Tick(nullptr);
 		return TicksToSeconds(m_elapsedTicks);
 	}
 

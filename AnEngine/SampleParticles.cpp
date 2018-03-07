@@ -120,6 +120,11 @@ namespace AnEngine::RenderCore::Resource
 		return m_vertexBuffer;
 	}
 
+	ID3D12Resource * SampleParticles::GetSrvUav()
+	{
+		return m_particleBuffer.Get();
+	}
+
 	void SampleParticles::InitializeParticles(Particle* _pParticles, const XMFLOAT3& _center, const XMFLOAT4& _velocity, float _spread,
 		uint32_t _particlesNum)
 	{

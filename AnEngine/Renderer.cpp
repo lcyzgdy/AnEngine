@@ -24,6 +24,10 @@ namespace AnEngine::Game
 
 	void Renderer::Update()
 	{
+	}
+
+	void Renderer::AfterUpdate()
+	{
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
@@ -38,10 +42,6 @@ namespace AnEngine::Game
 		m_renderTarget->GetFence()->GpuSignal(0);
 
 		GraphicsContext::Push(commandList, commandAllocator);
-	}
-
-	void Renderer::AfterUpdate()
-	{
 	}
 
 	Renderer::Renderer(const std::wstring& name) : ObjectBehaviour(name)

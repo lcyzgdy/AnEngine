@@ -22,15 +22,6 @@ namespace AnEngine::RenderCore::Resource
 			DirectX::XMFLOAT4 color;
 		};
 
-		enum DescriptorHeapIndex : uint32_t
-		{
-			UavParticlePosVelo0 = 0,
-			UavParticlePosVelo1 = UavParticlePosVelo0 + 1,
-			SrvParticlePosVelo0 = UavParticlePosVelo1 + 1,
-			SrvParticlePosVelo1 = SrvParticlePosVelo0 + 1,
-			DescriptorCount = SrvParticlePosVelo1 + 1
-		};	// ×ÅÉ«Æ÷×ÊÔ´µÄË÷Òı
-
 		RenderCore::Resource::VertexBuffer* m_vertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_particleBuffer;
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_particleBufferUpload;
@@ -51,6 +42,16 @@ namespace AnEngine::RenderCore::Resource
 		ID3D12DescriptorHeap* GetDescriptorHeap();
 		std::tuple<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> GetHandle();
 		VertexBuffer* GetVertexBuffer();
+		ID3D12Resource* GetSrvUav();
+
+
+
+		enum DescriptorHeapIndex : uint32_t
+		{
+			UavParticlePosVelo0,
+			SrvParticlePosVelo0,
+			DescriptorCount
+		};	// ç€è‰²å™¨èµ„æºçš„ç´¢å¼•
 	};
 }
 

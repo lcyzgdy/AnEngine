@@ -40,6 +40,9 @@ namespace AnEngine::Game
 			ComputeRootParametersCount
 		};
 
+		ID3D12CommandQueue* m_graphicsQueue;
+		ID3D12CommandQueue* m_computeQueue;
+
 		RenderCore::Resource::SampleParticles* m_particles;
 
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature;
@@ -51,10 +54,13 @@ namespace AnEngine::Game
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_constantBufferCS;
 
 		RenderCore::Fence* m_fence;
+		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
 
 		CD3DX12_VIEWPORT m_viewport;
 		CD3DX12_RECT m_scissorRect;
 		D3D12_RECT m_cullingScissorRect;	// 用作遮挡剔除
+
+		void Simulate();
 
 	public:
 		ParticlesRenderer(std::wstring&& name);

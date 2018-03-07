@@ -1,9 +1,10 @@
 #include"onwind.h"
 //#include"DrawLine.h"
-//#include"NBody.h"
+#include"NBody.h"
 #include"Driver.h"
 #include"ThreadPool.hpp"
 #include"Input.h"
+#include"Screen.h"
 using namespace AnEngine;
 
 #include"Test.h"
@@ -55,11 +56,11 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case(WM_PAINT):
 	{
 		// BaseInput::GetInstance()->Update();	// 这里已经移动到线程池中执行。
-		//if (pD3dApp)
+		/*if (pD3dApp)
 		{
-			//pD3dApp->OnUpdate();
-			//pD3dApp->OnRender();
-		}
+			pD3dApp->OnUpdate();
+			pD3dApp->OnRender();
+		}*/
 		break;
 	}
 	case(WM_USER):
@@ -104,19 +105,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RECT windowRect = { 0, 0, static_cast<LONG>(screenw), static_cast<LONG>(screenh) };
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
-	window = CreateWindow(
-		windowClassName.c_str(),
-		windowTitle.c_str(),
-		WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_BORDER ^ WS_SIZEBOX,
-		//WS_POPUPWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		windowRect.right - windowRect.left,
-		windowRect.bottom - windowRect.top,
-		nullptr,
-		nullptr,
-		hInstance,
-		nullptr);
+	window = CreateWindow(windowClassName.c_str(), windowTitle.c_str(),
+		WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_BORDER ^ WS_SIZEBOX,		//WS_POPUPWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
+		nullptr, nullptr, hInstance, nullptr);
 	//d3dApp);
 
 	if (window == NULL)

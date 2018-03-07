@@ -59,8 +59,8 @@ void LoadScene()
 
 	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
 	//camera->AddComponent(trangleRender);
-	SampleMeshRenderer* mesh = new SampleMeshRenderer(L"Test Mesh", L"C:/Users/PC/Documents/Code/VSProject/AnEngine/Assets/Mesh.bin");
-	camera->AddComponent(mesh);
+	ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
+	camera->AddComponent(nBody);
 
 	testScene->AddObject(camera);
 	Driver::GetInstance()->BeginBehaviour(testScene);
@@ -91,5 +91,5 @@ while (msg.message != WM_QUIT)
 }
 ......
 ```
-在WinMain.cpp的合适位置调用LoadSence()，可看到运行效果如图（该模型文件来自MSDN，网格只能针对具体文件进行编程😩）：
+在WinMain.cpp的合适位置调用LoadSence()，可看到运行效果如图：
 ![image](./Blogs/Demo2.png)

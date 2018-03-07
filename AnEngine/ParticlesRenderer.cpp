@@ -7,10 +7,55 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
+	void ParticlesRenderer::Simulate()
+	{
+		uint32_t vSrvIndex;
+		uint32_t vUavIndex;
+		ID3D12Resource *pUavResource;
+
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
+		var iList = commandList->GetCommandList();
+		var iAllocator = commandAllocator->GetAllocator();
+
+		vSrvIndex = m_particles->SrvParticlePosVelo0;
+		vUavIndex = m_particles->UavParticlePosVelo0;
+		pUavResource = m_particles->GetSrvUav();
+
+		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pUavResource, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+
+		iList->SetPipelineState(m_computePso.Get());
+		iList->SetComputeRootSignature(m_computeRootSignature.Get());
+
+		ID3D12DescriptorHeap* ppHeaps[] = { m_particles->GetDescriptorHeap() };
+		iList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+		var[srvUavHandle, srvUavGpuHandle] = m_particles->GetHandle();
+		uint32_t srvUavDescriptorSize = r_graphicsCard[0]->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+		CD3DX12_GPU_DESCRIPTOR_HANDLE srvHandle(srvUavGpuHandle, vSrvIndex, srvUavDescriptorSize);
+		CD3DX12_GPU_DESCRIPTOR_HANDLE uavHandle(srvUavGpuHandle, vUavIndex, srvUavDescriptorSize);
+
+		iList->SetComputeRootConstantBufferView(ComputeRootCbv, m_constantBufferCS->GetGPUVirtualAddress());
+		iList->SetComputeRootDescriptorTable(ComputeRootSrvTable, srvHandle);
+		iList->SetComputeRootDescriptorTable(ComputeRootUavTable, uavHandle);
+
+		iList->Dispatch(static_cast<int>(ceil(m_particles->GetParticleCount() / 128.0f)), 1, 1);
+
+		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pUavResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
+
+		ThrowIfFailed(iList->Close());
+
+		ID3D12CommandList* ppList[] = { iList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
+
+		GraphicsContext::Push(commandList, commandAllocator);
+	}
+
 	ParticlesRenderer::ParticlesRenderer(std::wstring&& name) : Renderer(name),
 		m_viewport(0.0f, 0.0f, static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
 		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()), static_cast<long>(Screen::GetInstance()->Height()))
 	{
+		m_graphicsQueue = r_graphicsCard[0]->GetCommandQueue();
+		m_computeQueue = r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE);
 	}
 
 	void ParticlesRenderer::LoadAsset()

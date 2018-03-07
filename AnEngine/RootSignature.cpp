@@ -20,60 +20,60 @@ namespace AnEngine::RenderCore
 		m_rootParam.ParameterType = (D3D12_ROOT_PARAMETER_TYPE)0xFFFFFFFF;
 	}
 
-	void RootParameter::InitAsConstants(uint32_t Register, uint32_t NumDwords, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsConstants(uint32_t Register, uint32_t numDwords, D3D12_SHADER_VISIBILITY visibility)
 	{
 		m_rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-		m_rootParam.ShaderVisibility = Visibility;
-		m_rootParam.Constants.Num32BitValues = NumDwords;
+		m_rootParam.ShaderVisibility = visibility;
+		m_rootParam.Constants.Num32BitValues = numDwords;
 		m_rootParam.Constants.ShaderRegister = Register;
 		m_rootParam.Constants.RegisterSpace = 0;
 	}
 
-	void RootParameter::InitAsConstantBuffer(uint32_t Register, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsConstantBuffer(uint32_t Register, D3D12_SHADER_VISIBILITY visibility)
 	{
 		m_rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-		m_rootParam.ShaderVisibility = Visibility;
+		m_rootParam.ShaderVisibility = visibility;
 		m_rootParam.Descriptor.ShaderRegister = Register;
 		m_rootParam.Descriptor.RegisterSpace = 0;
 	}
 
-	void RootParameter::InitAsBufferSRV(uint32_t Register, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsBufferSRV(uint32_t Register, D3D12_SHADER_VISIBILITY visibility)
 	{
 		m_rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-		m_rootParam.ShaderVisibility = Visibility;
+		m_rootParam.ShaderVisibility = visibility;
 		m_rootParam.Descriptor.ShaderRegister = Register;
 		m_rootParam.Descriptor.RegisterSpace = 0;
 	}
 
-	void RootParameter::InitAsBufferUAV(uint32_t Register, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsBufferUAV(uint32_t Register, D3D12_SHADER_VISIBILITY visibility)
 	{
 		m_rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
-		m_rootParam.ShaderVisibility = Visibility;
+		m_rootParam.ShaderVisibility = visibility;
 		m_rootParam.Descriptor.ShaderRegister = Register;
 		m_rootParam.Descriptor.RegisterSpace = 0;
 	}
 
-	void RootParameter::InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE Type, uint32_t Register, uint32_t Count, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsDescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE Type, uint32_t Register, uint32_t count, D3D12_SHADER_VISIBILITY visibility)
 	{
-		InitAsDescriptorTable(1, Visibility);
-		SetTableRange(0, Type, Register, Count);
+		InitAsDescriptorTable(1, visibility);
+		SetTableRange(0, Type, Register, count);
 	}
 
-	void RootParameter::InitAsDescriptorTable(uint32_t RangeCount, D3D12_SHADER_VISIBILITY Visibility)
+	void RootParameter::InitAsDescriptorTable(uint32_t rangecount, D3D12_SHADER_VISIBILITY visibility)
 	{
 		m_rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		m_rootParam.ShaderVisibility = Visibility;
-		m_rootParam.DescriptorTable.NumDescriptorRanges = RangeCount;
-		m_rootParam.DescriptorTable.pDescriptorRanges = new D3D12_DESCRIPTOR_RANGE[RangeCount];
+		m_rootParam.ShaderVisibility = visibility;
+		m_rootParam.DescriptorTable.NumDescriptorRanges = rangecount;
+		m_rootParam.DescriptorTable.pDescriptorRanges = new D3D12_DESCRIPTOR_RANGE[rangecount];
 	}
 
-	void RootParameter::SetTableRange(uint32_t RangeIndex, D3D12_DESCRIPTOR_RANGE_TYPE Type, uint32_t Register, uint32_t Count, uint32_t Space)
+	void RootParameter::SetTableRange(uint32_t rangeIndex, D3D12_DESCRIPTOR_RANGE_TYPE Type, uint32_t Register, uint32_t count, uint32_t space)
 	{
-		D3D12_DESCRIPTOR_RANGE* range = const_cast<D3D12_DESCRIPTOR_RANGE*>(m_rootParam.DescriptorTable.pDescriptorRanges + RangeIndex);
+		D3D12_DESCRIPTOR_RANGE* range = const_cast<D3D12_DESCRIPTOR_RANGE*>(m_rootParam.DescriptorTable.pDescriptorRanges + rangeIndex);
 		range->RangeType = Type;
-		range->NumDescriptors = Count;
+		range->NumDescriptors = count;
 		range->BaseShaderRegister = Register;
-		range->RegisterSpace = Space;
+		range->RegisterSpace = space;
 		range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	}
 }

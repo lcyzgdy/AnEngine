@@ -24,14 +24,24 @@ namespace AnEngine::Game
 
 	void Renderer::Update()
 	{
-		if (m_renderTarget != nullptr)
-		{
-			OnRender();
-		}
 	}
 
 	void Renderer::AfterUpdate()
 	{
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
+		var iList = commandList->GetCommandList();
+		var iAllocator = commandAllocator->GetAllocator();
+		m_renderTarget->GetFence()->CpuWait(0);
+		if (m_renderTarget != nullptr)
+		{
+			OnRender(iList, iAllocator);
+		}
+
+		ID3D12CommandList* ppcommandList[] = { iList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		m_renderTarget->GetFence()->GpuSignal(0);
+
+		GraphicsContext::Push(commandList, commandAllocator);
 	}
 
 	Renderer::Renderer(const std::wstring& name) : ObjectBehaviour(name)
@@ -40,6 +50,14 @@ namespace AnEngine::Game
 
 	Renderer::Renderer(std::wstring&& name) : ObjectBehaviour(name)
 	{
+	}
+
+	void Renderer::Destory()
+	{
+		ObjectBehaviour::Destory();
+		delete m_pso;
+		delete m_rootSignature;
+		m_renderTarget = nullptr;
 	}
 
 	TrangleRender::TrangleRender(const wstring& name) : Renderer(name), m_viewport(0.0f, 0.0f,
@@ -112,37 +130,34 @@ namespace AnEngine::Game
 		//vertexBufferView.SizeInBytes = vertexBufferSize;
 	}
 
-	void TrangleRender::OnRender()
+	void TrangleRender::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		m_renderTarget->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalTicks());
+		m_renderTarget->GetFence()->CpuWait(Timer::GetTotalTicks());
 
-		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
-		var pCommandList = commandList->GetCommandList();
-		var pCommandAllocator = commandAllocator->GetAllocator();
-		ThrowIfFailed(pCommandAllocator->Reset());
-		pCommandList->Reset(pCommandAllocator, m_pso->GetPSO());
+		iList->Reset(iAllocator, m_pso->GetPSO());
 
-		pCommandList->SetGraphicsRootSignature(m_rootSignature->GetRootSignature());
-		pCommandList->RSSetViewports(1, &m_viewport);
-		pCommandList->RSSetScissorRects(1, &m_scissorRect);
+		var commonToRenderTarget = CommonState::commonToRenderTarget;
+		var renderTargetToCommon = CommonState::renderTargetToCommon;
+		commonToRenderTarget.Transition.pResource = m_renderTarget->GetResource();
+		renderTargetToCommon.Transition.pResource = m_renderTarget->GetResource();
 
-		pCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+		iList->ResourceBarrier(1, &commonToRenderTarget);
 
-		//float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
-		//pCommandList->ClearRenderTargetView(m_renderTarget->GetRTV(), clearColor, 0, nullptr);
+		iList->SetGraphicsRootSignature(m_rootSignature->GetRootSignature());
+		iList->RSSetViewports(1, &m_viewport);
+		iList->RSSetScissorRects(1, &m_scissorRect);
 
-		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		pCommandList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
-		pCommandList->DrawInstanced(3, 1, 0, 0);
+		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
 
-		pCommandList->Close();
+		iList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		iList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
+		iList->DrawInstanced(3, 1, 0, 0);
 
-		ID3D12CommandList* ppcommandList[] = { pCommandList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		iList->ResourceBarrier(1, &renderTargetToCommon);
 
-		GraphicsCommandContext::GetInstance()->Push(commandList);
-		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
+		iList->Close();
+
+		m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
 	}
 
 	void TrangleRender::Destory()

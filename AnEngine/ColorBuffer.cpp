@@ -75,7 +75,7 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
 		ThrowIfFailed(device->GetDevice()->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
-		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET,
+		ThrowIfFailed(device->GetDevice()->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, D3D12_RESOURCE_STATE_COMMON,
 			nullptr, IID_PPV_ARGS(&m_resource_cp)));
 	}
 

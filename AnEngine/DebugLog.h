@@ -2,20 +2,15 @@
 #ifndef __DEBUGLOG_H__
 #define __DEBUGLOG_H__
 
-#include<fstream>
 #include<string>
-#include<mutex>
-#include<ctime>
-using namespace std;
 
 namespace AnEngine::Debug
 {
-	std::ofstream out(to_string(time(0)) + "_log.txt");
-
-	void Log(std::string l)
+	class Debug
 	{
-		out << l << std::endl;
-	}
+	public:
+		static void Log(std::string l);
+	};
 }
 
 #endif // !__DEBUGLOG_H__

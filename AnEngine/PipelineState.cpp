@@ -173,46 +173,38 @@ namespace AnEngine::RenderCore
 
 	void GraphicPSO::Finalize()
 	{
-		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
 		var device = r_graphicsCard[0]->GetDevice();
-		/*if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("graphic_rootSignature");
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+	}
 
-		m_psoDesc.InputLayout.pInputElementDescs = nullptr;
-		uint64_t hashCode = Utility::GetHash(&m_psoDesc);
-		hashCode = Utility::GetHash(m_inputLayouts.get(), m_psoDesc.InputLayout.NumElements, hashCode);
-		m_psoDesc.InputLayout.pInputElementDescs = m_inputLayouts.get();
+	void GraphicPSO::Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc)
+	{
+		/*m_psoDesc.BlendState.AlphaToCoverageEnable = desc.BlendState.AlphaToCoverageEnable;
+		m_psoDesc.BlendState.IndependentBlendEnable = desc.BlendState.IndependentBlendEnable;
+		for (int i = 0; i < 8; i++) m_psoDesc.BlendState.RenderTarget[i] = desc.BlendState.RenderTarget[i];
+		m_psoDesc.CachedPSO = desc.CachedPSO;
+		m_psoDesc.DepthStencilState = desc.DepthStencilState;
+		m_psoDesc.DS = desc.DS;
+		m_psoDesc.DSVFormat = desc.DSVFormat;
+		m_psoDesc.Flags = desc.Flags;
+		m_psoDesc.GS = desc.GS;
+		m_psoDesc.HS = desc.HS;
+		m_psoDesc.IBStripCutValue = desc.IBStripCutValue;
+		SetInputLayout(desc.InputLayout.NumElements, desc.InputLayout.pInputElementDescs);
+		m_psoDesc.NodeMask = desc.NodeMask;
+		m_psoDesc.NumRenderTargets = desc.NumRenderTargets;
+		m_psoDesc.PrimitiveTopologyType = desc.PrimitiveTopologyType;
+		m_psoDesc.pRootSignature = desc.pRootSignature;
+		m_psoDesc.PS = desc.PS;
+		m_psoDesc.RasterizerState = desc.RasterizerState;
+		for (int i = 0; i < 8; i++) m_psoDesc.RTVFormats[i] = desc.RTVFormats[i];
+		m_psoDesc.SampleDesc = desc.SampleDesc;
+		m_psoDesc.SampleMask = desc.SampleMask;
+		m_psoDesc.StreamOutput = desc.StreamOutput;
+		m_psoDesc.VS = desc.VS;*/
+		m_psoDesc = desc;
 
-		ID3D12PipelineState** psoRef = nullptr;
-		bool firstCompile = false;
-		{
-			static mutex s_hashMapMutex;
-			lock_guard<mutex> lock(s_hashMapMutex);
-			var iter = r_s_graphicPSOMap.find(hashCode);
-
-			if (iter == r_s_graphicPSOMap.end())
-			{
-				firstCompile = true;
-				psoRef = r_s_graphicPSOMap[hashCode].GetAddressOf();
-			}
-			else
-			{
-				psoRef = iter->second.GetAddressOf();
-			}
-		}
-		if (firstCompile)
-		{
-			ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
-			r_s_graphicPSOMap[hashCode].Attach(m_pipelineState.Get());
-		}
-		else
-		{
-			while (*psoRef == nullptr)
-			{
-				this_thread::yield();
-			}
-			m_pipelineState = *psoRef;
-		}*/
-
+		var device = r_graphicsCard[0]->GetDevice();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
@@ -226,17 +218,17 @@ namespace AnEngine::RenderCore
 		m_psoDesc.NodeMask = 1;
 	}
 
-	void ComputePSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
 	}
 
-	void ComputePSO::SetComputeShader(const void * binary, size_t size)
+	void ComputePSO::SetComputeShader(const void* binary, size_t size)
 	{
 		m_psoDesc.CS = CD3DX12_SHADER_BYTECODE(binary, size);
 	}
 
-	void ComputePSO::SetComputeShader(const D3D12_SHADER_BYTECODE & binary)
+	void ComputePSO::SetComputeShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.CS = binary;
 	}
@@ -247,16 +239,15 @@ namespace AnEngine::RenderCore
 		var device = r_graphicsCard[0]->GetDevice();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
-		size_t hashCode = Utility::GetHash(&m_psoDesc);
+		/*size_t hashCode = Utility::GetHash(&m_psoDesc);
 
 		ID3D12PipelineState** psoRef = nullptr;
 		bool firstComplie = false;
 		{
 			static mutex s_hashMapMutex;
 			lock_guard<mutex> lock(s_hashMapMutex);
-			var iter = r_s_computePSOMap.find(hashCode);
 
-			if (iter == r_s_computePSOMap.end())
+			if (var iter = r_s_computePSOMap.find(hashCode); iter == r_s_computePSOMap.end())
 			{
 				firstComplie = true;
 				psoRef = r_s_computePSOMap[hashCode].GetAddressOf();
@@ -278,6 +269,8 @@ namespace AnEngine::RenderCore
 				this_thread::yield();
 			}
 			m_pipelineState = *psoRef;
-		}
+		}*/
+
+		ThrowIfFailed(device->CreateComputePipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 }

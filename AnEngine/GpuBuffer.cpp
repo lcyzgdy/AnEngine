@@ -56,20 +56,23 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 		heapDesc.Properties.CreationNodeMask = r_graphicsCard[0]->GetNodeNum();
 		heapDesc.Properties.VisibleNodeMask = r_graphicsCard[0]->GetNodeNum();
+		//heapDesc.Properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 		heapDesc.Alignment = 0;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE;
-		ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
+
+		//heapDesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		/*ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
 
 		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
-			nullptr, IID_PPV_ARGS(&m_resource_cp)));
+			nullptr, IID_PPV_ARGS(&m_resource_cp)));*/
 
-		/*ThrowIfFailed(device->CreateCommittedResource(
+		ThrowIfFailed(device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(m_bufferSize),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
-			IID_PPV_ARGS(&m_resource_cp)));*/
+			IID_PPV_ARGS(&m_resource_cp)));
 
 		m_gpuVirtualAddress = m_resource_cp->GetGPUVirtualAddress();
 

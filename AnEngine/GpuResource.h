@@ -5,6 +5,7 @@
 #include<wrl.h>
 #include"DX.h"
 #include"Fence.h"
+#include<functional>
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -24,7 +25,7 @@ namespace AnEngine::RenderCore::Resource
 		// 当使用VirtualAlloc()释放内存时从这里记录。
 		void* m_p_userAllocatedMemory;
 	public:
-		GpuResource();
+		GpuResource(); // For inheritance
 		GpuResource(ID3D12Resource* p_resource, D3D12_RESOURCE_STATES currentState);
 		~GpuResource() = default;
 
@@ -39,6 +40,8 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress() const;
 
 		Fence* GetFence();
+
+		void Create();
 	};
 }
 #endif // !__GPURESOURCE_H__

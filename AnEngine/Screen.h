@@ -4,11 +4,11 @@
 #include"onwind.h"
 #include<atomic>
 
-//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 namespace AnEngine
 {
-	class Screen : public Singleton<Screen>
+	class Screen : public NonCopyable//::Singleton<Screen>
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
@@ -17,6 +17,7 @@ namespace AnEngine
 		// */
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 		friend class Driver;
+		//static Screen* m_uniqueObj;
 
 		std::atomic<int> m_width;
 		std::atomic<int> m_height;
@@ -44,11 +45,11 @@ namespace AnEngine
 			return m_height;
 		}
 
-		/*inline static Screen* GetInstance()
+		inline static Screen* GetInstance()
 		{
 			static Screen screen;
 			return &screen;
-		}*/
+		}
 	};
 }
 

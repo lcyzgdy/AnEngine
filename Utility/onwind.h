@@ -24,6 +24,8 @@
 
 #ifdef UNICODE
 
+#define SOLUTION_DIR L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
+
 #define Strcpy(a,b) wcscpy_s(a, b)
 #define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), _T("Error"), 0)
 #define __FasterFunc(func) inline func __vectorcall
@@ -135,7 +137,7 @@ inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
 	{
-		throw std::exception();
+		throw std::exception("一个奇怪的错误");
 	}
 }
 
@@ -148,6 +150,7 @@ inline T* SafeAcquire(T* newObject)
 
 #else
 #define Strcpy(a,b) wcscpy(a,b);
+#define SOLUTION_DIR "C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
 #endif // !UNICODE
 #else
 #ifndef UNICODE

@@ -57,8 +57,10 @@ void LoadScene()
 	TestCamera* camera = new TestCamera(L"Test Camera Object");
 	camera->AddComponent(testCamera);
 
-	TrangleRender* trangleRender = new TrangleRender(L"Test Render");
-	camera->AddComponent(trangleRender);
+	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
+	//camera->AddComponent(trangleRender);
+	ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
+	camera->AddComponent(nBody);
 
 	testScene->AddObject(camera);
 	Driver::GetInstance()->BeginBehaviour(testScene);
@@ -90,4 +92,4 @@ while (msg.message != WM_QUIT)
 ......
 ```
 在WinMain.cpp的合适位置调用LoadSence()，可看到运行效果如图：
-![image](./Blogs/Demo.png)
+![image](./Blogs/Demo2.png)

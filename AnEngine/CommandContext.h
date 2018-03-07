@@ -5,6 +5,7 @@
 #include"DX.h"
 #include<queue>
 #include<mutex>
+#include<tuple>
 #include"onwind.h"
 #include"CommandList.h"
 
@@ -27,14 +28,14 @@ namespace AnEngine::RenderCore
 		virtual T GetOne() = 0;
 		virtual void Push(T) = 0;
 		virtual void AddNew(T) = 0;
-		//virtual vector<var> GetReady() = 0;
 		virtual void PopulateFinished() = 0;
 	};
 
 	// 渲染线程独占一个CommandList
-	class GraphicsCommandContext : public NonCopyable, public Context<CommandList*>
+	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public Context<CommandList*>
 	{
-		static GraphicsCommandContext* m_uniqueObj;
+		friend class ::Singleton<GraphicsCommandContext>;
+		//static GraphicsCommandContext* m_uniqueObj;
 
 		//queue<CommandList*> m_commandListPool;
 		//vector<CommandList*> m_readyQueue;
@@ -49,7 +50,7 @@ namespace AnEngine::RenderCore
 		~GraphicsCommandContext();
 
 	public:
-		static GraphicsCommandContext* GetInstance();
+		//static GraphicsCommandContext* GetInstance();
 		//CommandList* GetCommandList();
 		//void PushCommandList(CommandList* list);
 
@@ -58,13 +59,8 @@ namespace AnEngine::RenderCore
 
 		// 通过 Context 继承
 		virtual CommandList* GetOne() override;
-
 		virtual void Push(CommandList*) override;
-
 		virtual void AddNew(CommandList*) override;
-
-		std::vector<ID3D12CommandList*> GetReady();
-
 		virtual void PopulateFinished() override;
 
 		//vector<ID3D12CommandList*> GetReadyCommandList();
@@ -95,6 +91,45 @@ namespace AnEngine::RenderCore
 		virtual void Push(CommandAllocator*) override;
 		virtual void AddNew(CommandAllocator*) override;
 		virtual void PopulateFinished() override;
+	};
+}
+namespace AnEngine::RenderCore::Private
+{
+	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public Context<CommandList*>
+	{
+	public:
+		// 通过 Context 继承
+		virtual CommandList* GetOne() override;
+		virtual void Push(CommandList* list) override;
+		virtual void AddNew(CommandList* list) override;
+		virtual void PopulateFinished() override;
+	};
+
+	class ComputeCommandAllocator : public ::Singleton<ComputeCommandAllocator>, public Context<CommandAllocator*>
+	{
+	public:
+		// 通过 Context 继承
+		virtual CommandAllocator* GetOne() override;
+		virtual void Push(CommandAllocator* allocator) override;
+		virtual void AddNew(CommandAllocator* allocator) override;
+		virtual void PopulateFinished() override;
+	};
+}
+
+namespace AnEngine::RenderCore
+{
+	class ComputeContext
+	{
+	public:
+		static std::tuple<CommandList*, CommandAllocator*> GetOne();
+		static void Push(CommandList* list, CommandAllocator* allocator);
+	};
+
+	class GraphicsContext
+	{
+	public:
+		static std::tuple<CommandList*, CommandAllocator*> GetOne();
+		static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 }
 

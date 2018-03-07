@@ -38,7 +38,7 @@ namespace AnEngine::Game
 	void Camera::Update()
 	{
 		lock_guard<mutex> lock(m_rtvMutex);
-		m_colorBuffer->GetFence()->CpuWait(DTimer::GetInstance()->GetTotalSeconds());
+		m_colorBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 
 		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
 		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
@@ -49,19 +49,19 @@ namespace AnEngine::Game
 		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
 
 		var commonToRenderTarget = CommonState::commonToRenderTarget;
-		var renderTargetToCommon = CommonState::renderTargetToResolveDest;
+		var renderTargetToCommon = CommonState::renderTargetToCommon;
 		commonToRenderTarget.Transition.pResource = m_colorBuffer->GetResource();
 		renderTargetToCommon.Transition.pResource = m_colorBuffer->GetResource();
 
-		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
+		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = m_colorBuffer->GetClearColor();
-		float clearColor[4] = { 0.0f, 0.2f, sin((double)DTimer::GetInstance()->GetTotalTicks() / 10000), 1.0f };
+		float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 300000), 1.0f };
 		iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
-		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
+		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_colorBuffer->GetFence()->GpuSignal(DTimer::GetInstance()->GetTotalTicks());
+		m_colorBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
 		GraphicsCommandContext::GetInstance()->Push(commandList);
 		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
@@ -70,7 +70,8 @@ namespace AnEngine::Game
 	void Camera::AfterUpdate()
 	{
 		//RenderColorBuffer(m_colorBuffer);
-		this_thread::sleep_for(std::chrono::milliseconds(60));
+		if (m_postProcessShader != nullptr) PostProcess();
+		//this_thread::sleep_for(std::chrono::microseconds(1));
 		BlendBuffer(m_colorBuffer);
 	}
 
@@ -85,6 +86,10 @@ namespace AnEngine::Game
 		{
 			cameraPool.erase(it);
 		}
+	}
+
+	void Camera::PostProcess()
+	{
 	}
 
 	Camera::Camera(const std::wstring& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
@@ -141,7 +146,7 @@ namespace AnEngine::Game
 
 	RenderCore::Resource::ColorBuffer * Camera::GetColorBuffer()
 	{
-		lock_guard<mutex> lock(m_rtvMutex);
+		//lock_guard<mutex> lock(m_rtvMutex);
 		return m_colorBuffer;
 	}
 

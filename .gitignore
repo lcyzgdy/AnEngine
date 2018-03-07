@@ -264,3 +264,6 @@ __pycache__/
 [Pp]hys[Xx]/
 PhysX/
 [Pp]hysX/
+
+# Assets
+*.bin

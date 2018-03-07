@@ -43,5 +43,25 @@ namespace AnEngine
 		void SetMoveSpeed(float v);// 单位：uint/s
 		void SetTurnSpeed(float v);// 单位：s^-1 || /s
 	};
+
+	class LightCamera
+	{
+	public:
+		LightCamera();
+		~LightCamera();
+
+		void Get3DViewProjMatrices(XMFLOAT4X4 *view, XMFLOAT4X4 *proj, float fovInDegrees, float screenWidth, float screenHeight);
+		void Reset();
+		void Set(XMVECTOR eye, XMVECTOR at, XMVECTOR up);
+		static LightCamera *get();
+		void RotateYaw(float deg);
+		void RotatePitch(float deg);
+		void GetOrthoProjMatrices(XMFLOAT4X4 *view, XMFLOAT4X4 *proj, float width, float height);
+		XMVECTOR m_eye;
+		XMVECTOR m_at;
+		XMVECTOR m_up;
+	private:
+		static LightCamera* m_camera;
+	};
 }
 #endif // !__MCAMERA_H__

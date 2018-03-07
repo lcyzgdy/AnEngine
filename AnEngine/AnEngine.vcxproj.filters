@@ -174,6 +174,33 @@
     <ClInclude Include="GpuBuffer.h">
       <Filter>头文件\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dds.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeUnit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixBuffer.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleMeshRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleAssets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticlesRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleParticles.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -275,10 +302,34 @@
     <ClCompile Include="ComponentBehaviour.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Fence.cpp">
+    <ClCompile Include="GpuBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GpuBuffer.cpp">
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Fence.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeUnit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleMeshRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlesRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleParticles.cpp">
       <Filter>源文件\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -310,5 +361,13 @@
     <CustomBuild Include="compute_shader.hlsl">
       <Filter>资源文件</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Assets\test.hlsli">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\test.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -21,6 +21,7 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_VERTEX_BUFFER_VIEW m_vbv;
 		D3D12_INDEX_BUFFER_VIEW m_ibv;
 	public:
+		VertexBuffer(D3D12_SUBRESOURCE_DATA& subData, size_t vertexDataSize, uint32_t standardVertexStride);
 		VertexBuffer(D3D12_SUBRESOURCE_DATA& subData, size_t vertexDataSize, uint32_t standardVertexStride, D3D12_SUBRESOURCE_DATA& indexData,
 			size_t indexDataSize, DXGI_FORMAT standardIndexFormat);
 

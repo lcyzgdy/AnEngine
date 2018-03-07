@@ -38,7 +38,7 @@ namespace AnEngine::Game
 		virtual void Destory() override;
 
 		virtual void LoadAsset() = 0;
-		virtual void OnRender() = 0;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) = 0;
 	};
 
 	class TrangleRender : public Renderer
@@ -60,7 +60,7 @@ namespace AnEngine::Game
 
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;
-		virtual void OnRender() override;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) override;
 
 		virtual void Destory() override;
 	};

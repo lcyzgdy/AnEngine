@@ -21,20 +21,12 @@ namespace AnEngine::Game
 	{
 	}
 
-	void SpriteRenderer::OnRender()
+	void SpriteRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		m_renderTarget->GetFence()->CpuWait(Timer::GetTotalTicks());
-
-		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
-		var iCommandList = commandList->GetCommandList();
-		var iCommandAllocator = commandAllocator->GetAllocator();
-
-		iCommandList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+		ThrowIfFailed(iAllocator->Reset());
+		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));
 		
-
-		ThrowIfFailed(iCommandAllocator->Reset());
-		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, m_pso->GetPSO()));
+		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
 	}
 
 	void SpriteRenderer::Destory()

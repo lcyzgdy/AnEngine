@@ -195,6 +195,12 @@
     <ClInclude Include="SampleAssets.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ParticlesRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleParticles.h">
+      <Filter>头文件\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTimer.cpp">
@@ -318,6 +324,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
+      <Filter>源文件\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlesRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleParticles.cpp">
       <Filter>源文件\Graphic</Filter>
     </ClCompile>
   </ItemGroup>

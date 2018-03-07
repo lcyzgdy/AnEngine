@@ -189,6 +189,7 @@
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="ObjectBehaviour.h" />
+    <ClInclude Include="ParticlesRenderer.h" />
     <ClInclude Include="PhysicsCore.h" />
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
+    <ClInclude Include="SampleParticles.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ShaderClass.h" />
@@ -240,12 +242,14 @@
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
     <ClCompile Include="ObjectBehaviour.cpp" />
+    <ClCompile Include="ParticlesRenderer.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="SampleMeshRender.cpp" />
+    <ClCompile Include="SampleParticles.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />

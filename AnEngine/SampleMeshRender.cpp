@@ -299,14 +299,9 @@ namespace AnEngine::Game
 		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
-	void SampleMeshRenderer::OnRender()
+	void SampleMeshRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		m_renderTarget->GetFence()->CpuWait(0);
-
-		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var[shadowList, shadowAllocator] = GraphicsContext::GetOne();
-		var iAllocator = commandAllocator->GetAllocator();
-		var iList = commandList->GetCommandList();
 		var iShadowAllocator = shadowAllocator->GetAllocator();
 		var iShadowList = shadowList->GetCommandList();
 
@@ -397,13 +392,11 @@ namespace AnEngine::Game
 		iList->Close();
 		iShadowList->Close();
 
-		ID3D12CommandList* ppcommandList[] = { iList,iShadowList };
+		ID3D12CommandList* ppcommandList[] = { iShadowList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_renderTarget->GetFence()->GpuSignal(0);
 		m_fence->GpuSignal(0);
 
 		GraphicsContext::Push(shadowList, shadowAllocator);
-		GraphicsContext::Push(commandList, commandAllocator);
 	}
 
 	void SampleMeshRenderer::Destory()

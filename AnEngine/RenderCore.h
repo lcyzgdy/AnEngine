@@ -58,6 +58,7 @@ namespace AnEngine::RenderCore
 	extern HWND r_hwnd;
 #endif // _WIN32
 	extern bool rrrr_runningFlag;
+	extern std::function<void(void)> R_GetGpuError;
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 

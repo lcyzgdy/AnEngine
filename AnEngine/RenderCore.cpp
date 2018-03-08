@@ -31,6 +31,10 @@ namespace AnEngine::RenderCore
 #endif // _WIN32
 
 	bool rrrr_runningFlag;
+	function<void(void)> R_GetGpuError = [=]()
+	{
+		var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
+	};
 
 	namespace CommonState
 	{
@@ -156,8 +160,8 @@ namespace AnEngine::RenderCore
 		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(r_graphicsCard[0]->GetDevice());;
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
 		{
-			CommandAllocator* allocator = new CommandAllocator();
-			GraphicsCommandAllocator::GetInstance()->Push(allocator);
+			//CommandAllocator* allocator = new CommandAllocator();
+			//GraphicsCommandAllocator::GetInstance()->Push(allocator);
 
 			ComPtr<ID3D12Resource> displayPlane;
 			ThrowIfFailed(r_swapChain_cp->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
@@ -167,7 +171,7 @@ namespace AnEngine::RenderCore
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
-		for (int i = 0; i < 1; i++)
+		/*for (int i = 0; i < 1; i++)
 		{
 			CommandFormatDesc desc;
 			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetOne()->GetAllocator();
@@ -175,7 +179,7 @@ namespace AnEngine::RenderCore
 			desc.pipelineState = nullptr;
 			CommandList* list = new CommandList(desc);
 			GraphicsCommandContext::GetInstance()->AddNew(list);
-		}
+		}*/
 	}
 
 	void CreateCommonState()
@@ -284,8 +288,9 @@ namespace AnEngine::RenderCore
 
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
 	{
-		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		//var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -306,19 +311,21 @@ namespace AnEngine::RenderCore
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
-		GraphicsCommandContext::GetInstance()->Push(commandList);
-		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
+		//GraphicsCommandContext::GetInstance()->Push(commandList);
+		//GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
+		GraphicsContext::Push(commandList, commandAllocator);
 	}
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		//srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
-		//r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
+		srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
+		r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		uint32_t frameIndex = r_frameIndex;
 		var frame = r_displayPlane[frameIndex]->GetResource();
 
-		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		//var commandList = GraphicsCommandContext::GetInstance()->GetOne();
+		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -346,7 +353,7 @@ namespace AnEngine::RenderCore
 		//iCommandList->ResourceBarrier(1, &resolveSrcToRenderTarget);
 		iCommandList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
-		iCommandList->Close();
+		ThrowIfFailed(iCommandList->Close(), R_GetGpuError);
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 #ifdef _DEBUG
 		if (frameIndex != r_frameIndex)
@@ -358,12 +365,13 @@ namespace AnEngine::RenderCore
 
 		r_fenceForDisplayPlane->GpuSignal(r_fenceValueForDisplayPlane[frameIndex]);
 		//r_fenceForDisplayPlane->CpuWait();
-		ThrowIfFailed(r_swapChain_cp->Present(0, 0));
+		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
 		srcBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 
-		GraphicsCommandContext::GetInstance()->Push(commandList);
-		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
+		GraphicsContext::Push(commandList, commandAllocator);
+		//GraphicsCommandContext::GetInstance()->Push(commandList);
+		//GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 	}
 }

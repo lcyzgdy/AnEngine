@@ -17,8 +17,8 @@ namespace AnEngine::RenderCore::Resource
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
 
-		iAllocator->Reset();
-		iList->Reset(iAllocator, nullptr);
+		ThrowIfFailed(iAllocator->Reset(), R_GetGpuError);
+		ThrowIfFailed(iList->Reset(iAllocator, nullptr), R_GetGpuError);
 
 		vector<ParticleVertex> vertices;
 		Randomize();
@@ -50,13 +50,13 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_RESOURCE_DESC uploadBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(dataSize);
 
 		ThrowIfFailed(device->CreateCommittedResource(&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &bufferDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer0)));
+			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer0)), R_GetGpuError);
 		ThrowIfFailed(device->CreateCommittedResource(&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &bufferDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer1)));
+			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer1)), R_GetGpuError);
 		ThrowIfFailed(device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &uploadBufferDesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer0Upload)));
+			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer0Upload)), R_GetGpuError);
 		ThrowIfFailed(device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &uploadBufferDesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer1Upload)));
+			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer1Upload)), R_GetGpuError);
 
 		D3D12_SUBRESOURCE_DATA particleData = {};
 		particleData.pData = reinterpret_cast<uint8_t*>(&data[0]);
@@ -79,7 +79,7 @@ namespace AnEngine::RenderCore::Resource
 		srvUavHeapDesc.NumDescriptors = DescriptorCount;
 		srvUavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		srvUavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		ThrowIfFailed(device->CreateDescriptorHeap(&srvUavHeapDesc, IID_PPV_ARGS(&m_srvUavHeap)));
+		ThrowIfFailed(device->CreateDescriptorHeap(&srvUavHeapDesc, IID_PPV_ARGS(&m_srvUavHeap)), R_GetGpuError);
 		m_srvUavHandle = m_srvUavHeap->GetCPUDescriptorHandleForHeapStart();
 		m_srvUavGpuHandle = m_srvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
@@ -117,7 +117,7 @@ namespace AnEngine::RenderCore::Resource
 		device->CreateUnorderedAccessView(m_particleBuffer0.Get(), nullptr, &uavDesc, uavHandle0);
 		device->CreateUnorderedAccessView(m_particleBuffer1.Get(), nullptr, &uavDesc, uavHandle1);
 
-		ThrowIfFailed(iList->Close());
+		ThrowIfFailed(iList->Close(), R_GetGpuError);
 		ID3D12CommandList* ppList[] = { iList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
 

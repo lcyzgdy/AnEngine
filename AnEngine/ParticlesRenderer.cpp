@@ -10,7 +10,7 @@ namespace AnEngine::Game
 {
 	void ParticlesRenderer::Simulate()
 	{
-		var[commandList, commandAllocator] = GraphicsContext::GetOne();
+		var[commandList, commandAllocator] = ComputeContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
 		ThrowIfFailed(iAllocator->Reset());
@@ -74,6 +74,16 @@ namespace AnEngine::Game
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
+
+		var[computeList, computeAllocator] = ComputeContext::GetOne();
+		var cList = computeList->GetCommandList();
+		var cAllocator = computeAllocator->GetAllocator();
+
+		ThrowIfFailed(iAllocator->Reset());
+		ThrowIfFailed(iList->Reset(iAllocator, nullptr));
+		ThrowIfFailed(cAllocator->Reset());
+		ThrowIfFailed(cList->Reset(cAllocator, nullptr));
+
 		m_particles = new SampleParticles();
 
 		{
@@ -201,8 +211,8 @@ namespace AnEngine::Game
 			computeCBData.RowPitch = bufferSize;
 			computeCBData.SlicePitch = computeCBData.RowPitch;
 
-			UpdateSubresources<1>(iList, m_constantBufferCS.Get(), constantBufferCSUpload.Get(), 0, 0, 1, &computeCBData);
-			iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_constantBufferCS.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+			UpdateSubresources<1>(cList, m_constantBufferCS.Get(), constantBufferCSUpload.Get(), 0, 0, 1, &computeCBData);
+			cList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_constantBufferCS.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 		}	// 创建计算着色器的常量缓冲区
 		{
 			uint32_t constantBufferGSSize = sizeof(ConstantBufferGS) * r_DefaultFrameCount_const;
@@ -216,8 +226,16 @@ namespace AnEngine::Game
 			ZeroMemory(m_pConstantBufferGSData, constantBufferGSSize);
 		}	// 创建几何着色器的常量缓冲区ThrowIfFailed(commandList->Close());
 
-		ID3D12CommandList* ppCommandLists[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		{
+			ThrowIfFailed(iList->Close(), R_GetGpuError);
+			ID3D12CommandList* ppCommandLists[] = { iList };
+			r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		}
+		{
+			ThrowIfFailed(cList->Close(), R_GetGpuError);
+			ID3D12CommandList* ppCommandList[] = { cList };
+			r_graphicsCard[0]->ExecuteSync(_countof(ppCommandList), ppCommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+		}
 
 		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 		{
@@ -234,6 +252,7 @@ namespace AnEngine::Game
 		}
 
 		GraphicsContext::Push(commandList, commandAllocator);
+		ComputeContext::Push(computeList, computeAllocator);
 	}
 
 	void ParticlesRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
@@ -264,7 +283,7 @@ namespace AnEngine::Game
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_renderTarget->GetRTV());
 		iList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-		iList->ClearRenderTargetView(rtvHandle, r_ClearColor_const_float, 0, nullptr);
+		//iList->ClearRenderTargetView(rtvHandle, r_ClearColor_const_float, 0, nullptr);
 
 		float viewportHeight = static_cast<float>(static_cast<uint32_t>(m_viewport.Height));
 		float viewportWidth = static_cast<float>(static_cast<uint32_t>(m_viewport.Width));

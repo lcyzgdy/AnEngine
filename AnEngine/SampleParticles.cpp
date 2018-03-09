@@ -8,6 +8,8 @@ using namespace DirectX;
 
 namespace AnEngine::RenderCore::Resource
 {
+	const float SampleParticles::ParticleSpread = 400.0f;
+
 	SampleParticles::SampleParticles()
 	{
 		var device = r_graphicsCard[0]->GetDevice();
@@ -15,15 +17,15 @@ namespace AnEngine::RenderCore::Resource
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
 
-		iAllocator->Reset();
-		iList->Reset(iAllocator, nullptr);
+		ThrowIfFailed(iAllocator->Reset(), R_GetGpuError);
+		ThrowIfFailed(iList->Reset(iAllocator, nullptr), R_GetGpuError);
 
 		vector<ParticleVertex> vertices;
 		Randomize();
 		vertices.resize(ParticleCount);
 		for (int i = 0; i < ParticleCount; i++)
 		{
-			vertices[i].color = XMFLOAT4(Random(), Random(), Random(), 1.0f);
+			vertices[i].color = XMFLOAT4(Random(0.0f, 1.0f), Random(0.0f, 1.0f), Random(0.0f, 1.0f), 1.0f);
 		}
 		const uint32_t bufferSize = ParticleCount * sizeof(ParticleVertex);
 
@@ -32,7 +34,7 @@ namespace AnEngine::RenderCore::Resource
 		vertexData.RowPitch = bufferSize;
 		vertexData.SlicePitch = vertexData.RowPitch;
 
-		m_vertexBuffer = new VertexBuffer(vertexData, bufferSize, sizeof(Particle));
+		m_vertexBuffer = new VertexBuffer(vertexData, bufferSize, sizeof(ParticleVertex));
 
 		vector<Particle> data;
 		data.resize(ParticleCount);
@@ -48,23 +50,40 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_RESOURCE_DESC uploadBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(dataSize);
 
 		ThrowIfFailed(device->CreateCommittedResource(&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &bufferDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer)));
+			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer0)), R_GetGpuError);
+		ThrowIfFailed(device->CreateCommittedResource(&defaultHeapProperties, D3D12_HEAP_FLAG_NONE, &bufferDesc,
+			D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_particleBuffer1)), R_GetGpuError);
 		ThrowIfFailed(device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &uploadBufferDesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBufferUpload)));
+			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer0Upload)), R_GetGpuError);
+		ThrowIfFailed(device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &uploadBufferDesc,
+			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_particleBuffer1Upload)), R_GetGpuError);
 
 		D3D12_SUBRESOURCE_DATA particleData = {};
 		particleData.pData = reinterpret_cast<uint8_t*>(&data[0]);
 		particleData.RowPitch = dataSize;
 		particleData.SlicePitch = particleData.RowPitch;
 
-		UpdateSubresources<1>(iList, m_particleBuffer.Get(), m_particleBufferUpload.Get(), 0, 0, 1, &particleData);
-		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_particleBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
+		UpdateSubresources<1>(iList, m_particleBuffer0.Get(), m_particleBuffer0Upload.Get(), 0, 0, 1, &particleData);
+		UpdateSubresources<1>(iList, m_particleBuffer1.Get(), m_particleBuffer1Upload.Get(), 0, 0, 1, &particleData);
+		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_particleBuffer0.Get(),
+			D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
+		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_particleBuffer1.Get(),
+			D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
 
-		var[srvUavHeap, srvUavHandle, srvUavGpuHandle] = DescriptorHeapAllocator::GetInstance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		/*var[srvUavHeap, srvUavHandle, srvUavGpuHandle] = DescriptorHeapAllocator::GetInstance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 			DescriptorCount, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
 		m_srvUavHeap = srvUavHeap;
 		m_srvUavHandle = srvUavHandle;
-		m_srvUavGpuHandle = m_srvUavGpuHandle;
+		m_srvUavGpuHandle = srvUavGpuHandle;*/
+		D3D12_DESCRIPTOR_HEAP_DESC srvUavHeapDesc = {};
+		srvUavHeapDesc.NumDescriptors = DescriptorCount;
+		srvUavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		srvUavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		ThrowIfFailed(device->CreateDescriptorHeap(&srvUavHeapDesc, IID_PPV_ARGS(&m_srvUavHeap)), R_GetGpuError);
+		m_srvUavHandle = m_srvUavHeap->GetCPUDescriptorHandleForHeapStart();
+		m_srvUavGpuHandle = m_srvUavHeap->GetGPUDescriptorHandleForHeapStart();
+
+		//srvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 		uint32_t srvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -77,8 +96,12 @@ namespace AnEngine::RenderCore::Resource
 		srvDesc.Buffer.StructureByteStride = sizeof(Particle);
 		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
+		//CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle0(m_srvUavHandle, SrvParticlePosVelo0, srvUavDescriptorSize);
+
 		CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle0(m_srvUavHandle, SrvParticlePosVelo0, srvUavDescriptorSize);
-		device->CreateShaderResourceView(m_particleBuffer.Get(), &srvDesc, srvHandle0);
+		CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle1(m_srvUavHandle, SrvParticlePosVelo1, srvUavDescriptorSize);
+		device->CreateShaderResourceView(m_particleBuffer0.Get(), &srvDesc, srvHandle0);
+		device->CreateShaderResourceView(m_particleBuffer1.Get(), &srvDesc, srvHandle1);
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 		uavDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -90,7 +113,13 @@ namespace AnEngine::RenderCore::Resource
 		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE uavHandle0(m_srvUavHandle, UavParticlePosVelo0, srvUavDescriptorSize);
-		device->CreateUnorderedAccessView(m_particleBuffer.Get(), nullptr, &uavDesc, uavHandle0);
+		CD3DX12_CPU_DESCRIPTOR_HANDLE uavHandle1(m_srvUavHandle, UavParticlePosVelo1, srvUavDescriptorSize);
+		device->CreateUnorderedAccessView(m_particleBuffer0.Get(), nullptr, &uavDesc, uavHandle0);
+		device->CreateUnorderedAccessView(m_particleBuffer1.Get(), nullptr, &uavDesc, uavHandle1);
+
+		ThrowIfFailed(iList->Close(), R_GetGpuError);
+		ID3D12CommandList* ppList[] = { iList };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -105,12 +134,12 @@ namespace AnEngine::RenderCore::Resource
 		return ParticleCount;
 	}
 
-	ID3D12DescriptorHeap * SampleParticles::GetDescriptorHeap()
+	ID3D12DescriptorHeap* SampleParticles::GetDescriptorHeap()
 	{
-		return m_srvUavHeap;
+		return m_srvUavHeap.Get();
 	}
 
-	tuple<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> SampleParticles::GetHandle()
+	tuple<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> SampleParticles::GetSrvHandle()
 	{
 		return { m_srvUavHandle, m_srvUavGpuHandle };
 	}
@@ -122,14 +151,32 @@ namespace AnEngine::RenderCore::Resource
 
 	ID3D12Resource * SampleParticles::GetSrvUav()
 	{
-		return m_particleBuffer.Get();
+		if (m_srvIndex == 0) return m_particleBuffer0.Get();
+		else return m_particleBuffer1.Get();
+	}
+
+	void SampleParticles::SwapSrvUavIndex()
+	{
+		m_srvIndex = 1 - m_srvIndex;
+	}
+
+	std::tuple<uint32_t, uint32_t, ID3D12Resource*> SampleParticles::GetSrvIndexAndUavResource()
+	{
+		if (m_srvIndex == 0)
+		{
+			return { SrvParticlePosVelo0, UavParticlePosVelo1, m_particleBuffer1.Get() };
+		}
+		else
+		{
+			return { SrvParticlePosVelo1, UavParticlePosVelo0, m_particleBuffer0.Get() };
+		}
 	}
 
 	void SampleParticles::InitializeParticles(Particle* _pParticles, const XMFLOAT3& _center, const XMFLOAT4& _velocity, float _spread,
 		uint32_t _particlesNum)
 	{
 		Randomize();
-		for (int i = 0; i < _particlesNum; i++)
+		for (uint32_t i = 0; i < _particlesNum; i++)
 		{
 			XMFLOAT3 delta(_spread, _spread, _spread);
 

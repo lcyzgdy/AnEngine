@@ -4,7 +4,7 @@
 
 namespace AnEngine::RenderCore
 {
-	Fence::Fence(ID3D12CommandQueue* targetQueue) : m_fenceValue(2), m_curFenceValue(0)
+	Fence::Fence(ID3D12CommandQueue* targetQueue) : m_fenceValue(0), m_curFenceValue(0)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 		m_commandQueue = targetQueue;

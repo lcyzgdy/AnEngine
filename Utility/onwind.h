@@ -12,6 +12,7 @@
 #include<memory>
 #include<string>
 #include<vector>
+#include<functional>
 
 #define var auto
 #define let auto
@@ -137,6 +138,15 @@ inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
 	{
+		throw std::exception("一个奇怪的错误");
+	}
+}
+
+inline void ThrowIfFailed(HRESULT hr, std::function<void(void)> f)
+{
+	if (FAILED(hr))
+	{
+		f();
 		throw std::exception("一个奇怪的错误");
 	}
 }

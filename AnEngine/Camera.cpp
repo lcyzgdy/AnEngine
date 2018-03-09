@@ -37,11 +37,12 @@ namespace AnEngine::Game
 
 	void Camera::Update()
 	{
-		/*lock_guard<mutex> lock(m_rtvMutex);
+		this_thread::sleep_for(1ms);
+		lock_guard<mutex> lock(m_rtvMutex);
 		m_colorBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 
-		var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
+		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
@@ -63,8 +64,9 @@ namespace AnEngine::Game
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 		m_colorBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
-		GraphicsCommandContext::GetInstance()->Push(commandList);
-		GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);*/
+		GraphicsContext::Push(commandList, commandAllocator);
+		//GraphicsCommandContext::GetInstance()->Push(commandList);
+		//GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 	}
 
 	void Camera::AfterUpdate()

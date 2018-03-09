@@ -22,11 +22,41 @@ namespace AnEngine::RenderCore
 			delete list;
 			m_pool.pop();
 		}
-		for (var i in m_readyQueue)
+		while (!m_alloPool.empty())
 		{
-			delete i;
+			var list = m_alloPool.front();
+			delete list;
+			m_alloPool.pop();
 		}
-		m_readyQueue.clear();
+	}
+
+	std::tuple<CommandList*, CommandAllocator*> GraphicsCommandContext::GetOne()
+	{
+		lock_guard<mutex> lockr(m_readerMutex);
+		if (m_pool.size() <= 0)
+		{
+			var allocator = new CommandAllocator();
+			CommandFormatDesc desc;
+			desc.allocator = allocator->GetAllocator();
+			desc.nodeMask = 1;
+			desc.pipelineState = nullptr;
+			CommandList* list = new CommandList(desc);
+			return { list ,allocator };
+		}
+		lock_guard<mutex> lock(m_mutex);
+		var list = m_pool.front();
+		var allocator = m_alloPool.front();
+		m_pool.pop();
+		m_alloPool.pop();
+		return { list, allocator };
+	}
+
+	void GraphicsCommandContext::Push(CommandList* list, CommandAllocator* allo)
+	{
+		lock_guard<mutex> lockw(m_writerMutex);
+		lock_guard<mutex> lock(m_mutex);
+		m_pool.push(list);
+		m_alloPool.push(allo);
 	}
 
 	/*GraphicsCommandContext* GraphicsCommandContext::GetInstance()
@@ -38,16 +68,18 @@ namespace AnEngine::RenderCore
 		return m_uniqueObj;
 	}*/
 
-	CommandList* GraphicsCommandContext::GetOne()
+	/*CommandList* GraphicsCommandContext::GetOne()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
 		if (m_pool.size() <= 0)
 		{
+			var allocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 			CommandFormatDesc desc;
-			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetOne()->GetAllocator();
+			desc.allocator = allocator->GetAllocator();
 			desc.nodeMask = 1;
 			desc.pipelineState = nullptr;
 			CommandList* list = new CommandList(desc);
+			GraphicsCommandAllocator::GetInstance()->Push(allocator);
 			return list;
 		}
 		//lock_guard<mutex> lock(m_mutex);
@@ -79,9 +111,9 @@ namespace AnEngine::RenderCore
 			m_pool.emplace(i);
 		}
 		m_readyQueue.clear();
-	}
+	}*/
 }
-
+/*
 namespace AnEngine::RenderCore
 {
 	GraphicsCommandAllocator* GraphicsCommandAllocator::m_uniqueObj;
@@ -146,19 +178,21 @@ namespace AnEngine::RenderCore
 	{
 	}
 }
-
+*/
 namespace AnEngine::RenderCore::Private
 {
-	CommandList* ComputeCommandContext::GetOne()
+	/*CommandList* ComputeCommandContext::GetOne()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
 		if (m_pool.size() <= 0)
 		{
+			var allocator = ComputeCommandAllocator::GetInstance()->GetOne();
 			CommandFormatDesc desc;
-			desc.allocator = ComputeCommandAllocator::GetInstance()->GetOne()->GetAllocator();
+			desc.allocator = allocator->GetAllocator();
 			desc.nodeMask = 1;
 			desc.pipelineState = nullptr;
 			CommandList* list = new CommandList(desc, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			ComputeCommandAllocator::GetInstance()->Push(allocator);
 			return list;
 		}
 		//lock_guard<mutex> lock(m_mutex);
@@ -177,20 +211,37 @@ namespace AnEngine::RenderCore::Private
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
 		m_pool.emplace(list);
-	}
+	}*/
 
-	void ComputeCommandContext::PopulateFinished()
+	std::tuple<CommandList*, CommandAllocator*> ComputeCommandContext::GetOne()
 	{
-		lock_guard<std::mutex> lock1(m_readerMutex);
-		lock_guard<std::mutex> lock2(m_writerMutex);
-		for (CommandList* i in m_readyQueue)
+		lock_guard<mutex> lockr(m_readerMutex);
+		if (m_pool.size() <= 0)
 		{
-			m_pool.emplace(i);
+			var allocator = new CommandAllocator(D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			CommandFormatDesc desc;
+			desc.allocator = allocator->GetAllocator();
+			desc.nodeMask = 1;
+			desc.pipelineState = nullptr;
+			CommandList* list = new CommandList(desc, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			return { list ,allocator };
 		}
-		m_readyQueue.clear();
+		lock_guard<mutex> lock(m_mutex);
+		var list = m_pool.front();
+		var allocator = m_alloPool.front();
+		m_pool.pop();
+		m_alloPool.pop();
+		return { list, allocator };
+	}
+	void ComputeCommandContext::Push(CommandList* list, CommandAllocator* allo)
+	{
+		lock_guard<mutex> lockw(m_writerMutex);
+		lock_guard<mutex> lock(m_mutex);
+		m_pool.push(list);
+		m_alloPool.push(allo);
 	}
 }
-
+/*
 namespace AnEngine::RenderCore::Private
 {
 	CommandAllocator* ComputeCommandAllocator::GetOne()
@@ -223,35 +274,33 @@ namespace AnEngine::RenderCore::Private
 	{
 	}
 }
-
+*/
 namespace AnEngine::RenderCore
 {
 	using namespace AnEngine::RenderCore::Private;
 
 	tuple<CommandList*, CommandAllocator*> ComputeContext::GetOne()
 	{
-		var pList = ComputeCommandContext::GetInstance()->GetOne();
-		var pAllocator = ComputeCommandAllocator::GetInstance()->GetOne();
-		return { pList, pAllocator };
+		//var pList = ComputeCommandContext::GetInstance()->GetOne();
+		//var pAllocator = ComputeCommandAllocator::GetInstance()->GetOne();
+		//return { pList, pAllocator };
+		return move(GraphicsCommandContext::GetInstance()->GetOne());
 	}
 
 	void ComputeContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
-		ComputeCommandContext::GetInstance()->Push(list);
-		ComputeCommandAllocator::GetInstance()->Push(allocator);
+		//ComputeCommandContext::GetInstance()->Push(list);
+		//ComputeCommandAllocator::GetInstance()->Push(allocator);
+		GraphicsCommandContext::GetInstance()->Push(list, allocator);
 	}
 
 	tuple<CommandList*, CommandAllocator*> GraphicsContext::GetOne()
 	{
-		var pList = GraphicsCommandContext::GetInstance()->GetOne();
-		var pAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
-		return { pList, pAllocator };
-		//return make_tuple(pList, pAllocator);
+		return move(GraphicsCommandContext::GetInstance()->GetOne());
 	}
 
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
-		GraphicsCommandContext::GetInstance()->Push(list);
-		GraphicsCommandAllocator::GetInstance()->Push(allocator);
+		GraphicsCommandContext::GetInstance()->Push(list, allocator);
 	}
 }

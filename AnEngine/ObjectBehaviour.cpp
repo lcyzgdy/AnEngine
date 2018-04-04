@@ -14,7 +14,8 @@ namespace AnEngine::Game
 		if (m_active) //BeginUpdate();
 		{
 			OnActive();
-			Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 	}
 
@@ -151,7 +152,8 @@ namespace AnEngine::Game
 		{
 			OnActive();
 			//BeginUpdate();
-			Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 		else
 		{

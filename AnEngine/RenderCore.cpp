@@ -318,7 +318,7 @@ namespace AnEngine::RenderCore
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
+		//srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 		r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		uint32_t frameIndex = r_frameIndex;
 		var frame = r_displayPlane[frameIndex]->GetResource();

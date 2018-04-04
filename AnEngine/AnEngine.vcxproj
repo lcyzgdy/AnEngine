@@ -187,6 +187,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
+    <ClInclude Include="MultiBuffer.hpp" />
     <ClInclude Include="NBody.h" />
     <ClInclude Include="ObjectBehaviour.h" />
     <ClInclude Include="ParticlesRenderer.h" />

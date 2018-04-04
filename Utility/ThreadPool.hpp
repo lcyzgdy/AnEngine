@@ -13,89 +13,98 @@
 #include<stdexcept>
 #include<future>
 
-namespace Utility
+namespace Utility::ThreadPool
 {
-	class ThreadPool : NonCopyable
+	namespace Private
 	{
-	private:
-		using Task = std::function<void()>;
-
-		std::mutex m_mutex;
-		std::vector<std::thread> m_pool;
-		std::queue<Task> m_tasks;
-		std::condition_variable m_cvTask;
-
-		std::atomic_int m_idleThreadNum;
-		const uint32_t m_cnt_maxThreadNum = std::thread::hardware_concurrency();
-		std::atomic_bool m_stopped;
-
-
-	public:
-		ThreadPool() = default;
-
-		ThreadPool(int size)
+		class ThreadPool : NonCopyable
 		{
-			m_idleThreadNum = (size < 1) ? 1 : size;
-			for (int i = 0; i < m_idleThreadNum; i++)
+		private:
+			using Task = std::function<void()>;
+
+			std::mutex m_mutex;
+			std::vector<std::thread> m_pool;
+			std::queue<Task> m_tasks;
+			std::condition_variable m_cvTask;
+
+			std::atomic_int m_idleThreadNum;
+			const uint32_t m_cnt_maxThreadNum = std::thread::hardware_concurrency();
+			std::atomic_bool m_stopped;
+
+
+		public:
+			ThreadPool() = default;
+
+			ThreadPool(int size)
 			{
-				m_pool.emplace_back([this]()
+				m_idleThreadNum = (size < 1) ? 1 : size;
+				for (int i = 0; i < m_idleThreadNum; i++)
 				{
-					std::function<void()> task;
+					m_pool.emplace_back([this]()
 					{
-						std::unique_lock<std::mutex> lock(this->m_mutex);
-						this->m_cvTask.wait(lock, [this]()
+						std::function<void()> task;
 						{
-							return this->m_stopped.load() || !this->m_tasks.empty();
-						});
-						if (this->m_stopped && this->m_tasks.empty())
-						{
-							return;
+							std::unique_lock<std::mutex> lock(this->m_mutex);
+							this->m_cvTask.wait(lock, [this]()
+							{
+								return this->m_stopped.load() || !this->m_tasks.empty();
+							});
+							if (this->m_stopped && this->m_tasks.empty())
+							{
+								return;
+							}
+							task = move(this->m_tasks.front());
+							this->m_tasks.pop();
 						}
-						task = move(this->m_tasks.front());
-						this->m_tasks.pop();
-					}
-					m_idleThreadNum--;
-					task();
-					m_idleThreadNum++;
-				});
+						m_idleThreadNum--;
+						task();
+						m_idleThreadNum++;
+					});
+				}
 			}
-		}
 
-		~ThreadPool()
-		{
-			m_stopped.store(true);
-			m_cvTask.notify_all();
-			for (size_t i = 0; i < m_pool.size(); i++)
+			~ThreadPool()
 			{
-				m_pool[i].join();
+				m_stopped.store(true);
+				m_cvTask.notify_all();
+				for (size_t i = 0; i < m_pool.size(); i++)
+				{
+					m_pool[i].join();
+				}
 			}
-		}
 
-		int GetIdleThreadNum()
-		{
-			return m_idleThreadNum;
-		}
-
-		template<typename F, typename ... Args>
-		var Commit(F && f, Args && ...args)
-		{
-			if (m_stopped.load())
+			int GetIdleThreadNum()
 			{
-				throw exception("Thread pool is stopped");
+				return m_idleThreadNum;
 			}
-			using FuncType = decltype(f(args ...));
-			var task = std::make_shared<std::packaged_task<FuncType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-			std::future<FuncType> awaitFuture = task->get_future();
-			{
-				std::lock_guard<std::mutex> lock(m_mutex);
-				m_tasks.emplace([task] { (*task)(); });
-			}
-			m_cvTask.notify_one();
-			return awaitFuture;
-		}
-	};
 
-	static ThreadPool u_s_threadPool(std::thread::hardware_concurrency());
+			template<typename F, typename ... Args>
+			var Commit(F && f, Args && ...args)
+			{
+				if (m_stopped.load())
+				{
+					throw exception("Thread pool is stopped");
+				}
+				using FuncType = decltype(f(args ...));
+				var task = std::make_shared<std::packaged_task<FuncType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+				std::future<FuncType> awaitFuture = task->get_future();
+				{
+					std::lock_guard<std::mutex> lock(m_mutex);
+					m_tasks.emplace([task] { (*task)(); });
+				}
+				m_cvTask.notify_one();
+				return awaitFuture;
+			}
+		};
+
+		static ThreadPool u_s_threadPool(std::thread::hardware_concurrency());
+	}
+
+	template<typename F, typename ... Args>
+	var Commit(F && f, Args && ...args)
+	{
+		return Private::u_s_threadPool.Commit(f, args...);
+	}
 }
 #endif // !__THREADPOOL_H__
 

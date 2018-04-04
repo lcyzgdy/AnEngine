@@ -282,8 +282,7 @@ namespace AnEngine::Game
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_renderTarget->GetRTV());
 		iList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-
-		//iList->ClearRenderTargetView(rtvHandle, r_ClearColor_const_float, 0, nullptr);
+		iList->ClearRenderTargetView(rtvHandle, r_ClearColor_const_float, 0, nullptr);
 
 		float viewportHeight = static_cast<float>(static_cast<uint32_t>(m_viewport.Height));
 		float viewportWidth = static_cast<float>(static_cast<uint32_t>(m_viewport.Width));

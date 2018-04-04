@@ -27,9 +27,9 @@ namespace AnEngine::RenderCore::Resource
 	public:
 		GpuResource(); // For inheritance
 		GpuResource(ID3D12Resource* p_resource, D3D12_RESOURCE_STATES currentState);
-		~GpuResource() = default;
+		virtual ~GpuResource();
 
-		virtual void Release();
+		//virtual void Release();
 
 		ID3D12Resource* operator->();
 		const ID3D12Resource* operator->() const;

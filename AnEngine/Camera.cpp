@@ -39,7 +39,7 @@ namespace AnEngine::Game
 	{
 		this_thread::sleep_for(1ms);
 		lock_guard<mutex> lock(m_rtvMutex);
-		m_colorBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
+		//m_colorBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();

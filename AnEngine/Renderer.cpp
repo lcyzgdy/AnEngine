@@ -33,7 +33,7 @@ namespace AnEngine::Game
 		var iAllocator = commandAllocator->GetAllocator();
 		if (m_renderTarget != nullptr)
 		{
-			m_renderTarget->GetFence()->CpuWait(0);
+			//m_renderTarget->GetFence()->CpuWait(0);
 			OnRender(iList, iAllocator);
 			m_renderTarget->GetFence()->GpuSignal(0);
 		}

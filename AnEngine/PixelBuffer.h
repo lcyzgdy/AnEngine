@@ -42,7 +42,7 @@ namespace AnEngine::RenderCore::Resource
 	public:
 		PixelBuffer();
 		PixelBuffer(uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format);
-		~PixelBuffer() = default;
+		//virtual ~PixelBuffer() = default;
 
 		uint32_t GetWidth();
 		uint32_t GetHeight();

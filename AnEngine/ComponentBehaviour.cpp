@@ -39,7 +39,7 @@ namespace AnEngine::Game
 	{
 		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
-		Utility::u_s_threadPool.Commit(std::bind(&ComponentBehaviour::OnUpdate, this));
+		Utility::ThreadPool::Commit(std::bind(&ComponentBehaviour::OnUpdate, this));
 	}
 
 	void ComponentBehaviour::OnDisable()

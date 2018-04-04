@@ -24,10 +24,8 @@ namespace AnEngine::RenderCore::Resource
 		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
-	void GpuResource::Release()
+	GpuResource::~GpuResource()
 	{
-		//delete m_resource_cp.Get();
-		//m_resource_cp = nullptr;
 		m_gpuVirtualAddress = RenderCore::Resource::GpuVirtualAddressNull;
 		if (m_p_userAllocatedMemory != nullptr)
 		{
@@ -36,6 +34,12 @@ namespace AnEngine::RenderCore::Resource
 		}
 		delete m_fence;
 	}
+
+	/*void GpuResource::Release()
+	{
+		//delete m_resource_cp.Get();
+		//m_resource_cp = nullptr;
+	}*/
 
 	ID3D12Resource* GpuResource::operator->()
 	{

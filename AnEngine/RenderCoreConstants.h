@@ -14,6 +14,16 @@ namespace AnEngine::RenderCore
 	static const bool r_IsUseWarpDevice_const = false;
 	static const D3D_FEATURE_LEVEL r_MinD3DFeatureLevel_const = D3D_FEATURE_LEVEL_11_0;
 	static const D3D_FEATURE_LEVEL r_D3DFeatureLevelWithCreatorUpdate_const = D3D_FEATURE_LEVEL_12_1;
+
+	enum EngineType
+	{
+		Cpu,
+		Render,
+		Cpoy,
+		Compute,
+		Encode,
+		Decode
+	};
 }
 
 #endif // !__RENDERCORECONSTANTS_H__

@@ -299,9 +299,9 @@ namespace AnEngine::Game
 
 		ID3D12CommandList* ppcommandList[] = { iList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_renderTarget->GetFence()->GpuSignal(0);
+		//m_renderTarget->GetFence()->GpuSignal(0);
 		m_srvUavFenceValue++;
-		m_graphicsQueue->Signal(m_srvUavFence.Get(), m_srvUavFenceValue);
+		ThrowIfFailed(m_graphicsQueue->Signal(m_srvUavFence.Get(), m_srvUavFenceValue));
 	}
 
 	void ParticlesRenderer::Update()
@@ -316,11 +316,11 @@ namespace AnEngine::Game
 		uint8_t* destination = m_pConstantBufferGSData + sizeof(ConstantBufferGS);
 		memcpy(destination, &vConstantBufferGS, sizeof(ConstantBufferGS));
 
-		m_computeQueue->Wait(m_srvUavFence.Get(), m_srvUavFenceValue);
+		ThrowIfFailed(m_computeQueue->Wait(m_srvUavFence.Get(), m_srvUavFenceValue));
 		Simulate();
 		m_particles->SwapSrvUavIndex();
 		m_srvUavFenceValue++;
-		m_computeQueue->Signal(m_srvUavFence.Get(), m_srvUavFenceValue);
+		ThrowIfFailed(m_computeQueue->Signal(m_srvUavFence.Get(), m_srvUavFenceValue));
 	}
 
 	void ParticlesRenderer::Destory()

@@ -2,7 +2,7 @@
 #include"Screen.h"
 #include"CommandContext.h"
 #include"DescriptorHeap.hpp"
-#include"Fence.h"
+#include"Fence.hpp"
 #include"ThreadPool.hpp"
 #include"DTimer.h"
 #include"DebugLog.h"
@@ -319,7 +319,7 @@ namespace AnEngine::RenderCore
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
 		//srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
-		r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
+		//r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		uint32_t frameIndex = r_frameIndex;
 		var frame = r_displayPlane[frameIndex]->GetResource();
 
@@ -366,7 +366,7 @@ namespace AnEngine::RenderCore
 		r_fenceForDisplayPlane->GpuSignal(r_fenceValueForDisplayPlane[frameIndex]);
 		//r_fenceForDisplayPlane->CpuWait();
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
-		srcBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
+		//srcBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 

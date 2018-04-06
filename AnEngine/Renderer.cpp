@@ -35,7 +35,7 @@ namespace AnEngine::Game
 		{
 			//m_renderTarget->GetFence()->CpuWait(0);
 			OnRender(iList, iAllocator);
-			m_renderTarget->GetFence()->GpuSignal(0);
+			//m_renderTarget->GetFence()->GpuSignal(0);
 		}
 
 		GraphicsContext::Push(commandList, commandAllocator);
@@ -129,7 +129,7 @@ namespace AnEngine::Game
 
 	void TrangleRender::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		m_renderTarget->GetFence()->CpuWait(Timer::GetTotalTicks());
+		//m_renderTarget->GetFence()->CpuWait(Timer::GetTotalTicks());
 
 		iList->Reset(iAllocator, m_pso->GetPSO());
 
@@ -152,12 +152,12 @@ namespace AnEngine::Game
 
 		iList->ResourceBarrier(1, &renderTargetToCommon);
 
-		iList->Close();
+		ThrowIfFailed(iList->Close());
 
 		ID3D12CommandList* ppcommandList[] = { iList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
+		//m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
 	}
 
 	void TrangleRender::Destory()

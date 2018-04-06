@@ -62,7 +62,7 @@ namespace AnEngine::Game
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_colorBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
+		//m_colorBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
 
 		GraphicsContext::Push(commandList, commandAllocator);
 		//GraphicsCommandContext::GetInstance()->Push(commandList);
@@ -74,7 +74,8 @@ namespace AnEngine::Game
 		//RenderColorBuffer(m_colorBuffer);
 		if (m_postProcessShader != nullptr) PostProcess();
 		//this_thread::sleep_for(std::chrono::microseconds(1));
-		BlendBuffer(m_colorBuffer);
+		BlendBuffer(m_colorBuffers.GetFront());
+		m_colorBuffers.Swap();
 	}
 
 	void Camera::OnInvalid()
@@ -100,6 +101,12 @@ namespace AnEngine::Game
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 		m_colorBuffer->SetAsRenderTargetView();
 		m_depthBuffer = new DepthBuffer(0, 0);
+
+		m_colorBuffers.ManageBuffer(m_colorBuffer);
+		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		colorBuffer->SetAsRenderTargetView();
+		m_colorBuffers.ManageBuffer(colorBuffer);
 	}
 
 	Camera::Camera(wstring&& name) : ObjectBehaviour(name), m_clearFlag(ClearFlags::SkyBox)
@@ -110,6 +117,12 @@ namespace AnEngine::Game
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 		m_colorBuffer->SetAsRenderTargetView();
 		m_depthBuffer = new DepthBuffer(0, 0);
+
+		m_colorBuffers.ManageBuffer(m_colorBuffer);
+		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		colorBuffer->SetAsRenderTargetView();
+		m_colorBuffers.ManageBuffer(colorBuffer);
 	}
 
 	Camera::Camera(wstring&& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
@@ -119,6 +132,12 @@ namespace AnEngine::Game
 		m_colorBuffer->SetClearColor(Color::Blue);
 		m_colorBuffer->SetAsRenderTargetView();
 		m_depthBuffer = new DepthBuffer(0, 0);
+
+		m_colorBuffers.ManageBuffer(m_colorBuffer);
+		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		colorBuffer->SetAsRenderTargetView();
+		m_colorBuffers.ManageBuffer(colorBuffer);
 	}
 
 	Camera::Camera(const std::wstring& name, ClearFlags clearFlag) : ObjectBehaviour(name), m_clearFlag(clearFlag)
@@ -128,31 +147,38 @@ namespace AnEngine::Game
 		m_colorBuffer->SetClearColor(Color::Blue);
 		m_colorBuffer->SetAsRenderTargetView();
 		m_depthBuffer = new DepthBuffer(0, 0);
+
+		m_colorBuffers.ManageBuffer(m_colorBuffer);
+		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+		colorBuffer->SetAsRenderTargetView();
+		m_colorBuffers.ManageBuffer(colorBuffer);
 	}
 
 	Camera::~Camera()
 	{
 		if (m_colorBuffer)
 		{
-			m_colorBuffer->Release();
+			//m_colorBuffer->Release();
 			delete m_colorBuffer;
 			m_colorBuffer = nullptr;
 		}
 		if (m_depthBuffer)
 		{
-			m_depthBuffer->Release();
+			//m_depthBuffer->Release();
 			delete m_depthBuffer;
 			m_depthBuffer = nullptr;
 		}
 	}
 
-	RenderCore::Resource::ColorBuffer * Camera::GetColorBuffer()
+	ColorBuffer* Camera::GetColorBuffer()
 	{
 		//lock_guard<mutex> lock(m_rtvMutex);
-		return m_colorBuffer;
+		//return m_colorBuffer;
+		return m_colorBuffers.GetBack();
 	}
 
-	RenderCore::Resource::DepthBuffer * Camera::GetDepthBuffer()
+	DepthBuffer * Camera::GetDepthBuffer()
 	{
 		return m_depthBuffer;
 	}

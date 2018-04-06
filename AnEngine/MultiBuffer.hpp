@@ -2,7 +2,8 @@
 #ifndef __MULTIBUFFER_H__
 #define __MULTIBUFFER_H__
 
-#include "GpuResource.h"
+#include "ColorBuffer.h"
+#include "Fence.hpp"
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -10,11 +11,60 @@ namespace AnEngine::RenderCore::Resource
 	class MultiBuffer
 	{
 		T* m_buffer[n];
+		uint32_t m_index;
+		bool m_ok;
+
+		Fence* m_fence;
+		uint64_t m_fenceValues[n];
+		HANDLE m_fenceEvent;
 
 	public:
-		MultiBuffer()
+		MultiBuffer() : m_index(0), m_ok(false)
 		{
+		}
 
+		~MultiBuffer()
+		{
+			delete[] m_buffer;
+		}
+
+		void ManageBuffer(T* buffer)
+		{
+			if (m_ok) throw MultiBufferFullException();
+			m_buffer[m_index] = buffer;
+			if (m_index == n - 1)
+			{
+				m_ok = true;
+				m_index = 0;
+				return;
+			}
+			m_index++;
+		}
+
+		void Swap()
+		{
+			m_index++;
+			m_index %= n;
+		}
+
+		T* GetFront()
+		{
+			return m_buffer[m_index];
+		}
+
+		T* GetBack()
+		{
+			return m_buffer[(m_index + 1) % n];
+		}
+	};
+
+#include<exception>
+
+	class MultiBufferFullException : std::exception
+	{
+	public:
+		MultiBufferFullException() : exception("Multi buffer is full")
+		{
 		}
 	};
 }

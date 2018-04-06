@@ -67,9 +67,6 @@
     <ClInclude Include="DynamicConstantBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Fence.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicCard.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -198,6 +195,12 @@
     </ClInclude>
     <ClInclude Include="MultiBuffer.hpp">
       <Filter>Graphics\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="UICore.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="MatrixBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="UICore.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

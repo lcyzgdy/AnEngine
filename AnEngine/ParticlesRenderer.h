@@ -5,7 +5,7 @@
 #include"Renderer.h"
 #include"VertexBuffer.h"
 #include"SampleParticles.h"
-#include"Fence.h"
+#include"Fence.hpp"
 #include"MCamera.h"
 
 namespace AnEngine::Game

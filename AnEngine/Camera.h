@@ -7,6 +7,7 @@
 #include "DepthBuffer.h"
 #include "ObjectBehaviour.h"
 #include "ShaderClass.h"
+#include "MultiBuffer.hpp"
 
 namespace AnEngine::Game
 {
@@ -33,6 +34,9 @@ namespace AnEngine::Game
 
 		RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
+
+		RenderCore::Resource::MultiBuffer<2, RenderCore::Resource::ColorBuffer> m_colorBuffers;
+		RenderCore::Resource::MultiBuffer<2, RenderCore::Resource::DepthBuffer> m_depthBuffers;
 
 		std::mutex m_rtvMutex;
 

@@ -177,7 +177,7 @@
     <ClInclude Include="DX.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
-    <ClInclude Include="Fence.h" />
+    <ClInclude Include="Fence.hpp" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />
@@ -209,6 +209,7 @@
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UICore.h" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VirtualBehaviour.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="UICore.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VirtualBehaviour.cpp" />
   </ItemGroup>

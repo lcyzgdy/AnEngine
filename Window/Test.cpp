@@ -19,10 +19,10 @@ void LoadScene()
 	TestCamera* camera = new TestCamera(L"Test Camera Object");
 	camera->AddComponent(testCamera);
 
-	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
-	//camera->AddComponent(trangleRender);
-	ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
-	camera->AddComponent(nBody);
+	TrangleRender* trangleRender = new TrangleRender(L"Test Render");
+	camera->AddComponent(trangleRender);
+	//ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
+	//camera->AddComponent(nBody);
 
 	testScene->AddObject(camera);
 	Driver::GetInstance()->BeginBehaviour(testScene);

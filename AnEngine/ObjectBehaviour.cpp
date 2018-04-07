@@ -8,29 +8,30 @@ namespace AnEngine::Game
 {
 	void ObjectBehaviour::OnInit()
 	{
-		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
+		if (m_scene == nullptr) m_scene = dynamic_cast<ObjectBehaviour*>(gameObject)->m_scene;
 		Start();
 		if (m_active) //BeginUpdate();
 		{
 			OnActive();
-			//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 	}
 
 	void ObjectBehaviour::OnUpdate()
 	{
-		//Update();
-		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
+		Debug::Log(name + L": Begin update");
 		while (m_active)
 		{
-			//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 			lock_guard<mutex> lock(m_mutex);
 #if defined(_DEBUG) || defined(DEBUG)
 			BeforeUpdate();
+			m_scene->Wait();
 			Update();
+			m_scene->Wait();
 			AfterUpdate();
+			m_scene->Wait();
+			Debug::Log(name + to_wstring(m_active));
 #else 			
 			try
 			{
@@ -40,16 +41,15 @@ namespace AnEngine::Game
 			}
 			catch (exception e)
 			{
-				Debug::Debug::Log(e.what());
-			}
-#endif
+				Debug::Log(e.what());
 		}
+#endif
 	}
+}
 
 	void ObjectBehaviour::OnRelease()
 	{
 		m_active = false;
-		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
 		for (var i : m_component)
 		{
@@ -57,16 +57,7 @@ namespace AnEngine::Game
 			delete i;
 		}
 		Destory();
-		//m_scene->RemoveObject(this);
 	}
-
-	/*void ObjectBehaviour::BeginUpdate()
-	{
-		if (!m_active) throw std::exception("Object is not active");
-		//if (!m_enable) return;
-		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
-		Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
-	}*/
 
 	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
 	{
@@ -76,17 +67,15 @@ namespace AnEngine::Game
 	void ObjectBehaviour::BeforeUpdate()
 	{
 		if (!m_active) return;
-		//if (!m_enable) return;
-		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 	}
 
 	void ObjectBehaviour::AfterUpdate()
 	{
-		//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 	}
 
 	void ObjectBehaviour::Start()
 	{
+		Debug::Log(name + L": Start");
 	}
 
 	void ObjectBehaviour::OnActive()
@@ -103,9 +92,10 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Destory()
 	{
+		Debug::Log(name + L": Destory");
 	}
 
-	ObjectBehaviour::ObjectBehaviour(const std::wstring & name) : GameObject(name), m_active(true)
+	ObjectBehaviour::ObjectBehaviour(const std::wstring& name) : GameObject(name), m_active(true)
 	{
 	}
 
@@ -113,18 +103,17 @@ namespace AnEngine::Game
 	{
 	}
 
-	void ObjectBehaviour::AddComponent(ObjectBehaviour * component)
+	void ObjectBehaviour::AddComponent(ObjectBehaviour* component)
 	{
-		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
 		component->gameObject = this;
+		component->m_scene = this->m_scene;
 		m_component.emplace_back(component);
 	}
 
 	void ObjectBehaviour::RemoveComponent(ObjectBehaviour* component)
 	{
 		m_scene->RemoveObject(component);
-		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
 		for (var it = m_component.begin(); it != m_component.end(); ++it)
 		{
@@ -145,14 +134,11 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Active(bool b)
 	{
-		//lock_guard<recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
 		m_active = b;
 		if (b)
 		{
 			OnActive();
-			//BeginUpdate();
-			//Utility::u_s_threadPool.Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 		else

@@ -273,9 +273,6 @@
     <ClCompile Include="Screen.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
-    <ClCompile Include="DebugLog.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Driver.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -335,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="UICore.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLog.cpp">
+      <Filter>UTIL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

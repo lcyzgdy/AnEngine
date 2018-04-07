@@ -13,24 +13,19 @@ namespace AnEngine::Game
 
 	class ObjectBehaviour : public BaseBehaviour, public GameObject
 	{
+		friend class Scene;
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
 		virtual void OnRelease() override;
-		//virtual void BeforeUpdate() override;
-		//virtual void AfterUpdate() override;
 
 	protected:
 		bool m_active;
 		Scene* m_scene;
-		//std::recursive_mutex m_recursiveMutex;
-		//std::mutex m_mutex;
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_component;
-
-		//virtual void BeginUpdate();
 
 	protected:
 		// 物体刚刚被加入场景时调用

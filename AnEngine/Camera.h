@@ -32,7 +32,7 @@ namespace AnEngine::Game
 		ClearFlags m_clearFlag;
 		Color m_clearColor;
 
-		RenderCore::Resource::ColorBuffer* m_colorBuffer;
+		//RenderCore::Resource::ColorBuffer* m_colorBuffer;
 		RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
 		RenderCore::Resource::MultiBuffer<2, RenderCore::Resource::ColorBuffer> m_colorBuffers;
@@ -52,6 +52,7 @@ namespace AnEngine::Game
 
 		virtual void Start() override;
 		virtual void OnActive() override;
+		virtual void BeforeUpdate() override;
 		virtual void Update() override;
 		virtual void AfterUpdate() override;
 		virtual void OnInvalid() override;

@@ -44,20 +44,15 @@ namespace AnEngine::RenderCore
 {
 	extern bool r_enableHDROutput;
 
-	namespace Private
-	{
-		extern ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
-	}
-
 	extern vector<unique_ptr<GraphicsCard>> r_graphicsCard;
-	extern ComPtr<IDXGISwapChain3> r_swapChain_cp;
-	extern Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
+	//extern ComPtr<IDXGISwapChain3> r_swapChain_cp;
+	//extern Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	extern uint32_t r_frameIndex;
-	extern RootSignature r_rootSignature;
+	//extern RootSignature r_rootSignature;
 #ifdef _WIN32
 	extern HWND r_hwnd;
 #endif // _WIN32
-	extern bool rrrr_runningFlag;
+	//extern bool rrrr_runningFlag;
 	extern std::function<void(void)> R_GetGpuError;
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
@@ -68,8 +63,6 @@ namespace AnEngine::RenderCore
 	void RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 
 	void BlendBuffer(Resource::GpuResource* buffer);
-
-	//void ClearColorBuffer(Resource::ColorBuffer* destColorBuffer, )
 }
 
 

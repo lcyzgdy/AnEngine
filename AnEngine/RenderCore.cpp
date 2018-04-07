@@ -23,14 +23,17 @@ namespace AnEngine::RenderCore
 	uint32_t r_frameIndex;
 	uint64_t r_frameCount;
 
-	Fence* r_fenceForDisplayPlane;
+	//Fence* r_fenceForDisplayPlane;
+	ComPtr<ID3D12Fence> r_fence;
 	uint64_t r_fenceValueForDisplayPlane[r_SwapChainBufferCount_const];
+	HANDLE r_fenceEvent;
 
+	ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
 
-	bool rrrr_runningFlag;
+	//bool rrrr_runningFlag;
 	function<void(void)> R_GetGpuError = [=]()
 	{
 		var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
@@ -53,14 +56,10 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
-	namespace Private
-	{
-		ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
-	}
-
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	void InitializePipeline();
 	void PopulateCommandList();
+	void WaitForGpu();
 
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
@@ -75,38 +74,33 @@ namespace AnEngine::RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 #endif
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory_cp.GetAddressOf()));
+		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf()));
 
 
 		while (graphicCardCount--)
 		{
 			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
-			aRender->Initialize(Private::r_dxgiFactory_cp.Get(), true);
+			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
 		}
-		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>();
-		//rtv->Create(r_graphicsCard[0]->GetDevice());
 		DescriptorHeapAllocator::GetInstance();
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
 		InitializePipeline();
 		CreateCommonState();
 
-		r_fenceForDisplayPlane = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		//r_fenceForDisplayPlane = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		r_graphicsCard[0]->GetDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&r_fence));
 		memset(r_fenceValueForDisplayPlane, 0, sizeof(r_fenceValueForDisplayPlane));
+		r_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+		if (r_fenceEvent == NULL)
+		{
+			HRESULT_FROM_WIN32(GetLastError());
+		}
 		// 帧缓冲之间的资源同步
 
-		rrrr_runningFlag = true;
+		//rrrr_runningFlag = true;
 		r_frameCount = 0;
-		/*Utility::u_s_threadPool.Commit([=]
-		{
-			while (rrrr_runningFlag)
-			{
-				//this_thread::sleep_for(std::chrono::milliseconds(100 / 6));
-				PopulateCommandList();
-				Debug::Debug::Log(to_string((double)r_frameCount / Timer::GetTotalSeconds()));
-			}
-		});*/
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
@@ -125,11 +119,11 @@ namespace AnEngine::RenderCore
 
 		ComPtr<IDXGISwapChain1> swapChain1;
 		//Private::r_dxgiFactory_cp->Create
-		ThrowIfFailed(Private::r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
+		ThrowIfFailed(r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
 			nullptr, nullptr, swapChain1.GetAddressOf()));
 
 #ifdef _WIN32
-		Private::r_dxgiFactory_cp->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
+		r_dxgiFactory_cp->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
 #endif // _WIN32
 
 		ThrowIfFailed(swapChain1.As(&r_swapChain_cp));
@@ -157,12 +151,8 @@ namespace AnEngine::RenderCore
 
 	void InitializePipeline()
 	{
-		//DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(r_graphicsCard[0]->GetDevice());;
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
 		{
-			//CommandAllocator* allocator = new CommandAllocator();
-			//GraphicsCommandAllocator::GetInstance()->Push(allocator);
-
 			ComPtr<ID3D12Resource> displayPlane;
 			ThrowIfFailed(r_swapChain_cp->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
 			r_displayPlane[i] = new ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(),
@@ -170,16 +160,6 @@ namespace AnEngine::RenderCore
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-
-		/*for (int i = 0; i < 1; i++)
-		{
-			CommandFormatDesc desc;
-			desc.allocator = GraphicsCommandAllocator::GetInstance()->GetOne()->GetAllocator();
-			desc.nodeMask = 1;
-			desc.pipelineState = nullptr;
-			CommandList* list = new CommandList(desc);
-			GraphicsCommandContext::GetInstance()->AddNew(list);
-		}*/
 	}
 
 	void CreateCommonState()
@@ -279,7 +259,7 @@ namespace AnEngine::RenderCore
 
 	void PopulateCommandList()
 	{
-		r_fenceForDisplayPlane->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
+		//r_fenceForDisplayPlane->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 		r_frameCount++;
@@ -318,13 +298,9 @@ namespace AnEngine::RenderCore
 
 	void BlendBuffer(GpuResource* srcBuffer)
 	{
-		//srcBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
-		//r_displayPlane[r_frameIndex]->GetFence()->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		uint32_t frameIndex = r_frameIndex;
 		var frame = r_displayPlane[frameIndex]->GetResource();
 
-		//var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
@@ -332,25 +308,19 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(iCommandAllocator->Reset());
 		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
 
-		//var renderTargetToResolveSrc = CommonState::renderTarget2ResolveSource;
 		var commonToResolveSrc = CommonState::commonToResolveSource;
 		var commonToResolveDst = CommonState::commonToResolveDest;
-		//var resolveSrcToRenderTarget = CommonState::resolveSourceToRenderTarget;
 		var resolveSrcToCommon = CommonState::resolveSourceToCommon;
 		var resolveDstToCommon = CommonState::resolveDestToCommon;
 		commonToResolveSrc.Transition.pResource = srcBuffer->GetResource();
-		commonToResolveDst.Transition.pResource = frame;// r_displayPlane[r_frameIndex]->GetResource();
+		commonToResolveDst.Transition.pResource = frame;
 		resolveSrcToCommon.Transition.pResource = srcBuffer->GetResource();
-		resolveDstToCommon.Transition.pResource = frame;//r_displayPlane[r_frameIndex]->GetResource();
+		resolveDstToCommon.Transition.pResource = frame;
 		var barrier1 = { commonToResolveSrc, commonToResolveDst };
 		var barrier2 = { resolveSrcToCommon ,resolveDstToCommon };
 
 		iCommandList->ResourceBarrier(barrier1.size(), barrier1.begin());
-		//iCommandList->ResourceBarrier(1, &commonToResolveDst);
-		//iCommandList->ResolveSubresource(r_displayPlane[r_frameIndex]->GetResource(), 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 		iCommandList->ResolveSubresource(frame, 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
-		//iCommandList->ResourceBarrier(1, &resolveDstToCommon);
-		//iCommandList->ResourceBarrier(1, &resolveSrcToRenderTarget);
 		iCommandList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
 		ThrowIfFailed(iCommandList->Close(), R_GetGpuError);
@@ -363,15 +333,29 @@ namespace AnEngine::RenderCore
 #endif // _DEBUG
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		r_fenceForDisplayPlane->GpuSignal(r_fenceValueForDisplayPlane[frameIndex]);
-		//r_fenceForDisplayPlane->CpuWait();
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
-		//srcBuffer->GetFence()->GpuSignal(Timer::GetTotalTicks());
-
-		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		//r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		WaitForGpu();
 
 		GraphicsContext::Push(commandList, commandAllocator);
-		//GraphicsCommandContext::GetInstance()->Push(commandList);
-		//GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
+	}
+
+	void WaitForGpu()
+	{
+		uint64_t currentFenceValue = r_fenceValueForDisplayPlane[r_frameIndex];
+		var commandQueue = r_graphicsCard[0]->GetCommandQueue();
+		ThrowIfFailed(commandQueue->Signal(r_fence.Get(), currentFenceValue));
+		// 在队列中调度信号命令。
+
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		// 更新帧编号
+
+		if (r_fence->GetCompletedValue() < r_fenceValueForDisplayPlane[r_frameIndex])
+		{
+			r_fence->SetEventOnCompletion(r_fenceValueForDisplayPlane[r_frameIndex], r_fenceEvent);
+			WaitForSingleObjectEx(r_fenceEvent, INFINITE, false);
+		}// 如果下一帧还没有渲染完，则等待
+
+		r_fenceValueForDisplayPlane[r_frameIndex] = currentFenceValue + 1LL;
 	}
 }

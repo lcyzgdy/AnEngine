@@ -16,11 +16,11 @@ void LoadScene()
 	testCamera->ClearFlag(Camera::ClearFlags::SolidColor);
 	testCamera->ClearColor(Color::Blue);
 
-	TestCamera* camera = new TestCamera(L"Test Camera Object");
+	TestCamera* camera = new TestCamera(L"Test Object");
 	camera->AddComponent(testCamera);
 
-	TrangleRender* trangleRender = new TrangleRender(L"Test Render");
-	camera->AddComponent(trangleRender);
+	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
+	//camera->AddComponent(trangleRender);
 	//ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
 	//camera->AddComponent(nBody);
 
@@ -28,6 +28,6 @@ void LoadScene()
 	Driver::GetInstance()->BeginBehaviour(testScene);
 }
 
-TestCamera::TestCamera(std::wstring&& name) :ObjectBehaviour(name)
+TestCamera::TestCamera(std::wstring&& name) : ObjectBehaviour(name)
 {
 }

@@ -11,17 +11,17 @@ namespace AnEngine::Game
 		}
 	}
 
-	void Scene::BeforeUpdate()
+	/*void Scene::BeforeUpdate()
 	{
-	}
+	}*/
 
 	void Scene::OnUpdate()
 	{
 	}
 
-	void Scene::AfterUpdate()
+	/*void Scene::AfterUpdate()
 	{
-	}
+	}*/
 
 	void Scene::OnRelease()
 	{
@@ -43,6 +43,7 @@ namespace AnEngine::Game
 		}
 
 		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
+		behaviour->m_scene = this;
 		for (var i : behaviour->GetComponents())
 		{
 			//lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
@@ -80,5 +81,21 @@ namespace AnEngine::Game
 		}
 		dynamic_cast<BaseBehaviour*>(behaviour)->OnRelease();
 		behaviour = nullptr;
+	}
+
+	void Scene::Wait()
+	{
+
+		unique_lock<mutex> lock(m_mutex);
+		m_complateCount++;
+		if (m_complateCount == m_objects.size())
+		{
+			m_complateCount = 0;
+			m_cv.notify_all();
+			return;
+		}
+		lock.unlock();
+		unique_lock<mutex> behaviourLock(m_behaviourMutex);
+		m_cv.wait(behaviourLock);
 	}
 }

@@ -113,6 +113,8 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Utility\;$(SolutionDir)PhyX\PhysX_3.4\Include</AdditionalIncludeDirectories>
+      <EnableModules>true</EnableModules>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

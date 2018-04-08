@@ -14,7 +14,7 @@ namespace AnEngine::Game
 {
 	class BaseBehaviour : NonCopyable
 	{
-		friend class ::AnEngine::Driver;
+		//friend class ::AnEngine::Driver;
 		friend class Scene;
 		// virtual void OnRender() = 0;
 		// virtual void OnUpdate() = 0;

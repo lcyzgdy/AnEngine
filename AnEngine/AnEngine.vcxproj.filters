@@ -202,6 +202,18 @@
     <ClInclude Include="UICore.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Hash.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="DMath.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="onwind.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.hpp">
+      <Filter>UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -334,6 +346,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DebugLog.cpp">
+      <Filter>UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
   </ItemGroup>

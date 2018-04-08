@@ -16,8 +16,8 @@ namespace AnEngine::Game
 	void Camera::BeforeUpdate()
 	{
 		if (m_postProcessShader != nullptr) PostProcess();
-		BlendBuffer(m_colorBuffers.GetFront());
 		m_colorBuffers.Swap();
+		BlendBuffer(m_colorBuffers.GetFront());
 	}
 
 	void Camera::Start()
@@ -33,12 +33,9 @@ namespace AnEngine::Game
 	void Camera::Update()
 	{
 		ObjectBehaviour::Update();
-		//this_thread::sleep_for(1ms);
 		lock_guard<mutex> lock(m_rtvMutex);
-		//m_colorBuffer->GetFence()->CpuWait(Timer::GetTotalTicks());
 
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
-		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 		var frameBuffer = m_colorBuffers.GetBack();
@@ -48,13 +45,11 @@ namespace AnEngine::Game
 
 		var commonToRenderTarget = CommonState::commonToRenderTarget;
 		var renderTargetToCommon = CommonState::renderTargetToCommon;
-		commonToRenderTarget.Transition.pResource = frameBuffer->GetResource();// m_colorBuffers.GetBack()->GetResource();
-		renderTargetToCommon.Transition.pResource = frameBuffer->GetResource();// m_colorBuffers.GetBack()->GetResource();
+		commonToRenderTarget.Transition.pResource = frameBuffer->GetResource();
+		renderTargetToCommon.Transition.pResource = frameBuffer->GetResource();
 
 		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
-		//var clearColorTemp = m_colorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 300000), 1.0f };
-		//iCommandList->ClearRenderTargetView(m_colorBuffer->GetRTV(), clearColor, 0, nullptr);
 		iCommandList->ClearRenderTargetView(frameBuffer->GetRTV(), clearColor, 0, nullptr);
 		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		ThrowIfFailed(iCommandList->Close());

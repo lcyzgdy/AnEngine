@@ -3,12 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Utility\Utility.vcxproj", "{B0F9295B-ECAE-49AC-BB83-981BFC70E784}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Window", "Window\Window.vcxproj", "{4CF13019-9BF4-4E1E-B45C-73CD66DB0F5D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784} = {B0F9295B-ECAE-49AC-BB83-981BFC70E784}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysX", "PhysX\PhysX_3.4\Source\compiler\vc14win64\PhysX.vcxproj", "{FC0C1E74-2BE0-A8BC-4F0C-82D0F2EAB9A4}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -122,9 +117,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NvParameterized", "PhysX\APEX_1.4\NvParameterized\compiler\vc14win64-PhysX_3.4\NvParameterized.vcxproj", "{116CDA44-9950-8942-1462-6A904E0C4817}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnEngine", "AnEngine\AnEngine.vcxproj", "{9839A870-23AE-44DD-95AA-857EC1119546}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784} = {B0F9295B-ECAE-49AC-BB83-981BFC70E784}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -138,26 +130,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x64.ActiveCfg = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x64.Build.0 = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x64.Deploy.0 = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x86.ActiveCfg = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x86.Build.0 = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.checked|x86.Deploy.0 = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Debug|x64.ActiveCfg = Debug|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Debug|x64.Build.0 = Debug|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Debug|x86.ActiveCfg = Debug|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Debug|x86.Build.0 = Debug|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x64.ActiveCfg = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x64.Build.0 = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x64.Deploy.0 = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x86.ActiveCfg = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x86.Build.0 = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.profile|x86.Deploy.0 = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Release|x64.ActiveCfg = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Release|x64.Build.0 = Release|x64
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Release|x86.ActiveCfg = Release|Win32
-		{B0F9295B-ECAE-49AC-BB83-981BFC70E784}.Release|x86.Build.0 = Release|Win32
 		{4CF13019-9BF4-4E1E-B45C-73CD66DB0F5D}.checked|x64.ActiveCfg = Release|x64
 		{4CF13019-9BF4-4E1E-B45C-73CD66DB0F5D}.checked|x64.Build.0 = Release|x64
 		{4CF13019-9BF4-4E1E-B45C-73CD66DB0F5D}.checked|x64.Deploy.0 = Release|x64

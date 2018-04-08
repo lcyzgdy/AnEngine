@@ -29,7 +29,7 @@ namespace AnEngine
 		BaseInput::GetInstance()->Release();
 	}
 
-	void Driver::BeginBehaviour(Game::BaseBehaviour * behaviour)
+	void Driver::StartScene(Game::Scene* behaviour)
 	{
 		m_scene = behaviour;
 		behaviour->OnInit();

@@ -31,8 +31,8 @@ namespace AnEngine::Game
 			m_scene->Wait();
 			AfterUpdate();
 			m_scene->Wait();
-			Debug::Log(name + to_wstring(m_active));
-#else 			
+			//Debug::Log(name + to_wstring(m_active));
+#else
 			try
 			{
 				BeforeUpdate();
@@ -42,10 +42,10 @@ namespace AnEngine::Game
 			catch (exception e)
 			{
 				Debug::Log(e.what());
-		}
+			}
 #endif
+		}
 	}
-}
 
 	void ObjectBehaviour::OnRelease()
 	{

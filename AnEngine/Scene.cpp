@@ -85,16 +85,16 @@ namespace AnEngine::Game
 
 	void Scene::Wait()
 	{
-
-		unique_lock<mutex> lock(m_mutex);
-		m_complateCount++;
-		if (m_complateCount == m_objects.size())
 		{
-			m_complateCount = 0;
-			m_cv.notify_all();
-			return;
+			lock_guard<mutex> lock(m_mutex);
+			m_complateCount++;
+			if (m_complateCount == m_objects.size())
+			{
+				m_complateCount = 0;
+				m_cv.notify_all();
+				return;
+			}
 		}
-		lock.unlock();
 		unique_lock<mutex> behaviourLock(m_behaviourMutex);
 		m_cv.wait(behaviourLock);
 	}

@@ -13,14 +13,14 @@ namespace AnEngine::Game
 	class Scene : public BaseBehaviour//, public NonCopyable
 	{
 		// Scene直接调度BaseBehaviour
-
+		friend class ::AnEngine::Driver;
 
 		std::vector<BaseBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
 		std::condition_variable m_cv;
 		std::mutex m_behaviourMutex;
-		uint32_t m_complateCount;
+		volatile uint32_t m_complateCount;
 
 
 		//protected:

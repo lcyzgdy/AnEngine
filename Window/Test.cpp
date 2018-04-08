@@ -25,7 +25,7 @@ void LoadScene()
 	//camera->AddComponent(nBody);
 
 	testScene->AddObject(camera);
-	Driver::GetInstance()->BeginBehaviour(testScene);
+	Driver::GetInstance()->StartScene(testScene);
 }
 
 TestCamera::TestCamera(std::wstring&& name) : ObjectBehaviour(name)

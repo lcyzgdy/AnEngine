@@ -31,9 +31,8 @@ namespace Utility::ThreadPool
 			const uint32_t m_cnt_maxThreadNum = std::thread::hardware_concurrency();
 			std::atomic_bool m_stopped;
 
-
 		public:
-			ThreadPool() = default;
+			ThreadPool() = delete;
 
 			ThreadPool(int size)
 			{
@@ -97,7 +96,7 @@ namespace Utility::ThreadPool
 			}
 		};
 
-		static ThreadPool u_s_threadPool(std::thread::hardware_concurrency());
+		extern ThreadPool u_s_threadPool;
 	}
 
 	template<typename F, typename ... Args>

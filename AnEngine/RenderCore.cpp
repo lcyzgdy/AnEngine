@@ -348,6 +348,7 @@ namespace AnEngine::RenderCore
 		// 在队列中调度信号命令。
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		r_frameCount++;
 		// 更新帧编号
 
 		if (r_fence->GetCompletedValue() < r_fenceValueForDisplayPlane[r_frameIndex])

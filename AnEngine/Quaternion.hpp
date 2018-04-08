@@ -2,7 +2,7 @@
 #ifndef __QUATERNION_HPP__
 #define __QUATERNION_HPP__
 
-#include"../Utility/onwind.h"
+#include"onwind.h"
 #include<DirectXMath.h>
 #include"Vector.hpp"
 #include<cmath>

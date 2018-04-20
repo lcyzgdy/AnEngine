@@ -14,6 +14,7 @@ namespace AnEngine::Game
 	class ObjectBehaviour : public BaseBehaviour, public GameObject
 	{
 		friend class Scene;
+
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
@@ -40,10 +41,13 @@ namespace AnEngine::Game
 		// Call before update, ignore it if do nothing
 		virtual void BeforeUpdate();
 
-		// 更新时调用
+		// 更新时调用，暴露
 		// Call when update
 		virtual void Update();
 		//virtual void FixedUpdate();
+
+		// 更新后调用，暴露
+		virtual void LateUpdate();
 
 		// 更新后调用
 		// Call after update, ignore it if do nothing

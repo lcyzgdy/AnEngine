@@ -1,0 +1,2 @@
+Test Object: Start
+Test Camera: Start

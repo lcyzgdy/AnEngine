@@ -15,13 +15,15 @@ namespace AnEngine::Game
 		// Scene直接调度BaseBehaviour
 		friend class ::AnEngine::Driver;
 
-		std::vector<BaseBehaviour*> m_objects;
+		//std::vector<BaseBehaviour*> m_objects;
+		std::vector<ObjectBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
 		std::condition_variable m_cv;
 		std::mutex m_behaviourMutex;
-		volatile uint32_t m_complateCount;
+		uint32_t m_complateCount;
 
+		bool m_frameLoop;
 
 		//protected:
 		// 通过 BaseBehaviour 继承

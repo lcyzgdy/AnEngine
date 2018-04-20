@@ -8,29 +8,37 @@ namespace AnEngine::Game
 {
 	void ObjectBehaviour::OnInit()
 	{
-		lock_guard<mutex> lock(m_mutex);
-		if (m_scene == nullptr) m_scene = dynamic_cast<ObjectBehaviour*>(gameObject)->m_scene;
+		//lock_guard<mutex> lock(m_mutex);
+		//if (m_scene == nullptr) m_scene = dynamic_cast<ObjectBehaviour*>(gameObject)->m_scene;
 		Start();
 		if (m_active) //BeginUpdate();
 		{
 			OnActive();
-			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+		}
+		for (var item : m_children)
+		{
+			dynamic_cast<ObjectBehaviour*>(item)->OnInit();
+		}
+		for (var item : m_component)
+		{
+			item->OnInit();
 		}
 	}
 
 	void ObjectBehaviour::OnUpdate()
 	{
-		Debug::Log(name + L": Begin update");
+		/*Debug::Log(name + L": Begin update");
 		while (m_active)
 		{
-			lock_guard<mutex> lock(m_mutex);
+			//lock_guard<mutex> lock(m_mutex);
 #if defined(_DEBUG) || defined(DEBUG)
 			BeforeUpdate();
-			m_scene->Wait();
+			//m_scene->Wait();
 			Update();
-			m_scene->Wait();
+			//m_scene->Wait();
 			AfterUpdate();
-			m_scene->Wait();
+			//m_scene->Wait();
 			//Debug::Log(name + to_wstring(m_active));
 #else
 			try
@@ -44,7 +52,9 @@ namespace AnEngine::Game
 				Debug::Log(e.what());
 			}
 #endif
-		}
+		}*/
+		if (!m_active) return;
+		Update();
 	}
 
 	void ObjectBehaviour::OnRelease()
@@ -70,6 +80,12 @@ namespace AnEngine::Game
 	}
 
 	void ObjectBehaviour::AfterUpdate()
+	{
+		if (!m_active) return;
+		LateUpdate();
+	}
+
+	void ObjectBehaviour::LateUpdate()
 	{
 	}
 

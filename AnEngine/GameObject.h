@@ -13,7 +13,7 @@ namespace AnEngine::Game
 	class GameObject
 	{
 		virtual void DoNothing();
-		//protected:
+	protected:
 		std::vector<GameObject*> m_children;
 		// 当前物体的子物体
 		GameObject* m_parentObject;

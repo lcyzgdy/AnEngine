@@ -19,9 +19,17 @@ namespace AnEngine::Game
 		// virtual void OnRender() = 0;
 		// virtual void OnUpdate() = 0;
 
+		enum BehaviourState
+		{
+			BeforeUpdate,
+			Update,
+			AfterUpdate
+		};
+
 		virtual void OnInit() = 0;
 		//virtual void BeforeUpdate() = 0;
 		virtual void OnUpdate() = 0;
+		virtual void OnUpdate(BehaviourState state) = 0;
 		//virtual void AfterUpdate() = 0;
 		virtual void OnRelease() = 0;
 

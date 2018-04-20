@@ -1,5 +1,7 @@
 #include "Scene.h"
-#include"ObjectBehaviour.h"
+#include "ObjectBehaviour.h"
+#include "ThreadPool.hpp"
+using namespace std;
 
 namespace AnEngine::Game
 {
@@ -9,6 +11,8 @@ namespace AnEngine::Game
 		{
 			i->OnInit();
 		}
+		m_frameLoop = true;
+		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
 	}
 
 	/*void Scene::BeforeUpdate()
@@ -17,6 +21,24 @@ namespace AnEngine::Game
 
 	void Scene::OnUpdate()
 	{
+		unique_lock<mutex> lock(m_mutex);
+		lock.unlock();
+		while (lock.lock(), m_frameLoop == true)
+		{
+			for (var item : m_objects)
+			{
+				item->BeforeUpdate();
+			}
+			for (var item : m_objects)
+			{
+				item->OnUpdate();
+			}
+			for (var item : m_objects)
+			{
+				item->AfterUpdate();
+			}
+			lock.unlock();
+		}
 	}
 
 	/*void Scene::AfterUpdate()
@@ -25,9 +47,12 @@ namespace AnEngine::Game
 
 	void Scene::OnRelease()
 	{
+		lock_guard<mutex> lock(m_mutex);
+		m_frameLoop = false;
 		for (var i : m_objects)
 		{
-			RemoveObject(dynamic_cast<GameObject*>(dynamic_cast<ObjectBehaviour*>(i)));
+			//RemoveObject(dynamic_cast<GameObject*>(dynamic_cast<ObjectBehaviour*>(i)));
+			RemoveObject(dynamic_cast<GameObject*>(i));
 		}
 	}
 
@@ -37,12 +62,12 @@ namespace AnEngine::Game
 
 	void Scene::AddObject(GameObject* obj)
 	{
-		for (var i : obj->GetChildren())
+		/*for (var i : obj->GetChildren())
 		{
 			AddObject(i);
-		}
+		}*/
 
-		var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
+		/*var behaviour = dynamic_cast<ObjectBehaviour*>(obj);
 		behaviour->m_scene = this;
 		for (var i : behaviour->GetComponents())
 		{
@@ -54,13 +79,13 @@ namespace AnEngine::Game
 			}
 		}
 		//lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
-		lock_guard<mutex> lock(m_mutex);
-		m_objects.emplace_back(dynamic_cast<BaseBehaviour*>(behaviour));
+		lock_guard<mutex> lock(m_mutex);*/
+		m_objects.emplace_back(dynamic_cast<ObjectBehaviour*>(obj));
 	}
 
 	void Scene::RemoveObject(GameObject* obj)
 	{
-		for (var i : obj->GetChildren())
+		/*for (var i : obj->GetChildren())
 		{
 			RemoveObject(i);
 		}
@@ -68,19 +93,19 @@ namespace AnEngine::Game
 		for (var i : behaviour->GetComponents())
 		{
 			RemoveObject(i);
-		}
+		}*/
 		//lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);
 		for (var it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
-			if (*it == behaviour)
+			if (*it == obj)
 			{
 				m_objects.erase(it);
 				break;
 			}
 		}
-		dynamic_cast<BaseBehaviour*>(behaviour)->OnRelease();
-		behaviour = nullptr;
+		dynamic_cast<BaseBehaviour*>(obj)->OnRelease();
+		obj = nullptr;
 	}
 
 	void Scene::Wait()

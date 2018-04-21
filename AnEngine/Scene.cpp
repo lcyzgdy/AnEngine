@@ -1,7 +1,9 @@
 #include "Scene.h"
 #include "ObjectBehaviour.h"
 #include "ThreadPool.hpp"
+#include "ManagedTask.hpp"
 using namespace std;
+using namespace AnEngine::Utility;
 
 namespace AnEngine::Game
 {
@@ -12,38 +14,50 @@ namespace AnEngine::Game
 			i->OnInit();
 		}
 		m_frameLoop = true;
-		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
+		Utility::ThreadPool::Commit([this]
+		{
+			unique_lock<mutex> lock(this->m_mutex);
+			lock.unlock();
+			while (lock.lock(), m_frameLoop == true)
+			{
+				this->BeforeUpdate();
+				this->OnUpdate();
+				this->AfterUpdate();
+				lock.unlock();
+			}
+		});
 	}
 
-	/*void Scene::BeforeUpdate()
+	void Scene::BeforeUpdate()
 	{
-	}*/
+		SceneManagedTaskQueue::GetSceneTask(GetHashCode())->InvokeAll();
+	}
 
 	void Scene::OnUpdate()
 	{
-		unique_lock<mutex> lock(m_mutex);
-		lock.unlock();
-		while (lock.lock(), m_frameLoop == true)
+		//unique_lock<mutex> lock(m_mutex);
+		//lock.unlock();
+		//while (lock.lock(), m_frameLoop == true)
+		//{
+		for (var item : m_objects)
 		{
-			for (var item : m_objects)
-			{
-				item->BeforeUpdate();
-			}
-			for (var item : m_objects)
-			{
-				item->OnUpdate();
-			}
-			for (var item : m_objects)
-			{
-				item->AfterUpdate();
-			}
-			lock.unlock();
+			item->BeforeUpdate();
 		}
+		for (var item : m_objects)
+		{
+			item->OnUpdate();
+		}
+		for (var item : m_objects)
+		{
+			item->AfterUpdate();
+		}
+		//lock.unlock();
+		//}
 	}
 
-	/*void Scene::AfterUpdate()
+	void Scene::AfterUpdate()
 	{
-	}*/
+	}
 
 	void Scene::OnRelease()
 	{
@@ -58,6 +72,7 @@ namespace AnEngine::Game
 
 	Scene::Scene(std::wstring _name) : name(_name)
 	{
+		SceneManagedTaskQueue* queue = new SceneManagedTaskQueue(GetHashCode());
 	}
 
 	void Scene::AddObject(GameObject* obj)

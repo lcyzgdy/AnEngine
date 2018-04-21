@@ -214,6 +214,12 @@
     <ClInclude Include="ThreadPool.hpp">
       <Filter>UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="ManagedTask.hpp">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -349,6 +355,12 @@
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="ThreadPool.cpp">
+      <Filter>UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagedTask.cpp">
+      <Filter>UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
   </ItemGroup>

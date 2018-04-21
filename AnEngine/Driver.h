@@ -11,7 +11,7 @@
 #include"Scene.h"
 namespace AnEngine
 {
-	class Driver
+	class Driver : public Object
 	{
 		bool m_initialized;
 		Game::Scene* m_scene;

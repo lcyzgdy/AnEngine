@@ -13,7 +13,7 @@
 #include<stdexcept>
 #include<future>
 
-namespace Utility::ThreadPool
+namespace AnEngine::Utility::ThreadPool
 {
 	namespace Private
 	{

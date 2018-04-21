@@ -119,6 +119,8 @@ namespace AnEngine::RenderCore
 
 	void ComputeContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
+		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		GraphicsCommandContext::GetInstance()->Push(list, allocator);
 	}
 
@@ -129,6 +131,8 @@ namespace AnEngine::RenderCore
 
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
+		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
+		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 		GraphicsCommandContext::GetInstance()->Push(list, allocator);
 	}
 }

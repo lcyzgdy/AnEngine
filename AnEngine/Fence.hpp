@@ -45,8 +45,8 @@ namespace AnEngine::RenderCore
 #ifdef _WIN32
 		HANDLE m_fenceEvent;
 #endif // _WIN32
-		std::atomic_uint64_t m_fenceValue;
-		std::atomic_uint64_t m_curFenceValue;
+		std::uint64_t m_fenceValue;
+		std::uint64_t m_curFenceValue;
 		uint32_t m_fenceIndex;
 
 		std::mutex m_mutex;
@@ -56,27 +56,6 @@ namespace AnEngine::RenderCore
 		}
 
 		~FenceBetweenCpuAndGpu()
-		{
-		}
-	};
-
-	class FenceBetweenGpu
-	{
-		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
-		ID3D12CommandQueue* m_commandQueue;
-#ifdef _WIN32
-		HANDLE m_fenceEvent;
-#endif // _WIN32
-		std::atomic_uint64_t m_fenceValue;
-		std::atomic_uint64_t m_curFenceValue;
-
-		std::mutex m_mutex;
-	public:
-		FenceBetweenGpu()
-		{
-		}
-
-		~FenceBetweenGpu()
 		{
 		}
 	};

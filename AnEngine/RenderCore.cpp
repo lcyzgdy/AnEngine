@@ -324,14 +324,14 @@ namespace AnEngine::RenderCore
 		iCommandList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
 		ThrowIfFailed(iCommandList->Close(), R_GetGpuError);
-		ID3D12CommandList* ppcommandList[] = { iCommandList };
+		//ID3D12CommandList* ppcommandList[] = { iCommandList };
 #ifdef _DEBUG
 		if (frameIndex != r_frameIndex)
 		{
 			throw exception();
 		}
 #endif // _DEBUG
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
 		//r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();

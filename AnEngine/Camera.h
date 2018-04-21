@@ -52,9 +52,8 @@ namespace AnEngine::Game
 
 		virtual void Start() override;
 		virtual void OnActive() override;
-		virtual void BeforeUpdate() override;
 		virtual void Update() override;
-		virtual void AfterUpdate() override;
+		virtual void LateUpdate() override;
 		virtual void OnInvalid() override;
 		virtual void Destory() override;
 

@@ -190,10 +190,12 @@
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ManagedTask.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="MultiBuffer.hpp" />
     <ClInclude Include="NBody.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectBehaviour.h" />
     <ClInclude Include="onwind.h" />
     <ClInclude Include="ParticlesRenderer.h" />
@@ -247,9 +249,11 @@
     <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="GraphicCard.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="ManagedTask.cpp" />
     <ClCompile Include="MatrixBuffer.cpp" />
     <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="NBody.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectBehaviour.cpp" />
     <ClCompile Include="ParticlesRenderer.cpp" />
     <ClCompile Include="PipelineState.cpp" />

@@ -1,6 +1,6 @@
 #include "ThreadPool.hpp"
 
-namespace Utility::ThreadPool
+namespace AnEngine::Utility::ThreadPool
 {
 	namespace Private
 	{

@@ -16,7 +16,7 @@
 #pragma intrinsic(_mm_crc32_u64)
 #endif
 
-namespace Utility
+namespace AnEngine::Utility
 {
 	inline uint64_t HashRange(const uint32_t* const begin, const uint32_t* const end, size_t hash)
 	{

@@ -26,9 +26,9 @@ namespace AnEngine::Game
 
 		virtual void Start() override;
 
-		virtual void BeforeUpdate() override;
+		//virtual void BeforeUpdate() override;
 		virtual void Update() override;
-		virtual void AfterUpdate() override;
+		virtual void LateUpdate() override;
 
 	public:
 		explicit Renderer(const std::wstring& name);

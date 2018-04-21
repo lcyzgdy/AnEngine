@@ -13,12 +13,12 @@ namespace AnEngine::Game
 	static vector<Camera*> cameraPool;
 	static mutex poolMutex;
 
-	void Camera::BeforeUpdate()
+	/*void Camera::BeforeUpdate()
 	{
 		if (m_postProcessShader != nullptr) PostProcess();
 		m_colorBuffers.Swap();
 		BlendBuffer(m_colorBuffers.GetFront());
-	}
+	}*/
 
 	void Camera::Start()
 	{
@@ -32,8 +32,9 @@ namespace AnEngine::Game
 
 	void Camera::Update()
 	{
-		ObjectBehaviour::Update();
-		lock_guard<mutex> lock(m_rtvMutex);
+		if (m_postProcessShader != nullptr) PostProcess();
+		m_colorBuffers.Swap();
+		BlendBuffer(m_colorBuffers.GetFront());
 
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iCommandList = commandList->GetCommandList();
@@ -49,17 +50,15 @@ namespace AnEngine::Game
 		renderTargetToCommon.Transition.pResource = frameBuffer->GetResource();
 
 		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
-		float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 300000), 1.0f };
+		float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 30000), 1.0f };
 		iCommandList->ClearRenderTargetView(frameBuffer->GetRTV(), clearColor, 0, nullptr);
 		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		ThrowIfFailed(iCommandList->Close());
-		ID3D12CommandList* ppcommandList[] = { iCommandList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
 
-	void Camera::AfterUpdate()
+	void Camera::LateUpdate()
 	{
 	}
 

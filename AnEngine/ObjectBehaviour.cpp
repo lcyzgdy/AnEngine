@@ -55,6 +55,14 @@ namespace AnEngine::Game
 		}*/
 		if (!m_active) return;
 		Update();
+		for (var i : m_children)
+		{
+			dynamic_cast<ObjectBehaviour*>(i)->OnUpdate();
+		}
+		for (var i : m_component)
+		{
+			i->OnUpdate();
+		}
 	}
 
 	void ObjectBehaviour::OnRelease()
@@ -83,6 +91,14 @@ namespace AnEngine::Game
 	{
 		if (!m_active) return;
 		LateUpdate();
+		for (var i : m_children)
+		{
+			dynamic_cast<ObjectBehaviour*>(i)->AfterUpdate();
+		}
+		for (var i : m_component)
+		{
+			i->AfterUpdate();
+		}
 	}
 
 	void ObjectBehaviour::LateUpdate()
@@ -155,7 +171,7 @@ namespace AnEngine::Game
 		if (b)
 		{
 			OnActive();
-			Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
+			//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
 		else
 		{

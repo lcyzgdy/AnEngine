@@ -257,8 +257,8 @@ namespace AnEngine::Game
 		}
 
 		ThrowIfFailed(iList->Close());
-		ID3D12CommandList* ppCommandLists[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		//ID3D12CommandList* ppCommandLists[] = { iList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
 		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::GetInstance()->Width()),
 			static_cast<UINT>(Screen::GetInstance()->Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
@@ -392,8 +392,8 @@ namespace AnEngine::Game
 		iList->Close();
 		iShadowList->Close();
 
-		ID3D12CommandList* ppcommandList[] = { iShadowList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		//ID3D12CommandList* ppcommandList[] = { iShadowList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 		m_fence->GpuSignal(0);
 
 		GraphicsContext::Push(shadowList, shadowAllocator);

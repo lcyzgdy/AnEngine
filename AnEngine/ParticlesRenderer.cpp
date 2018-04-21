@@ -43,8 +43,8 @@ namespace AnEngine::Game
 
 		ThrowIfFailed(iList->Close());
 
-		ID3D12CommandList* ppList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
+		//ID3D12CommandList* ppList[] = { iList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -228,13 +228,13 @@ namespace AnEngine::Game
 
 		{
 			ThrowIfFailed(iList->Close(), R_GetGpuError);
-			ID3D12CommandList* ppCommandLists[] = { iList };
-			r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+			//ID3D12CommandList* ppCommandLists[] = { iList };
+			//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 		}
 		{
 			ThrowIfFailed(cList->Close(), R_GetGpuError);
-			ID3D12CommandList* ppCommandList[] = { cList };
-			r_graphicsCard[0]->ExecuteSync(_countof(ppCommandList), ppCommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+			//ID3D12CommandList* ppCommandList[] = { cList };
+			//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandList), ppCommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		}
 
 		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
@@ -297,8 +297,8 @@ namespace AnEngine::Game
 		iList->ResourceBarrier(1, &renderTargetToCommon);
 		ThrowIfFailed(iList->Close());
 
-		ID3D12CommandList* ppcommandList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		//ID3D12CommandList* ppcommandList[] = { iList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 		//m_renderTarget->GetFence()->GpuSignal(0);
 		m_srvUavFenceValue++;
 		ThrowIfFailed(m_graphicsQueue->Signal(m_srvUavFence.Get(), m_srvUavFenceValue));

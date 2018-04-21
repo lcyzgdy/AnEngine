@@ -16,9 +16,15 @@ namespace AnEngine::Game
 		friend class Scene;
 
 		// 通过 BaseBehaviour 继承
-		virtual void OnInit() override;
-		virtual void OnUpdate() override;
-		virtual void OnRelease() override;
+		virtual void OnInit() final;
+		// 更新前调用，如没有动作可忽略
+		// Call before update, ignore it if do nothing
+		virtual void BeforeUpdate() final;
+		virtual void OnUpdate() final;
+		// 更新后调用
+		// Call after update, ignore it if do nothing
+		virtual void AfterUpdate() final;
+		virtual void OnRelease() final;
 
 	protected:
 		bool m_active;
@@ -37,10 +43,6 @@ namespace AnEngine::Game
 		// Call when the object is actived
 		virtual void OnActive();
 
-		// 更新前调用，如没有动作可忽略
-		// Call before update, ignore it if do nothing
-		virtual void BeforeUpdate();
-
 		// 更新时调用，暴露
 		// Call when update
 		virtual void Update();
@@ -48,10 +50,6 @@ namespace AnEngine::Game
 
 		// 更新后调用，暴露
 		virtual void LateUpdate();
-
-		// 更新后调用
-		// Call after update, ignore it if do nothing
-		virtual void AfterUpdate();
 
 		// 物体未被激活但还在场景中时调用
 		// Call when object is not actived but in scene

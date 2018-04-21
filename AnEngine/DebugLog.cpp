@@ -32,4 +32,9 @@ namespace AnEngine::Debug
 		lock_guard<mutex> lock(m_mutex);
 		fout << l << endl;
 	}
+	void Log(uint32_t u)
+	{
+		lock_guard<mutex> lock(m_mutex);
+		fout << u << endl;
+	}
 }

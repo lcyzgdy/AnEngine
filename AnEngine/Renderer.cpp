@@ -16,17 +16,17 @@ namespace AnEngine::Game
 		LoadAsset();
 	}
 
-	void Renderer::BeforeUpdate()
+	/*void Renderer::BeforeUpdate()
 	{
 		//m_renderTarget = nullptr;
-		m_renderTarget = Camera::FindForwordTarget(this->transform.Position());
-	}
+	}*/
 
 	void Renderer::Update()
 	{
+		m_renderTarget = Camera::FindForwordTarget(this->transform.Position());
 	}
 
-	void Renderer::AfterUpdate()
+	void Renderer::LateUpdate()
 	{
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
@@ -154,8 +154,8 @@ namespace AnEngine::Game
 
 		ThrowIfFailed(iList->Close());
 
-		ID3D12CommandList* ppcommandList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		//ID3D12CommandList* ppcommandList[] = { iList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		//m_renderTarget->GetFence()->GpuSignal(Timer::GetTotalTicks());
 	}

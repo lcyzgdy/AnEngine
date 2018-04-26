@@ -333,11 +333,11 @@ namespace AnEngine::RenderCore
 #endif // _DEBUG
 		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
-		//r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-		WaitForGpu();
-
+		//WaitForGpu();
 		GraphicsContext::Push(commandList, commandAllocator);
+
+		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
+		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 	}
 
 	void WaitForGpu()

@@ -29,7 +29,7 @@ namespace AnEngine::RenderCore
 	class GraphicsCard;
 
 	template<typename _List, typename _Allocator>
-	class Context
+	class CommandContext
 	{
 	protected:
 		std::queue<_List> m_pool;
@@ -39,17 +39,25 @@ namespace AnEngine::RenderCore
 		std::mutex m_writerMutex;
 		std::mutex m_mutex;
 	};
-
+	/*/
 	template<typename _List, typename _Allocator>
 	class IContext
 	{
 	public:
 		virtual std::tuple<_List, _Allocator> GetOne() = 0;
 		virtual void Push(_List, _Allocator) = 0;
+	};*/
+
+	template<typename ... _T>
+	class IContext
+	{
+	public:
+		virtual std::tuple<_T...> GetOne() = 0;
+		virtual void Push(_T...) = 0;
 	};
 
 	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public IContext<CommandList*, CommandAllocator*>,
-		public Context<CommandList*, CommandAllocator*>
+		public CommandContext<CommandList*, CommandAllocator*>
 	{
 		friend class ::Singleton<GraphicsCommandContext>;
 
@@ -65,12 +73,23 @@ namespace AnEngine::RenderCore
 namespace AnEngine::RenderCore::Private
 {
 	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public IContext<CommandList*, CommandAllocator*>,
-		public Context<CommandList*, CommandAllocator*>
+		public CommandContext<CommandList*, CommandAllocator*>
 	{
 	public:
 		// 通过 IContext 继承
 		virtual std::tuple<CommandList*, CommandAllocator*> GetOne() override;
 		virtual void Push(CommandList*, CommandAllocator*) override;
+	};
+}
+namespace AnEngine::RenderCore::Private
+{
+	class FenceContext : public ::Singleton<FenceContext>, public IContext<Fence*>
+	{
+		std::queue<Fence*> m_pool;
+	public:
+		// 通过 IContext 继承
+		virtual std::tuple<Fence*> GetOne() override;
+		virtual void Push(Fence* fence) override;
 	};
 }
 

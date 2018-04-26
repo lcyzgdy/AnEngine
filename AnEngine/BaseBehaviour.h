@@ -36,7 +36,7 @@ namespace AnEngine::Game
 	protected:
 		//std::recursive_mutex m_recursiveMutex;
 		std::mutex m_mutex;
-		//bool m_enable;
+		bool m_released;
 
 	public:
 		BaseBehaviour() = default;

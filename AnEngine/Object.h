@@ -8,6 +8,7 @@ namespace AnEngine
 	class Object
 	{
 	public:
+		virtual ~Object();
 		virtual uint64_t GetHashCode();
 		virtual std::wstring ToString();
 		template<typename T>

@@ -11,24 +11,28 @@ namespace AnEngine::Game
 {
 	class Scene;
 
-	class ObjectBehaviour : public BaseBehaviour, public GameObject
+	class ObjectBehaviour : public BaseBehaviour//, public GameObject
 	{
 		friend class Scene;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() final;
 		// 更新前调用，如没有动作可忽略
-		// Call before update, ignore it if do nothing
+		// Call before update, ignore if do nothing
 		virtual void BeforeUpdate() final;
+		// 更新调用
+		// Call update, ignore if do nothing
 		virtual void OnUpdate() final;
 		// 更新后调用
-		// Call after update, ignore it if do nothing
+		// Call after update, ignore if do nothing
 		virtual void AfterUpdate() final;
 		virtual void OnRelease() final;
 
 	protected:
 		bool m_active;
 		Scene* m_scene;
+
+		GameObject* gameObject;
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
@@ -62,13 +66,13 @@ namespace AnEngine::Game
 	public:
 		ObjectBehaviour(const std::wstring& name);
 		ObjectBehaviour(std::wstring&& name);
-		~ObjectBehaviour() = default;
+		virtual ~ObjectBehaviour();
 
 		std::vector<ObjectBehaviour*> GetComponents();
 		template<typename T = ObjectBehaviour>
 		T* GetComponentByName(string name)
 		{
-			for (var i : m_component)
+			for (var i : ((ObjectBehaviour*)gameObject)->m_component)
 			{
 				if (i->name == name)
 					return i;
@@ -76,13 +80,15 @@ namespace AnEngine::Game
 		}
 
 		template<typename T = ObjectBehaviour>
-		T GetComponent()
+		T* GetComponent()
 		{
-			for (var i : m_component)
+			for (var i : ((ObjectBehaviour*)gameObject)->m_component)
 			{
-				if (dynamic_cast<T*>(i) != nullptr)
-					return i;
+				var p = dynamic_cast<T*>(i);
+				if (p != nullptr)
+					return p;
 			}
+			return nullptr;
 		}
 
 		void AddComponent(ObjectBehaviour* component);

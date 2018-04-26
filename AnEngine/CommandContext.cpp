@@ -107,6 +107,25 @@ namespace AnEngine::RenderCore::Private
 		m_alloPool.push(allo);
 	}
 }
+namespace AnEngine::RenderCore::Private
+{
+	std::tuple<Fence*> FenceContext::GetOne()
+	{
+		if (m_pool.empty())
+		{
+			var p = new Fence();
+			return p;
+		}
+		var p = m_pool.front();
+		m_pool.pop();
+		return { p };
+	}
+
+	void FenceContext::Push(Fence* fence)
+	{
+		m_pool.push(fence);
+	}
+}
 
 namespace AnEngine::RenderCore
 {
@@ -133,6 +152,15 @@ namespace AnEngine::RenderCore
 	{
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+
+		var[fence] = FenceContext::GetInstance()->GetOne();
+		var iFence = fence->GetFence();
+		uint64_t fenceValue = fence->GetFenceValue();
+		fenceValue++;
+		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
+		fence->WaitForValue(fenceValue);
+
 		GraphicsCommandContext::GetInstance()->Push(list, allocator);
+		FenceContext::GetInstance()->Push(fence);
 	}
 }

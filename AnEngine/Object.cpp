@@ -4,6 +4,9 @@ using namespace std;
 
 namespace AnEngine
 {
+	Object::~Object()
+	{
+	}
 	uint64_t Object::GetHashCode()
 	{
 		return Utility::GetHash(this);

@@ -67,6 +67,7 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::OnRelease()
 	{
+		if (m_released) return;
 		m_active = false;
 		lock_guard<mutex> lock(m_mutex);
 		for (var i : m_component)
@@ -75,6 +76,7 @@ namespace AnEngine::Game
 			delete i;
 		}
 		Destory();
+		m_released = true;
 	}
 
 	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
@@ -135,10 +137,20 @@ namespace AnEngine::Game
 	{
 	}
 
+	ObjectBehaviour::~ObjectBehaviour()
+	{
+		for (var i : m_component)
+		{
+			delete i;
+		}
+		m_component.clear();
+		OnRelease();
+	}
+
 	void ObjectBehaviour::AddComponent(ObjectBehaviour* component)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		component->gameObject = this;
+		component->gameObject = this->gameObject;
 		component->m_scene = this->m_scene;
 		m_component.emplace_back(component);
 	}

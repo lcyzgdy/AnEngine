@@ -14,50 +14,37 @@ namespace AnEngine::RenderCore
 	{
 		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
 		//uint64_t m_fenceValue;
-		ID3D12CommandQueue* m_commandQueue;
+		//ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32
 		HANDLE m_fenceEvent;
+#else
+		std::condition_variable m_fenceEvent;
 #endif // _WIN32
 		//uint64_t m_fenceValue;
 		//uint64_t m_curFenceValue;
-		std::atomic_uint64_t m_fenceValue;
-		std::atomic_uint64_t m_curFenceValue;
+		uint64_t m_fenceValue;
+		uint64_t m_curFenceValue;
 
 		std::mutex m_mutex;
 
 	public:
-		explicit Fence(ID3D12CommandQueue* targetQueue);
+		//explicit Fence(ID3D12CommandQueue* targetQueue);
+		Fence();
 		~Fence();
 
-		void CpuWait(uint64_t semap);
-		void CpuSignal(uint64_t semap);
+		ID3D12Fence* GetFence();
+		uint64_t GetFenceValue();
 
-		void GpuWait(uint64_t semap);
-		void GpuSignal(uint64_t semap);
+		ID3D12Fence* operator->();
+
+		//void CpuWait(uint64_t semap);
+		//void CpuSignal(uint64_t semap);
+
+		//void GpuWait(uint64_t semap);
+		//void GpuSignal(uint64_t semap);
 
 		void WaitForGpu();
-	};
-
-	class FenceBetweenCpuAndGpu
-	{
-		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
-		ID3D12CommandQueue* m_commandQueue;
-#ifdef _WIN32
-		HANDLE m_fenceEvent;
-#endif // _WIN32
-		std::uint64_t m_fenceValue;
-		std::uint64_t m_curFenceValue;
-		uint32_t m_fenceIndex;
-
-		std::mutex m_mutex;
-	public:
-		FenceBetweenCpuAndGpu()
-		{
-		}
-
-		~FenceBetweenCpuAndGpu()
-		{
-		}
+		void WaitForValue(uint64_t fenceValue);
 	};
 }
 

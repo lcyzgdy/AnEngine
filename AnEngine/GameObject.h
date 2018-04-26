@@ -12,20 +12,21 @@ namespace AnEngine::Game
 	// 一个确定的物体
 	class GameObject
 	{
-		virtual void DoNothing();
 	protected:
-		std::vector<GameObject*> m_children;
+		// 当前物体的父物体
+		GameObject * m_parentObject;
+
 		// 当前物体的子物体
-		GameObject* m_parentObject;
+		std::vector<GameObject*> m_children;
 
 	public:
 		explicit GameObject(const std::wstring& name);
 		explicit GameObject(std::wstring&& name);
-		~GameObject() = default;
+		virtual ~GameObject();
 
 		wstring name;
 		GameObject* gameObject;
-		Transform transform;
+		//Transform transform;
 
 		GameObject* GetParent();
 		void SetParent(GameObject* newParent);

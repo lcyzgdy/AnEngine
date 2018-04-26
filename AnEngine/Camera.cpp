@@ -50,8 +50,8 @@ namespace AnEngine::Game
 		renderTargetToCommon.Transition.pResource = frameBuffer->GetResource();
 
 		iCommandList->ResourceBarrier(1, &commonToRenderTarget);
-		float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 30000), 1.0f };
-		iCommandList->ClearRenderTargetView(frameBuffer->GetRTV(), clearColor, 0, nullptr);
+		//float clearColor[4] = { 0.0f, 0.2f, sin((float)Timer::GetTotalTicks() / 30000), 1.0f };
+		iCommandList->ClearRenderTargetView(frameBuffer->GetRTV(), m_clearColor.GetPtr(), 0, nullptr);
 		iCommandList->ResourceBarrier(1, &renderTargetToCommon);
 		ThrowIfFailed(iCommandList->Close());
 

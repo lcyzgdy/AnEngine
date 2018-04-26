@@ -237,7 +237,8 @@ namespace AnEngine::Game
 			//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandList), ppCommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		}
 
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		m_fence = new Fence();
 		{
 			ThrowIfFailed(device->CreateFence(m_srvUavFenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_srvUavFence)));
 			m_srvUavFenceValue++;

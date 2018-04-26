@@ -13,6 +13,8 @@ namespace AnEngine::RenderCore
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
+		friend class UICore;
+
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
 
 		// 渲染着色器的命令队列。

@@ -16,14 +16,14 @@ namespace AnEngine::Game
 			OnActive();
 			//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 		}
-		for (var item : m_children)
+		/*for (var item : m_children)
 		{
 			dynamic_cast<ObjectBehaviour*>(item)->OnInit();
-		}
-		for (var item : m_component)
+		}*/
+		/*for (var item : m_component)
 		{
 			item->OnInit();
-		}
+		}*/
 	}
 
 	void ObjectBehaviour::OnUpdate()
@@ -55,14 +55,14 @@ namespace AnEngine::Game
 		}*/
 		if (!m_active) return;
 		Update();
-		for (var i : m_children)
+		/*for (var i : m_children)
 		{
 			dynamic_cast<ObjectBehaviour*>(i)->OnUpdate();
 		}
 		for (var i : m_component)
 		{
 			i->OnUpdate();
-		}
+		}*/
 	}
 
 	void ObjectBehaviour::OnRelease()
@@ -70,18 +70,13 @@ namespace AnEngine::Game
 		if (m_released) return;
 		m_active = false;
 		lock_guard<mutex> lock(m_mutex);
-		for (var i : m_component)
+		/*for (var i : m_component)
 		{
 			i->OnRelease();
 			delete i;
-		}
+		}*/
 		Destory();
 		m_released = true;
-	}
-
-	std::vector<ObjectBehaviour*> ObjectBehaviour::GetComponents()
-	{
-		return m_component;
 	}
 
 	void ObjectBehaviour::BeforeUpdate()
@@ -93,14 +88,14 @@ namespace AnEngine::Game
 	{
 		if (!m_active) return;
 		LateUpdate();
-		for (var i : m_children)
+		/*for (var i : m_children)
 		{
 			dynamic_cast<ObjectBehaviour*>(i)->AfterUpdate();
 		}
 		for (var i : m_component)
 		{
 			i->AfterUpdate();
-		}
+		}*/
 	}
 
 	void ObjectBehaviour::LateUpdate()
@@ -109,7 +104,7 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Start()
 	{
-		Debug::Log(name + L": Start");
+		Debug::Log(gameObject->name + L": Start");
 	}
 
 	void ObjectBehaviour::OnActive()
@@ -126,50 +121,28 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Destory()
 	{
-		Debug::Log(name + L": Destory");
+		Debug::Log(gameObject->name + L": Destory");
 	}
 
-	ObjectBehaviour::ObjectBehaviour(const std::wstring& name) : GameObject(name), m_active(true)
+	/*ObjectBehaviour::ObjectBehaviour(const std::wstring& name) : m_active(true)
 	{
 	}
 
 	ObjectBehaviour::ObjectBehaviour(std::wstring&& name) : GameObject(name), m_active(true)
 	{
+	}*/
+
+	ObjectBehaviour::ObjectBehaviour() : m_active(true)
+	{
 	}
 
 	ObjectBehaviour::~ObjectBehaviour()
 	{
-		for (var i : m_component)
-		{
-			delete i;
-		}
-		m_component.clear();
-		OnRelease();
+		if (!m_released)
+			OnRelease();
 	}
 
-	void ObjectBehaviour::AddComponent(ObjectBehaviour* component)
-	{
-		lock_guard<mutex> lock(m_mutex);
-		component->gameObject = this->gameObject;
-		component->m_scene = this->m_scene;
-		m_component.emplace_back(component);
-	}
 
-	void ObjectBehaviour::RemoveComponent(ObjectBehaviour* component)
-	{
-		m_scene->RemoveObject(component);
-		lock_guard<mutex> lock(m_mutex);
-		for (var it = m_component.begin(); it != m_component.end(); ++it)
-		{
-			if (*it == component)
-			{
-				(*it)->OnRelease();
-				m_component.erase(it);
-				delete *it;
-				break;
-			}
-		}
-	}
 
 	bool ObjectBehaviour::Active()
 	{

@@ -139,12 +139,6 @@
     <ClInclude Include="BaseBehaviour.h">
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentBehaviour.h">
-      <Filter>Game\Behaviour</Filter>
-    </ClInclude>
-    <ClInclude Include="VirtualBehaviour.h">
-      <Filter>Game\Behaviour</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
@@ -219,6 +213,9 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -299,12 +296,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentBehaviour.cpp">
-      <Filter>Game\Behaviour</Filter>
-    </ClCompile>
-    <ClCompile Include="VirtualBehaviour.cpp">
-      <Filter>Game\Behaviour</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game\Component</Filter>

@@ -7,14 +7,13 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
-	SpriteRenderer::SpriteRenderer(const wstring& name, Texture* tex) : Renderer(name)
+	SpriteRenderer::SpriteRenderer(Texture* tex) : Renderer()
 	{
 		m_texture = tex;
 	}
 
-	SpriteRenderer::SpriteRenderer(wstring&& name, Texture* tex) : Renderer(name)
+	SpriteRenderer::SpriteRenderer() : Renderer()
 	{
-		m_texture = tex;
 	}
 
 	void SpriteRenderer::LoadAsset()
@@ -25,7 +24,7 @@ namespace AnEngine::Game
 	{
 		ThrowIfFailed(iAllocator->Reset());
 		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));
-		
+
 		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
 	}
 

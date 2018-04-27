@@ -10,7 +10,7 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
-	SampleMeshRenderer::SampleMeshRenderer(wstring&& name, wstring && fileName) : Renderer(name), m_fileName(fileName)
+	SampleMeshRenderer::SampleMeshRenderer(wstring && fileName) : Renderer(), m_fileName(fileName)
 	{
 		m_pso = new GraphicPSO();
 	}

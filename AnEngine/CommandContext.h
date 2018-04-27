@@ -81,7 +81,7 @@ namespace AnEngine::RenderCore::Private
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
-namespace AnEngine::RenderCore::Private
+namespace AnEngine::RenderCore
 {
 	class FenceContext : public ::Singleton<FenceContext>, public IContext<Fence*>
 	{

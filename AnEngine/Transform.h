@@ -9,7 +9,7 @@
 using namespace DirectX;
 using namespace AnEngine::Math;
 
-namespace AnEngine::PhysicsCore
+namespace AnEngine::Game
 {
 	class Transform
 	{

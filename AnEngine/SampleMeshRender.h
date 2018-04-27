@@ -78,7 +78,7 @@ namespace AnEngine::Game
 		RenderCore::Fence* m_fence;
 
 	public:
-		SampleMeshRenderer(wstring&& name, wstring&& fileName);
+		SampleMeshRenderer(wstring&& fileName);
 
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;

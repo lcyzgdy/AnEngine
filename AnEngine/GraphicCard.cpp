@@ -233,7 +233,7 @@ namespace AnEngine::RenderCore
 	}
 
 	GraphicsCard::GraphicsCard() :
-		m_stableFlag(false), m_node(1)
+		m_stableFlag(false), m_node(0)
 	{
 	}
 

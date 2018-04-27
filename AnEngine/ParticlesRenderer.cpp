@@ -60,7 +60,7 @@ namespace AnEngine::Game
 		WaitForSingleObject(m_srvUavFenceEvent, INFINITE);
 	}
 
-	ParticlesRenderer::ParticlesRenderer(std::wstring&& name) : Renderer(name),
+	ParticlesRenderer::ParticlesRenderer() : Renderer(),
 		m_viewport(0.0f, 0.0f, static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
 		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()), static_cast<long>(Screen::GetInstance()->Height()))
 	{
@@ -238,7 +238,7 @@ namespace AnEngine::Game
 		}
 
 		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
-		m_fence = new Fence();
+		//m_fence = new Fence();
 		{
 			ThrowIfFailed(device->CreateFence(m_srvUavFenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_srvUavFence)));
 			m_srvUavFenceValue++;

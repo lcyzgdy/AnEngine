@@ -14,6 +14,7 @@ namespace AnEngine::Game
 	class ObjectBehaviour : public BaseBehaviour//, public GameObject
 	{
 		friend class Scene;
+		friend class GameObject;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() final;
@@ -36,7 +37,7 @@ namespace AnEngine::Game
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
-		std::vector<ObjectBehaviour*> m_component;
+		// std::vector<ObjectBehaviour*> m_component;
 
 	protected:
 		// 物体刚刚被加入场景时调用
@@ -64,39 +65,16 @@ namespace AnEngine::Game
 		virtual void Destory();
 
 	public:
-		ObjectBehaviour(const std::wstring& name);
-		ObjectBehaviour(std::wstring&& name);
+		//ObjectBehaviour(const std::wstring& name);
+		//ObjectBehaviour(std::wstring&& name);
+		ObjectBehaviour();
 		virtual ~ObjectBehaviour();
-
-		std::vector<ObjectBehaviour*> GetComponents();
-		template<typename T = ObjectBehaviour>
-		T* GetComponentByName(string name)
-		{
-			for (var i : ((ObjectBehaviour*)gameObject)->m_component)
-			{
-				if (i->name == name)
-					return i;
-			}
-		}
-
-		template<typename T = ObjectBehaviour>
-		T* GetComponent()
-		{
-			for (var i : ((ObjectBehaviour*)gameObject)->m_component)
-			{
-				var p = dynamic_cast<T*>(i);
-				if (p != nullptr)
-					return p;
-			}
-			return nullptr;
-		}
-
-		void AddComponent(ObjectBehaviour* component);
-		void RemoveComponent(ObjectBehaviour* component);
 
 		bool Active();
 		void Active(bool b);
 	};
+
+	using Script = ObjectBehaviour;
 }
 
 #endif // !__OBJECTBEHAVIOUR_H__

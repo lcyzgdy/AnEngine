@@ -112,7 +112,7 @@ namespace AnEngine::RenderCore
 		swapChainDesc.Width = width;
 		swapChainDesc.Height = height;
 		swapChainDesc.Format = dxgiFormat;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 		swapChainDesc.SampleDesc.Count = 1;
 		swapChainDesc.SampleDesc.Quality = 0;
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
@@ -282,11 +282,11 @@ namespace AnEngine::RenderCore
 		commonToRenderTarget.Transition.pResource = dstColorBuffer->GetResource();
 		renderTargetToCommon.Transition.pResource = dstColorBuffer->GetResource();
 
-		//iCommandList->ResourceBarrier(1, &commonToRenderTarget);
+		//iList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRTV(), clearColor, 0, nullptr);
-		//iCommandList->ResourceBarrier(1, &renderTargetToCommon);
+		//iList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
@@ -302,11 +302,11 @@ namespace AnEngine::RenderCore
 		var frame = r_displayPlane[frameIndex]->GetResource();
 
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
-		var iCommandList = commandList->GetCommandList();
+		var iList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
 
 		ThrowIfFailed(iCommandAllocator->Reset());
-		ThrowIfFailed(iCommandList->Reset(iCommandAllocator, nullptr));
+		ThrowIfFailed(iList->Reset(iCommandAllocator, nullptr));
 
 		var commonToResolveSrc = CommonState::commonToResolveSource;
 		var commonToResolveDst = CommonState::commonToResolveDest;
@@ -319,12 +319,14 @@ namespace AnEngine::RenderCore
 		var barrier1 = { commonToResolveSrc, commonToResolveDst };
 		var barrier2 = { resolveSrcToCommon ,resolveDstToCommon };
 
-		iCommandList->ResourceBarrier(barrier1.size(), barrier1.begin());
-		iCommandList->ResolveSubresource(frame, 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
-		iCommandList->ResourceBarrier(barrier2.size(), barrier2.begin());
+		iList->ResourceBarrier(barrier1.size(), barrier1.begin());
+		float color[4] = { 0, 0, 0, 1 };
+		iList->ClearRenderTargetView(r_displayPlane[frameIndex]->GetRTV(), color, 0, nullptr);
+		iList->ResolveSubresource(frame, 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
+		iList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
-		ThrowIfFailed(iCommandList->Close(), R_GetGpuError);
-		//ID3D12CommandList* ppcommandList[] = { iCommandList };
+		ThrowIfFailed(iList->Close(), R_GetGpuError);
+		//ID3D12CommandList* ppcommandList[] = { iList };
 #ifdef _DEBUG
 		if (frameIndex != r_frameIndex)
 		{
@@ -336,13 +338,14 @@ namespace AnEngine::RenderCore
 		//WaitForGpu();
 		GraphicsContext::Push(commandList, commandAllocator);
 
-		ThrowIfFailed(r_swapChain_cp->Present(1, 0), R_GetGpuError);
+		ThrowIfFailed(r_swapChain_cp->Present(0, 0), R_GetGpuError);
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
+		WaitForGpu();
 	}
 
 	void WaitForGpu()
 	{
-		uint64_t currentFenceValue = r_fenceValueForDisplayPlane[r_frameIndex];
+		/*uint64_t currentFenceValue = r_fenceValueForDisplayPlane[r_frameIndex];
 		var commandQueue = r_graphicsCard[0]->GetCommandQueue();
 		ThrowIfFailed(commandQueue->Signal(r_fence.Get(), currentFenceValue));
 		// 在队列中调度信号命令。
@@ -357,6 +360,13 @@ namespace AnEngine::RenderCore
 			WaitForSingleObjectEx(r_fenceEvent, INFINITE, false);
 		}// 如果下一帧还没有渲染完，则等待
 
-		r_fenceValueForDisplayPlane[r_frameIndex] = currentFenceValue + 1LL;
+		r_fenceValueForDisplayPlane[r_frameIndex] = currentFenceValue + 1LL;*/
+
+		var[fence] = FenceContext::GetInstance()->GetOne();
+		var iFence = fence->GetFence();
+		uint64_t fenceValue = fence->GetFenceValue();
+		fenceValue++;
+		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
+		fence->WaitForValue(fenceValue);
 	}
 }

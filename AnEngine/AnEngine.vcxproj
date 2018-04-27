@@ -161,12 +161,12 @@
   <ItemGroup>
     <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
-    <ClInclude Include="ComponentBehaviour.h" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
@@ -221,7 +221,6 @@
     <ClInclude Include="UICore.h" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VirtualBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -230,7 +229,6 @@
     <ClCompile Include="CommandContext.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
-    <ClCompile Include="ComponentBehaviour.cpp" />
     <ClCompile Include="ComputeUnit.cpp" />
     <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
@@ -270,7 +268,6 @@
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="UICore.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VirtualBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

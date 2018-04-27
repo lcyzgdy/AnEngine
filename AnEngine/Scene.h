@@ -15,8 +15,8 @@ namespace AnEngine::Game
 		// Scene直接调度BaseBehaviour
 		friend class ::AnEngine::Driver;
 
-		//std::vector<BaseBehaviour*> m_objects;
-		std::vector<ObjectBehaviour*> m_objects;
+		std::vector<GameObject*> m_objects;
+		//std::vector<ObjectBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
 		std::condition_variable m_cv;

@@ -107,7 +107,7 @@ namespace AnEngine::RenderCore::Private
 		m_alloPool.push(allo);
 	}
 }
-namespace AnEngine::RenderCore::Private
+namespace AnEngine::RenderCore
 {
 	std::tuple<Fence*> FenceContext::GetOne()
 	{

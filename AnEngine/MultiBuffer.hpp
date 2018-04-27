@@ -7,15 +7,15 @@
 
 namespace AnEngine::RenderCore::Resource
 {
-	template<int N, class T>
+	template<int _N, class _Ty>
 	class MultiBuffer
 	{
-		T* m_buffer[N];
+		_Ty* m_buffer[_N];
 		uint32_t m_index;
 		bool m_ok;
 
 		Fence* m_fence;
-		uint64_t m_fenceValues[N];
+		uint64_t m_fenceValues[_N];
 		HANDLE m_fenceEvent;
 
 	public:
@@ -28,11 +28,11 @@ namespace AnEngine::RenderCore::Resource
 			delete[] m_buffer;
 		}
 
-		void ManageBuffer(T* buffer)
+		void ManageBuffer(_Ty* buffer)
 		{
 			if (m_ok) throw MultiBufferFullException();
 			m_buffer[m_index] = buffer;
-			if (m_index == N - 1)
+			if (m_index == _N - 1)
 			{
 				m_ok = true;
 				m_index = 0;
@@ -44,17 +44,17 @@ namespace AnEngine::RenderCore::Resource
 		void Swap()
 		{
 			m_index++;
-			m_index %= N;
+			m_index %= _N;
 		}
 
-		T* GetFront()
+		_Ty* GetFront()
 		{
 			return m_buffer[m_index];
 		}
 
-		T* GetBack()
+		_Ty* GetBack()
 		{
-			return m_buffer[(m_index + 1) % N];
+			return m_buffer[(m_index + 1) % _N];
 		}
 	};
 

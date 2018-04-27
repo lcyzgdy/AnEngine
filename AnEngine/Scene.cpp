@@ -9,9 +9,23 @@ namespace AnEngine::Game
 {
 	void Scene::OnInit()
 	{
+		queue<GameObject*> q;
 		for (var i : m_objects)
 		{
-			i->OnInit();
+			q.push(i);
+		}
+		while (!q.empty())
+		{
+			var p = q.front();
+			q.pop();
+			for (var i : p->m_component)
+			{
+				i->OnInit();
+			}
+			for (var i : p->m_children)
+			{
+				q.push(i);
+			}
 		}
 		m_frameLoop = true;
 		Utility::ThreadPool::Commit([this]
@@ -39,7 +53,61 @@ namespace AnEngine::Game
 		//lock.unlock();
 		//while (lock.lock(), m_frameLoop == true)
 		//{
+		queue<GameObject*> q;
 		for (var item : m_objects)
+		{
+			q.push(item);
+		}
+		while (!q.empty())
+		{
+			var p = q.front();
+			q.pop();
+			for (var i : p->m_component)
+			{
+				i->BeforeUpdate();
+			}
+			for (var i : p->m_children)
+			{
+				q.push(i);
+			}
+		}
+
+		for (var item : m_objects)
+		{
+			q.push(item);
+		}
+		while (!q.empty())
+		{
+			var p = q.front();
+			q.pop();
+			for (var i : p->m_component)
+			{
+				i->OnUpdate();
+			}
+			for (var i : p->m_children)
+			{
+				q.push(i);
+			}
+		}
+
+		for (var item : m_objects)
+		{
+			q.push(item);
+		}
+		while (!q.empty())
+		{
+			var p = q.front();
+			q.pop();
+			for (var i : p->m_component)
+			{
+				i->AfterUpdate();
+			}
+			for (var i : p->m_children)
+			{
+				q.push(i);
+			}
+		}
+		/*for (var item : m_objects)
 		{
 			item->BeforeUpdate();
 		}
@@ -50,7 +118,7 @@ namespace AnEngine::Game
 		for (var item : m_objects)
 		{
 			item->AfterUpdate();
-		}
+		}*/
 		//lock.unlock();
 		//}
 	}
@@ -66,7 +134,7 @@ namespace AnEngine::Game
 		for (var i : m_objects)
 		{
 			//RemoveObject(dynamic_cast<GameObject*>(dynamic_cast<ObjectBehaviour*>(i)));
-			RemoveObject(dynamic_cast<GameObject*>(i));
+			RemoveObject(i);
 		}
 	}
 
@@ -95,7 +163,7 @@ namespace AnEngine::Game
 		}
 		//lock_guard<std::recursive_mutex> lock(m_recursiveMutex);
 		lock_guard<mutex> lock(m_mutex);*/
-		m_objects.emplace_back(dynamic_cast<ObjectBehaviour*>(obj));
+		m_objects.emplace_back(obj);
 	}
 
 	void Scene::RemoveObject(GameObject* obj)
@@ -119,8 +187,9 @@ namespace AnEngine::Game
 				break;
 			}
 		}
-		dynamic_cast<BaseBehaviour*>(obj)->OnRelease();
-		obj = nullptr;
+		//dynamic_cast<BaseBehaviour*>(obj)->OnRelease();
+		//obj = nullptr;
+		delete obj;
 	}
 
 	void Scene::Wait()

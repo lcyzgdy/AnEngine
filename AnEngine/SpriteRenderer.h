@@ -11,8 +11,8 @@ namespace AnEngine::Game
 	{
 		RenderCore::Resource::Texture* m_texture;
 	public:
-		explicit SpriteRenderer(const wstring& name, RenderCore::Resource::Texture* tex);
-		explicit SpriteRenderer(wstring&& name, RenderCore::Resource::Texture* tex);
+		explicit SpriteRenderer();
+		explicit SpriteRenderer(RenderCore::Resource::Texture* tex);
 		virtual ~SpriteRenderer() = default;
 
 		// 通过 Renderer 继承

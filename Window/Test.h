@@ -6,10 +6,10 @@
 
 void LoadScene();
 
-class TestCamera : public AnEngine::Game::ObjectBehaviour
+class TestCamera : public AnEngine::Game::Script
 {
 protected:
 	virtual void Update() override;
 public:
-	TestCamera(std::wstring&& name);
+	TestCamera();
 };

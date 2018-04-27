@@ -31,8 +31,9 @@ namespace AnEngine::Game
 		virtual void LateUpdate() override;
 
 	public:
-		explicit Renderer(const std::wstring& name);
-		explicit Renderer(std::wstring&& name);
+		//explicit Renderer(const std::wstring& name);
+		//explicit Renderer(std::wstring&& name);
+		Renderer();
 		virtual ~Renderer() = default;
 
 		virtual void Destory() override;
@@ -55,8 +56,9 @@ namespace AnEngine::Game
 			XMFLOAT3 position;
 			XMFLOAT4 color;
 		};
-		TrangleRender(const std::wstring& name);
-		TrangleRender(std::wstring&& name);
+		/*TrangleRender(const std::wstring& name);
+		TrangleRender(std::wstring&& name);*/
+		TrangleRender();
 
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;

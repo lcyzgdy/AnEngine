@@ -54,7 +54,7 @@ namespace AnEngine::Game
 		uint8_t* m_pConstantBufferGSData;
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_constantBufferCS;
 
-		RenderCore::Fence* m_fence;
+		//RenderCore::Fence* m_fence;
 		Microsoft::WRL::ComPtr<ID3D12Fence> m_srvUavFence;
 		uint64_t m_srvUavFenceValue;
 		HANDLE m_srvUavFenceEvent;
@@ -68,7 +68,7 @@ namespace AnEngine::Game
 		void WaitForRenderContext();
 
 	public:
-		ParticlesRenderer(std::wstring&& name);
+		ParticlesRenderer();
 		// 通过 Renderer 继承
 		virtual void LoadAsset() override;
 		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) override;

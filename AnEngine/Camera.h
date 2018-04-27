@@ -33,7 +33,7 @@ namespace AnEngine::Game
 		Color m_clearColor;
 
 		//RenderCore::Resource::ColorBuffer* m_colorBuffer;
-		RenderCore::Resource::DepthBuffer* m_depthBuffer;
+		//RenderCore::Resource::DepthBuffer* m_depthBuffer;
 
 		RenderCore::Resource::MultiBuffer<2, RenderCore::Resource::ColorBuffer> m_colorBuffers;
 		RenderCore::Resource::MultiBuffer<2, RenderCore::Resource::DepthBuffer> m_depthBuffers;
@@ -60,10 +60,12 @@ namespace AnEngine::Game
 		void PostProcess();
 
 	public:
-		Camera(const std::wstring& name);
+		/*Camera(const std::wstring& name);
 		Camera(std::wstring&& name);
 		Camera(const std::wstring& name, ClearFlags clearFlag);
-		Camera(std::wstring&& name, ClearFlags clearFlag);
+		Camera(std::wstring&& name, ClearFlags clearFlag);*/
+		Camera();
+		Camera(ClearFlags clearFlag);
 		~Camera();
 
 		RenderCore::Resource::ColorBuffer* GetColorBuffer();

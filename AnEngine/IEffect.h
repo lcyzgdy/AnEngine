@@ -15,4 +15,4 @@ namespace AnEngine::Effect
 	};
 }
 
-#undef // !__IEFFECT_H__
+#endif // !__IEFFECT_H__

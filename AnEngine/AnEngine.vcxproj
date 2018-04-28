@@ -224,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
     <ClCompile Include="CommandContext.cpp" />

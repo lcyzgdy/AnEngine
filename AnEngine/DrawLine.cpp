@@ -1,4 +1,4 @@
-﻿#include "DrawLine.h"
+#include "DrawLine.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 

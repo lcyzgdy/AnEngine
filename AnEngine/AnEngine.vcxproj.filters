@@ -354,6 +354,7 @@
     <ClCompile Include="Object.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
+    <ClCompile Include="Canvas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

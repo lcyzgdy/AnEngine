@@ -10,8 +10,6 @@ namespace AnEngine::Game::UI
 	{
 	protected:
 		virtual void Start() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
 	};
 }
 

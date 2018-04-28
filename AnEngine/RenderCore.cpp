@@ -16,6 +16,8 @@ using namespace AnEngine::Debug;
 
 namespace AnEngine::RenderCore
 {
+	ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
+
 	vector<unique_ptr<GraphicsCard>> r_graphicsCard;
 	ComPtr<IDXGISwapChain3> r_swapChain_cp = nullptr;
 	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
@@ -24,11 +26,12 @@ namespace AnEngine::RenderCore
 	uint64_t r_frameCount;
 
 	//Fence* r_fenceForDisplayPlane;
-	ComPtr<ID3D12Fence> r_fence;
-	uint64_t r_fenceValueForDisplayPlane[r_SwapChainBufferCount_const];
-	HANDLE r_fenceEvent;
+	//ComPtr<ID3D12Fence> r_fence;
+	//uint64_t r_fenceValueForDisplayPlane[r_SwapChainBufferCount_const];
+	//HANDLE r_fenceEvent;
 
-	ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
+	// D2D
+
 #ifdef _WIN32
 	HWND r_hwnd;
 #endif // _WIN32
@@ -90,13 +93,13 @@ namespace AnEngine::RenderCore
 		CreateCommonState();
 
 		//r_fenceForDisplayPlane = new Fence(r_graphicsCard[0]->GetCommandQueue());
-		r_graphicsCard[0]->GetDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&r_fence));
+		/*r_graphicsCard[0]->GetDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&r_fence));
 		memset(r_fenceValueForDisplayPlane, 0, sizeof(r_fenceValueForDisplayPlane));
 		r_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 		if (r_fenceEvent == NULL)
 		{
 			HRESULT_FROM_WIN32(GetLastError());
-		}
+		}*/
 		// 帧缓冲之间的资源同步
 
 		//rrrr_runningFlag = true;
@@ -145,9 +148,9 @@ namespace AnEngine::RenderCore
 			{
 				r_enableHDROutput = true;
 			}
-		}
-#endif
 	}
+#endif
+}
 
 	void InitializePipeline()
 	{
@@ -257,14 +260,14 @@ namespace AnEngine::RenderCore
 		psResource2DepthWrite.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 	}
 
-	void PopulateCommandList()
+	/*void PopulateCommandList()
 	{
 		//r_fenceForDisplayPlane->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
 		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 		r_frameCount++;
 		r_fenceValueForDisplayPlane[r_frameIndex] = Timer::GetTotalTicks();
-	}
+	}*/
 
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
 	{

@@ -13,31 +13,31 @@ Camera* testCamera;
 void LoadScene()
 {
 	testScene = new Scene(L"Test Scene");
-	GameObject* object = new GameObject(L"Test Object");
+	GameObject* testCameraObject = new GameObject(L"Test Object");
 
 	testCamera = new Camera();
 	testCamera->ClearFlag(Camera::ClearFlags::SolidColor);
 	testCamera->ClearColor({ 0.5f, 0.5f, 0.2f, 1.0f });
-	object->AddComponent(testCamera);
+	testCameraObject->AddComponent(testCamera);
 
-	TestCamera* camera = new TestCamera();
-	object->AddComponent(camera);
+	TestCamera* cameraScript = new TestCamera();
+	testCameraObject->AddComponent(cameraScript);
 
 	TrangleRender* trangleRender = new TrangleRender();
-	object->AddComponent(trangleRender);
+	testCameraObject->AddComponent(trangleRender);
 	//ParticlesRenderer* nBody = new ParticlesRenderer();
-	//object->AddComponent(nBody);
+	//testCameraObject->AddComponent(nBody);
 
-	testScene->AddObject(object);
+	testScene->AddObject(testCameraObject);
 	Driver::GetInstance()->StartScene(testScene);
 }
 
 void TestCamera::Update()
 {
-	//var camera = gameObject->GetComponent<Camera>();
-	//camera->ClearColor({ 0.0f, sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
+	//var cameraScript = gameObject->GetComponent<Camera>();
+	//cameraScript->ClearColor({ 0.0f, sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
 }
 
-TestCamera::TestCamera() : ObjectBehaviour()
+TestCamera::TestCamera() : Script()
 {
 }

@@ -92,7 +92,7 @@ namespace AnEngine::Utility::ThreadPool
 					m_tasks.emplace([task] { (*task)(); });
 				}
 				m_cvTask.notify_one();
-				return awaitFuture;
+				return std::move(awaitFuture);
 			}
 		};
 

@@ -79,9 +79,9 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	DeleteFile(_T("log.txt"));
-	std::wstring windowTitle(_T("AnEngine"));
-	std::wstring windowClassName(_T("AWindow"));
+	DeleteFile(L"log.txt");
+	std::wstring windowTitle(L"AnEngine");
+	std::wstring windowClassName(L"AWindow");
 	screenw = 1280;
 	screenh = 720;
 
@@ -113,7 +113,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (window == NULL)
 	{
-		MessageBox(NULL, _T("Error"), _T("Error1"), 0);
+		MessageBox(NULL, L"Error", L"Error1", 0);
 		state = 1;
 		return 0;
 	}

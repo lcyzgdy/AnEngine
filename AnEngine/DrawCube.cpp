@@ -1,7 +1,7 @@
 #include "DrawCube.h"
 using namespace AnEngine::RenderCore;
 
-DrawCube::DrawCube(const HWND _hwnd, const UINT _width, const UINT _height) :
+DrawCube::DrawCube(const HWND _hwnd, const uint32_t _width, const uint32_t _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	frameIndex(0),
 	viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)),
@@ -50,17 +50,17 @@ void DrawCube::OnRender()
 	MoveToNextFrame();
 }
 
-void DrawCube::OnKeyDown(UINT8 key)
+void DrawCube::OnKeyDown(uint8_t key)
 {
 }
 
-void DrawCube::OnKeyUp(UINT8 key)
+void DrawCube::OnKeyUp(uint8_t key)
 {
 }
 
 void DrawCube::InitializePipeline()
 {
-	UINT dxgiFactoryFlags = 0;
+	uint32_t dxgiFactoryFlags = 0;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	ComPtr<ID3D12Debug> d3dDebugController;
@@ -153,7 +153,7 @@ void DrawCube::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < r_DefaultFrameCount_const; i++)
+	for (uint32_t i = 0; i < r_DefaultFrameCount_const; i++)
 	{
 		swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -179,13 +179,13 @@ void DrawCube::InitializeAssets()
 		ComPtr<ID3DBlob> vertexShader;
 		ComPtr<ID3DBlob> pixelShader;
 #if defined(_DEBUG)
-		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+		uint32_t compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-		UINT compileFlags = 0;
+		uint32_t compileFlags = 0;
 #endif
 		//auto l = GetAssetFullPath(_T("shaders.hlsl"));
-		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+		D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+		D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 
 
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -243,7 +243,7 @@ void DrawCube::InitializeAssets()
 			{ { -1.0f, -1.0f, 1.0f },{ Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,Random(0.0f,1.0f), 1.0f } },	// Front Bottom Left
 		};
 
-		UINT cubeIndices[] =
+		uint32_t cubeIndices[] =
 		{
 			0, 1, 3,
 			1, 2, 3,
@@ -264,18 +264,18 @@ void DrawCube::InitializeAssets()
 			5, 4, 6,
 		};
 
-		UINT vertexIndexBufferSize = sizeof(cubeIndices) + sizeof(cubeVertices);// +sizeof(quadVertices);
+		uint32_t vertexIndexBufferSize = sizeof(cubeIndices) + sizeof(cubeVertices);// +sizeof(quadVertices);
 
 		ThrowIfFailed(device->CreateCommittedResource
 		(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 
-			D3D12_HEAP_FLAG_NONE, 
-			&CD3DX12_RESOURCE_DESC::Buffer(vertexIndexBufferSize), 
-			D3D12_RESOURCE_STATE_GENERIC_READ, 
-			nullptr, 
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(vertexIndexBufferSize),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
 			IID_PPV_ARGS(&vertexIndexBuffer)
 		));
-		UINT8* mappedUploadHeap = nullptr;
+		uint8_t* mappedUploadHeap = nullptr;
 		CD3DX12_RANGE readRange(0, 0);
 		ThrowIfFailed(vertexIndexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&mappedUploadHeap)));
 
@@ -293,9 +293,9 @@ void DrawCube::InitializeAssets()
 		ThrowIfFailed(device->CreateCommandList
 		(
 			0,
-			D3D12_COMMAND_LIST_TYPE_DIRECT, 
-			commandAllocators[frameIndex].Get(), 
-			pipelineState.Get(), 
+			D3D12_COMMAND_LIST_TYPE_DIRECT,
+			commandAllocators[frameIndex].Get(),
+			pipelineState.Get(),
 			IID_PPV_ARGS(&commandList)
 		));
 		//commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertexIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_INDEX_BUFFER));
@@ -361,7 +361,7 @@ void DrawCube::PopulateCommandList()
 
 void DrawCube::MoveToNextFrame()
 {
-	const UINT64 currentFenceValue = fenceValues[frameIndex];
+	const uint64_t currentFenceValue = fenceValues[frameIndex];
 	ThrowIfFailed(commandQueue->Signal(fence.Get(), currentFenceValue));
 
 	frameIndex = swapChain->GetCurrentBackBufferIndex();

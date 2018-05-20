@@ -61,7 +61,6 @@ namespace AnEngine::RenderCore
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	void InitializePipeline();
-	void PopulateCommandList();
 	void WaitForGpu();
 
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
@@ -77,7 +76,7 @@ namespace AnEngine::RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 #endif
-		CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf()));
+		ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
 
 
 		while (graphicCardCount--)
@@ -92,17 +91,6 @@ namespace AnEngine::RenderCore
 		InitializePipeline();
 		CreateCommonState();
 
-		//r_fenceForDisplayPlane = new Fence(r_graphicsCard[0]->GetCommandQueue());
-		/*r_graphicsCard[0]->GetDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&r_fence));
-		memset(r_fenceValueForDisplayPlane, 0, sizeof(r_fenceValueForDisplayPlane));
-		r_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-		if (r_fenceEvent == NULL)
-		{
-			HRESULT_FROM_WIN32(GetLastError());
-		}*/
-		// 帧缓冲之间的资源同步
-
-		//rrrr_runningFlag = true;
 		r_frameCount = 0;
 	}
 
@@ -148,9 +136,9 @@ namespace AnEngine::RenderCore
 			{
 				r_enableHDROutput = true;
 			}
-	}
+		}
 #endif
-}
+	}
 
 	void InitializePipeline()
 	{
@@ -260,15 +248,6 @@ namespace AnEngine::RenderCore
 		psResource2DepthWrite.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 	}
 
-	/*void PopulateCommandList()
-	{
-		//r_fenceForDisplayPlane->CpuWait(r_fenceValueForDisplayPlane[r_frameIndex]);
-		ThrowIfFailed(r_swapChain_cp->Present(1, 0));
-		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-		r_frameCount++;
-		r_fenceValueForDisplayPlane[r_frameIndex] = Timer::GetTotalTicks();
-	}*/
-
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
 	{
 		//var commandList = GraphicsCommandContext::GetInstance()->GetOne();
@@ -289,13 +268,10 @@ namespace AnEngine::RenderCore
 		var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRTV(), clearColor, 0, nullptr);
-		//iList->ResourceBarrier(1, &renderTargetToCommon);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
-		//GraphicsCommandContext::GetInstance()->Push(commandList);
-		//GraphicsCommandAllocator::GetInstance()->Push(commandAllocator);
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
 
@@ -329,16 +305,13 @@ namespace AnEngine::RenderCore
 		iList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
 		ThrowIfFailed(iList->Close(), R_GetGpuError);
-		//ID3D12CommandList* ppcommandList[] = { iList };
 #ifdef _DEBUG
 		if (frameIndex != r_frameIndex)
 		{
 			throw exception();
 		}
 #endif // _DEBUG
-		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		//WaitForGpu();
 		GraphicsContext::Push(commandList, commandAllocator);
 
 		ThrowIfFailed(r_swapChain_cp->Present(0, 0), R_GetGpuError);
@@ -348,23 +321,6 @@ namespace AnEngine::RenderCore
 
 	void WaitForGpu()
 	{
-		/*uint64_t currentFenceValue = r_fenceValueForDisplayPlane[r_frameIndex];
-		var commandQueue = r_graphicsCard[0]->GetCommandQueue();
-		ThrowIfFailed(commandQueue->Signal(r_fence.Get(), currentFenceValue));
-		// 在队列中调度信号命令。
-
-		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-		r_frameCount++;
-		// 更新帧编号
-
-		if (r_fence->GetCompletedValue() < r_fenceValueForDisplayPlane[r_frameIndex])
-		{
-			r_fence->SetEventOnCompletion(r_fenceValueForDisplayPlane[r_frameIndex], r_fenceEvent);
-			WaitForSingleObjectEx(r_fenceEvent, INFINITE, false);
-		}// 如果下一帧还没有渲染完，则等待
-
-		r_fenceValueForDisplayPlane[r_frameIndex] = currentFenceValue + 1LL;*/
-
 		var[fence] = FenceContext::GetInstance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();

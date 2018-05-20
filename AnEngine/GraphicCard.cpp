@@ -1,6 +1,7 @@
 #include"GraphicCard.h"
 #include"DebugLog.h"
 #include"DTimer.h"
+#include"RenderCore.h"
 using namespace std;
 using namespace Microsoft::WRL;
 
@@ -10,16 +11,9 @@ namespace AnEngine::RenderCore
 	{
 		D3D_FEATURE_LEVEL featureLevel;
 
-		//CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(Private::r_dxgiFactory_cp.GetAddressOf()));
-		//if (dxgiFactory == nullptr)
-		//{
-		//	CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&dxgiFactory));
-		//}
-
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
-		//GetHardwareAdapter(Private::r_dxgiFactory_cp.Get(), &cp_hardwareAdapter);
 		GetHardwareAdapter(dxgiFactory, &cp_hardwareAdapter);
-		D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp));
+		ThrowIfFailed(D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp)), R_GetGpuError);
 
 		if (m_device_cp.Get() == nullptr)
 		{
@@ -65,7 +59,7 @@ namespace AnEngine::RenderCore
 					DXGI_FORMAT_R11G11B10_FLOAT,
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
-				};
+	};
 				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
@@ -75,8 +69,8 @@ namespace AnEngine::RenderCore
 				{
 					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
-			}
-		}
+}
+}
 	}
 
 	void GraphicsCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)

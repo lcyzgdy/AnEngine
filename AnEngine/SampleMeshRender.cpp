@@ -132,7 +132,7 @@ namespace AnEngine::Game
 			device->CreateDepthStencilView(m_depthStencil.Get(), nullptr, m_dsvHandle);
 		}
 		uint32_t fileSize = 0;
-		uint8_t* pAssetData;
+		std::byte* pAssetData;
 		ThrowIfFailed(ReadDataFromFile(m_fileName.c_str(), &pAssetData, &fileSize));
 
 		D3D12_SUBRESOURCE_DATA vertexData = {};

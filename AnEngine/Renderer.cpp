@@ -13,6 +13,7 @@ namespace AnEngine::Game
 {
 	void Renderer::Start()
 	{
+		ObjectBehaviour::Start();
 		LoadAsset();
 	}
 

@@ -215,7 +215,7 @@
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
-      <Filter>Game</Filter>
+      <Filter>Game\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -354,7 +354,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
-    <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Game\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

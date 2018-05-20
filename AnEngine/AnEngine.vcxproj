@@ -23,7 +23,7 @@
     <ProjectGuid>{9839A870-23AE-44DD-95AA-857EC1119546}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>AnEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -116,6 +116,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)PhyX\PhysX_3.4\Include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
+      <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

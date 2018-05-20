@@ -107,20 +107,6 @@ namespace AnEngine::Game
 				q.push(i);
 			}
 		}
-		/*for (var item : m_objects)
-		{
-			item->BeforeUpdate();
-		}
-		for (var item : m_objects)
-		{
-			item->OnUpdate();
-		}
-		for (var item : m_objects)
-		{
-			item->AfterUpdate();
-		}*/
-		//lock.unlock();
-		//}
 	}
 
 	void Scene::AfterUpdate()

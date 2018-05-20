@@ -24,8 +24,8 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
 
 		ComPtr<ID3D11Device> d3d11Device;
-		ThrowIfFailed(D3D11On12CreateDevice(r_graphicsCard[0]->m_device_cp.Get(), d3d11DeviceFlags, nullptr, 0,
-			reinterpret_cast<IUnknown**>(m_commandQueue.GetAddressOf()), 1, 0, &d3d11Device, &m_d3d11DeviceContext, nullptr));
+		/*ThrowIfFailed(D3D11On12CreateDevice(r_graphicsCard[0]->m_device_cp.Get(), d3d11DeviceFlags, nullptr, 0,
+			reinterpret_cast<IUnknown**>(m_commandQueue.GetAddressOf()), 1, 0, &d3d11Device, &m_d3d11DeviceContext, nullptr));*/
 
 		// Query the 11On12 device from the 11 device.
 		ThrowIfFailed(d3d11Device.As(&m_d3d11On12Device));

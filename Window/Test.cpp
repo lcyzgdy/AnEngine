@@ -34,8 +34,8 @@ void LoadScene()
 
 void TestCamera::Update()
 {
-	//var cameraScript = gameObject->GetComponent<Camera>();
-	//cameraScript->ClearColor({ 0.0f, sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
+	var cameraScript = gameObject->GetComponent<Camera>();
+	cameraScript->ClearColor({ sin((float)Timer::GetTotalTicks() / 240000), sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
 }
 
 TestCamera::TestCamera() : Script()

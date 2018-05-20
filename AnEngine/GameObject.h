@@ -55,16 +55,6 @@ namespace AnEngine::Game
 
 		std::vector<ObjectBehaviour*> GetComponents();
 
-		/*template<typename T = ObjectBehaviour>
-		T* GetComponentByName(std::wstring name)
-		{
-			for (var i : ((ObjectBehaviour*)gameObject)->m_component)
-			{
-				if (i->name == name)
-					return i;
-			}
-		}*/
-
 		template<typename _Ty = ObjectBehaviour>
 		_Ty* GetComponent()
 		{
@@ -78,6 +68,17 @@ namespace AnEngine::Game
 		}
 
 		void AddComponent(ObjectBehaviour* component);
+
+		template<typename _Ty>
+		void AddComponent()
+		{
+			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
+			{
+				throw std::exception("_Ty is not derived ObjectBehaviour");
+			}
+			AddComponent(new _Ty());
+		}
+
 		void RemoveComponent(ObjectBehaviour* component);
 	};
 }

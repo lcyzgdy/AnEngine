@@ -124,12 +124,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsCore.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigidbody3D.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="SampleAssets.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -216,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="Canvas.h">
       <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
       <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

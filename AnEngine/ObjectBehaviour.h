@@ -30,7 +30,6 @@ namespace AnEngine::Game
 
 	protected:
 		bool m_active;
-		Scene* m_scene;
 
 		GameObject* gameObject;
 

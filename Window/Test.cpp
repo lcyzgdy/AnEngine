@@ -3,6 +3,8 @@
 #include "SampleMeshRender.h"
 #include "ParticlesRenderer.h"
 #include "DTimer.h"
+#include "StateMachine.h"
+#include "DebugLog.h"
 using namespace AnEngine;
 using namespace AnEngine::Game;
 using namespace AnEngine::RenderCore;
@@ -27,6 +29,10 @@ void LoadScene()
 	testCameraObject->AddComponent(trangleRender);
 	//ParticlesRenderer* nBody = new ParticlesRenderer();
 	//testCameraObject->AddComponent(nBody);
+
+	StateMachine* fsm = new StateMachine();
+	int s1 = fsm->CreateNewState(L"State1", []() { Debug::Log(L"State1"); });
+	int s2 = fsm->CreateNewState(L"State2", []() { Debug::Log(L"State2"); });
 
 	testScene->AddObject(testCameraObject);
 	Driver::GetInstance()->StartScene(testScene);

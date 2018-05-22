@@ -4,7 +4,7 @@
 
 #include<wrl.h>
 #include"DX.h"
-#include"Fence.h"
+#include"Fence.hpp"
 #include<functional>
 
 namespace AnEngine::RenderCore::Resource
@@ -14,7 +14,7 @@ namespace AnEngine::RenderCore::Resource
 
 	class GpuResource
 	{
-		Fence* m_fence;
+		//Fence* m_fence;
 	protected:
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource_cp;
 		Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;
@@ -27,9 +27,9 @@ namespace AnEngine::RenderCore::Resource
 	public:
 		GpuResource(); // For inheritance
 		GpuResource(ID3D12Resource* p_resource, D3D12_RESOURCE_STATES currentState);
-		~GpuResource() = default;
+		virtual ~GpuResource();
 
-		virtual void Release();
+		//virtual void Release();
 
 		ID3D12Resource* operator->();
 		const ID3D12Resource* operator->() const;
@@ -39,7 +39,7 @@ namespace AnEngine::RenderCore::Resource
 
 		D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress() const;
 
-		Fence* GetFence();
+		//Fence* GetFence();
 
 		void Create();
 	};

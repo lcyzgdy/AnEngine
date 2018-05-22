@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef __DRAWLINE_H__
 #define __DRAWLINE_H__
 

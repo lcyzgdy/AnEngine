@@ -159,8 +159,8 @@ void FrameBuffering::InitializeAssets()
 	UINT compileFlags = 0;
 #endif
 	//auto l = GetAssetFullPath(_T("shaders.hlsl"));
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -267,7 +267,7 @@ void FrameBuffering::PopulateCommandList()
 	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
-	
+
 	commandList->DrawInstanced(7, 1, 0, 0);
 
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));

@@ -434,7 +434,7 @@ namespace AnEngine::RenderCore::Resource
 		const D3D12_RESOURCE_DESC & resourceDesc, D3D12_CLEAR_VALUE clearValue,
 		D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
-		this->Release();
+		//this->Release();
 
 		CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
 		ThrowIfFailed(device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE,

@@ -1,12 +1,13 @@
 #include "ExecuteIndirect.h"
+#include <string>
 
-const UINT ExecuteIndirect::commandSizePerFrame = triangleCount * sizeof(IndirectCommand);
-const UINT ExecuteIndirect::commandBufferCounterOffset = AlignForUavCounter(ExecuteIndirect::commandSizePerFrame);
+const uint32_t ExecuteIndirect::commandSizePerFrame = triangleCount * sizeof(IndirectCommand);
+const uint32_t ExecuteIndirect::commandBufferCounterOffset = AlignForUavCounter(ExecuteIndirect::commandSizePerFrame);
 const float ExecuteIndirect::triangleHalfWidth = 0.05f;
 const float ExecuteIndirect::triangleDepth = 1.0f;
 const float ExecuteIndirect::cullingCutoff = 0.5f;
 
-ExecuteIndirect::ExecuteIndirect(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title) :
+ExecuteIndirect::ExecuteIndirect(const HWND _hwnd, const uint32_t _width, const uint32_t _height, const wstring& _title) :
 	D3D12AppBase(_hwnd, _width, _height, _title), pCbvDataBegin(nullptr),
 	constantBufferData{}, csRootConstants(), enableCulling(true),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),
@@ -39,7 +40,7 @@ void ExecuteIndirect::OnInit()
 
 void ExecuteIndirect::OnUpdate()
 {
-	for (UINT i = 0; i < triangleCount; i++)
+	for (uint32_t i = 0; i < triangleCount; i++)
 	{
 		const float offsetBounds = 2.5f;
 
@@ -51,7 +52,7 @@ void ExecuteIndirect::OnUpdate()
 		}
 	}
 
-	UINT8* destination = pCbvDataBegin + (triangleCount * frameIndex * sizeof(SceneConstantBuffer));
+	uint8_t* destination = pCbvDataBegin + (triangleCount * frameIndex * sizeof(SceneConstantBuffer));
 	memcpy(destination, &constantBufferData[0], triangleCount * sizeof(SceneConstantBuffer));
 	// 将数据拷贝到场景常量缓冲区
 }
@@ -92,11 +93,11 @@ void ExecuteIndirect::OnRelease()
 	CloseHandle(fenceEvent);
 }
 
-void ExecuteIndirect::OnKeyUp(UINT8 key)
+void ExecuteIndirect::OnKeyUp(uint8_t key)
 {
 }
 
-void ExecuteIndirect::OnKeyDown(UINT8 key)
+void ExecuteIndirect::OnKeyDown(uint8_t key)
 {
 	if (key == VK_SPACE)
 	{
@@ -106,7 +107,7 @@ void ExecuteIndirect::OnKeyDown(UINT8 key)
 
 void ExecuteIndirect::InitializePipeline()
 {
-	UINT dxgiFactoryFlags = 0;
+	uint32_t dxgiFactoryFlags = 0;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	ComPtr<ID3D12Debug> d3dDebugController;
@@ -216,7 +217,7 @@ void ExecuteIndirect::InitializePipeline()
 	// !#1	创建描述符堆
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-	for (UINT i = 0; i < r_DefaultFrameCount_const; i++)
+	for (uint32_t i = 0; i < r_DefaultFrameCount_const; i++)
 	{
 		ThrowIfFailed(swapChain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i])));
 		device->CreateRenderTargetView(renderTargets[i].Get(), nullptr, rtvHandle);
@@ -279,12 +280,12 @@ void ExecuteIndirect::InitializeAssets()
 		ComPtr<ID3DBlob> error;
 
 #if defined(_DEBUG)
-		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+		uint32_t compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-		UINT compileFlags = 0;
+		uint32_t compileFlags = 0;
 #endif
 
-		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(_T("execute_indirect_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, &error));
+		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"execute_indirect_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, &error));
 		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"execute_indirect_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, &error));
 		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(L"compute_shader.hlsl").c_str(), nullptr, nullptr, "CSMain", "cs_5_0", compileFlags, 0, &computeShader, &error));
 
@@ -335,7 +336,7 @@ void ExecuteIndirect::InitializeAssets()
 			{ { triangleHalfWidth, -triangleHalfWidth, triangleDepth } },
 			{ { -triangleHalfWidth, -triangleHalfWidth, triangleDepth } }
 		};
-		const UINT vertexBufferSize = sizeof(triangleVertices);
+		const uint32_t vertexBufferSize = sizeof(triangleVertices);
 		device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE,
@@ -352,7 +353,7 @@ void ExecuteIndirect::InitializeAssets()
 			IID_PPV_ARGS(&vertexBufferUpload));
 
 		D3D12_SUBRESOURCE_DATA vertexData = {};
-		vertexData.pData = reinterpret_cast<UINT8*>(triangleVertices);
+		vertexData.pData = reinterpret_cast<uint8_t*>(triangleVertices);
 		vertexData.RowPitch = vertexBufferSize;
 		vertexData.SlicePitch = vertexData.RowPitch;
 
@@ -390,7 +391,7 @@ void ExecuteIndirect::InitializeAssets()
 	}
 	// #5
 	{
-		const UINT constantBufferDataSize = triangleResourceCount * sizeof(SceneConstantBuffer);
+		const uint32_t constantBufferDataSize = triangleResourceCount * sizeof(SceneConstantBuffer);
 
 		device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -400,7 +401,7 @@ void ExecuteIndirect::InitializeAssets()
 			nullptr,
 			IID_PPV_ARGS(&constantBuffer));
 
-		for (UINT n = 0; n < triangleCount; n++)
+		for (uint32_t n = 0; n < triangleCount; n++)
 		{
 			constantBufferData[n].velocity = XMFLOAT4(Random(0.01f, 0.02f), 0.0f, 0.0f, 0.0f);
 			constantBufferData[n].offset = XMFLOAT4(Random(-5.0f, -1.5f), Random(-1.0f, 1.0f), Random(0.0f, 2.0f), 0.0f);
@@ -423,7 +424,7 @@ void ExecuteIndirect::InitializeAssets()
 		// 创建常量缓冲区的着色器资源视图（SRV），以供计算着色器读取。
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CbvSrvOffset, cbvSrvUavDescriptorSize);
-		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
+		for (uint32_t frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
 			srvDesc1.Buffer.FirstElement = frame * triangleCount;
 			device->CreateShaderResourceView(constantBuffer.Get(), &srvDesc1, cbvSrvHandle);
@@ -451,7 +452,7 @@ void ExecuteIndirect::InitializeAssets()
 	{
 		std::vector<IndirectCommand> commands;
 		commands.resize(triangleResourceCount);
-		const UINT commandBufferSize = commandSizePerFrame * r_DefaultFrameCount_const;
+		const uint32_t commandBufferSize = commandSizePerFrame * r_DefaultFrameCount_const;
 
 		D3D12_RESOURCE_DESC commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferSize);
 		device->CreateCommittedResource(
@@ -471,11 +472,11 @@ void ExecuteIndirect::InitializeAssets()
 			IID_PPV_ARGS(&commandBufferUpload));
 
 		D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = constantBuffer->GetGPUVirtualAddress();
-		UINT commandIndex = 0;
+		uint32_t commandIndex = 0;
 
-		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
+		for (uint32_t frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
-			for (UINT n = 0; n < triangleCount; n++)
+			for (uint32_t n = 0; n < triangleCount; n++)
 			{
 				commands[commandIndex].cbv = gpuAddress;
 				commands[commandIndex].drawArguments.VertexCountPerInstance = 3;
@@ -489,7 +490,7 @@ void ExecuteIndirect::InitializeAssets()
 		}
 
 		D3D12_SUBRESOURCE_DATA commandData = {};
-		commandData.pData = reinterpret_cast<UINT8*>(&commands[0]);
+		commandData.pData = reinterpret_cast<uint8_t*>(&commands[0]);
 		commandData.RowPitch = commandBufferSize;
 		commandData.SlicePitch = commandData.RowPitch;
 		// 将数据复制到中间上传堆，然后将上传堆的副本拷贝到命令缓冲区。
@@ -507,7 +508,7 @@ void ExecuteIndirect::InitializeAssets()
 		// 为命令缓冲区创建SRV。
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE commandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), CommandsOffset, cbvSrvUavDescriptorSize);
-		for (UINT frameI = 0; frameI < r_DefaultFrameCount_const; frameI++)
+		for (uint32_t frameI = 0; frameI < r_DefaultFrameCount_const; frameI++)
 		{
 			srvDesc2.Buffer.FirstElement = frameI * triangleCount;
 			device->CreateShaderResourceView(commandBuffer.Get(), &srvDesc2, commandsHandle);
@@ -516,9 +517,9 @@ void ExecuteIndirect::InitializeAssets()
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle(cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), ProcessedCommandsOffset, cbvSrvUavDescriptorSize);
 		// 创建存储计算工作结果的无序访问视图（UAV）。
-		for (UINT frame = 0; frame < r_DefaultFrameCount_const; frame++)
+		for (uint32_t frame = 0; frame < r_DefaultFrameCount_const; frame++)
 		{
-			commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferCounterOffset + sizeof(UINT), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+			commandBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(commandBufferCounterOffset + sizeof(uint32_t), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 			device->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 				D3D12_HEAP_FLAG_NONE,
@@ -549,16 +550,16 @@ void ExecuteIndirect::InitializeAssets()
 		device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(UINT)),
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(uint32_t)),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(&processedCommandBufferCounterReset));
 		// 分配一个可用于重置UAV计数器并将其初始化为0的缓冲区。
 
-		UINT8* pMappedCounterReset = nullptr;
+		uint8_t* pMappedCounterReset = nullptr;
 		CD3DX12_RANGE readRange2(0, 0);
 		processedCommandBufferCounterReset->Map(0, &readRange2, reinterpret_cast<void**>(&pMappedCounterReset));
-		ZeroMemory(pMappedCounterReset, sizeof(UINT));
+		ZeroMemory(pMappedCounterReset, sizeof(uint32_t));
 		processedCommandBufferCounterReset->Unmap(0, nullptr);
 		// !#7	//创建命令缓冲区和UAV以存储计算工作的结果。
 	}
@@ -595,7 +596,7 @@ void ExecuteIndirect::PopulateCommandList()
 
 	if (enableCulling)
 	{
-		UINT frameDescriptorOffset = frameIndex * CbvSrvUavDescriptorCountPerFrame;
+		uint32_t frameDescriptorOffset = frameIndex * CbvSrvUavDescriptorCountPerFrame;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
 		computeCommandList->SetComputeRootSignature(computeRootSignature.Get());
@@ -609,13 +610,13 @@ void ExecuteIndirect::PopulateCommandList()
 
 		computeCommandList->SetComputeRoot32BitConstants(RootConstants, 4, reinterpret_cast<void*>(&csRootConstants), 0);
 
-		computeCommandList->CopyBufferRegion(processedCommandBuffers[frameIndex].Get(), commandBufferCounterOffset, processedCommandBufferCounterReset.Get(), 0, sizeof(UINT));
+		computeCommandList->CopyBufferRegion(processedCommandBuffers[frameIndex].Get(), commandBufferCounterOffset, processedCommandBufferCounterReset.Get(), 0, sizeof(uint32_t));
 		// 为这一帧重置UAV计数器
 
 		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(processedCommandBuffers[frameIndex].Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		computeCommandList->ResourceBarrier(1, &barrier);
 
-		computeCommandList->Dispatch(static_cast<UINT>(ceil(triangleCount / float(computeThreadBlockSize))), 1, 1);
+		computeCommandList->Dispatch(static_cast<uint32_t>(ceil(triangleCount / float(computeThreadBlockSize))), 1, 1);
 	}
 	computeCommandList->Close();
 
@@ -705,7 +706,7 @@ void ExecuteIndirect::WaitForGpu()
 
 void ExecuteIndirect::MoveToNextFrame()
 {
-	const UINT64 currentFenceValue = fenceValues[frameIndex];
+	const uint64_t currentFenceValue = fenceValues[frameIndex];
 	commandQueue->Signal(fence.Get(), currentFenceValue);
 	// 在队列中调度信号命令。
 
@@ -718,15 +719,15 @@ void ExecuteIndirect::MoveToNextFrame()
 		WaitForSingleObjectEx(fenceEvent, INFINITE, false);
 	}// 如果下一帧还没有渲染完，则等待
 
-	fenceValues[frameIndex] = static_cast<UINT>(currentFenceValue) + 1;
+	fenceValues[frameIndex] = static_cast<uint32_t>(currentFenceValue) + 1;
 }
 
 void ExecuteIndirect::WaitForRenderContext()
 {
 }
 
-UINT ExecuteIndirect::AlignForUavCounter(UINT bufferSize)
+uint32_t ExecuteIndirect::AlignForUavCounter(uint32_t bufferSize)
 {
-	const UINT alignment = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT;
+	const uint32_t alignment = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT;
 	return (bufferSize + (alignment - 1)) & ~(alignment - 1);
 }	// ???

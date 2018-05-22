@@ -5,12 +5,11 @@
 
 ## 特征
 * 使用了组件式设计，所有的组件继承自BaseBehaviour类，由Scene统一调度。
-* 对于游戏中可用的对象，都继承自ObjectBehaviour类，而ObjectBehaviour继承自BaseBehaviour和GameObject，既对于游戏对象将其抽象为一个GameObject，而对于其行为使用BaseBehaviour描述。其行为的具体内容由ObjectBehaviour中的虚函数覆写。
-* 如果想要让场景中出现一张2D图片，那么需要对该对象用一个继承自ObjectBehaviour的类描述，假设其名称为Sprite，而图片需要由渲染器渲染，则需要实例化一个SpriteRenderer，该类继承自Renderer，而Renderer继承自ObjectBehaviour并重写了一些虚函数。需要调用Sprite::AddComponent(SpriteRenderer)，此时Sprite::gameObject == SpriteRenderer::gameobject，其中gameObject是指向对象的指针，对于Sprite来说，其gameObject == this。
+* 对于游戏中可用的对象，都继承自ObjectBehaviour类，而ObjectBehaviour继承自BaseBehaviour，同时绑定到一个GameObject上，既对于游戏对象将其抽象为一个GameObject，而对于其行为使用Behaviour描述。其行为的具体内容由ObjectBehaviour中的虚函数覆写。
+* 如果想要让场景中出现一张2D图片，那么需要对该对象用一个GameObject描述，假设其名称为Sprite，而图片需要由渲染器渲染，则需要实例化一个SpriteRenderer，该类继承自Renderer，而Renderer继承自ObjectBehaviour并重写了一些虚函数。需要调用Sprite::AddComponent(SpriteRenderer)，此时Sprite::gameObject == SpriteRenderer::gameobject，其中gameObject是指向对象的指针，对于Sprite来说，其gameObject == this。
 
 ## 正在开发的功能
-* 计算引擎的资源载入
-* 加载3D模型
+* 状态机
 
 ### 计算机图形学作业专用Demo
 * 绘制三角形
@@ -24,8 +23,8 @@
 * Sample Mesh Renderer
 * MSAA
 
-### 错误
-在启用MSAA时没有使用资源缓冲会导致渲染目标视图死锁。
+### 倒车
+为了解决死锁问题和快速添加功能，将其改回了单线程。然而总感觉这样是开历史的倒车，在想到解决同步的方法前先凑合下。
 
 ## 开始
 在Window项目中新建头文件和源文件（Test.h，Test.cpp），头文件中引用 Driver.h。
@@ -36,10 +35,12 @@
 
 void LoadScene();
 
-class TestCamera :public AnEngine::Game::ObjectBehaviour
+class TestCamera : public AnEngine::Game::ObjectBehaviour
 {
+protected:
+	virtual void Update() override;
 public:
-	TestCamera(std::wstring&& name);
+	TestCamera();
 };
 
 ```
@@ -57,28 +58,35 @@ Camera* testCamera;
 void LoadScene()
 {
 	testScene = new Scene(L"Test Scene");
-	testCamera = new Camera(L"Test Camera");
+	GameObject* testCameraObject = new GameObject(L"Test Object");
+
+	testCamera = new Camera();
 	testCamera->ClearFlag(Camera::ClearFlags::SolidColor);
-	testCamera->ClearColor(Color::Blue);
+	testCamera->ClearColor(Color::Black);
+	testCameraObject->AddComponent(testCamera);
 
-	TestCamera* camera = new TestCamera(L"Test Camera Object");
-	camera->AddComponent(testCamera);
+	TestCamera* cameraScript = new TestCamera();
+	testCameraObject->AddComponent(cameraScript);
 
-	//TrangleRender* trangleRender = new TrangleRender(L"Test Render");
-	//camera->AddComponent(trangleRender);
-	ParticlesRenderer* nBody = new ParticlesRenderer(L"Test Particles");
-	camera->AddComponent(nBody);
+	ParticlesRenderer* nBody = new ParticlesRenderer();
+	testCameraObject->AddComponent(nBody);
 
-	testScene->AddObject(camera);
-	Driver::GetInstance()->BeginBehaviour(testScene);
+	testScene->AddObject(testCameraObject);
+	Driver::GetInstance()->StartScene(testScene);
 }
 
-TestCamera::TestCamera(std::wstring name) : ObjectBehaviour(name)
+void TestCamera::Update()
+{
+	// var camera = gameObject->GetComponent<Camera>();
+	// camera->ClearColor({ 0.0f, sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
+}
+
+TestCamera::TestCamera() : ObjectBehaviour()
 {
 }
 ```
 &#8195;&#8195;在CPP文件中对TestCamera的构造函数进行定义，这个对象并没有什么用，所以不需要在构造函数中做任何事情，只需要调用基类构造函数即可。<br/>
-&#8195;&#8195;在LoadScene()中，我们创建了一个空场景testScene，一个照相机testCamera，将清空标志设置为纯色，填充颜色为蓝色（注：这里为了Debug在Camera代码中没有使用ClearColor变量作为填充，下一版本会修改）。然后实例化一个TestCamera对象camera，将照相机作为该对象的组件，即调用camera的AddComponent方法将testCamera挂上去。然后创建一个三角形网格渲染器，也作为组件挂到camera上。最后，将camera对象加入到场景中，使用Driver的BeginBehaviour()方法加载场景。
+&#8195;&#8195;在LoadScene()中，我们创建了一个空场景testScene，一个照相机testCamera，将清空标志设置为纯色，可以通过Update()实时改变填充颜色。然后实例化一个TestCamera对象cameraScript，将脚本作为该对象的组件，即调用testCameraObject的AddComponent方法将testCamera和testCameraScript挂上去。然后创建一个nBody为原型的粒子渲染器，也作为组件挂到testCameraObject上。最后，将testCameraObject对象加入到场景中，使用Driver的BeginBehaviour()方法加载场景。
 
 * WinMain.cpp：
 ```cpp

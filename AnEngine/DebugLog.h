@@ -6,11 +6,10 @@
 
 namespace AnEngine::Debug
 {
-	class Debug
-	{
-	public:
-		static void Log(std::string l);
-	};
+	//void Log(std::string l);
+	void Log(const std::wstring& l);
+	void Log(std::wstring&& l);
+	void Log(uint32_t u);
 }
 
 #endif // !__DEBUGLOG_H__

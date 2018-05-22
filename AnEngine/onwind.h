@@ -2,59 +2,71 @@
 #ifndef __ONWIND_H__
 #define __ONWIND_H__
 
-#include<iostream>
-#include<fstream>
-#include<ctime>
-#include<cstring>
-#include<cmath>
-#include<cstdlib>
-#include<algorithm>
-#include<memory>
-#include<string>
-#include<vector>
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include <cstring>
+#include <cmath>
+#include <cstdlib>
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+#include <map>
+#include <functional>
 
 #define var auto
+#define let auto
+#define __FasterFunc(func) inline func __vectorcall
 
 #ifdef _WIN64
 
-#include<windows.h>
-#include<wrl.h>
-#include<tchar.h>
+#include <Windows.h>
+#include <wrl.h>
 
 #ifdef UNICODE
 
-#define Strcpy(a,b) wcscpy_s(a,b)
-#define ERRORBLOCK(a) MessageBox(NULL, _T("Error"), ToLPCWSTR(a), 0)
+#define SOLUTION_DIR L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
+
+#define Strcpy(a,b) wcscpy_s(a, b)
+#define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), L"Error", 0)
+
+#if defined _DEBUG || defined DEBUG
+#define ERRORBREAK(a) {\
+						ERRORBLOCK(a); \
+						throw std::exception(); \
+					  }
+#else
+#define ERRORBREAK(a) (a)
+#endif // _DEBUG || DEBUG
+
 
 inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
 	size_t origsize = orig.length() + 1;
-	const size_t newsize = 100;
-	size_t convertedChars = 0;
+	//const size_t newsize = 100;
+	//size_t convertedChars = 0;
 	wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t) *(origsize - 1));
 	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
 	return wcstring;
 }
 
-inline LPCWSTR ToLPCWSTR(char* l)
+/*inline LPCWSTR ToLPCWSTR(const char* l)
 {
-	std::string orig(l);
-	size_t origsize = orig.length() + 1;
-	const size_t newsize = 100;
+	//std::string orig(l);
+	size_t origsize = strlen(l);// orig.length() + 1;
+	//const size_t newsize = 100;
 	size_t convertedChars = 0;
-	wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t) *(orig.length() - 1));
-	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
+	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
 	return wcstring;
-}
+}*/
 
 inline LPCWSTR ToLPCWSTR(const char* l)
 {
-	std::string orig(l);
-	size_t origsize = orig.length() + 1;
-	const size_t newsize = 100;
-	size_t convertedChars = 0;
-	wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t) *(orig.length() - 1));
-	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
+	size_t origsize = strlen(l) + 1;
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
+	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
 	return wcstring;
 }
 
@@ -79,7 +91,7 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 	}
 }
 
-inline HRESULT ReadDataFromFile(LPCWSTR filename, byte** data, UINT* size)
+inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
 {
 	using namespace Microsoft::WRL;
 
@@ -108,7 +120,7 @@ inline HRESULT ReadDataFromFile(LPCWSTR filename, byte** data, UINT* size)
 		throw std::exception();
 	}
 
-	*data = reinterpret_cast<byte*>(malloc(fileInfo.EndOfFile.LowPart));
+	*data = reinterpret_cast<std::byte*>(malloc(fileInfo.EndOfFile.LowPart));
 	*size = fileInfo.EndOfFile.LowPart;
 
 	if (!ReadFile(file.Get(), *data, fileInfo.EndOfFile.LowPart, nullptr, nullptr))
@@ -123,7 +135,16 @@ inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
 	{
-		throw std::exception();
+		throw std::exception("一个奇怪的错误");
+	}
+}
+
+inline void ThrowIfFailed(HRESULT hr, const std::function<void(void)>& f)
+{
+	if (FAILED(hr))
+	{
+		f();
+		throw std::exception("一个奇怪的错误");
 	}
 }
 
@@ -136,6 +157,7 @@ inline T* SafeAcquire(T* newObject)
 
 #else
 #define Strcpy(a,b) wcscpy(a,b);
+#define SOLUTION_DIR "C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
 #endif // !UNICODE
 #else
 #ifndef UNICODE
@@ -145,17 +167,21 @@ inline T* SafeAcquire(T* newObject)
 #endif
 #endif // !_WIN64
 
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+
 template<typename T>
 struct Range
 {
-	T maxn, minn;
+	T m_maxn, m_minn;
 
-	Range(T& _maxn, T& _minn)
+	Range(const T& _minn, const T& _maxn) :maxn(_maxn), minn(_minn)
 	{
-		if (typeid(T) != typeid(float) || typeid(T) != typeid(int) || typeid(T) != typeid(long))
-			throw exception();
-		maxn = _maxn;
-		minn = _minn;
+		if (m_minn > m_maxn) throw std::exception("Min argument is greater than max argument");
 	}
 
 	bool Has(T& value)
@@ -166,29 +192,29 @@ struct Range
 	}
 };
 
-inline void Randomize()
+__FasterFunc(void) Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-inline int Random(int a)
+__FasterFunc(int) Random(int a)
 {
 	return rand() % a;
 }
 
-inline float Random()
+__FasterFunc(float) Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-inline int Random(int a, int b)
+__FasterFunc(int) Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-inline float Random(float a, float b)
+__FasterFunc(float) Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;
@@ -201,7 +227,42 @@ struct NonCopyable
 	NonCopyable(const NonCopyable&) = delete;
 	~NonCopyable() = default;
 
-	NonCopyable & operator=(const NonCopyable&) = delete;
+	NonCopyable& operator=(const NonCopyable&) = delete;
+};
+
+template<typename T>
+class Singleton : public NonCopyable
+{
+	inline static T* m_uniqueObj = nullptr;
+
+public:
+	static T* GetInstance()
+	{
+		if (m_uniqueObj == nullptr)
+		{
+			m_uniqueObj = new T();
+		}
+		return m_uniqueObj;
+	}
+};
+
+template<typename _T, typename _TBase>
+class IsDerived
+{
+public:
+	static int t(_TBase* base)
+	{
+		return 1;
+	}
+	static  char t(void* t2)
+	{
+		return 0;
+	}
+
+	enum
+	{
+		Result = (sizeof(int) == sizeof(t((_T*)NULL))),
+	};
 };
 
 #endif // !__ONWIND_H__

@@ -10,7 +10,7 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game
 {
-	SampleMeshRenderer::SampleMeshRenderer(wstring&& name, wstring && fileName) : Renderer(name), m_fileName(fileName)
+	SampleMeshRenderer::SampleMeshRenderer(wstring && fileName) : Renderer(), m_fileName(fileName)
 	{
 		m_pso = new GraphicPSO();
 	}
@@ -132,7 +132,7 @@ namespace AnEngine::Game
 			device->CreateDepthStencilView(m_depthStencil.Get(), nullptr, m_dsvHandle);
 		}
 		uint32_t fileSize = 0;
-		uint8_t* pAssetData;
+		std::byte* pAssetData;
 		ThrowIfFailed(ReadDataFromFile(m_fileName.c_str(), &pAssetData, &fileSize));
 
 		D3D12_SUBRESOURCE_DATA vertexData = {};
@@ -257,8 +257,8 @@ namespace AnEngine::Game
 		}
 
 		ThrowIfFailed(iList->Close());
-		ID3D12CommandList* ppCommandLists[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		//ID3D12CommandList* ppCommandLists[] = { iList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
 		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::GetInstance()->Width()),
 			static_cast<UINT>(Screen::GetInstance()->Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
@@ -296,7 +296,8 @@ namespace AnEngine::Game
 
 		GraphicsContext::Push(commandList, commandAllocator);
 
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		m_fence = new Fence();
 	}
 
 	void SampleMeshRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
@@ -392,9 +393,9 @@ namespace AnEngine::Game
 		iList->Close();
 		iShadowList->Close();
 
-		ID3D12CommandList* ppcommandList[] = { iShadowList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		m_fence->GpuSignal(0);
+		//ID3D12CommandList* ppcommandList[] = { iShadowList };
+		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		//m_fence->GpuSignal(0);
 
 		GraphicsContext::Push(shadowList, shadowAllocator);
 	}

@@ -9,7 +9,7 @@
 using namespace DirectX;
 using namespace AnEngine::Math;
 
-namespace AnEngine::PhysicsCore
+namespace AnEngine::Game
 {
 	class Transform
 	{
@@ -36,11 +36,21 @@ namespace AnEngine::PhysicsCore
 			return m_rotation;
 		}
 
+		XMFLOAT4X4 GetModelMatrix()
+		{
+			XMFLOAT4X4 t(1, 0, 0, m_position.X(),
+				0, 1, 0, m_position.Y(),
+				0, 0, 1, m_position.Z(),
+				0, 0, 0, 1);
+			return XMFLOAT4X4();
+		}
+
 		Transform& operator=(const Transform& t)
 		{
 			m_position = t.m_position;
 			m_rotation = t.m_rotation;
 			m_scale = t.m_scale;
+			return *this;
 		}
 	};
 }

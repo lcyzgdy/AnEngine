@@ -23,7 +23,7 @@
     <ProjectGuid>{4CF13019-9BF4-4E1E-B45C-73CD66DB0F5D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AWindow</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>Window</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Utility\;$(SolutionDir)AnEngine\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)AnEngine\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -99,7 +99,8 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableModules>true</EnableModules>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utility\;$(SolutionDir)AnEngine\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)AnEngine\</AdditionalIncludeDirectories>
+      <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -11,7 +11,7 @@ namespace AnEngine::RenderCore::Resource
 		m_usageState(D3D12_RESOURCE_STATE_COMMON),
 		m_transitioningState((D3D12_RESOURCE_STATES)-1)
 	{
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
 	GpuResource::GpuResource(ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState) :
@@ -21,21 +21,25 @@ namespace AnEngine::RenderCore::Resource
 		m_usageState(currentState),
 		m_transitioningState(static_cast<D3D12_RESOURCE_STATES>(-1))
 	{
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
-	void GpuResource::Release()
+	GpuResource::~GpuResource()
 	{
-		//delete m_resource_cp.Get();
-		//m_resource_cp = nullptr;
 		m_gpuVirtualAddress = RenderCore::Resource::GpuVirtualAddressNull;
 		if (m_p_userAllocatedMemory != nullptr)
 		{
 			VirtualFree(m_p_userAllocatedMemory, 0, MEM_RELEASE);
 			m_p_userAllocatedMemory = nullptr;
 		}
-		delete m_fence;
+		//delete m_fence;
 	}
+
+	/*void GpuResource::Release()
+	{
+		//delete m_resource_cp.Get();
+		//m_resource_cp = nullptr;
+	}*/
 
 	ID3D12Resource* GpuResource::operator->()
 	{
@@ -62,8 +66,8 @@ namespace AnEngine::RenderCore::Resource
 		return m_gpuVirtualAddress;
 	}
 
-	Fence* GpuResource::GetFence()
+	/*Fence* GpuResource::GetFence()
 	{
 		return m_fence;
-	}
+	}*/
 }

@@ -3,28 +3,38 @@
 #define __GAMEOBJECT_H__
 
 #include"onwind.h"
-#include"PhysicsCore.h"
-#include"BaseBehaviour.h"
-using namespace AnEngine::PhysicsCore;
+#include"Object.h"
+#include"Transform.h"
+#include<mutex>
+// #include"BaseBehaviour.h"
 
 namespace AnEngine::Game
 {
+	class ObjectBehaviour;
+
 	// 一个确定的物体
-	class GameObject
+	class GameObject : public Object
 	{
-		virtual void DoNothing();
-		//protected:
-		std::vector<GameObject*> m_children;
+		friend class Scene;
+
+		std::mutex m_mutex;
+	protected:
+		// 当前物体的父物体
+		GameObject * m_parentObject;
+
 		// 当前物体的子物体
-		GameObject* m_parentObject;
+		std::vector<GameObject*> m_children;
+
+		// 当前物体的一些组件，比如渲染器、脚本等等。
+		// Components of this object, such script、renderer、rigidbody etc.
+		std::vector<ObjectBehaviour*> m_component;
 
 	public:
 		explicit GameObject(const std::wstring& name);
 		explicit GameObject(std::wstring&& name);
-		~GameObject() = default;
+		virtual ~GameObject();
 
-		wstring name;
-		GameObject* gameObject;
+		std::wstring name;
 		Transform transform;
 
 		GameObject* GetParent();
@@ -32,16 +42,44 @@ namespace AnEngine::Game
 
 		std::vector<GameObject*> GetChildren();
 
-		template<typename T = GameObject>
-		T* GetChildByName(string& name)
+		template<typename _Ty = GameObject>
+		_Ty* GetChildByName(std::wstring& name)
 		{
 			//for (auto i = 0; i < m_children.size(); i++)
 			for (var i : m_children)
 			{
-				if (i->name == name) return static_cast<T*>(gameObject);
+				if (i->name == name) return static_cast<_Ty*>(gameObject);
 			}
 			return nullptr;
 		}
+
+		std::vector<ObjectBehaviour*> GetComponents();
+
+		template<typename _Ty = ObjectBehaviour>
+		_Ty* GetComponent()
+		{
+			for (var i : this->m_component)
+			{
+				var p = dynamic_cast<_Ty*>(i);
+				if (p != nullptr)
+					return p;
+			}
+			return nullptr;
+		}
+
+		void AddComponent(ObjectBehaviour* component);
+
+		template<typename _Ty>
+		void AddComponent()
+		{
+			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
+			{
+				throw std::exception("_Ty is not derived ObjectBehaviour");
+			}
+			AddComponent(new _Ty());
+		}
+
+		void RemoveComponent(ObjectBehaviour* component);
 	};
 }
 #endif // !__GAMEOBJECT_H__

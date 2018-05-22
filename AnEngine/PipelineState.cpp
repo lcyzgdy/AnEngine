@@ -34,7 +34,7 @@ namespace AnEngine::RenderCore
 	GraphicPSO::GraphicPSO()
 	{
 		memset(&m_psoDesc, 0, sizeof(m_psoDesc));
-		m_psoDesc.NodeMask = 1;
+		m_psoDesc.NodeMask = 0;
 		m_psoDesc.SampleMask = 0xffffffffu;
 		m_psoDesc.SampleDesc.Count = 1;
 		m_psoDesc.InputLayout.NumElements = 0;
@@ -174,7 +174,7 @@ namespace AnEngine::RenderCore
 	void GraphicPSO::Finalize()
 	{
 		var device = r_graphicsCard[0]->GetDevice();
-		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)), R_GetGpuError);
 	}
 
 	void GraphicPSO::Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc)

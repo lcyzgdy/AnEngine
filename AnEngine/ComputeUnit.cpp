@@ -13,7 +13,8 @@ namespace AnEngine::Game
 		m_rootSignature = new RootSignature();
 		m_cs = new ComputeShader(csFileName);
 		m_pso = new ComputePSO();
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
+		m_fence = new Fence();
 
 		m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
 		m_pso->SetComputeShader(m_cs->GetByteCode());
@@ -24,7 +25,8 @@ namespace AnEngine::Game
 	{
 		m_rootSignature = new RootSignature();
 		m_pso = new ComputePSO();
-		m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
+		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
+		m_fence = new Fence();
 	}
 
 	ComputeUnit::~ComputeUnit()
@@ -50,7 +52,7 @@ namespace AnEngine::Game
 		iList->Dispatch(threadGroupX, threadGroupY, threadGroupZ);
 		ID3D12CommandList* ppList[] = { iList };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
-		m_fence->GpuSignal(0);
+		//m_fence->GpuSignal(0);
 
 		ComputeContext::Push(pList, pAllocator);
 	}

@@ -8,107 +8,56 @@
 #include<tuple>
 #include"onwind.h"
 #include"CommandList.h"
+#include"Fence.hpp"
+
+namespace AnEngine::RenderCore
+{
+	class ContextTask
+	{
+		CommandList* m_list;
+		CommandAllocator* m_allo;
+		Fence* m_syncObject;
+	public:
+		ContextTask(CommandList* list, CommandAllocator* allocator, Fence* sync);
+		ContextTask(std::tuple<CommandList*, CommandAllocator*, Fence*>&& tp);
+		void Run();
+	};
+}
 
 namespace AnEngine::RenderCore
 {
 	class GraphicsCard;
 
-	template<typename T>
-	class Context
+	template<typename _List, typename _Allocator>
+	class CommandContext
 	{
 	protected:
-		std::queue<T> m_pool;
-		std::queue<T> m_readyQueue;
+		std::queue<_List> m_pool;
+		std::queue<_Allocator> m_alloPool;
 
 		std::mutex m_readerMutex;
 		std::mutex m_writerMutex;
 		std::mutex m_mutex;
-
-	public:
-		virtual T GetOne() = 0;
-		virtual void Push(T) = 0;
-		virtual void AddNew(T) = 0;
-		virtual void PopulateFinished() = 0;
 	};
-
-	template<typename List, typename Allocator>
-	class Context2
+	/*/
+	template<typename _List, typename _Allocator>
+	class IContext
 	{
-	protected:
-		std::queue<List> m_pool;
-		std::queue<Allocator> m_alloPool;
-
-		std::mutex m_readerMutex;
-		std::mutex m_writerMutex;
-		std::mutex m_mutex;
-
 	public:
-		virtual std::tuple<List, Allocator> GetOne() = 0;
-		virtual void Push(List, Allocator) = 0;
-	};
-
-	// 渲染线程独占一个CommandList
-	/*class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public Context<CommandList*>
-	{
-		friend class ::Singleton<GraphicsCommandContext>;
-		//static GraphicsCommandContext* m_uniqueObj;
-
-		//queue<CommandList*> m_commandListPool;
-		//vector<CommandList*> m_readyQueue;
-		//ComPtr<ID3D12Fence> m_fence_cp;
-		//std::mutex m_readerMutex;
-		//std::mutex m_writerMutex;
-		//std::mutex m_mutex;
-
-		//ID3D12Device* m_device;
-
-		GraphicsCommandContext();
-		~GraphicsCommandContext();
-
-	public:
-		//static GraphicsCommandContext* GetInstance();
-		//CommandList* GetCommandList();
-		//void PushCommandList(CommandList* list);
-
-		//void AddNewCommandList(CommandList* newList);
-
-
-		// 通过 Context 继承
-		virtual CommandList* GetOne() override;
-		virtual void Push(CommandList*) override;
-		virtual void AddNew(CommandList*) override;
-		virtual void PopulateFinished() override;
-
-		//vector<ID3D12CommandList*> GetReadyCommandList();
-		//void PopulateFinished();
-	};
-
-	class GraphicsCommandAllocator : public NonCopyable, public Context<CommandAllocator*>
-	{
-		static GraphicsCommandAllocator* m_uniqueObj;
-
-		//queue<CommandAllocator*> m_commandAllocatorPool;
-		//ComPtr<ID3D12Fence> m_fence_cp;
-		//std::mutex m_readerMutex;
-		//std::mutex m_writerMutex;
-		//std::mutex m_mutex;
-
-		GraphicsCommandAllocator();
-		~GraphicsCommandAllocator();
-
-	public:
-		//explicit GraphicsCommandAllocator(GraphicsCard* device, uint32_t n = 8);
-		static GraphicsCommandAllocator* GetInstance();
-		//CommandAllocator* GetCommandAllocator();
-		//void PushCommandAllocator(CommandAllocator* newAllocator);
-
-		// 通过 Context 继承
-		virtual CommandAllocator* GetOne() override;
-		virtual void Push(CommandAllocator*) override;
-		virtual void AddNew(CommandAllocator*) override;
-		virtual void PopulateFinished() override;
+		virtual std::tuple<_List, _Allocator> GetOne() = 0;
+		virtual void Push(_List, _Allocator) = 0;
 	};*/
-	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public Context2<CommandList*, CommandAllocator*>
+
+	template<typename ... _T>
+	class IContext
+	{
+	public:
+		virtual std::tuple<_T...> GetOne() = 0;
+		virtual void Push(_T...) = 0;
+	};
+
+	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public IContext<CommandList*, CommandAllocator*>,
+		public CommandContext<CommandList*, CommandAllocator*>
 	{
 		friend class ::Singleton<GraphicsCommandContext>;
 
@@ -116,35 +65,31 @@ namespace AnEngine::RenderCore
 		~GraphicsCommandContext();
 
 	public:
-		// 通过 Context2 继承
+		// 通过 IContext 继承
 		virtual std::tuple<CommandList*, CommandAllocator*> GetOne() override;
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
 namespace AnEngine::RenderCore::Private
 {
-	/*class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public Context<CommandList*>
+	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public IContext<CommandList*, CommandAllocator*>,
+		public CommandContext<CommandList*, CommandAllocator*>
 	{
 	public:
-		// 通过 Context 继承
-		virtual CommandList* GetOne() override;
-		virtual void Push(CommandList* list) override;
-	};
-
-	class ComputeCommandAllocator : public ::Singleton<ComputeCommandAllocator>, public Context<CommandAllocator*>
-	{
-	public:
-		// 通过 Context 继承
-		virtual CommandAllocator* GetOne() override;
-		virtual void Push(CommandAllocator* allocator) override;
-	};*/
-
-	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public Context2<CommandList*, CommandAllocator*>
-	{
-	public:
-		// 通过 Context2 继承
+		// 通过 IContext 继承
 		virtual std::tuple<CommandList*, CommandAllocator*> GetOne() override;
 		virtual void Push(CommandList*, CommandAllocator*) override;
+	};
+}
+namespace AnEngine::RenderCore
+{
+	class FenceContext : public ::Singleton<FenceContext>, public IContext<Fence*>
+	{
+		std::queue<Fence*> m_pool;
+	public:
+		// 通过 IContext 继承
+		virtual std::tuple<Fence*> GetOne() override;
+		virtual void Push(Fence* fence) override;
 	};
 }
 
@@ -164,5 +109,6 @@ namespace AnEngine::RenderCore
 		static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 }
+
 
 #endif // !__COMMANDCONTEXT_H__

@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "Screen.h"
+#include "ThreadPool.hpp"
 using namespace std;
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -29,7 +30,7 @@ namespace AnEngine
 		memset(m_mouseButtonDownState, 0, sizeof(m_mouseButtonDownState));
 		memset(m_mouseButtonState, 0, sizeof(m_mouseButtonState));
 
-		Utility::u_s_threadPool.Commit(std::bind(&BaseInput::Update, this));
+		Utility::ThreadPool::Commit(std::bind(&BaseInput::Update, this));
 	}
 
 	void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)

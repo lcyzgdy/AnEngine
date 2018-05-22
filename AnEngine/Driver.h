@@ -8,13 +8,13 @@
 #include"Camera.h"
 #include"ObjectBehaviour.h"
 #include"Renderer.h"
-
+#include"Scene.h"
 namespace AnEngine
 {
-	class Driver
+	class Driver : public Object
 	{
 		bool m_initialized;
-		Game::BaseBehaviour* m_scene;
+		Game::Scene* m_scene;
 
 		Driver() = default;
 		~Driver() = default;
@@ -26,7 +26,7 @@ namespace AnEngine
 		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Release();
 
-		void BeginBehaviour(Game::BaseBehaviour* behaviour);
+		void StartScene(Game::Scene* behaviour);
 		void EndBehaviour();
 	};
 }

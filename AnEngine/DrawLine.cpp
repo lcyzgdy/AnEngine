@@ -1,4 +1,4 @@
-﻿#include "DrawLine.h"
+#include "DrawLine.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 
@@ -179,8 +179,8 @@ void DrawLine::InitializeAssets()
 	UINT compileFlags = 0;
 #endif
 	//auto l = GetAssetFullPath(_T("shaders.hlsl"));
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -503,8 +503,8 @@ void DrawLineWithWu::InitializeAssets()
 	UINT compileFlags = 0;
 #endif
 	//auto l = GetAssetFullPath(_T("shaders.hlsl"));
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -923,8 +923,8 @@ void DrawTriangle::InitializeAssets()
 	UINT compileFlags = 0;
 #endif
 	//auto l = GetAssetFullPath(_T("shaders.hlsl"));
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-	D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
+	D3DCompileFromFile(GetAssetFullPath(L"framebuffer_shaders.hlsl").c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
 
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =

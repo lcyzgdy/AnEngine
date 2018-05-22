@@ -5,7 +5,6 @@
 #include"RootSignature.h"
 #include<map>
 
-
 namespace AnEngine::RenderCore
 {
 	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;

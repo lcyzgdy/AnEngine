@@ -92,20 +92,64 @@ namespace AnEngine::Game
 		return index;
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, uint32_t newValue, Condition cond)
+	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_int[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_int[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, float newValue, Condition cond)
+	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_float[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_float[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, bool newValue, Condition cond)
+	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_bool[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_bool[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring trggerName)
+	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_trigger.emplace_back(m_str2Hash[tiggerName]);
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_trigger.emplace_back(m_str2Hash[tiggerName]);
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
 	void StateMachine::SetInt(std::wstring&& name, int value)

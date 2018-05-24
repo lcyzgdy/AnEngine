@@ -1,15 +1,15 @@
-#include "UICore.h"
+#include "GraphicsCard2D.h"
 #include "RenderCore.h"
 using namespace Microsoft::WRL;
 
-namespace AnEngine::RenderCore
+namespace AnEngine::RenderCore::UI
 {
-	UICore::UICore()
+	GraphicsCard2D::GraphicsCard2D()
 	{
 
 	}
 
-	void UICore::Initialize()
+	void GraphicsCard2D::Initialize()
 	{
 		uint32_t dxgiFactoryFlags = 0;
 		uint32_t d3d11DeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -27,11 +27,11 @@ namespace AnEngine::RenderCore
 		/*ThrowIfFailed(D3D11On12CreateDevice(r_graphicsCard[0]->m_device_cp.Get(), d3d11DeviceFlags, nullptr, 0,
 			reinterpret_cast<IUnknown**>(m_commandQueue.GetAddressOf()), 1, 0, &d3d11Device, &m_d3d11DeviceContext, nullptr));*/
 
-		// Query the 11On12 device from the 11 device.
+			// Query the 11On12 device from the 11 device.
 		ThrowIfFailed(d3d11Device.As(&m_d3d11On12Device));
 	}
 
-	void UICore::Release()
+	void GraphicsCard2D::Release()
 	{
 	}
 }

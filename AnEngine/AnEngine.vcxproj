@@ -218,7 +218,9 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="UICore.h" />
+    <ClInclude Include="GraphicsCard2D.h" />
+    <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIText.h" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
@@ -268,7 +270,9 @@
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
-    <ClCompile Include="UICore.cpp" />
+    <ClCompile Include="GraphicsCard2D.cpp" />
+    <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>

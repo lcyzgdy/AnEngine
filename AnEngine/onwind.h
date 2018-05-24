@@ -221,6 +221,15 @@ __FasterFunc(float) Random(float a, float b)
 	return scale * range + a;
 }
 
+constexpr float operator "" f(unsigned long long i)
+{
+	return (float)i;
+}
+constexpr float operator "" lf(unsigned long long i)
+{
+	return (double)i;
+}
+
 struct NonCopyable
 {
 	NonCopyable() = default;

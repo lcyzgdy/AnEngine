@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __UICORE_H__
-#define __UICORE_H__
+#ifndef __GRAPHICSCARD2D_H__
+#define __GRAPHICSCARD2D_H__
 
 #include"DX.h"
 #include<d2d1_3.h>
@@ -8,9 +8,9 @@
 #include<d3d11on12.h>
 #include"RenderCoreConstants.h"
 
-namespace AnEngine::RenderCore
+namespace AnEngine::RenderCore::UI
 {
-	class UICore
+	class GraphicsCard2D
 	{
 		Microsoft::WRL::ComPtr<ID2D1Factory3> m_d2dFactory;
 		Microsoft::WRL::ComPtr<ID2D1Device2> m_d2dDevice;
@@ -23,12 +23,12 @@ namespace AnEngine::RenderCore
 		Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_d2dRenderTarget[r_DefaultFrameCount_const];
 
 	public:
-		UICore();
-		~UICore() = default;
+		GraphicsCard2D();
+		~GraphicsCard2D() = default;
 
 		void Initialize();
 		void Release();
 	};
 }
 
-#endif // !__UICORE_H__
+#endif // !__GRAPHICSCARD2D_H__

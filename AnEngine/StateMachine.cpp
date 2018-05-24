@@ -18,6 +18,20 @@ namespace AnEngine::Game
 
 	void StateMachine::Update()
 	{
+		m_states[m_curState].Invoke();
+		for (var ea : m_states[m_curState].m_events)
+		{
+			int f = 1;
+			for (var item : ea.m_float)
+			{
+				f &= Cmp<float>[item.second.second](m_floatParam[item.first], item.second.first);
+			}
+			if (f)
+			{
+				m_curState = ea.m_transState;
+				break;
+			}
+		}
 	}
 
 	int StateMachine::GetStateIndex(const std::wstring& name)
@@ -92,7 +106,7 @@ namespace AnEngine::Game
 		return index;
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond)
 	{
 		for (var i : m_states[from].m_events)
 		{
@@ -107,7 +121,7 @@ namespace AnEngine::Game
 		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond)
 	{
 		for (var i : m_states[from].m_events)
 		{
@@ -122,7 +136,7 @@ namespace AnEngine::Game
 		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond)
 	{
 		for (var i : m_states[from].m_events)
 		{
@@ -137,7 +151,7 @@ namespace AnEngine::Game
 		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName)
 	{
 		for (var i : m_states[from].m_events)
 		{

@@ -187,9 +187,6 @@
     <ClInclude Include="Fence.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="UICore.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Hash.hpp">
       <Filter>Math</Filter>
     </ClInclude>
@@ -213,6 +210,15 @@
     </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCard2D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="UIComponent.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Game\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -336,9 +342,6 @@
     <ClCompile Include="MatrixBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="UICore.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DebugLog.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -356,6 +359,15 @@
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsCard2D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="UIComponent.cpp">
+      <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>Game\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -125,10 +125,10 @@ namespace AnEngine::Game
 		int CreateNewState(std::wstring&& name, const std::function<void()>& func);
 		int CreateNewState(std::wstring&& name, std::function<void()>&& func);
 		// 添加状态转移条件
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName);
 		// 外部设置状态机
 		void SetInt(std::wstring&& name, int value);
 		void SetBool(std::wstring&& name, bool value);

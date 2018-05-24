@@ -10,6 +10,9 @@ namespace AnEngine::Game::UI
 	{
 	protected:
 		virtual void Start() override;
+
+	public:
+
 	};
 }
 

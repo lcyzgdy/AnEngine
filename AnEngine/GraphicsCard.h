@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __GRAPHICCARD_H__
-#define __GRAPHICCARD_H__
+#ifndef __GRAPHICSCARD_H__
+#define __GRAPHICSCARD_H__
 
 #include"DX.h"
 #include"CommandQueue.h"
@@ -13,7 +13,7 @@ namespace AnEngine::RenderCore
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
-		friend class UICore;
+		friend class GraphicsCard2D;
 
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
 
@@ -72,6 +72,7 @@ namespace AnEngine::RenderCore
 		void Initialize(IDXGIFactory4* dxgiFactory, bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		const ID3D12Device* GetDevice() const;
 		ID3D12Device* GetDevice();
 		uint32_t GetNodeNum();
@@ -87,4 +88,4 @@ namespace AnEngine::RenderCore
 	};
 }
 
-#endif // !__GRAPHICCARD_H__
+#endif // !__GRAPHICSCARD_H__

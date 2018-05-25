@@ -1,6 +1,7 @@
 #include "DrawLine.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
+using namespace Microsoft::WRL;
 
 DrawLine::DrawLine(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),

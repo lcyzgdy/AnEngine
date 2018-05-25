@@ -21,10 +21,10 @@ namespace AnEngine::Game
 		m_states[m_curState].Invoke();
 		for (var ea : m_states[m_curState].m_events)
 		{
-			int f = 1;
+			bool f = true;
 			for (var item : ea.m_float)
 			{
-				f &= Cmp<float>[item.second.second](m_floatParam[item.first], item.second.first);
+				f = f && Cmp<float>[item.second.second](m_floatParam[item.first], item.second.first);
 			}
 			if (f)
 			{
@@ -173,17 +173,17 @@ namespace AnEngine::Game
 
 	void StateMachine::SetBool(std::wstring&& name, bool value)
 	{
-		m_intParam[m_str2Hash[name]] = value;
+		m_boolParam[m_str2Hash[name]] = value;
 	}
 
 	void StateMachine::SetFloat(std::wstring&& name, float value)
 	{
-		m_intParam[m_str2Hash[name]] = value;
+		m_floatParam[m_str2Hash[name]] = value;
 	}
 
 	void StateMachine::SetTrigger(std::wstring&& name)
 	{
-		m_intParam[m_str2Hash[name]] = true;
+		m_triggerParam[m_str2Hash[name]] = true;
 	}
 
 	void StateMachine::SetCurrentState(int index)

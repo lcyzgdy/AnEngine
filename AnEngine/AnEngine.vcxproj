@@ -117,10 +117,14 @@
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
+      <DisableSpecificWarnings>4455</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -187,7 +191,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
-    <ClInclude Include="GraphicCard.h" />
+    <ClInclude Include="GraphicsCard.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
@@ -248,7 +252,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
     <ClCompile Include="GpuResource.cpp" />
-    <ClCompile Include="GraphicCard.cpp" />
+    <ClCompile Include="GraphicsCard.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ManagedTask.cpp" />
     <ClCompile Include="MatrixBuffer.cpp" />

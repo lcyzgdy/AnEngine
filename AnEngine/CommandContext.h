@@ -9,7 +9,7 @@
 #include"onwind.h"
 #include"CommandList.h"
 #include"Fence.hpp"
-
+/*
 namespace AnEngine::RenderCore
 {
 	class ContextTask
@@ -22,7 +22,7 @@ namespace AnEngine::RenderCore
 		ContextTask(std::tuple<CommandList*, CommandAllocator*, Fence*>&& tp);
 		void Run();
 	};
-}
+}*/
 
 namespace AnEngine::RenderCore
 {

@@ -1,4 +1,4 @@
-#include"GraphicCard.h"
+#include"GraphicsCard.h"
 #include"DebugLog.h"
 #include"DTimer.h"
 #include"RenderCore.h"
@@ -59,7 +59,7 @@ namespace AnEngine::RenderCore
 					DXGI_FORMAT_R11G11B10_FLOAT,
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
-	};
+				};
 				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
@@ -69,8 +69,8 @@ namespace AnEngine::RenderCore
 				{
 					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
-}
-}
+			}
+		}
 	}
 
 	void GraphicsCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
@@ -196,13 +196,13 @@ namespace AnEngine::RenderCore
 		return nullptr;
 	}
 
-	ID3D12CommandQueue * GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
+	ID3D12CommandQueue* GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
 		switch (type)
 		{
 		case D3D12_COMMAND_LIST_TYPE_DIRECT:
 		{
-			return m_renderCommandQueue.GetCommandQueue();
+			return m_renderCommandQueue.m_cp_commandQueue.Get();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
@@ -212,12 +212,42 @@ namespace AnEngine::RenderCore
 		}
 		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
 		{
-			return m_computeCommandQueue.GetCommandQueue();
+			return m_computeCommandQueue.m_cp_commandQueue.Get();
 			break;
 		}
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
-			return m_copyCommandQueue.GetCommandQueue();
+			return m_copyCommandQueue.m_cp_commandQueue.Get();
+			break;
+		}
+		default:
+			break;
+		}
+		return nullptr;
+	}
+
+	ID3D12CommandQueue** GraphicsCard::GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type)
+	{
+		switch (type)
+		{
+		case D3D12_COMMAND_LIST_TYPE_DIRECT:
+		{
+			return m_renderCommandQueue.m_cp_commandQueue.GetAddressOf();
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
+		{
+			return nullptr;
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
+		{
+			return m_computeCommandQueue.m_cp_commandQueue.GetAddressOf();
+			break;
+		}
+		case D3D12_COMMAND_LIST_TYPE_COPY:
+		{
+			return m_copyCommandQueue.m_cp_commandQueue.GetAddressOf();
 			break;
 		}
 		default:

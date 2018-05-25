@@ -8,34 +8,26 @@
 
 namespace AnEngine::Utility
 {
-	//template<typename Func, typename ... Args>
+	template<typename _RtTy, typename... _Ty>
 	class ManagedTask : public Object
 	{
-		//std::function<Func(Args ...)> m_task;
-		std::function<void()> m_task;
-
+		std::function<_RtTy(_Ty...)> m_task;
 	public:
-		ManagedTask()
+		_RtTy Invoke(_Ty... args)
 		{
-		}
-
-		auto Invoke()
-		{
-			return m_task();
+			return m_task(args...);
 		}
 	};
 
-	class SceneManagedTaskQueue : public Object
+	template<typename _RtTy>
+	class ManagedTask : public Object
 	{
-		std::queue<ManagedTask> m_taskQueue;
-
+		std::function<_RtTy()> m_task;
 	public:
-		SceneManagedTaskQueue(uint64_t hash);
-		~SceneManagedTaskQueue();
-		void Commit(ManagedTask&& task);
-		void InvokeAll();
-
-		static SceneManagedTaskQueue* GetSceneTask(uint64_t);
+		_RtTy Invoke()
+		{
+			return m_task();
+		}
 	};
 }
 

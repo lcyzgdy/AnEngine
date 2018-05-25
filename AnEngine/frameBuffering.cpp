@@ -1,5 +1,7 @@
 #include "frameBuffering.h"
 
+using namespace Microsoft::WRL;
+
 FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),
 	viewport(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height)),

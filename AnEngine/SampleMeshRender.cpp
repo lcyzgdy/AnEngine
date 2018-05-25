@@ -7,6 +7,7 @@ using namespace AnEngine::RenderCore;
 using namespace AnEngine;
 using namespace AnEngine::RenderCore::Heap;
 using namespace AnEngine::RenderCore::Resource;
+using namespace Microsoft::WRL;
 
 namespace AnEngine::Game
 {

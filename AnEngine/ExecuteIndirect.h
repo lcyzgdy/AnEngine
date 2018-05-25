@@ -57,7 +57,7 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	// 每个三角形每帧获得自己的常量缓冲区。
 
 	static const UINT triangleCount = 1024;
-	static const UINT triangleResourceCount = triangleCount*r_DefaultFrameCount_const;
+	static const UINT triangleResourceCount = triangleCount * r_DefaultFrameCount_const;
 	static const UINT commandSizePerFrame;			// 用于在单个框架中绘制所有三角形的间接命令的大小。
 	static const UINT commandBufferCounterOffset;	// 在处理命令缓冲区uva计数器的偏移量。
 	static const UINT computeThreadBlockSize = 128;	// 应与compute.hlsl中的值匹配。
@@ -70,40 +70,40 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	D3D12_RECT cullingScissorRect;
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> dsvHeap;
-	ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
 	UINT rtvDescriptorSize;
 	UINT dsvDescriptorSize;
 	UINT cbvSrvUavDescriptorSize;
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
-	ComPtr<ID3D12CommandSignature> commandSignature;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12CommandSignature> commandSignature;
 
-	ComPtr<ID3D12GraphicsCommandList> computeCommandList;
-	ComPtr<ID3D12CommandQueue> computeCommandQueue;
-	ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> computeRootSignature;
-	ComPtr<ID3D12PipelineState> computeState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> computeCommandList;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> computeCommandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> computeCommandAllocators[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> computeRootSignature;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> computeState;
 
-	ComPtr<ID3D12Fence> fence;
-	ComPtr<ID3D12Fence> computeFence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> computeFence;
 	UINT64 fenceValues[r_DefaultFrameCount_const];
 	HANDLE fenceEvent;
 
-	ComPtr<ID3D12Resource> vertexBuffer;
-	ComPtr<ID3D12Resource> constantBuffer;
-	ComPtr<ID3D12Resource> depthStencil;
-	ComPtr<ID3D12Resource> commandBuffer;
-	ComPtr<ID3D12Resource> processedCommandBuffers[r_DefaultFrameCount_const];
-	ComPtr<ID3D12Resource> processedCommandBufferCounterReset;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencil;
+	Microsoft::WRL::ComPtr<ID3D12Resource> commandBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> processedCommandBuffers[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12Resource> processedCommandBufferCounterReset;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 
 	CSRootConstants csRootConstants;	// 计算着色器的常量

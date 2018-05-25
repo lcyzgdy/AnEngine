@@ -18,6 +18,7 @@
 #define var auto
 #define let auto
 #define __FasterFunc(func) inline func __vectorcall
+#define procedure void
 
 #ifdef _WIN64
 
@@ -225,7 +226,7 @@ constexpr float operator "" f(unsigned long long i)
 {
 	return (float)i;
 }
-constexpr float operator "" lf(unsigned long long i)
+constexpr double operator "" lf(unsigned long long i)
 {
 	return (double)i;
 }

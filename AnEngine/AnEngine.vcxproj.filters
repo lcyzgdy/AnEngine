@@ -67,9 +67,6 @@
     <ClInclude Include="DynamicConstantBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicCard.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="IEffect.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -220,6 +217,9 @@
     <ClInclude Include="UIText.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsCard.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -256,9 +256,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Fence.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicCard.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="PipelineState.cpp">
@@ -368,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="UIText.cpp">
       <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsCard.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

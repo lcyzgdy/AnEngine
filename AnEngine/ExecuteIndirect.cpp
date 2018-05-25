@@ -1,6 +1,8 @@
 #include "ExecuteIndirect.h"
 #include <string>
 
+using namespace Microsoft::WRL;
+
 const uint32_t ExecuteIndirect::commandSizePerFrame = triangleCount * sizeof(IndirectCommand);
 const uint32_t ExecuteIndirect::commandBufferCounterOffset = AlignForUavCounter(ExecuteIndirect::commandSizePerFrame);
 const float ExecuteIndirect::triangleHalfWidth = 0.05f;

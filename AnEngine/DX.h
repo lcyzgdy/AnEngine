@@ -4,21 +4,21 @@
 
 #include<windows.h>
 #include<iomanip>
-#include<iostream>
-#include<sstream>
-#include<vector>
-#include<ctime>
-#include<io.h>
-#include<wrl.h>
-#include"onwind.h"
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <ctime>
+#include <io.h>
+#include <wrl.h>
+#include "onwind.h"
 
-#include<d3d12.h>
-#include"d3dx12.h"
-#include<D3Dcompiler.h>
-#include<DirectXMath.h>
-#include<dxgi1_4.h>
-#include<pix.h>
-#include<dcomp.h>
+#include <d3d12.h>
+#include "d3dx12.h"
+#include <D3Dcompiler.h>
+#include <DirectXMath.h>
+#include <dxgi1_4.h>
+#include <pix.h>
+#include <dcomp.h>
 
 #pragma comment(lib, "dcomp.lib")
 #pragma comment(lib, "d3d12.lib")

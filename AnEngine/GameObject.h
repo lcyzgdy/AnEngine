@@ -53,6 +53,14 @@ namespace AnEngine::Game
 			return nullptr;
 		}
 
+		template<typename _Ty>
+		std::vector<_Ty*>&& GetComponents()
+		{
+			std::vector<_Ty*> ret;
+
+			return std::move(ret);
+		}
+
 		std::vector<ObjectBehaviour*> GetComponents();
 
 		template<typename _Ty = ObjectBehaviour>

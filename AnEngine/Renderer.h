@@ -7,6 +7,7 @@
 #include "ColorBuffer.h"
 #include "GpuBuffer.h"
 #include "ShaderClass.h"
+#include <future>
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -19,6 +20,7 @@ namespace AnEngine::Game
 
 	class Renderer : public ObjectBehaviour
 	{
+		std::future<void> m_renderTask;
 	protected:
 		RenderCore::Resource::ColorBuffer* m_renderTarget;
 		RenderCore::GraphicPSO* m_pso;

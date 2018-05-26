@@ -2,6 +2,7 @@
 #include "GraphicsCard.h"
 #include "RenderCore.h"
 #include "ManagedTask.hpp"
+#include <functional>
 
 #define in :
 

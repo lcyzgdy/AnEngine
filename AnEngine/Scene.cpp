@@ -44,7 +44,7 @@ namespace AnEngine::Game
 
 	void Scene::BeforeUpdate()
 	{
-		SceneManagedTaskQueue::GetSceneTask(GetHashCode())->InvokeAll();
+
 	}
 
 	void Scene::OnUpdate()
@@ -121,7 +121,7 @@ namespace AnEngine::Game
 
 	Scene::Scene(std::wstring _name) : name(_name)
 	{
-		SceneManagedTaskQueue* queue = new SceneManagedTaskQueue(GetHashCode());
+
 	}
 
 	void Scene::AddObject(GameObject* obj)

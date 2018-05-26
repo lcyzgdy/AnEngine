@@ -6,6 +6,7 @@
 #include "Screen.h"
 #include "Camera.h"
 #include "DTimer.h"
+#include "ThreadPool.hpp"
 using namespace std;
 using namespace AnEngine::RenderCore;
 
@@ -29,6 +30,8 @@ namespace AnEngine::Game
 
 	void Renderer::LateUpdate()
 	{
+		//m_renderTask = move(Utility::ThreadPool::Commit([this]()
+		//{
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
@@ -40,6 +43,8 @@ namespace AnEngine::Game
 		}
 
 		GraphicsContext::Push(commandList, commandAllocator);
+		//}));
+		//m_renderTask.wait();
 	}
 
 	Renderer::Renderer() : ObjectBehaviour()

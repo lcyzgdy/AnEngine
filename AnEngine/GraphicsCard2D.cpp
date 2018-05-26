@@ -11,6 +11,8 @@ namespace AnEngine::RenderCore::UI
 {
 	procedure GraphicsCard2D::InitializeForText()
 	{
+		ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
+
 		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_textBrush));
 		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Consola", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", &m_textFormat));
@@ -29,30 +31,20 @@ namespace AnEngine::RenderCore::UI
 		uint32_t d3d11DeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 		D2D1_FACTORY_OPTIONS d2dFactoryOptions = {};
 
-		D2D1_DEVICE_CONTEXT_OPTIONS deviceOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
-		ThrowIfFailed(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &d2dFactoryOptions, &m_d2dFactory));
-		ComPtr<IDXGIDevice> dxgiDevice;
-		////ThrowIfFailed(r_graphicsCard[0]->m_device_cp.As(&dxgiDevice));
-		ThrowIfFailed(m_d2dFactory->CreateDevice(dxgiDevice.Get(), &m_d2dDevice));
-		ThrowIfFailed(m_d2dDevice->CreateDeviceContext(deviceOptions, &m_d2dContext));
-		ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
-
 		ComPtr<ID3D11Device> d3d11Device;
 		ThrowIfFailed(D3D11On12CreateDevice(r_graphicsCard[0]->GetDevice(), d3d11DeviceFlags, nullptr, 0,
 			reinterpret_cast<IUnknown**>(r_graphicsCard[0]->GetCommandQueueAddress()), 1, 0, &d3d11Device,
 			&m_d3d11DeviceContext, nullptr));
 
 		ThrowIfFailed(d3d11Device.As(&m_d3d11On12Device));
-		{
-			D2D1_DEVICE_CONTEXT_OPTIONS deviceOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
-			ThrowIfFailed(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &d2dFactoryOptions,
-				&m_d2dFactory));
-			ComPtr<IDXGIDevice> dxgiDevice;
-			ThrowIfFailed(m_d3d11On12Device.As(&dxgiDevice));
-			ThrowIfFailed(m_d2dFactory->CreateDevice(dxgiDevice.Get(), &m_d2dDevice));
-			ThrowIfFailed(m_d2dDevice->CreateDeviceContext(deviceOptions, &m_d2dContext));
-			ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
-		}
+
+		D2D1_DEVICE_CONTEXT_OPTIONS deviceOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
+		ThrowIfFailed(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &d2dFactoryOptions, &m_d2dFactory));
+		ComPtr<IDXGIDevice> dxgiDevice;
+		ThrowIfFailed(m_d3d11On12Device.As(&dxgiDevice));
+		ThrowIfFailed(m_d2dFactory->CreateDevice(dxgiDevice.Get(), &m_d2dDevice));
+		ThrowIfFailed(m_d2dDevice->CreateDeviceContext(deviceOptions, &m_d2dContext));
+
 		float dpiX;
 		float dpiY;
 		m_d2dFactory->GetDesktopDpi(&dpiX, &dpiY);

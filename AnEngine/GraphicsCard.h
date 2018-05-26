@@ -10,10 +10,15 @@
 
 namespace AnEngine::RenderCore
 {
+	/*namespace UI
+	{
+		class GraphicsCard2D;
+	}*/
+
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
-		friend class GraphicsCard2D;
+		//friend class UI::GraphicsCard2D;
 
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
 

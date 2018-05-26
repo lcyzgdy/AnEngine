@@ -41,23 +41,26 @@ namespace AnEngine::Utility::ThreadPool
 				{
 					m_pool.emplace_back([this]()
 					{
-						std::function<void()> task;
+						while (!this->m_stopped)
 						{
-							std::unique_lock<std::mutex> lock(this->m_mutex);
-							this->m_cvTask.wait(lock, [this]()
+							std::function<void()> task;
 							{
-								return this->m_stopped.load() || !this->m_tasks.empty();
-							});
-							if (this->m_stopped && this->m_tasks.empty())
-							{
-								return;
+								std::unique_lock<std::mutex> lock(this->m_mutex);
+								this->m_cvTask.wait(lock, [this]()
+								{
+									return this->m_stopped.load() || !this->m_tasks.empty();
+								});
+								if (this->m_stopped && this->m_tasks.empty())
+								{
+									return;
+								}
+								task = move(this->m_tasks.front());
+								this->m_tasks.pop();
 							}
-							task = move(this->m_tasks.front());
-							this->m_tasks.pop();
+							m_idleThreadNum--;
+							task();
+							m_idleThreadNum++;
 						}
-						m_idleThreadNum--;
-						task();
-						m_idleThreadNum++;
 					});
 				}
 			}

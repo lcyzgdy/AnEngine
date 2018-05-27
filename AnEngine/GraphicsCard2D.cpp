@@ -12,12 +12,6 @@ namespace AnEngine::RenderCore::UI
 	procedure GraphicsCard2D::InitializeForText()
 	{
 		ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
-
-		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_textBrush));
-		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Consola", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
-			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", &m_textFormat));
-		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
-		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));
 	}
 
 	GraphicsCard2D::GraphicsCard2D()
@@ -66,5 +60,39 @@ namespace AnEngine::RenderCore::UI
 	ID3D11Resource* GraphicsCard2D::GetWrappedBackBuffer(uint32_t index)
 	{
 		return m_wrappedBackBuffers[index].Get();
+	}
+
+	void GraphicsCard2D::Begin()
+	{
+		m_d3d11On12Device->AcquireWrappedResources(m_wrappedBackBuffers[r_frameIndex].GetAddressOf(), 1);
+
+		m_d2dContext->SetTarget(m_d2dRenderTarget[r_frameIndex].Get());
+		m_d2dContext->BeginDraw();
+	}
+
+	void GraphicsCard2D::End()
+	{
+		ThrowIfFailed(m_d2dContext->EndDraw());
+
+		m_d3d11On12Device->ReleaseWrappedResources(m_wrappedBackBuffers[r_frameIndex].GetAddressOf(), 1);
+		m_d3d11DeviceContext->Flush();
+	}
+
+	ID2D1DeviceContext2* GraphicsCard2D::GetContext()
+	{
+		return m_d2dContext.Get();
+	}
+
+	void GraphicsCard2D::CreateTextFormat()
+	{
+		/*ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_textBrush));
+		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Consola", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", &m_textFormat));
+		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
+		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));*/
+	}
+
+	void GraphicsCard2D::CreateTextBrush()
+	{
 	}
 }

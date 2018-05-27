@@ -264,7 +264,7 @@ public:
 	{
 		return 1;
 	}
-	static  char t(void* t2)
+	static char t(void* t2)
 	{
 		return 0;
 	}

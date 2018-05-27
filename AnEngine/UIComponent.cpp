@@ -1,4 +1,5 @@
 #include "UIComponent.h"
+#include "GraphicsCard2D.h"
 
 namespace AnEngine::Game::UI
 {

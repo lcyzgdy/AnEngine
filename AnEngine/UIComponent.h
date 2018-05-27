@@ -3,6 +3,7 @@
 #define __UICOMPONENT_H__
 
 #include "Renderer.h"
+#include "GraphicsCard2D.h"
 
 namespace AnEngine::Game::UI
 {

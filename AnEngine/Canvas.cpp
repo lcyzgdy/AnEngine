@@ -1,6 +1,9 @@
 #include "Canvas.h"
 #include "ThreadPool.hpp"
 #include "UIComponent.h"
+#include "GraphicsCard2D.h"
+#include "RenderCore.h"
+using namespace AnEngine::RenderCore;
 
 namespace AnEngine::Game::UI
 {
@@ -11,6 +14,10 @@ namespace AnEngine::Game::UI
 
 	void Canvas::LateUpdate()
 	{
-		gameObject->GetComponents<UIComponent>();
+		r_graphicsCard2D->Begin();
+
+
+
+		r_graphicsCard2D->End();
 	}
 }

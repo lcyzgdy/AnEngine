@@ -31,8 +31,6 @@ namespace AnEngine::RenderCore::UI
 		D2D1_BITMAP_PROPERTIES1 m_bitmapProperties;
 
 		Microsoft::WRL::ComPtr<IDWriteFactory> m_dWriteFactory;
-		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_textBrush;
-		Microsoft::WRL::ComPtr<IDWriteTextFormat> m_textFormat;
 
 		procedure InitializeForText();
 
@@ -45,6 +43,15 @@ namespace AnEngine::RenderCore::UI
 
 		ID3D11On12Device* GetDevice11On12();
 		ID3D11Resource* GetWrappedBackBuffer(uint32_t index);
+
+		void Begin();
+		void End();
+
+		ID2D1DeviceContext2* GetContext();
+
+		void CreateTextFormat();
+		void CreateTextBrush();
+		void DrawText();
 	};
 }
 

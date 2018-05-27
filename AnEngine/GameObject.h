@@ -68,9 +68,13 @@ namespace AnEngine::Game
 		{
 			for (var i : this->m_component)
 			{
-				var p = dynamic_cast<_Ty*>(i);
+				if (typeid(*i) == typeid(_Ty))
+				{
+					return (_Ty*)i;
+				}
+				/*var p = dynamic_cast<_Ty*>(i);
 				if (p != nullptr)
-					return p;
+					return p;*/
 			}
 			return nullptr;
 		}

@@ -1,7 +1,8 @@
 #pragma once
 #ifndef __COLOR_H__
 #define __COLOR_H__
-#include<DirectXMath.h>
+#include <DirectXMath.h>
+#include <d2d1_3.h>
 using namespace DirectX;
 
 namespace AnEngine::RenderCore::Resource
@@ -55,6 +56,8 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t R8G8B8A8() const;
 
 		uint32_t R11G11B10F(bool RoundToEven = false) const;
+
+		D2D1::ColorF ToD2DColor() const;
 
 		//operator XMVECTOR() const;
 

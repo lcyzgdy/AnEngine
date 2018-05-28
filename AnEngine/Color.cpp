@@ -207,6 +207,11 @@ namespace AnEngine::RenderCore::Resource
 		return ret.u[0] >> 17 | ret.u[1] >> 6 | ret.u[2] << 4;
 	}
 
+	D2D1::ColorF Color::ToD2DColor() const
+	{
+		return D2D1::ColorF(m_color.x, m_color.y, m_color.z, m_color.w);
+	}
+
 	/*inline Color::operator XMVECTOR() const
 	{
 		return XMLoadFloat4(&m_color);

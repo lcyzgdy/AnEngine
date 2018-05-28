@@ -9,6 +9,5 @@ namespace AnEngine::Game::UI
 
 	void UIComponent::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		OnGUI();
 	}
 }

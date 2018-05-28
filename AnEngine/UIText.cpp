@@ -8,20 +8,36 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::Game::UI
 {
-	UIText::UIText(wstring&& text, Color&& color) : m_text(text)
+	UIText::UIText()
 	{
+		r_graphicsCard2D->CreateTextFormat(&m_textFormat);
+		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
+		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));
+
+		r_graphicsCard2D->CreateTextBrush(&m_textBrush, Color::Black);
 	}
 
-	UIText::UIText(const wstring& text, const Color& color)
+	UIText::UIText(wstring&& text, Color&& color) : m_text(text)
 	{
+		r_graphicsCard2D->CreateTextFormat(&m_textFormat);
+		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
+		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));
+
+		r_graphicsCard2D->CreateTextBrush(&m_textBrush, color);
+	}
+
+	UIText::UIText(const wstring& text, const Color& color) : m_text(text)
+	{
+		r_graphicsCard2D->CreateTextFormat(&m_textFormat);
+		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
+		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));
+
+		r_graphicsCard2D->CreateTextBrush(&m_textBrush, color);
 	}
 
 	void UIText::OnGUI()
 	{
-		//D2D1_SIZE_F rtSize = m_d2dRenderTargets[r_frameIndex]->GetSize();
-		//D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
-		//context->SetTransform(D2D1::Matrix3x2F::Identity());
-		//context->DrawText(m_text.c_str(), m_text.length(), m_textFormat.Get(), &textRect, m_textBrush.Get());
+		r_graphicsCard2D->DrawText1(m_text.c_str(), m_text.length(), m_textFormat.Get(), m_textBrush.Get());
 	}
 
 	std::wstring UIText::Text()

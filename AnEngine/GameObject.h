@@ -2,10 +2,11 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
-#include"onwind.h"
-#include"Object.h"
-#include"Transform.h"
-#include<mutex>
+#include "onwind.h"
+#include "Object.h"
+#include "Transform.h"
+#include <mutex>
+#include <queue>
 // #include"BaseBehaviour.h"
 
 namespace AnEngine::Game
@@ -61,6 +62,39 @@ namespace AnEngine::Game
 			return std::move(ret);
 		}
 
+		template<typename _Ty>
+		std::vector<_Ty*>&& GetComponentsInChildren()
+		{
+			std::vector<_Ty*> ret;
+			std::queue<GameObject*> q;
+			for (var child : m_children)
+			{
+				q.push(child);
+			}
+			while (!q.empty())
+			{
+				for (var c : q.front()->m_component)
+				{
+					/*if (typeid(*c) == typeid(_Ty))
+					{
+						ret.push_back((_Ty*)c);
+					}*/
+					var p = dynamic_cast<_Ty*>(c);
+					if (p != nullptr)
+					{
+						ret.push_back(p);
+					}
+				}
+				for (var c : q.front()->m_children)
+				{
+					q.push(c);
+				}
+				q.pop();
+			}
+
+			return std::move(ret);
+		}
+
 		std::vector<ObjectBehaviour*> GetComponents();
 
 		template<typename _Ty = ObjectBehaviour>
@@ -92,6 +126,8 @@ namespace AnEngine::Game
 		}
 
 		void RemoveComponent(ObjectBehaviour* component);
+
+		void AddChildObject(GameObject* obj);
 	};
 }
 #endif // !__GAMEOBJECT_H__

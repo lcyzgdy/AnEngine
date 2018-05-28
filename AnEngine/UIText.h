@@ -19,6 +19,7 @@ namespace AnEngine::Game::UI
 
 	public:
 #define GLO ::AnEngine::RenderCore
+		UIText();
 		UIText(std::wstring&& text, GLO::Resource::Color&& color);
 		UIText(const std::wstring& text, const GLO::Resource::Color& color);
 

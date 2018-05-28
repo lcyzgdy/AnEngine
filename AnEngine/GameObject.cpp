@@ -64,4 +64,9 @@ namespace AnEngine::Game
 			}
 		}
 	}
+
+	void GameObject::AddChildObject(GameObject* obj)
+	{
+		m_children.push_back(obj);
+	}
 }

@@ -83,16 +83,22 @@ namespace AnEngine::RenderCore::UI
 		return m_d2dContext.Get();
 	}
 
-	void GraphicsCard2D::CreateTextFormat()
+	void GraphicsCard2D::CreateTextFormat(IDWriteTextFormat** format)
 	{
-		/*ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_textBrush));
 		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Consola", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
-			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", &m_textFormat));
-		ThrowIfFailed(m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER));
-		ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER));*/
+			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", format));
 	}
 
-	void GraphicsCard2D::CreateTextBrush()
+	void GraphicsCard2D::CreateTextBrush(ID2D1SolidColorBrush** brush, const Resource::Color& color)
 	{
+		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(color.ToD2DColor(), brush));
+	}
+
+	void GraphicsCard2D::DrawText1(const wchar_t* text, uint32_t length, IDWriteTextFormat* format, ID2D1Brush* brush)
+	{
+		D2D1_SIZE_F rtSize = m_d2dRenderTarget[r_frameIndex]->GetSize();
+		D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
+		m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+		m_d2dContext->DrawText(text, length, format, &textRect, brush);
 	}
 }

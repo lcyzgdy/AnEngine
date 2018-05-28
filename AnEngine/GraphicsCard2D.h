@@ -7,6 +7,7 @@
 #include <dwrite_3.h>
 #include <d3d11on12.h>
 #include "RenderCoreConstants.h"
+#include "Color.h"
 
 namespace AnEngine::RenderCore
 {
@@ -49,9 +50,9 @@ namespace AnEngine::RenderCore::UI
 
 		ID2D1DeviceContext2* GetContext();
 
-		void CreateTextFormat();
-		void CreateTextBrush();
-		void DrawText();
+		void CreateTextFormat(IDWriteTextFormat** format);
+		void CreateTextBrush(ID2D1SolidColorBrush** brush, const Resource::Color& color);
+		void DrawText1(const wchar_t* text, uint32_t length, IDWriteTextFormat* format, ID2D1Brush* brush);
 	};
 }
 

@@ -46,9 +46,6 @@
     <ClInclude Include="NBody.h">
       <Filter>Demos</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="CommandContext.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -220,6 +217,9 @@
     <ClInclude Include="GraphicsCard.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Graphics\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -236,9 +236,6 @@
     </ClCompile>
     <ClCompile Include="NBody.cpp">
       <Filter>Demos</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="CommandContext.cpp">
       <Filter>Graphics</Filter>
@@ -368,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="GraphicsCard.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Graphics\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

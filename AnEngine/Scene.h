@@ -2,11 +2,11 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include"onwind.h"
-#include"BaseBehaviour.h"
-#include"GameObject.h"
-#include"Camera.h"
-#include<condition_variable>
+#include "onwind.h"
+#include "BaseBehaviour.h"
+#include "GameObject.h"
+#include "Camera.h"
+#include <condition_variable>
 
 namespace AnEngine::Game
 {
@@ -24,6 +24,8 @@ namespace AnEngine::Game
 		uint32_t m_complateCount;
 
 		bool m_frameLoop;
+
+		ObjectBehaviour* m_canvas;
 
 		//protected:
 		// 通过 BaseBehaviour 继承

@@ -2,8 +2,11 @@
 #include "ObjectBehaviour.h"
 #include "ThreadPool.hpp"
 #include "ManagedTask.hpp"
+#include "Canvas.h"
+#include "RenderCore.h"
 using namespace std;
 using namespace AnEngine::Utility;
+using namespace AnEngine::RenderCore;
 
 namespace AnEngine::Game
 {
@@ -44,7 +47,6 @@ namespace AnEngine::Game
 
 	void Scene::BeforeUpdate()
 	{
-
 	}
 
 	void Scene::OnUpdate()
@@ -107,6 +109,7 @@ namespace AnEngine::Game
 
 	void Scene::AfterUpdate()
 	{
+		R_Present();
 	}
 
 	void Scene::OnRelease()

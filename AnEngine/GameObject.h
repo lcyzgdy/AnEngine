@@ -63,7 +63,7 @@ namespace AnEngine::Game
 		}
 
 		template<typename _Ty>
-		std::vector<_Ty*>&& GetComponentsInChildren()
+		std::vector<_Ty*> GetComponentsInChildren()
 		{
 			std::vector<_Ty*> ret;
 			std::queue<GameObject*> q;

@@ -85,13 +85,14 @@ namespace AnEngine::RenderCore::UI
 
 	void GraphicsCard2D::CreateTextFormat(IDWriteTextFormat** format)
 	{
-		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Consola", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
-			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"zh-cn", format));
+		ThrowIfFailed(m_dWriteFactory->CreateTextFormat(L"Verdana", nullptr, DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"en-us", format));
 	}
 
 	void GraphicsCard2D::CreateTextBrush(ID2D1SolidColorBrush** brush, const Resource::Color& color)
 	{
-		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(color.ToD2DColor(), brush));
+		//ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(color.ToD2DColor(), brush));
+		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), brush));
 	}
 
 	void GraphicsCard2D::DrawText1(const wchar_t* text, uint32_t length, IDWriteTextFormat* format, ID2D1Brush* brush)

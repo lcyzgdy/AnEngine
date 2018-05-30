@@ -65,6 +65,7 @@ namespace AnEngine::RenderCore
 
 	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	procedure WaitForGpu();
+	procedure CreateCommonState();
 
 	procedure InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
@@ -141,7 +142,7 @@ namespace AnEngine::RenderCore
 			{
 				r_enableHDROutput = true;
 			}
-		}
+	}
 #endif
 
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
@@ -164,7 +165,7 @@ namespace AnEngine::RenderCore
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-	}
+}
 
 	void CreateCommonState()
 	{
@@ -326,7 +327,10 @@ namespace AnEngine::RenderCore
 #endif // _DEBUG
 
 		GraphicsContext::Push(commandList, commandAllocator);
+	}
 
+	void R_Present()
+	{
 		ThrowIfFailed(r_swapChain_cp->Present(0, 0), R_GetGpuError);
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 		WaitForGpu();

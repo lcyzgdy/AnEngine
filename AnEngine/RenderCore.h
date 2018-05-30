@@ -57,11 +57,13 @@ namespace AnEngine::RenderCore
 
 	procedure InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
 
-	procedure CreateCommonState();
+	//procedure CreateCommonState();
 
 	procedure RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 
 	procedure BlendBuffer(Resource::GpuResource* buffer);
+
+	procedure R_Present();
 }
 
 

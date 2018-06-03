@@ -31,7 +31,7 @@ namespace AnEngine::Game
 			}
 		}
 		m_frameLoop = true;
-		Utility::ThreadPool::Commit([this]
+		/*Utility::ThreadPool::Commit([this]
 		{
 			unique_lock<mutex> lock(this->m_mutex);
 			lock.unlock();
@@ -42,15 +42,22 @@ namespace AnEngine::Game
 				this->AfterUpdate();
 				lock.unlock();
 			}
-		});
+		});*/
+
+		Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
+
+		//Utility::ThreadPool::Private::u_s_threadPool.Commit(Scene::BeforeUpdate, this);
 	}
 
 	void Scene::BeforeUpdate()
 	{
+		lock_guard<mutex> lock(m_mutex);
+		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
 	}
 
 	void Scene::OnUpdate()
 	{
+		lock_guard<mutex> lock(m_mutex);
 		queue<GameObject*> q;
 		for (var item : m_objects)
 		{
@@ -105,11 +112,15 @@ namespace AnEngine::Game
 				q.push(i);
 			}
 		}
+
+		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
 	}
 
 	void Scene::AfterUpdate()
 	{
+		lock_guard<mutex> lock(m_mutex);
 		R_Present();
+		Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
 	}
 
 	void Scene::OnRelease()
@@ -134,7 +145,7 @@ namespace AnEngine::Game
 
 	void Scene::RemoveObject(GameObject* obj)
 	{
-		lock_guard<mutex> lock(m_mutex);
+		//lock_guard<mutex> lock(m_mutex);
 		for (var it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
 			if (*it == obj)
@@ -144,21 +155,5 @@ namespace AnEngine::Game
 			}
 		}
 		delete obj;
-	}
-
-	void Scene::Wait()
-	{
-		{
-			lock_guard<mutex> lock(m_mutex);
-			m_complateCount++;
-			if (m_complateCount == m_objects.size())
-			{
-				m_complateCount = 0;
-				m_cv.notify_all();
-				return;
-			}
-		}
-		unique_lock<mutex> behaviourLock(m_behaviourMutex);
-		m_cv.wait(behaviourLock);
 	}
 }

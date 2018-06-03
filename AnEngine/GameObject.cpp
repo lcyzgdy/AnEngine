@@ -4,13 +4,17 @@ using namespace std;
 
 namespace AnEngine::Game
 {
+	unordered_multimap<wstring, GameObject*> g_gameObjects;
+
 	//GameObject::GameObject(const std::wstring& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
 	GameObject::GameObject(const std::wstring& _name) : m_parentObject(nullptr), name(_name)
 	{
+		g_gameObjects.emplace(_name, this);
 	}
 
 	GameObject::GameObject(std::wstring&& _name) : m_parentObject(nullptr), name(_name)
 	{
+		g_gameObjects.emplace(_name, this);
 	}
 
 	GameObject::~GameObject()
@@ -20,6 +24,17 @@ namespace AnEngine::Game
 			delete i;
 		}
 		m_children.clear();
+		var all = g_gameObjects.equal_range(this->name);
+		while (all.first != all.second)
+		{
+			if ((*all.first).second == this)
+			{
+				g_gameObjects.erase(all.first);
+				break;
+			}
+			++all.first;
+		}
+		//g_gameObjects.erase(this->name);
 	}
 
 	GameObject * GameObject::GetParent()
@@ -68,5 +83,19 @@ namespace AnEngine::Game
 	void GameObject::AddChildObject(GameObject* obj)
 	{
 		m_children.push_back(obj);
+	}
+
+	GameObject* GameObject::Find(const std::wstring & name)
+	{
+		var r = g_gameObjects.find(name);
+		if (r == g_gameObjects.end()) return nullptr;
+		return (*r).second;
+	}
+
+	GameObject* GameObject::Find(std::wstring && name)
+	{
+		var r = g_gameObjects.find(name);
+		if (r == g_gameObjects.end()) return nullptr;
+		return (*r).second;
 	}
 }

@@ -19,32 +19,32 @@ namespace AnEngine::Game
 	void ObjectBehaviour::BeforeUpdate()
 	{
 		Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": BeforeUpdate");
-		{
-			lock_guard<mutex> lock(m_mutex);
-			if (!m_active) return;
-		}
+		//{
+			//lock_guard<mutex> lock(m_mutex);
+		if (!m_active) return;
+		//}
 		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 	}
 
 	void ObjectBehaviour::OnUpdate()
 	{
 		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": OnUpdate");
-		{
-			lock_guard<mutex> lock(m_mutex);
-			if (!m_active) return;
-			Update();
-		}
+		//{
+			//lock_guard<mutex> lock(m_mutex);
+		if (!m_active) return;
+		Update();
+		//}
 		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
 	}
 
 	void ObjectBehaviour::AfterUpdate()
 	{
 		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": AfterUpdate");
-		{
-			lock_guard<mutex> lock(m_mutex);
-			if (!m_active) return;
-			LateUpdate();
-		}
+		//{
+			//lock_guard<mutex> lock(m_mutex);
+		if (!m_active) return;
+		LateUpdate();
+		//}
 		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 	}
 

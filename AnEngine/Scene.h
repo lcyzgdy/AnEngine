@@ -43,8 +43,6 @@ namespace AnEngine::Game
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
-
-		void Wait();
 	};
 }
 

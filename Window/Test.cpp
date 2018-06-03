@@ -57,7 +57,9 @@ void TestCamera::Update()
 {
 	//var cameraScript = gameObject->GetComponent<Camera>();
 	//cameraScript->ClearColor({ sin((float)Timer::GetTotalTicks() / 240000), sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
-	//gameObject->GetComponent<StateMachine>()->SetFloat(L"Sin", sin((float)Timer::GetTotalTicks() / 240000));
+	var stateMachine = gameObject->GetComponent<StateMachine>();
+	stateMachine->SetFloat(L"Sin", sin((float)Timer::GetTotalTicks() / 240000));
+	GameObject::Find(L"Text")->GetComponent<UIText>()->Text();
 }
 
 TestCamera::TestCamera() : Script()

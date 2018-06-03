@@ -81,7 +81,7 @@ namespace AnEngine::Utility::ThreadPool
 			}
 
 			template<typename F, typename ... Args>
-			var Commit(F && f, Args && ...args)
+			var Commit(F&& f, Args&& ...args)// -> std::future<decltype(f(args...))>
 			{
 				if (m_stopped.load())
 				{
@@ -89,7 +89,7 @@ namespace AnEngine::Utility::ThreadPool
 				}
 				using FuncType = decltype(f(args ...));
 				var task = std::make_shared<std::packaged_task<FuncType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-				std::future<FuncType> awaitFuture = task->get_future();
+				var awaitFuture = task->get_future();
 				{
 					std::lock_guard<std::mutex> lock(m_mutex);
 					m_tasks.emplace([task] { (*task)(); });
@@ -105,6 +105,13 @@ namespace AnEngine::Utility::ThreadPool
 	template<typename F, typename ... Args>
 	var Commit(F && f, Args && ...args)
 	{
+		return Private::u_s_threadPool.Commit(f, args...);
+	}
+
+	template<typename F, typename ... Args>
+	var CommitAfter(std::future<void>&& wait, F&& f, Args&& ... args)
+	{
+		wait.get();
 		return Private::u_s_threadPool.Commit(f, args...);
 	}
 }

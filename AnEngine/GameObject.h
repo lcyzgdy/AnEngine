@@ -126,8 +126,10 @@ namespace AnEngine::Game
 		}
 
 		void RemoveComponent(ObjectBehaviour* component);
-
 		void AddChildObject(GameObject* obj);
+
+		static GameObject* Find(const std::wstring& name);
+		static GameObject* Find(std::wstring&& name);
 	};
 }
 #endif // !__GAMEOBJECT_H__

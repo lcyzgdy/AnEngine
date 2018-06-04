@@ -18,7 +18,7 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::BeforeUpdate()
 	{
-		Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": BeforeUpdate");
+		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": BeforeUpdate");
 		//{
 			//lock_guard<mutex> lock(m_mutex);
 		if (!m_active) return;

@@ -111,11 +111,12 @@ namespace AnEngine::Game
 		virtual void Update() final;
 
 	public:
-		StateMachine() = default;
-		virtual ~StateMachine() = default;
+		StateMachine();
+		virtual ~StateMachine();
 
 		int GetStateIndex(const std::wstring& name);
 		int GetStateIndex(std::wstring&& name);
+		std::wstring GetCurrectStateName();
 		// 增添状态机参数
 		void AddIntParam(std::wstring&& name, int initValue);
 		void AddFloatParam(std::wstring&& name, float initValue);

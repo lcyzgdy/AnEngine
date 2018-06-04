@@ -113,7 +113,7 @@ namespace AnEngine::Game
 			}
 		}
 
-		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
+		Utility::ThreadPool::Commit(bind(&Scene::AfterUpdate, this));
 	}
 
 	void Scene::AfterUpdate()

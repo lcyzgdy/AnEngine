@@ -13,8 +13,10 @@ namespace AnEngine::Game
 		[](_Ty a, _Ty b) { return a < b; },
 		[](_Ty a, _Ty b) { return a <= b; },
 		[](_Ty a, _Ty b) { return a > b; },
-		[](_Ty a, _Ty b) { return a >= b; },
+		[](_Ty a, _Ty b) { return a >= b; }
 	};
+
+	vector<StateMachine*> g_stateMachines;
 
 	void StateMachine::Update()
 	{
@@ -26,12 +28,40 @@ namespace AnEngine::Game
 			{
 				f = f && Cmp<float>[item.second.second](m_floatParam[item.first], item.second.first);
 			}
+			for (var item : ea.m_int)
+			{
+				f = f && Cmp<int>[item.second.second](m_intParam[item.first], item.second.first);
+			}
+			for (var item : ea.m_bool)
+			{
+				f = f && Cmp<bool>[item.second.second](m_boolParam[item.first], item.second.first);
+			}
+			for (var item : ea.m_trigger)
+			{
+				f = f && m_triggerParam[item];
+			}
 			if (f)
 			{
 				m_curState = ea.m_transState;
+
+				for (var item : ea.m_trigger)
+				{
+					m_triggerParam[item] = false;
+				}
+
 				break;
 			}
 		}
+	}
+
+	StateMachine::StateMachine()
+	{
+		g_stateMachines.push_back(this);
+	}
+
+	StateMachine::~StateMachine()
+	{
+		g_stateMachines.erase(find(g_stateMachines.begin(), g_stateMachines.end(), this));
 	}
 
 	int StateMachine::GetStateIndex(const std::wstring& name)
@@ -44,6 +74,11 @@ namespace AnEngine::Game
 	{
 
 		return -1;
+	}
+
+	std::wstring StateMachine::GetCurrectStateName()
+	{
+		return m_stateName[m_curState];
 	}
 
 	void StateMachine::AddIntParam(wstring&& name, int initValue)
@@ -63,7 +98,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = initValue;
+		m_floatParam[h] = initValue;
 	}
 
 	void StateMachine::AddBoolParam(wstring&& name, bool initValue)
@@ -73,7 +108,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = initValue;
+		m_boolParam[h] = initValue;
 	}
 
 	void StateMachine::AddTrigerParam(wstring&& name)
@@ -83,7 +118,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = false;
+		m_triggerParam[h] = false;
 	}
 
 	int StateMachine::CreateNewState(std::wstring && name, const std::function<void()>& func)

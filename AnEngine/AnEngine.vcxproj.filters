@@ -112,9 +112,6 @@
     <ClInclude Include="Screen.h">
       <Filter>UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="Driver.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -220,6 +217,7 @@
     <ClInclude Include="Color.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Driver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -284,9 +282,6 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="Driver.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
@@ -369,6 +364,7 @@
     <ClCompile Include="Color.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Driver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

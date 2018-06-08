@@ -11,17 +11,24 @@
 #include"Scene.h"
 namespace AnEngine
 {
-	class Driver : public Object
+	class Engine : public Object
 	{
 		bool m_initialized;
+		bool m_running;
 		Game::Scene* m_scene;
+		std::mutex m_mutex;
+		std::future<void> m_future;
 
-		Driver() = default;
-		~Driver() = default;
+		Engine() = default;
+		virtual ~Engine() = default;
+
+		void BeforeUpdate();
+		void OnUpdate();
+		void AfterUpdate();
 
 	public:
 
-		static Driver* GetInstance();
+		static Engine* GetInstance();
 
 		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Release();

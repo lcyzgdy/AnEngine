@@ -93,6 +93,9 @@ namespace AnEngine::Game
 			bool operator==(const State& rhs) { return this->m_id == rhs.m_id; }
 		};
 
+		friend class Scene;
+		static void StaticUpdate();
+
 	private:
 		std::unordered_map<std::wstring, uint64_t> m_str2Hash;
 

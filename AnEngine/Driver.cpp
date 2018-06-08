@@ -1,17 +1,47 @@
 #include "Driver.h"
-#include"RenderCore.h"
-#include"Screen.h"
-#include"Input.h"
+#include "RenderCore.h"
+#include "Screen.h"
+#include "Input.h"
+#include "ThreadPool.hpp"
+#include "DTimer.h"
 
 namespace AnEngine
 {
-	Driver* Driver::GetInstance()
+	void Engine::BeforeUpdate()
 	{
-		static Driver driver;
+		lock_guard<mutex> lock(m_mutex);
+		BaseInput::GetInstance()->Update();
+		DTimer::GetInstance()->Tick(nullptr);
+		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::OnUpdate, this)));
+	}
+
+	void Engine::OnUpdate()
+	{
+		lock_guard<mutex> lock(m_mutex);
+		m_scene->BeforeUpdate();
+		m_scene->OnUpdate();
+		m_scene->AfterUpdate();
+		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this)));
+	}
+
+	void Engine::AfterUpdate()
+	{
+		lock_guard<mutex> lock(m_mutex);
+		RenderCore::R_Present();
+		BaseInput::GetInstance()->ZeroInputState();
+		if (m_running)
+		{
+			m_future = move(Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this)));
+		}
+	}
+
+	Engine* Engine::GetInstance()
+	{
+		static Engine driver;
 		return &driver;
 	}
 
-	void Driver::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
+	void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
 	{
 		if (m_initialized) return;
 		m_initialized = true;
@@ -20,23 +50,25 @@ namespace AnEngine
 		RenderCore::InitializeRender(hwnd);
 	}
 
-	void Driver::Release()
+	void Engine::Release()
 	{
-		//RenderCore::rrrr_runningFlag = false;
-		//this_thread::sleep_for(100ms);
 		m_initialized = false;
+		m_running = false;
 		EndBehaviour();
 		BaseInput::GetInstance()->Release();
 	}
 
-	void Driver::StartScene(Game::Scene* behaviour)
+	void Engine::StartScene(Game::Scene* behaviour)
 	{
 		m_scene = behaviour;
 		behaviour->OnInit();
+		m_running = true;
+		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this)));
 	}
 
-	void Driver::EndBehaviour()
+	void Engine::EndBehaviour()
 	{
+		m_future.wait();
 		m_scene->OnRelease();
 	}
 }

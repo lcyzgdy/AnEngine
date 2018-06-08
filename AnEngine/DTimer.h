@@ -80,8 +80,9 @@ namespace AnEngine
 	class Timer
 	{
 	public:
-		static uint64_t _vectorcall GetTotalTicks();
-		static double _vectorcall GetTotalSeconds();
+		static inline uint64_t _vectorcall GetTotalTicks() { return DTimer::GetInstance()->GetTotalTicks(); }
+		static inline double Timer::GetTotalSeconds() { return DTimer::GetInstance()->GetTotalSeconds(); }
+		static inline uint32_t GetFPS() { return DTimer::GetInstance()->GetFramePerSecond(); }
 	};
 }
 #endif // !__DTIMER_H__

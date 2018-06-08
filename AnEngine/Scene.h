@@ -13,7 +13,7 @@ namespace AnEngine::Game
 	class Scene : public BaseBehaviour//, public NonCopyable
 	{
 		// Scene直接调度BaseBehaviour
-		friend class ::AnEngine::Driver;
+		friend class ::AnEngine::Engine;
 
 		std::vector<GameObject*> m_objects;
 		//std::vector<ObjectBehaviour*> m_objects;
@@ -30,8 +30,11 @@ namespace AnEngine::Game
 		//protected:
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() override;
+		// 对象状态、状态机、AI、物理等
 		virtual void BeforeUpdate() override;
+		// 脚本在这里运行
 		virtual void OnUpdate() override;
+		// 好像没什么东西了
 		virtual void AfterUpdate() override;
 		virtual void OnRelease() override;
 

@@ -18,6 +18,14 @@ namespace AnEngine::Game
 
 	vector<StateMachine*> g_stateMachines;
 
+	void StateMachine::StaticUpdate()
+	{
+		for (var i : g_stateMachines)
+		{
+			i->Update();
+		}
+	}
+
 	void StateMachine::Update()
 	{
 		m_states[m_curState].Invoke();
@@ -72,7 +80,6 @@ namespace AnEngine::Game
 
 	int StateMachine::GetStateIndex(std::wstring&& name)
 	{
-
 		return -1;
 	}
 

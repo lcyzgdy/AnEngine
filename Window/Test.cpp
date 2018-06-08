@@ -34,7 +34,7 @@ void LoadScene()
 	//ParticlesRenderer* nBody = new ParticlesRenderer();
 	//testCameraObject->AddComponent(nBody);
 
-	StateMachine* fsm = new StateMachine();
+	/*StateMachine* fsm = new StateMachine();
 	int s1 = fsm->CreateNewState(L"State1", [] {});
 	int s2 = fsm->CreateNewState(L"State2", [] {});
 	int s3 = fsm->CreateNewState(L"State3", [] {});
@@ -44,7 +44,7 @@ void LoadScene()
 	fsm->CreateStateTransCondition(s2, s1, L"Sin", 0f, StateMachine::Condition::Greater);
 	fsm->CreateStateTransCondition(s1, s3, L"T");
 	fsm->CreateStateTransCondition(s3, s1, L"Sin", 0.5f, StateMachine::Condition::Less);
-	testCameraObject->AddComponent(fsm);
+	testCameraObject->AddComponent(fsm);*/
 
 	GameObject* canvas = new GameObject(L"Canvas");
 	canvas->AddComponent<Canvas>();
@@ -55,20 +55,21 @@ void LoadScene()
 
 	testScene->AddObject(testCameraObject);
 	testScene->AddObject(canvas);
-	Driver::GetInstance()->StartScene(testScene);
+	Engine::GetInstance()->StartScene(testScene);
 }
 
 void TestCamera::Update()
 {
 	//var cameraScript = gameObject->GetComponent<Camera>();
 	//cameraScript->ClearColor({ sin((float)Timer::GetTotalTicks() / 240000), sin((float)Timer::GetTotalTicks() / 180000), sin((float)Timer::GetTotalTicks() / 300000), 1.0f });
-	var stateMachine = gameObject->GetComponent<StateMachine>();
-	if (BaseInput::GetInstance()->GetKeyDown(48))
+	//var stateMachine = gameObject->GetComponent<StateMachine>();
+	/*if (BaseInput::GetInstance()->GetKeyDown(48))
 	{
 		stateMachine->SetTrigger(L"T");
-	}
-	stateMachine->SetFloat(L"Sin", sin((float)Timer::GetTotalTicks() / 240000));
-	GameObject::Find(L"Text")->GetComponent<UIText>()->Text(stateMachine->GetCurrectStateName());
+	}*/
+	//stateMachine->SetFloat(L"Sin", sin((float)Timer::GetTotalTicks() / 240000));
+	//GameObject::Find(L"Text")->GetComponent<UIText>()->Text(stateMachine->GetCurrectStateName());
+	GameObject::Find(L"Text")->GetComponent<UIText>()->Text(to_wstring(Timer::GetFPS()));
 }
 
 TestCamera::TestCamera() : Script()

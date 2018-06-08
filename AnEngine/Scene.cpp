@@ -4,6 +4,8 @@
 #include "ManagedTask.hpp"
 #include "Canvas.h"
 #include "RenderCore.h"
+#include "StateMachine.h"
+#include "Camera.h"
 using namespace std;
 using namespace AnEngine::Utility;
 using namespace AnEngine::RenderCore;
@@ -44,20 +46,18 @@ namespace AnEngine::Game
 			}
 		});*/
 
-		Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
+		//Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
 
 		//Utility::ThreadPool::Private::u_s_threadPool.Commit(Scene::BeforeUpdate, this);
 	}
 
 	void Scene::BeforeUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
-		Utility::ThreadPool::Commit(bind(&Scene::OnUpdate, this));
+		StateMachine::StaticUpdate();
 	}
 
 	void Scene::OnUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
 		queue<GameObject*> q;
 		for (var item : m_objects)
 		{
@@ -69,6 +69,10 @@ namespace AnEngine::Game
 			q.pop();
 			for (var i : p->m_component)
 			{
+				/*if (is_same<decltype(*i), Camera>::value)
+				{
+					continue;
+				}*/
 				i->BeforeUpdate();
 			}
 			for (var i : p->m_children)
@@ -87,6 +91,10 @@ namespace AnEngine::Game
 			q.pop();
 			for (var i : p->m_component)
 			{
+				if (is_same<decltype(*i), StateMachine>::value)
+				{
+					continue;
+				}
 				i->OnUpdate();
 			}
 			for (var i : p->m_children)
@@ -112,15 +120,13 @@ namespace AnEngine::Game
 				q.push(i);
 			}
 		}
-
-		Utility::ThreadPool::Commit(bind(&Scene::AfterUpdate, this));
 	}
 
 	void Scene::AfterUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
+		//lock_guard<mutex> lock(m_mutex);
 		R_Present();
-		Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
+		//Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
 	}
 
 	void Scene::OnRelease()

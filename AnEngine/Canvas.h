@@ -3,6 +3,7 @@
 #define __CANVAS_H__
 
 #include "ObjectBehaviour.h"
+#include "UIComponent.h"
 
 namespace AnEngine::Game::UI
 {

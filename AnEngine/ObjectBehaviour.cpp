@@ -12,56 +12,36 @@ namespace AnEngine::Game
 		if (m_active)
 		{
 			OnActive();
-			//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 		}
 	}
 
 	void ObjectBehaviour::BeforeUpdate()
 	{
-		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": BeforeUpdate");
-		//{
-			//lock_guard<mutex> lock(m_mutex);
 		if (!m_active) return;
-		//}
-		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::OnUpdate, this));
 	}
 
 	void ObjectBehaviour::OnUpdate()
 	{
-		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": OnUpdate");
-		//{
-			//lock_guard<mutex> lock(m_mutex);
 		if (!m_active) return;
 		Update();
-		//}
-		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::AfterUpdate, this));
 	}
 
 	void ObjectBehaviour::AfterUpdate()
 	{
-		//Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": AfterUpdate");
-		//{
-			//lock_guard<mutex> lock(m_mutex);
 		if (!m_active) return;
 		LateUpdate();
-		//}
-		//Utility::ThreadPool::Commit(std::bind(&ObjectBehaviour::BeforeUpdate, this));
 	}
 
 	void ObjectBehaviour::OnRelease()
 	{
 		if (m_released) return;
 		m_active = false;
-		//lock_guard<mutex> lock(m_mutex);
 		Destory();
 		m_released = true;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void ObjectBehaviour::Start()
-	{
-		Debug::Log(gameObject->name + ToLPCWSTR(typeid(*this).name()) + L": Start");
-	}
+	void ObjectBehaviour::Start() {	}
 
 	void ObjectBehaviour::OnActive() { }
 
@@ -71,10 +51,8 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::OnInvalid() { }
 
-	void ObjectBehaviour::Destory()
-	{
-		Debug::Log(gameObject->name + L": Destory");
-	}
+	void ObjectBehaviour::Destory() { }
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	ObjectBehaviour::ObjectBehaviour() : m_active(true)
 	{
@@ -82,11 +60,8 @@ namespace AnEngine::Game
 
 	ObjectBehaviour::~ObjectBehaviour()
 	{
-		if (!m_released)
-			OnRelease();
+		if (!m_released) OnRelease();
 	}
-
-
 
 	bool ObjectBehaviour::Active()
 	{

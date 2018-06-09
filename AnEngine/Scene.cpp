@@ -33,27 +33,12 @@ namespace AnEngine::Game
 			}
 		}
 		m_frameLoop = true;
-		/*Utility::ThreadPool::Commit([this]
-		{
-			unique_lock<mutex> lock(this->m_mutex);
-			lock.unlock();
-			while (lock.lock(), m_frameLoop == true)
-			{
-				this->BeforeUpdate();
-				this->OnUpdate();
-				this->AfterUpdate();
-				lock.unlock();
-			}
-		});*/
-
-		//Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
-
-		//Utility::ThreadPool::Private::u_s_threadPool.Commit(Scene::BeforeUpdate, this);
 	}
 
 	void Scene::BeforeUpdate()
 	{
-		StateMachine::StaticUpdate();
+		future<void> f1 = Utility::ThreadPool::Commit(StateMachine::StaticUpdate);
+		f1.wait();
 	}
 
 	void Scene::OnUpdate()
@@ -69,10 +54,6 @@ namespace AnEngine::Game
 			q.pop();
 			for (var i : p->m_component)
 			{
-				/*if (is_same<decltype(*i), Camera>::value)
-				{
-					continue;
-				}*/
 				i->BeforeUpdate();
 			}
 			for (var i : p->m_children)
@@ -95,17 +76,26 @@ namespace AnEngine::Game
 				{
 					continue;
 				}
-				i->OnUpdate();
+				if (i->Active())
+				{
+					i->OnUpdate();
+				}
 			}
 			for (var i : p->m_children)
 			{
-				q.push(i);
+				if (i->Active())
+				{
+					q.push(i);
+				}
 			}
 		}
 
 		for (var item : m_objects)
 		{
-			q.push(item);
+			if (item->Active())
+			{
+				q.push(item);
+			}
 		}
 		while (!q.empty())
 		{
@@ -113,21 +103,23 @@ namespace AnEngine::Game
 			q.pop();
 			for (var i : p->m_component)
 			{
-				i->AfterUpdate();
+				if (i->Active())
+				{
+					i->AfterUpdate();
+				}
 			}
 			for (var i : p->m_children)
 			{
-				q.push(i);
+				if (i->Active())
+				{
+					q.push(i);
+				}
 			}
 		}
 	}
 
 	void Scene::AfterUpdate()
-	{
-		//lock_guard<mutex> lock(m_mutex);
-		R_Present();
-		//Utility::ThreadPool::Commit(bind(&Scene::BeforeUpdate, this));
-	}
+	{ }
 
 	void Scene::OnRelease()
 	{
@@ -151,7 +143,6 @@ namespace AnEngine::Game
 
 	void Scene::RemoveObject(GameObject* obj)
 	{
-		//lock_guard<mutex> lock(m_mutex);
 		for (var it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
 			if (*it == obj)

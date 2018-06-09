@@ -19,6 +19,7 @@ namespace AnEngine::Game
 		friend class Scene;
 
 		std::mutex m_mutex;
+		bool m_active;
 	protected:
 		// 当前物体的父物体
 		GameObject * m_parentObject;
@@ -127,6 +128,9 @@ namespace AnEngine::Game
 
 		void RemoveComponent(ObjectBehaviour* component);
 		void AddChildObject(GameObject* obj);
+
+		bool Active();
+		void Active(bool b);
 
 		static GameObject* Find(const std::wstring& name);
 		static GameObject* Find(std::wstring&& name);

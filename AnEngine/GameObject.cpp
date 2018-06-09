@@ -7,12 +7,12 @@ namespace AnEngine::Game
 	unordered_multimap<wstring, GameObject*> g_gameObjects;
 
 	//GameObject::GameObject(const std::wstring& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
-	GameObject::GameObject(const std::wstring& _name) : m_parentObject(nullptr), name(_name)
+	GameObject::GameObject(const std::wstring& _name) : m_parentObject(nullptr), name(_name), m_active(true)
 	{
 		g_gameObjects.emplace(_name, this);
 	}
 
-	GameObject::GameObject(std::wstring&& _name) : m_parentObject(nullptr), name(_name)
+	GameObject::GameObject(std::wstring&& _name) : m_parentObject(nullptr), name(_name), m_active(true)
 	{
 		g_gameObjects.emplace(_name, this);
 	}
@@ -97,5 +97,34 @@ namespace AnEngine::Game
 		var r = g_gameObjects.find(name);
 		if (r == g_gameObjects.end()) return nullptr;
 		return (*r).second;
+	}
+
+	bool GameObject::Active()
+	{
+		return m_active;
+	}
+
+	void GameObject::Active(bool b)
+	{
+		lock_guard<mutex> lock(m_mutex);
+		m_active = b;
+		if (b)
+		{
+			for (var i : m_component)
+			{
+				i->OnActive();
+			}
+		}
+		else
+		{
+			for (var i : GetComponents())
+			{
+				i->OnInvalid();
+			}
+		}
+		for (var i : m_children)
+		{
+			i->Active(b);
+		}
 	}
 }

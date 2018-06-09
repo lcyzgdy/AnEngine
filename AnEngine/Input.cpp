@@ -61,8 +61,6 @@ namespace AnEngine
 
 	void BaseInput::Release()
 	{
-		m_exit = true;
-		while (m_exit);
 		if (m_keyboard)
 		{
 			m_keyboard->Unacquire();

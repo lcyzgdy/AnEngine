@@ -12,7 +12,7 @@ namespace AnEngine
 		lock_guard<mutex> lock(m_mutex);
 		BaseInput::GetInstance()->Update();
 		DTimer::GetInstance()->Tick(nullptr);
-		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::OnUpdate, this)));
+		Utility::ThreadPool::Commit(bind(&Engine::OnUpdate, this));
 	}
 
 	void Engine::OnUpdate()
@@ -21,7 +21,7 @@ namespace AnEngine
 		m_scene->BeforeUpdate();
 		m_scene->OnUpdate();
 		m_scene->AfterUpdate();
-		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this)));
+		Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this));
 	}
 
 	void Engine::AfterUpdate()
@@ -31,7 +31,7 @@ namespace AnEngine
 		BaseInput::GetInstance()->ZeroInputState();
 		if (m_running)
 		{
-			m_future = move(Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this)));
+			Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this));
 		}
 	}
 
@@ -63,12 +63,12 @@ namespace AnEngine
 		m_scene = behaviour;
 		behaviour->OnInit();
 		m_running = true;
-		m_future = move(Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this)));
+		Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this));
 	}
 
 	void Engine::EndBehaviour()
 	{
-		m_future.wait();
+		//m_future.wait();
 		m_scene->OnRelease();
 	}
 }

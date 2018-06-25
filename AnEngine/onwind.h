@@ -148,6 +148,15 @@ inline void ThrowIfFailed(HRESULT hr, const std::function<void(void)>& f)
 		throw std::exception("一个奇怪的错误");
 	}
 }
+inline void ThrowIfFalse(bool value)
+{
+	ThrowIfFailed(value ? S_OK : E_FAIL);
+}
+
+inline void ThrowIfFalse(bool value, const wchar_t* msg)
+{
+	ThrowIfFailed(value ? S_OK : E_FAIL);
+}
 
 template <typename T>
 inline T* SafeAcquire(T* newObject)

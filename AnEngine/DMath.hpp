@@ -11,7 +11,7 @@
 #undef min
 #endif
 
-namespace DMath
+namespace AnEngine::DMath
 {
 	template<typename T>
 	__forceinline T __vectorcall AlignUpWithMask(T value, size_t mask)
@@ -71,6 +71,16 @@ namespace DMath
 			args += size;
 		}
 		return *minn;
+	}
+
+	inline uint32_t Align(uint32_t size, uint32_t alignment)
+	{
+		return (size + (alignment - 1)) & ~(alignment - 1);
+	}
+
+	inline uint32_t CalculateConstantBufferByteSize(uint32_t byteSize)
+	{
+		return Align(byteSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 	}
 }
 

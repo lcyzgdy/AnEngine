@@ -50,5 +50,21 @@ namespace AnEngine::RenderCore::Resource
 		ByteAddressBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
 			const void* initialData = nullptr);
 	};
+
+	class GpuUploadBuffer
+	{
+	public:
+		Microsoft::WRL::ComPtr<ID3D12Resource> GetResource() { return m_resource; }
+
+	protected:
+		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource;
+
+		GpuUploadBuffer() {}
+		~GpuUploadBuffer();
+
+		void Allocate(ID3D12Device* device, uint32_t bufferSize, wchar_t* resourceName = nullptr);
+
+		uint8_t* MapCpuWriteOnly();
+	};
 }
 #endif // !__GPUBUFFER_H__

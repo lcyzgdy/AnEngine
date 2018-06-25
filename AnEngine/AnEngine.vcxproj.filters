@@ -29,6 +29,9 @@
     <Filter Include="Graphics\Resource">
       <UniqueIdentifier>{aca8377d-6640-4eae-bfbd-fd3cdcbe689e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DXR">
+      <UniqueIdentifier>{0e021905-d8c9-4e82-8c6a-81fcc2edfa28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -91,16 +94,10 @@
     <ClInclude Include="Vector.hpp">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="DebugLog.h">
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="DTimer.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="DX.h">
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -218,6 +215,36 @@
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Driver.h" />
+    <ClInclude Include="RayTracingPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingHelper.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\d3d12video.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DX.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\d3d12_1.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingFallback.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingPrototypeHelpers.hpp">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\d3d12.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\DXR\dxcapi.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -269,9 +296,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DTimer.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="DX.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -365,6 +389,9 @@
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="DX.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

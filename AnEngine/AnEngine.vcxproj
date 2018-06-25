@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)PhyX\PhysX_3.4\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -113,7 +113,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)PhyX\PhysX_3.4\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
@@ -164,6 +164,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rdparty\DXR\d3d12.h" />
+    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingFallback.h" />
+    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingPrototypeHelpers.hpp" />
+    <ClInclude Include="..\3rdparty\DXR\d3d12video.h" />
+    <ClInclude Include="..\3rdparty\DXR\d3d12_1.h" />
+    <ClInclude Include="..\3rdparty\DXR\dxcapi.h" />
     <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
@@ -207,6 +213,8 @@
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="Quaternion.hpp" />
+    <ClInclude Include="RayTracingHelper.hpp" />
+    <ClInclude Include="RayTracingPipeline.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Renderer.h" />

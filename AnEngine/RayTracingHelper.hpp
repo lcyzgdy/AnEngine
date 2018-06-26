@@ -27,12 +27,12 @@ namespace AnEngine::RenderCore
 	class ShaderRecord
 	{
 	public:
-		ShaderRecord(void* pShaderIdentifier, UINT shaderIdentifierSize) :
+		ShaderRecord(void* pShaderIdentifier, uint32_t shaderIdentifierSize) :
 			shaderIdentifier(pShaderIdentifier, shaderIdentifierSize)
 		{
 		}
 
-		ShaderRecord(void* pShaderIdentifier, UINT shaderIdentifierSize, void* pLocalRootArguments, UINT localRootArgumentsSize) :
+		ShaderRecord(void* pShaderIdentifier, uint32_t shaderIdentifierSize, void* pLocalRootArguments, uint32_t localRootArgumentsSize) :
 			shaderIdentifier(pShaderIdentifier, shaderIdentifierSize),
 			localRootArguments(pLocalRootArguments, localRootArgumentsSize)
 		{
@@ -48,12 +48,13 @@ namespace AnEngine::RenderCore
 			}
 		}
 
-		struct PointerWithSize {
+		struct PointerWithSize
+		{
 			void *ptr;
-			UINT size;
+			uint32_t size;
 
 			PointerWithSize() : ptr(nullptr), size(0) {}
-			PointerWithSize(void* _ptr, UINT _size) : ptr(_ptr), size(_size) {};
+			PointerWithSize(void* _ptr, uint32_t _size) : ptr(_ptr), size(_size) {};
 		};
 		PointerWithSize shaderIdentifier;
 		PointerWithSize localRootArguments;
@@ -63,7 +64,7 @@ namespace AnEngine::RenderCore
 	class ShaderTable : public Resource::GpuUploadBuffer
 	{
 		uint8_t* m_mappedShaderRecords;
-		UINT m_shaderRecordSize;
+		uint32_t m_shaderRecordSize;
 
 		// Debug support
 		std::wstring m_name;
@@ -71,12 +72,12 @@ namespace AnEngine::RenderCore
 
 		ShaderTable() {}
 	public:
-		ShaderTable(ID3D12Device* device, UINT numShaderRecords, UINT shaderRecordSize, wchar_t* resourceName = nullptr)
+		ShaderTable(ID3D12Device* device, uint32_t numShaderRecords, uint32_t shaderRecordSize, wchar_t* resourceName = nullptr)
 			: m_name(resourceName)
 		{
 			m_shaderRecordSize = DMath::Align(shaderRecordSize, D3D12_RAYTRACING_SHADER_RECORD_BYTE_ALIGNMENT);
 			m_shaderRecords.reserve(numShaderRecords);
-			UINT bufferSize = numShaderRecords * m_shaderRecordSize;
+			uint32_t bufferSize = numShaderRecords * m_shaderRecordSize;
 			Allocate(device, bufferSize, resourceName);
 			m_mappedShaderRecords = MapCpuWriteOnly();
 		}
@@ -89,7 +90,7 @@ namespace AnEngine::RenderCore
 			m_mappedShaderRecords += m_shaderRecordSize;
 		}
 
-		UINT GetShaderRecordSize() { return m_shaderRecordSize; }
+		uint32_t GetShaderRecordSize() { return m_shaderRecordSize; }
 
 		// Pretty-print the shader records.
 		void DebugPrint(std::unordered_map<void*, std::wstring> shaderIdToStringMap)
@@ -100,7 +101,7 @@ namespace AnEngine::RenderCore
 				<< m_shaderRecordSize << L" | "
 				<< m_shaderRecords.size() * m_shaderRecordSize << L" bytes\n";
 
-			for (UINT i = 0; i < m_shaderRecords.size(); i++)
+			for (uint32_t i = 0; i < m_shaderRecords.size(); i++)
 			{
 				wstr << L"| [" << i << L"]: ";
 				wstr << shaderIdToStringMap[m_shaderRecords[i].shaderIdentifier.ptr] << L", ";
@@ -112,7 +113,8 @@ namespace AnEngine::RenderCore
 		}
 	};
 
-	inline void AllocateUAVBuffer(ID3D12Device* pDevice, UINT64 bufferSize, ID3D12Resource **ppResource, D3D12_RESOURCE_STATES initialResourceState = D3D12_RESOURCE_STATE_COMMON, const wchar_t* resourceName = nullptr)
+	inline void AllocateUAVBuffer(ID3D12Device* pDevice, uint64_t bufferSize, ID3D12Resource **ppResource,
+		D3D12_RESOURCE_STATES initialResourceState = D3D12_RESOURCE_STATE_COMMON, const wchar_t* resourceName = nullptr)
 	{
 		auto uploadHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 		auto bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
@@ -127,7 +129,7 @@ namespace AnEngine::RenderCore
 	template<class T, size_t N>
 	void DefineExports(T* obj, LPCWSTR(&Exports)[N])
 	{
-		for (UINT i = 0; i < N; i++)
+		for (uint32_t i = 0; i < N; i++)
 		{
 			obj->DefineExport(Exports[i]);
 		}
@@ -136,15 +138,16 @@ namespace AnEngine::RenderCore
 	template<class T, size_t N, size_t M>
 	void DefineExports(T* obj, LPCWSTR(&Exports)[N][M])
 	{
-		for (UINT i = 0; i < N; i++)
-			for (UINT j = 0; j < M; j++)
+		for (uint32_t i = 0; i < N; i++)
+			for (uint32_t j = 0; j < M; j++)
 			{
 				obj->DefineExport(Exports[i][j]);
 			}
 	}
 
 
-	inline void AllocateUploadBuffer(ID3D12Device* pDevice, void *pData, UINT64 datasize, ID3D12Resource **ppResource, const wchar_t* resourceName = nullptr)
+	inline void AllocateUploadBuffer(ID3D12Device* pDevice, void *pData, uint64_t datasize, ID3D12Resource **ppResource,
+		const wchar_t* resourceName = nullptr)
 	{
 		auto uploadHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 		auto bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(datasize);
@@ -170,15 +173,15 @@ namespace AnEngine::RenderCore
 		if (desc->Type == D3D12_STATE_OBJECT_TYPE_COLLECTION) wstr << L"Collection\n";
 		if (desc->Type == D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE) wstr << L"Raytracing Pipeline\n";
 
-		auto ExportTree = [](UINT depth, UINT numExports, const D3D12_EXPORT_DESC* exports)
+		auto ExportTree = [](uint32_t depth, uint32_t numExports, const D3D12_EXPORT_DESC* exports)
 		{
 			std::wostringstream woss;
-			for (UINT i = 0; i < numExports; i++)
+			for (uint32_t i = 0; i < numExports; i++)
 			{
 				woss << L"|";
 				if (depth > 0)
 				{
-					for (UINT j = 0; j < 2 * depth - 1; j++) woss << L" ";
+					for (uint32_t j = 0; j < 2 * depth - 1; j++) woss << L" ";
 				}
 				woss << L" [" << i << L"]: ";
 				if (exports[i].ExportToRename) woss << exports[i].ExportToRename << L" --> ";
@@ -187,7 +190,7 @@ namespace AnEngine::RenderCore
 			return woss.str();
 		};
 
-		for (UINT i = 0; i < desc->NumSubobjects; i++)
+		for (uint32_t i = 0; i < desc->NumSubobjects; i++)
 		{
 			wstr << L"| [" << i << L"]: ";
 			switch (desc->pSubobjects[i].Type)
@@ -240,7 +243,7 @@ namespace AnEngine::RenderCore
 				wstr << L"DXIL Subobjects to Exports Association (";
 				auto association = static_cast<const D3D12_DXIL_SUBOBJECT_TO_EXPORTS_ASSOCIATION*>(desc->pSubobjects[i].pDesc);
 				wstr << association->SubobjectToAssociate << L")\n";
-				for (UINT j = 0; j < association->NumExports; j++)
+				for (uint32_t j = 0; j < association->NumExports; j++)
 				{
 					wstr << L"|  [" << j << L"]: " << association->pExports[j] << L"\n";
 				}

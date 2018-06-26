@@ -1,11 +1,12 @@
-#include"RenderCore.h"
-#include"Screen.h"
-#include"CommandContext.h"
-#include"DescriptorHeap.hpp"
-#include"Fence.hpp"
-#include"ThreadPool.hpp"
-#include"DTimer.h"
-#include"DebugLog.h"
+#include "RenderCore.h"
+#include "Screen.h"
+#include "CommandContext.h"
+#include "DescriptorHeap.hpp"
+#include "Fence.hpp"
+#include "ThreadPool.hpp"
+#include "DTimer.h"
+#include "DebugLog.h"
+#include <dxgidebug.h>
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -72,15 +73,31 @@ namespace AnEngine::RenderCore
 		r_hwnd = hwnd;
 		uint32_t dxgiFactoryFlags = 0;
 		// 开启Debug模式
+		bool debugDxgi = false;
 #if defined(DEBUG) || defined(_DEBUG)
+
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
 		{
 			d3dDebugController->EnableDebugLayer();
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
+
+		ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiInfoQueue))))
+		{
+			debugDxgi = true;
+
+			ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&r_dxgiFactory_cp)));
+
+			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
+			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+		}
 #endif
-		ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
+		if (!debugDxgi)
+		{
+			ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
+		}
 
 
 		while (graphicCardCount--)
@@ -141,8 +158,8 @@ namespace AnEngine::RenderCore
 				SUCCEEDED(p_swapChain->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020)))
 			{
 				r_enableHDROutput = true;
-			}
 	}
+}
 #endif
 
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
@@ -165,7 +182,7 @@ namespace AnEngine::RenderCore
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-}
+	}
 
 	void CreateCommonState()
 	{

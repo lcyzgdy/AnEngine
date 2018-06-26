@@ -16,7 +16,8 @@ namespace AnEngine::RenderCore
 		//uint64_t m_fenceValue;
 		//ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32
-		HANDLE m_fenceEvent;
+		// HANDLE m_fenceEvent;
+		Microsoft::WRL::Wrappers::Event m_fenceEvent;
 #else
 		std::condition_variable m_fenceEvent;
 #endif // _WIN32

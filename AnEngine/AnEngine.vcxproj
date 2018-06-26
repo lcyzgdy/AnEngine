@@ -76,9 +76,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,7 +113,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
@@ -164,12 +164,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rdparty\DXR\d3d12.h" />
-    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingFallback.h" />
-    <ClInclude Include="..\3rdparty\DXR\D3D12RaytracingPrototypeHelpers.hpp" />
-    <ClInclude Include="..\3rdparty\DXR\d3d12video.h" />
-    <ClInclude Include="..\3rdparty\DXR\d3d12_1.h" />
-    <ClInclude Include="..\3rdparty\DXR\dxcapi.h" />
+    <ClInclude Include="..\3rdparty\DXR\Include\d3d12.h" />
+    <ClInclude Include="..\3rdparty\DXR\Include\D3D12RaytracingFallback.h" />
+    <ClInclude Include="..\3rdparty\DXR\Include\D3D12RaytracingPrototypeHelpers.hpp" />
+    <ClInclude Include="..\3rdparty\DXR\Include\d3d12video.h" />
+    <ClInclude Include="..\3rdparty\DXR\Include\d3d12_1.h" />
+    <ClInclude Include="..\3rdparty\DXR\Include\dxcapi.h" />
+    <ClInclude Include="..\Assets\HlslCompat.h" />
+    <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
@@ -271,6 +273,7 @@
     <ClCompile Include="ParticlesRenderer.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
+    <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
@@ -379,6 +382,11 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\Assets\Raytracing.hlsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)3rdparty\DXR\Bin\x64\dxc.exe" -nologo -Zpr -Fh "$(IntDir)\CompiledShaders\%(Filename).hlsl.h" -Vn g_p%(Filename) -T lib_6_1 "%(Identity)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\CompiledShaders\%(Filename).hlsl.h</Outputs>
+    </CustomBuild>
     <FxCompile Include="..\Assets\test.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

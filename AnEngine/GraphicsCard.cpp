@@ -13,43 +13,38 @@ namespace AnEngine::RenderCore
 
 		ComPtr<IDXGIAdapter1> cp_hardwareAdapter;
 		GetHardwareAdapter(dxgiFactory, &cp_hardwareAdapter);
-		ThrowIfFailed(D3D12CreateDevice(cp_hardwareAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp)), R_GetGpuError);
+		ThrowIfFailed(D3D12CreateDevice(cp_hardwareAdapter.Get(), r_D3DFeatureLevelWithCreatorUpdate_const, IID_PPV_ARGS(&m_device_cp)), R_GetGpuError);
 
 		if (m_device_cp.Get() == nullptr)
 		{
 			ComPtr<IDXGIAdapter> cp_warpAdapter;
 			dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&cp_warpAdapter));
-			D3D12CreateDevice(cp_warpAdapter.Get(), r_MinD3DFeatureLevel_const, IID_PPV_ARGS(&m_device_cp));
+			D3D12CreateDevice(cp_warpAdapter.Get(), r_D3DFeatureLevelWithCreatorUpdate_const, IID_PPV_ARGS(&m_device_cp));
 		}
 
 		m_device_cp->SetStablePowerState(m_stableFlag);
 
-#if defined(DEBUG) //|| defined(_DEBUG)
-		ID3D12InfoQueue* p_compInfoQueue = nullptr;
-		ThrowIfFailed(m_device_cp->QueryInterface(IID_PPV_ARGS(&p_compInfoQueue)));
-		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-
-		// 通过ID来避免个人消息。
-		D3D12_MESSAGE_ID denyMessageIds[] =
+#ifndef NDEBUG
+		// Configure debug device (if active).
+		ComPtr<ID3D12InfoQueue> d3dInfoQueue;
+		if (SUCCEEDED(m_device_cp.As(&d3dInfoQueue)))
 		{
-			// 当描述符表中有未初始化的描述符时，即使着色器不访问，也会发生这种情况。常见的做法是切换着色器的排列而不是改变太多的代码、重新安排资源。
-			D3D12_MESSAGE_ID_INVALID_DESCRIPTOR_HANDLE,
-			// 当着色器不输出渲染目标的所有颜色分量（例如仅将RGB写入R10G10B10A2缓冲区时）忽略Alpha时触发。
-			D3D12_MESSAGE_ID_CREATEGRAPHICSPIPELINESTATE_PS_OUTPUT_RT_OUTPUT_MISMATCH,
-			// 即使当着色器不访问缺少的描述符，也会在描述符表未绑定时触发。不同的着色器之间共享的根签名并不都需要相同类型的资源。
-			D3D12_MESSAGE_ID_COMMAND_LIST_DESCRIPTOR_TABLE_NOT_SET,
-
-			(D3D12_MESSAGE_ID)1008,
-		};
-		D3D12_INFO_QUEUE_FILTER newFilter = {};
-		newFilter.DenyList.NumSeverities = _countof(severities);
-		newFilter.DenyList.pSeverityList = severities;
-		newFilter.DenyList.NumIDs = _countof(denyMessageIds);
-		newFilter.DenyList.pIDList = denyMessageIds;
-
-		p_compInfoQueue->PushStorageFilter(&newFilter);
-		p_compInfoQueue->Release();
+#ifdef _DEBUG
+			d3dInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+			d3dInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 #endif
+			D3D12_MESSAGE_ID hide[] =
+			{
+				D3D12_MESSAGE_ID_MAP_INVALID_NULLRANGE,
+				D3D12_MESSAGE_ID_UNMAP_INVALID_NULLRANGE
+			};
+			D3D12_INFO_QUEUE_FILTER filter = {};
+			filter.DenyList.NumIDs = _countof(hide);
+			filter.DenyList.pIDList = hide;
+			d3dInfoQueue->AddStorageFilterEntries(&filter);
+		}
+#endif
+
 		if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &m_featureDataOptions, sizeof(m_featureDataOptions))))
 		{
 			if (m_featureDataOptions.TypedUAVLoadAdditionalFormats)
@@ -71,6 +66,8 @@ namespace AnEngine::RenderCore
 				}
 			}
 		}
+
+		ThrowIfFailed(m_device_cp->QueryInterface(IID_PPV_ARGS(&m_dxrDevice_cp)));
 	}
 
 	void GraphicsCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
@@ -113,6 +110,16 @@ namespace AnEngine::RenderCore
 	ID3D12Device * GraphicsCard::GetDevice()
 	{
 		return m_device_cp.Get();
+	}
+
+	const ID3D12DeviceRaytracingPrototype * GraphicsCard::GetDxrDevice() const
+	{
+		return m_dxrDevice_cp.Get();
+	}
+
+	ID3D12DeviceRaytracingPrototype * GraphicsCard::GetDxrDevice()
+	{
+		return m_dxrDevice_cp.Get();
 	}
 
 	uint32_t GraphicsCard::GetNodeNum()

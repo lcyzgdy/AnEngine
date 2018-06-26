@@ -2,10 +2,11 @@
 #ifndef __GRAPHICSCARD_H__
 #define __GRAPHICSCARD_H__
 
-#include"DX.h"
-#include"CommandQueue.h"
-#include"RenderCoreConstants.h"
-#include<mutex>
+#include "DX.h"
+#include "CommandQueue.h"
+#include "RenderCoreConstants.h"
+#include <mutex>
+#include "d3d12_1.h"
 //#include"Fence.h"
 
 namespace AnEngine::RenderCore
@@ -21,6 +22,7 @@ namespace AnEngine::RenderCore
 		//friend class UI::GraphicsCard2D;
 
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
+		Microsoft::WRL::ComPtr<ID3D12DeviceRaytracingPrototype> m_dxrDevice_cp;
 
 		// 渲染着色器的命令队列。
 		CommandQueue m_renderCommandQueue;
@@ -80,6 +82,8 @@ namespace AnEngine::RenderCore
 		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		const ID3D12Device* GetDevice() const;
 		ID3D12Device* GetDevice();
+		const ID3D12DeviceRaytracingPrototype* GetDxrDevice() const;
+		ID3D12DeviceRaytracingPrototype* GetDxrDevice();
 		uint32_t GetNodeNum();
 
 		void ExecuteSync(_In_ uint32_t num, _In_reads_(num) ID3D12CommandList *const *ppCommandLists, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);

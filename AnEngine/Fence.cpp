@@ -23,8 +23,10 @@ namespace AnEngine::RenderCore
 		var device = r_graphicsCard[0]->GetDevice();
 		ThrowIfFailed(device->CreateFence(m_fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 #ifdef _WIN32
-		m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-		if (m_fenceEvent == nullptr)
+		//m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+		m_fenceEvent.Attach(CreateEvent(nullptr, FALSE, FALSE, nullptr));
+		//if (m_fenceEvent == nullptr)
+		if (!m_fenceEvent.IsValid())
 		{
 			ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
 		}
@@ -34,7 +36,8 @@ namespace AnEngine::RenderCore
 	Fence::~Fence()
 	{
 #ifdef _WIN32
-		CloseHandle(m_fenceEvent);
+		//CloseHandle(m_fenceEvent);
+		//m_fenceEvent.Get();
 #endif // _WIN32
 	}
 
@@ -98,8 +101,8 @@ namespace AnEngine::RenderCore
 	{
 		if (m_fence->GetCompletedValue() < fenceValue)
 		{
-			m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent);
-			WaitForSingleObjectEx(m_fenceEvent, INFINITE, false);
+			m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent.Get());
+			WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, false);
 		}
 		m_fenceValue = fenceValue;
 	}

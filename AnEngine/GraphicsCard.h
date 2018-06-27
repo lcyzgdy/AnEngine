@@ -22,7 +22,11 @@ namespace AnEngine::RenderCore
 		//friend class UI::GraphicsCard2D;
 
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
+#ifdef RAYTRACING_API_FALLBACK_LAYER
+		Microsoft::WRL::ComPtr<ID3D12RaytracingFallbackDevice> m_dxrDevice_cp;
+#else
 		Microsoft::WRL::ComPtr<ID3D12DeviceRaytracingPrototype> m_dxrDevice_cp;
+#endif
 
 		// 渲染着色器的命令队列。
 		CommandQueue m_renderCommandQueue;

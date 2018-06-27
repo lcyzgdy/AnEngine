@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysX", "PhysX\PhysX_3.4\So
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F} = {5B1132F6-84F8-142E-B951-ADB8505CC27F}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Physics", "Physics", "{2C1177E0-417B-4055-BBCA-CE07AEDBB942}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdparty", "3rdparty", "{2C1177E0-417B-4055-BBCA-CE07AEDBB942}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LowLevel", "PhysX\PhysX_3.4\Source\compiler\vc14win64\LowLevel.vcxproj", "{2A1F82AF-85E5-26A0-BFE0-1F8D0006DA7A}"
 EndProject
@@ -117,6 +117,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NvParameterized", "PhysX\APEX_1.4\NvParameterized\compiler\vc14win64-PhysX_3.4\NvParameterized.vcxproj", "{116CDA44-9950-8942-1462-6A904E0C4817}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnEngine", "AnEngine\AnEngine.vcxproj", "{9839A870-23AE-44DD-95AA-857EC1119546}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FallbackLayer", "3rdparty\D3D12RaytracingFallback\src\FallbackLayer.vcxproj", "{4BE280A6-1066-41CA-ACDD-6BB7E532508B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -442,6 +444,19 @@ Global
 		{9839A870-23AE-44DD-95AA-857EC1119546}.Release|x64.Build.0 = Release|x64
 		{9839A870-23AE-44DD-95AA-857EC1119546}.Release|x86.ActiveCfg = Release|Win32
 		{9839A870-23AE-44DD-95AA-857EC1119546}.Release|x86.Build.0 = Release|Win32
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.checked|x64.ActiveCfg = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.checked|x64.Build.0 = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.checked|x86.ActiveCfg = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.checked|x86.Build.0 = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Debug|x64.ActiveCfg = Debug|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Debug|x64.Build.0 = Debug|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Debug|x86.ActiveCfg = Debug|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.profile|x64.ActiveCfg = Profile|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.profile|x64.Build.0 = Profile|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.profile|x86.ActiveCfg = Profile|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Release|x64.ActiveCfg = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Release|x64.Build.0 = Release|x64
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -474,6 +489,7 @@ Global
 		{F7306F72-804E-41BB-6430-8804934AD542} = {ED73E27D-4A0B-4171-9BC5-89E7DC4378A7}
 		{E52F63A7-67BB-4C5F-AC3F-306F95DBDD0F} = {ED73E27D-4A0B-4171-9BC5-89E7DC4378A7}
 		{116CDA44-9950-8942-1462-6A904E0C4817} = {ED73E27D-4A0B-4171-9BC5-89E7DC4378A7}
+		{4BE280A6-1066-41CA-ACDD-6BB7E532508B} = {2C1177E0-417B-4055-BBCA-CE07AEDBB942}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CE0BFB1-10E4-49F6-B596-BAE28628756A}

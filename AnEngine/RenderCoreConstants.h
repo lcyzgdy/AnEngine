@@ -24,6 +24,15 @@ namespace AnEngine::RenderCore
 		Encode,
 		Decode
 	};
+
+	enum class RaytracingAPI {
+		FallbackLayer,
+		DirectXRaytracing,
+	};
+
+	static const RaytracingAPI r_RaytracingAPI = RaytracingAPI::FallbackLayer;
+#define RAYTRACING_API_FALLBACK_LAYER
+	//#undef RAYTRACING_API_DIRECTX_RAYTRACING;
 }
 
 #endif // !__RENDERCORECONSTANTS_H__

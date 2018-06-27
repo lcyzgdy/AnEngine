@@ -76,9 +76,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
-    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,7 +115,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
@@ -399,6 +401,11 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rootsig_1.1</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3rdparty\D3D12RaytracingFallback\src\FallbackLayer.vcxproj">
+      <Project>{4be280a6-1066-41ca-acdd-6bb7e532508b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

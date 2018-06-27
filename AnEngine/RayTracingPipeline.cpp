@@ -1,5 +1,6 @@
 #include "RayTracingPipeline.h"
 #include "GraphicsCard.h"
+#include "RenderCoreConstants.h"
 #include "../Assets/CompiledShaders/Raytracing.hlsl.h"
 
 namespace AnEngine::RenderCore
@@ -55,13 +56,13 @@ namespace AnEngine::RenderCore
 		shaderConfig->Config(payloadSize, attributeSize);
 
 		// Local root signature and shader association
-		CreateLocalRootSignatureSubobjects(&raytracingPipeline);
+		//CreateLocalRootSignatureSubobjects(&raytracingPipeline);
 		// This is a root signature that enables a shader to have unique arguments that come from shader tables.
 
 		// Global root signature
 		// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
 		auto globalRootSignature = raytracingPipeline.CreateSubobject<CD3D12_ROOT_SIGNATURE_SUBOBJECT>();
-		globalRootSignature->SetRootSignature(m_raytracingGlobalRootSignature.Get());
+		//globalRootSignature->SetRootSignature(m_raytracingGlobalRootSignature.Get());
 
 		// Pipeline config
 		// Defines the maximum TraceRay() recursion depth.
@@ -76,13 +77,13 @@ namespace AnEngine::RenderCore
 #endif
 
 		// Create the state object.
-		if (m_raytracingAPI == RaytracingAPI::FallbackLayer)
+		/*if (r_raytracingAPI == RaytracingAPI::FallbackLayer)
 		{
-			ThrowIfFailed(m_fallbackDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_fallbackStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
+			ThrowIfFailed(r_fallbackDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_fallbackStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
 		}
 		else // DirectX Raytracing
 		{
-			ThrowIfFailed(m_dxrDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_dxrStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
-		}
+			ThrowIfFailed(r_dxrDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_dxrStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
+		}*/
 	}
 }

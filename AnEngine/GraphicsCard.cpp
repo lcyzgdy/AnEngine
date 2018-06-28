@@ -55,19 +55,19 @@ namespace AnEngine::RenderCore
 					D3D12_FORMAT_SUPPORT1_NONE,
 					D3D12_FORMAT_SUPPORT2_NONE
 				};
-				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport,
+					sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R11G11B10_FLOAT = true;
 				}
 				formatSupport.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
+				if (SUCCEEDED(m_device_cp->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport,
+					sizeof(formatSupport))) && (formatSupport.Support2 & D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD) != 0)
 				{
 					m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT = true;
 				}
 			}
 		}
-
-		ThrowIfFailed(m_device_cp->QueryInterface(IID_PPV_ARGS(&m_dxrDevice_cp)));
 	}
 
 	void GraphicsCard::CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type)
@@ -110,16 +110,6 @@ namespace AnEngine::RenderCore
 	ID3D12Device * GraphicsCard::GetDevice()
 	{
 		return m_device_cp.Get();
-	}
-
-	const ID3D12DeviceRaytracingPrototype * GraphicsCard::GetDxrDevice() const
-	{
-		return m_dxrDevice_cp.Get();
-	}
-
-	ID3D12DeviceRaytracingPrototype * GraphicsCard::GetDxrDevice()
-	{
-		return m_dxrDevice_cp.Get();
 	}
 
 	uint32_t GraphicsCard::GetNodeNum()
@@ -263,6 +253,7 @@ namespace AnEngine::RenderCore
 		return nullptr;
 	}
 
+
 	GraphicsCard::GraphicsCard() :
 		m_stableFlag(false), m_node(0)
 	{
@@ -277,5 +268,26 @@ namespace AnEngine::RenderCore
 
 		/*m_device_cp->CreateFence(DTimer::GetInstance()->GetTotalTicks(), D3D12_FENCE_FLAG_NONE,
 			IID_PPV_ARGS(&m_fence_cp));*/
+	}
+
+}
+namespace AnEngine::RenderCore
+{
+	void GraphicsCardWithRT::CreateDevice(IDXGIFactory4* dxgiFactory)
+	{
+		GraphicsCard::CreateDevice(dxgiFactory);
+
+		CreateRaytracingFallbackDeviceFlags createDeviceFlags = CreateRaytracingFallbackDeviceFlags::ForceComputeFallback;
+		ThrowIfFailed(D3D12CreateRaytracingFallbackDevice(m_device_cp.Get(), createDeviceFlags, 0, IID_PPV_ARGS(&m_dxrDevice_cp)));
+	}
+
+	const ID3D12RaytracingFallbackDevice* GraphicsCardWithRT::GetDxrDevice() const
+	{
+		return m_dxrDevice_cp.Get();
+	}
+
+	ID3D12RaytracingFallbackDevice* GraphicsCardWithRT::GetDxrDevice()
+	{
+		return m_dxrDevice_cp.Get();
 	}
 }

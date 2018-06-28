@@ -102,7 +102,7 @@ namespace AnEngine::RenderCore
 
 		while (graphicCardCount--)
 		{
-			GraphicsCard* aRender = new GraphicsCard();
+			GraphicsCard* aRender = new GraphicsCardWithRT();
 			aRender->IsStable(isStable);
 			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
@@ -158,8 +158,8 @@ namespace AnEngine::RenderCore
 				SUCCEEDED(p_swapChain->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020)))
 			{
 				r_enableHDROutput = true;
-	}
-}
+			}
+		}
 #endif
 
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)

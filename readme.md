@@ -9,7 +9,7 @@
 * 如果想要让场景中出现一张2D图片，那么需要对该对象用一个GameObject描述，假设其名称为Sprite，而图片需要由渲染器渲染，则需要实例化一个SpriteRenderer，该类继承自Renderer，而Renderer继承自ObjectBehaviour并重写了一些虚函数。需要调用Sprite::AddComponent(SpriteRenderer)，此时Sprite::gameObject == SpriteRenderer::gameobject，其中gameObject是指向对象的指针，对于Sprite来说，其gameObject == this。
 
 ## 正在开发的功能
-* 丧心病狂的开始尝试DXR和RTP
+* 丧心病狂的开始尝试DXR
 
 ### 已完成功能
 * Sample Particles Renderer（CS计算位置，GS和PS控制形状）
@@ -42,6 +42,11 @@ void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramN
 void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond);
 void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName);
 ```
+
+## 系统要求
+* Windows 10 17134或更新
+* Visual Studio 2017，需要C++游戏开发组件、Windows 10 SDK 17134、VC++ ATL
+* [Fallback Layer for DXR](https://github.com/Microsoft/DirectX-Graphics-Samples)
 
 ## 开始
 在Window项目中新建头文件和源文件（Test.h，Test.cpp），头文件中引用 Driver.h。
@@ -136,5 +141,3 @@ while (msg.message != WM_QUIT)
 }
 ......
 ```
-在WinMain.cpp的合适位置调用LoadSence()，可看到运行效果如图：
-![image](./Blogs/Demo2.png)

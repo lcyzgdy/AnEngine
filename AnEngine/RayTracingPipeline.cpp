@@ -1,12 +1,104 @@
 #include "RayTracingPipeline.h"
 #include "GraphicsCard.h"
 #include "RenderCoreConstants.h"
+#include "RenderCore.h"
+#include "CommandContext.h"
 #include "../Assets/CompiledShaders/Raytracing.hlsl.h"
+using namespace Microsoft::WRL;
 
 namespace AnEngine::RenderCore
 {
-	void RayTracingPipeline::Initialize()
+	const wchar_t* hitGroupName = L"MyHitGroup";
+	const wchar_t* raygenShaderName = L"MyRaygenShader";
+	const wchar_t* closestHitShaderName = L"MyClosestHitShader";
+	const wchar_t* missShaderName = L"MyMissShader";
+
+	void RaytracingPipeline::InitializeRaytracing()
 	{
+		var dxrDevice = ((GraphicsCardWithRT*)r_graphicsCard[0].get())->GetDxrDevice();
+		var[commandList, commandAllocator] = GraphicsContext::GetOne();
+		m_commandList = commandList;
+		for (int i = 1; i < r_DefaultFrameCount_const; i++)
+		{
+			m_commandAllocator[i] = new CommandAllocator();
+		}
+
+		CreateRaytracingFallbackDeviceFlags createDeviceFlags = CreateRaytracingFallbackDeviceFlags::ForceComputeFallback;
+		dxrDevice->QueryRaytracingCommandList(m_commandList->GetCommandList(), IID_PPV_ARGS(&m_dxrCommandList));
+	}
+
+	void RaytracingPipeline::CreateRootSignatures()
+	{
+		// 全局根签名
+		{
+			CD3DX12_DESCRIPTOR_RANGE UAVDescriptor;
+			UAVDescriptor.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0);
+			CD3DX12_ROOT_PARAMETER rootParameters[GlobalRootSignatureParams::Count];
+			rootParameters[GlobalRootSignatureParams::OutputViewSlot].InitAsDescriptorTable(1, &UAVDescriptor);
+			rootParameters[GlobalRootSignatureParams::AccelerationStructureSlot].InitAsShaderResourceView(0);
+			CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(ARRAYSIZE(rootParameters), rootParameters);
+			SerializeAndCreateRaytracingRootSignature(globalRootSignatureDesc, &m_rtGlobalRootSignature);
+		}
+		// 局部根签名
+		{
+			CD3DX12_ROOT_PARAMETER rootParameters[LocalRootSignatureParams::Count];
+			rootParameters[LocalRootSignatureParams::ViewportConstantSlot].InitAsConstants(SizeOfInUint32(m_rayGenCB), 0, 0);
+			CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(ARRAYSIZE(rootParameters), rootParameters);
+			localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
+			SerializeAndCreateRaytracingRootSignature(localRootSignatureDesc, &m_rtLocalRootSignature);
+		}
+		// 空的本地根签名
+		{
+			CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(D3D12_DEFAULT);
+			localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
+			SerializeAndCreateRaytracingRootSignature(localRootSignatureDesc, &m_rtEmptyLocalRootSignature);
+		}
+	}
+
+	void RaytracingPipeline::SerializeAndCreateRaytracingRootSignature(D3D12_ROOT_SIGNATURE_DESC& desc, ComPtr<ID3D12RootSignature>* rootSig)
+	{
+		var dxrDevice = ((GraphicsCardWithRT*)r_graphicsCard[0].get())->GetDxrDevice();
+		ComPtr<ID3DBlob> blob;
+		ComPtr<ID3DBlob> error;
+
+		ThrowIfFailed(dxrDevice->D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
+		ThrowIfFailed(dxrDevice->CreateRootSignature(1, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&(*rootSig))));
+	}
+
+	void RaytracingPipeline::CreateLocalRootSignatureSubobjects(CD3D12_STATE_OBJECT_DESC* raytracingPipeline)
+	{
+		// Ray gen shader中所用的局部根签名
+		{
+			var localRootSignature = raytracingPipeline->CreateSubobject<CD3D12_LOCAL_ROOT_SIGNATURE_SUBOBJECT>();
+			localRootSignature->SetRootSignature(m_rtLocalRootSignature.Get());
+			// Shader association
+			var rootSignatureAssociation = raytracingPipeline->CreateSubobject<CD3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT>();
+			rootSignatureAssociation->SetSubobjectToAssociate(*localRootSignature);
+			rootSignatureAssociation->AddExport(raygenShaderName);
+		}
+		{
+			var localRootSignature = raytracingPipeline->CreateSubobject<CD3D12_LOCAL_ROOT_SIGNATURE_SUBOBJECT>();
+			localRootSignature->SetRootSignature(m_rtEmptyLocalRootSignature.Get());
+			// Shader association
+			var rootSignatureAssociation = raytracingPipeline->CreateSubobject<CD3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT>();
+			rootSignatureAssociation->SetSubobjectToAssociate(*localRootSignature);
+			rootSignatureAssociation->AddExport(missShaderName);
+			rootSignatureAssociation->AddExport(hitGroupName);
+		}
+	}
+
+	RaytracingPipeline::~RaytracingPipeline()
+	{
+		delete m_commandList;
+	}
+
+	void RaytracingPipeline::Initialize()
+	{
+		var dxrDevice = ((GraphicsCardWithRT*)r_graphicsCard[0].get())->GetDxrDevice();
+
+		InitializeRaytracing();
+		CreateRootSignatures();
+
 		// 创建7个组合成RTPSO的子对象：
 		// 子对象需要通过默认或显式关联与DXIL导出（即着色器）相关联。
 		// 默认关联适用于没有任何与其关联的任何相同类型的子对象的每个导出的着色器入口点。
@@ -17,11 +109,6 @@ namespace AnEngine::RenderCore
 		// 2 * 本地根签名和关联
 		// 1 * 全局根签名
 		// 1 * 管道配置
-
-		const wchar_t* hitGroupName = L"MyHitGroup";
-		const wchar_t* raygenShaderName = L"MyRaygenShader";
-		const wchar_t* closestHitShaderName = L"MyClosestHitShader";
-		const wchar_t* missShaderName = L"MyMissShader";
 
 		CD3D12_STATE_OBJECT_DESC raytracingPipeline{ D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE };
 
@@ -44,46 +131,37 @@ namespace AnEngine::RenderCore
 		// Triangle hit group
 		// A hit group specifies closest hit, any hit and intersection shaders to be executed when a ray intersects the geometry's triangle/AABB.
 		// In this sample, we only use triangle geometry with a closest hit shader, so others are not set.
-		auto hitGroup = raytracingPipeline.CreateSubobject<CD3D12_HIT_GROUP_SUBOBJECT>();
+		var hitGroup = raytracingPipeline.CreateSubobject<CD3D12_HIT_GROUP_SUBOBJECT>();
 		hitGroup->SetClosestHitShaderImport(closestHitShaderName);
 		hitGroup->SetHitGroupExport(hitGroupName);
 
 		// Shader config
 		// Defines the maximum sizes in bytes for the ray payload and attribute structure.
-		auto shaderConfig = raytracingPipeline.CreateSubobject<CD3D12_RAYTRACING_SHADER_CONFIG_SUBOBJECT>();
-		UINT payloadSize = 4 * sizeof(float);   // float4 color
-		UINT attributeSize = 2 * sizeof(float); // float2 barycentrics
+		var shaderConfig = raytracingPipeline.CreateSubobject<CD3D12_RAYTRACING_SHADER_CONFIG_SUBOBJECT>();
+		uint32_t payloadSize = 4 * sizeof(float);   // float4 color
+		uint32_t attributeSize = 2 * sizeof(float); // float2 barycentrics
 		shaderConfig->Config(payloadSize, attributeSize);
 
 		// Local root signature and shader association
-		//CreateLocalRootSignatureSubobjects(&raytracingPipeline);
+		CreateLocalRootSignatureSubobjects(&raytracingPipeline);
 		// This is a root signature that enables a shader to have unique arguments that come from shader tables.
 
 		// Global root signature
 		// This is a root signature that is shared across all raytracing shaders invoked during a DispatchRays() call.
-		auto globalRootSignature = raytracingPipeline.CreateSubobject<CD3D12_ROOT_SIGNATURE_SUBOBJECT>();
+		var globalRootSignature = raytracingPipeline.CreateSubobject<CD3D12_ROOT_SIGNATURE_SUBOBJECT>();
 		//globalRootSignature->SetRootSignature(m_raytracingGlobalRootSignature.Get());
 
 		// Pipeline config
 		// Defines the maximum TraceRay() recursion depth.
-		auto pipelineConfig = raytracingPipeline.CreateSubobject<CD3D12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
+		var pipelineConfig = raytracingPipeline.CreateSubobject<CD3D12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT>();
 		// PERFOMANCE TIP: Set max recursion depth as low as needed 
 		// as drivers may apply optimization strategies for low recursion depths. 
-		UINT maxRecursionDepth = 1; // ~ primary rays only. 
+		uint32_t maxRecursionDepth = 1; // ~ primary rays only. 
 		pipelineConfig->Config(maxRecursionDepth);
 
 #if _DEBUG
 		PrintStateObjectDesc(raytracingPipeline);
 #endif
-
-		// Create the state object.
-		/*if (r_raytracingAPI == RaytracingAPI::FallbackLayer)
-		{
-			ThrowIfFailed(r_fallbackDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_fallbackStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
-		}
-		else // DirectX Raytracing
-		{
-			ThrowIfFailed(r_dxrDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_dxrStateObject)), L"Couldn't create DirectX Raytracing state object.\n");
-		}*/
+		ThrowIfFailed(dxrDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_dxrStateObject)));
 	}
 }

@@ -34,7 +34,6 @@ namespace AnEngine::Game
 			}
 			++all.first;
 		}
-		//g_gameObjects.erase(this->name);
 	}
 
 	GameObject * GameObject::GetParent()

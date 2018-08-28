@@ -2,11 +2,12 @@
 #include "RenderCore.h"
 #include "ThreadPool.hpp"
 #include "Screen.h"
-#include"CommandContext.h"
-#include"DTimer.h"
+#include "CommandContext.h"
+#include "DTimer.h"
 
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
+using namespace AnEngine::DMath;
 
 namespace AnEngine::Game
 {
@@ -212,5 +213,40 @@ namespace AnEngine::Game
 			if (i != nullptr) return i->GetColorBuffer();
 		}
 		return nullptr;
+	}
+
+	Matrix4x4& Camera::ViewMatrix()
+	{
+		return m_viewMatrix;
+	}
+
+	Matrix4x4& Camera::ProjectionMatrix()
+	{
+		return m_projectionMatrix;
+	}
+
+	Matrix4x4& Camera::NonJitteredProjectionMatrix()
+	{
+		return m_nonJitteredProjectionMatrix;
+	}
+
+	void Camera::ResetProjectionMatrix()
+	{
+
+	}
+
+	void Camera::ViewMatrix(Matrix4x4& v)
+	{
+		m_viewMatrix = v;
+	}
+
+	void Camera::ProjectionMatrix(Matrix4x4& p)
+	{
+		m_projectionMatrix = p;
+	}
+
+	void Camera::NonJitteredProjectionMatrix(Matrix4x4& njp)
+	{
+		m_nonJitteredProjectionMatrix = njp;
 	}
 }

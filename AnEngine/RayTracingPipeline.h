@@ -1,4 +1,5 @@
 #pragma once
+#ifdef __USE_RAYTRACING__
 #ifndef __RAYTRACINGPIPELINE_H__
 #define __RAYTRACINGPIPELINE_H__
 
@@ -64,3 +65,4 @@ namespace AnEngine::RenderCore
 }
 
 #endif // __RAYTRACINGPIPELINE_H__
+#endif // __USE_RAYTRACING__

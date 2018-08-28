@@ -1,4 +1,5 @@
 #pragma once
+#ifdef __USE_RAYTRACING__
 #ifndef __RAYTRACINGHLSLCOMPAT_H__
 #define __RAYTRACINGHLSLCOMPAT_H__
 
@@ -20,3 +21,4 @@ namespace AnEngine::RenderCore
 }
 
 #endif // __RAYTRACINGHLSLCOMPAT_H__
+#endif // __USE_RAYTRACING__

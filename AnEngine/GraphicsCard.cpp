@@ -271,23 +271,3 @@ namespace AnEngine::RenderCore
 	}
 
 }
-namespace AnEngine::RenderCore
-{
-	void GraphicsCardWithRT::CreateDevice(IDXGIFactory4* dxgiFactory)
-	{
-		GraphicsCard::CreateDevice(dxgiFactory);
-
-		CreateRaytracingFallbackDeviceFlags createDeviceFlags = CreateRaytracingFallbackDeviceFlags::ForceComputeFallback;
-		ThrowIfFailed(D3D12CreateRaytracingFallbackDevice(m_device_cp.Get(), createDeviceFlags, 0, IID_PPV_ARGS(&m_dxrDevice_cp)));
-	}
-
-	const ID3D12RaytracingFallbackDevice* GraphicsCardWithRT::GetDxrDevice() const
-	{
-		return m_dxrDevice_cp.Get();
-	}
-
-	ID3D12RaytracingFallbackDevice* GraphicsCardWithRT::GetDxrDevice()
-	{
-		return m_dxrDevice_cp.Get();
-	}
-}

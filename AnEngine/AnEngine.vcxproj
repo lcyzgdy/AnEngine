@@ -175,6 +175,7 @@
     <ClInclude Include="..\Assets\HlslCompat.h" />
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
+    <ClInclude Include="BehaviourSystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
@@ -182,9 +183,11 @@
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
+    <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
+    <ClInclude Include="DeferredPipeline.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />
     <ClInclude Include="DMath.hpp" />
@@ -206,6 +209,7 @@
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ManagedTask.hpp" />
+    <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="MultiBuffer.hpp" />

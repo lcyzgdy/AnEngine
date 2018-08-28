@@ -2,12 +2,12 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-//#include "ComponentBehaviour.h"
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
 #include "ObjectBehaviour.h"
 #include "ShaderClass.h"
 #include "MultiBuffer.hpp"
+#include "DMath.hpp"
 
 namespace AnEngine::Game
 {
@@ -28,6 +28,10 @@ namespace AnEngine::Game
 		float m_nearDistance;
 		float m_farDistance;
 		float m_viewField;
+
+		Matrix4x4 m_viewMatrix;
+		Matrix4x4 m_projectionMatrix;
+		Matrix4x4 m_nonJitteredProjectionMatrix;
 
 		ClearFlags m_clearFlag;
 		Color m_clearColor;
@@ -77,6 +81,14 @@ namespace AnEngine::Game
 		Color ClearColor();
 
 		static ColorBuffer* FindForwordTarget(Vector3&& pos);
+
+		Matrix4x4& ViewMatrix();
+		Matrix4x4& ProjectionMatrix();
+		Matrix4x4& NonJitteredProjectionMatrix();
+		void ResetProjectionMatrix();
+		void ViewMatrix(Matrix4x4& v);
+		void ProjectionMatrix(Matrix4x4& p);
+		void NonJitteredProjectionMatrix(Matrix4x4& njp);
 	};
 }
 

@@ -1,8 +1,10 @@
 #pragma once
 #ifndef __DMATH_HPP__
 #define __DMATH_HPP__
-#include<algorithm>
-#include<cmath>
+#include <algorithm>
+#include <cmath>
+#include "Vector.hpp"
+#include "Matrix.hpp"
 
 #ifdef max
 #undef max

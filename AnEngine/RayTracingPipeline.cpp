@@ -1,4 +1,9 @@
 #include "RayTracingPipeline.h"
+
+#ifdef __USE_RAYTRACING__
+
+
+
 #include "GraphicsCard.h"
 #include "RenderCoreConstants.h"
 #include "RenderCore.h"
@@ -165,3 +170,5 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(dxrDevice->CreateStateObject(raytracingPipeline, IID_PPV_ARGS(&m_dxrStateObject)));
 	}
 }
+
+#endif // __USE_RAYTRACING__

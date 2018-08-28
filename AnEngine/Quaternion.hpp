@@ -8,7 +8,7 @@
 #include<cmath>
 using namespace DirectX;
 
-namespace AnEngine::Math
+namespace AnEngine::DMath
 {
 	class Quaternion
 	{

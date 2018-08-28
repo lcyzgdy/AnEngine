@@ -2,55 +2,102 @@
 #ifndef __TRANSFORM_H__
 #define __TRANSFORM_H__
 
-#include<DirectXMath.h>
-#include"Vector.hpp"
-#include"Quaternion.hpp"
-
-using namespace DirectX;
-using namespace AnEngine::Math;
+#include "Vector.hpp"
+#include "Matrix.hpp"
+#include "Quaternion.hpp"
+#include "ComponentBase.h"
 
 namespace AnEngine::Game
 {
-	class Transform
+	class Transform : ComponentBase
 	{
-		Vector3 m_position;
-		Quaternion m_rotation;
-		Vector3 m_scale;
+		DMath::Vector3 m_position;
+		DMath::Quaternion m_rotation;
+		DMath::Vector3 m_scale;
+
+		DMath::Vector3 m_localPosition;
+		DMath::Quaternion m_localRotation;
+		DMath::Vector3 m_localScale;
+
+		Transform* m_parent;
 
 	public:
 		Transform() = default;
-		~Transform() = default;
+		virtual ~Transform() = default;
 
-		inline Vector3 Position()
+		DMath::Vector3 Position()
 		{
 			return m_position;
 		}
 
-		inline void Position(const Vector3& newPosition)
+		void Position(const DMath::Vector3& newPosition)
 		{
 			m_position = newPosition;
 		}
-		///////////////////////////////////////////////////////////////
-		inline Quaternion Rotation()
+
+		DMath::Vector3 LocalPosition()
+		{
+			return m_localPosition;
+		}
+
+		void LocakPosition(const DMath::Vector3& newLocalPos)
+		{
+			m_localPosition = newLocalPos;
+		}
+
+		DMath::Quaternion Rotation()
 		{
 			return m_rotation;
 		}
 
-		XMFLOAT4X4 GetModelMatrix()
+		void Rotation(const DMath::Quaternion& newRotation)
 		{
-			XMFLOAT4X4 t(1, 0, 0, m_position.X(),
-				0, 1, 0, m_position.Y(),
-				0, 0, 1, m_position.Z(),
-				0, 0, 0, 1);
-			return XMFLOAT4X4();
+			m_rotation = newRotation;
 		}
 
-		Transform& operator=(const Transform& t)
+		DMath::Quaternion LocalRotation()
 		{
-			m_position = t.m_position;
-			m_rotation = t.m_rotation;
-			m_scale = t.m_scale;
-			return *this;
+			return m_localRotation;
+		}
+
+		void LocalRotation(const DMath::Quaternion newRot)
+		{
+			m_localRotation = newRot;
+		}
+
+		DMath::Vector3 Scale()
+		{
+			return m_scale;
+		}
+
+		void Scale(const DMath::Vector3& newScale)
+		{
+			m_scale = newScale;
+		}
+
+		DMath::Vector3 LocalScale()
+		{
+			return m_localScale;
+		}
+
+		void LocalScale(const DMath::Vector3 newScale)
+		{
+			m_localScale = newScale;
+		}
+
+		DMath::Matrix4x4 ObjectToWorldMatrix()
+		{
+			DMath::Matrix4x4 local(cosf(m_rotation.X()), 0, 0, m_localPosition.X(),
+				0, 0, 0, m_localPosition.Y(),
+				0, 0, 0, m_localPosition.Z(),
+				m_localScale.X(), m_localScale.Y(), m_localScale.Z(), 1);
+			var parent = m_parent;
+			while (parent != nullptr)
+			{
+				local *= parent->ObjectToWorldMatrix();
+				parent = parent->m_parent;
+			}
+			return local;
 		}
 	};
 }

@@ -6,17 +6,10 @@
 #include "CommandQueue.h"
 #include "RenderCoreConstants.h"
 #include <mutex>
-#include "d3d12_1.h"
-#include "D3D12RaytracingFallback.h"
 //#include"Fence.h"
 
 namespace AnEngine::RenderCore
 {
-	/*namespace UI
-	{
-		class GraphicsCard2D;
-	}*/
-
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
@@ -91,18 +84,6 @@ namespace AnEngine::RenderCore
 		void GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 		HRESULT GetDeviceRemovedReason();
-	};
-
-	class GraphicsCardWithRT : public GraphicsCard
-	{
-	protected:
-		Microsoft::WRL::ComPtr<ID3D12RaytracingFallbackDevice> m_dxrDevice_cp;
-
-		virtual void CreateDevice(IDXGIFactory4* dxgiFactory) override;
-
-	public:
-		const ID3D12RaytracingFallbackDevice* GetDxrDevice() const;
-		ID3D12RaytracingFallbackDevice* GetDxrDevice();
 	};
 }
 

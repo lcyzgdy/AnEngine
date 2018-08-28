@@ -1,5 +1,5 @@
 #pragma once
-#ifndef __RAYTRACINGHELPER_HPP__
+#if !defined __RAYTRACINGHELPER_HPP__ && defined __USE_RAYTRACING__
 #define __RAYTRACINGHELPER_HPP__
 
 #include "onwind.h"

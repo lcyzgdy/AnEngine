@@ -4,7 +4,6 @@
 
 #include"onwind.h"
 #include<DirectXMath.h>
-using namespace DirectX;
 
 /*(http://blog.csdn.net/zjjzhaohang/article/details/68936082)
 为了效率起见，在DX12中传参XMVECTOR 时，有一定规则的调用方式，以便利用SSE/SSE2硬件加速。
@@ -15,10 +14,10 @@ using namespace DirectX;
 5、若其中穿插了其他类型参数，规则忽略其他参数照样生效
 */
 
-namespace AnEngine::Math
+namespace AnEngine::DMath
 {
 	template<size_t n>
-	class Vector
+	struct Vector
 	{
 	public:
 		Vector()
@@ -28,11 +27,9 @@ namespace AnEngine::Math
 		}
 	};
 
-	class Vector2 :Vector<2>
+	struct Vector2 :Vector<2>
 	{
-		friend class Quaternion;
-
-		XMFLOAT2 m_vector;
+		DirectX::XMFLOAT2 m_vector;
 	public:
 		Vector2() = default;
 		Vector2(const Vector2& v) :m_vector(v.m_vector)
@@ -41,7 +38,7 @@ namespace AnEngine::Math
 		Vector2(float x, float y) :m_vector(x, y)
 		{
 		}
-		Vector2(const XMFLOAT2& f2) :m_vector(f2)
+		Vector2(const DirectX::XMFLOAT2& f2) :m_vector(f2)
 		{
 		}
 
@@ -67,12 +64,6 @@ namespace AnEngine::Math
 			m_vector.y = y;
 		}
 
-
-		//////////////////////////////////////////////////////////////////////////////////////////////
-		//																							//
-		//																							//
-		//																							//
-		//////////////////////////////////////////////////////////////////////////////////////////////
 		inline static Vector2&& Cross(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
@@ -196,21 +187,12 @@ namespace AnEngine::Math
 		XMStoreFloat2(&temp.m_vector, XMVectorScale(XMLoadFloat2(&v1.m_vector), n));
 		return std::move(temp);
 	}
-
-
-
-
-
-
-
-
-
-
-	class Vector3 :Vector<3>
+}
+namespace AnEngine::DMath
+{
+	struct Vector3 :Vector<3>
 	{
-		friend class Quaternion;
-
-		XMFLOAT3 m_vector;
+		DirectX::XMFLOAT3 m_vector;
 	public:
 		Vector3() = default;
 		Vector3(const Vector3& v) :m_vector(v.m_vector)
@@ -219,7 +201,7 @@ namespace AnEngine::Math
 		Vector3(float x, float y, float z) :m_vector(x, y, z)
 		{
 		}
-		Vector3(XMFLOAT3&& f2) :m_vector(f2)
+		Vector3(DirectX::XMFLOAT3&& f2) :m_vector(f2)
 		{
 		}
 		Vector3(float x) :m_vector(x, x, x)
@@ -362,6 +344,154 @@ namespace AnEngine::Math
 	{
 		Vector3 temp;
 		XMStoreFloat3(&temp.m_vector, XMVectorSubtract(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+		return std::move(temp);
+	}
+}
+
+namespace AnEngine::DMath
+{
+	struct Vector4 :Vector<4>
+	{
+		DirectX::XMFLOAT4 m_vector;
+
+	public:
+		Vector4() = default;
+		Vector4(const Vector4& v) :m_vector(v.m_vector) {}
+		Vector4(float x) :m_vector(x, 0, 0, 0) {}
+		Vector4(float x, float y) :m_vector(x, y, 0, 0) {}
+		Vector4(float x, float y, float z) :m_vector(x, y, z, 0) {}
+		Vector4(float x, float y, float z, float w) :m_vector(x, y, z, w) {}
+		Vector4(DirectX::XMFLOAT4&& f2) :m_vector(f2) {}
+
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		inline float X()
+		{
+			return m_vector.x;
+		}
+
+		inline void X(float x)
+		{
+			m_vector.x = x;
+		}
+
+		inline float Y()
+		{
+			return m_vector.y;
+		}
+
+		inline void Y(float y)
+		{
+			m_vector.y = y;
+		}
+
+		inline float Z()
+		{
+			return m_vector.z;
+		}
+
+		inline void Z(float z)
+		{
+			m_vector.z = z;
+		}
+
+		inline float W()
+		{
+			return m_vector.w;
+		}
+
+		inline void W(float w)
+		{
+			m_vector.w = w;
+		}
+
+		inline static Vector4&& Cross(const Vector4& v1, const Vector4& v2)
+		{
+			Vector4 temp;
+			XMStoreFloat4(&temp.m_vector, XMVector3Cross(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			return std::move(temp);
+		}
+
+		inline static Vector4&& Dot(const Vector4& v1, const Vector4& v2)
+		{
+			Vector4 temp;
+			XMStoreFloat4(&temp.m_vector, XMVector4Dot(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			return std::move(temp);
+		}
+
+		inline static Vector4&& Add(const Vector4& v1, const Vector4& v2)
+		{
+			Vector4 temp;
+			XMStoreFloat4(&temp.m_vector, XMVectorAdd(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			return std::move(temp);
+		}
+
+		inline static Vector4&& Subtract(const Vector4& v1, const Vector4& v2)
+		{
+			Vector4 temp;
+			XMStoreFloat4(&temp.m_vector, XMVectorSubtract(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			return std::move(temp);
+		}
+
+		inline Vector4& operator+=(const Vector4& v)
+		{
+			XMStoreFloat4(&m_vector, XMVectorAdd(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			return *this;
+		}
+
+		inline Vector4& operator-=(const Vector4& v)
+		{
+			XMStoreFloat4(&m_vector, XMVectorSubtract(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			return *this;
+		}
+
+		inline Vector4& operator*=(const Vector4& v)
+		{
+			XMStoreFloat4(&m_vector, XMVector2Cross(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			return *this;
+		}
+
+		inline Vector4& operator*=(float n)
+		{
+			XMStoreFloat4(&m_vector, XMVectorScale(XMLoadFloat4(&m_vector), n));
+			return *this;
+		}
+
+		inline Vector4& operator=(const Vector4& v)
+		{
+			XMStoreFloat4(&m_vector, XMLoadFloat4(&v.m_vector));
+			return *this;
+		}
+
+		friend inline Vector4&& operator+(const Vector4& v1, const Vector4& v2);
+		friend inline Vector4&& operator-(const Vector4& v1, const Vector4& v2);
+
+		///////////////////////////////////////////////////////////////////////////////////
+
+		inline static Vector4&& Normalize(const Vector4& v)
+		{
+			Vector4 temp;
+			XMStoreFloat4(&temp.m_vector, XMVector2Normalize(XMLoadFloat4(&v.m_vector)));
+			return std::move(temp);
+		}
+
+		inline void Normalize()
+		{
+			XMStoreFloat4(&m_vector, XMVector2Normalize(XMLoadFloat4(&m_vector)));
+		}
+	};
+
+	Vector4&& operator+(const Vector4& v1, const Vector4& v2)
+	{
+		Vector4 temp;
+		XMStoreFloat4(&temp.m_vector, XMVectorAdd(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+		return std::move(temp);
+	}
+
+	Vector4&& operator-(const Vector4& v1, const Vector4& v2)
+	{
+		Vector4 temp;
+		XMStoreFloat4(&temp.m_vector, XMVectorSubtract(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
 		return std::move(temp);
 	}
 }

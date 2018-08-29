@@ -202,29 +202,29 @@ struct Range
 	}
 };
 
-__FasterFunc(void) Randomize()
+inline void __vectorcall Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-__FasterFunc(int) Random(int a)
+inline int __vectorcall Random(int a)
 {
 	return rand() % a;
 }
 
-__FasterFunc(float) Random()
+inline float __vectorcall Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-__FasterFunc(int) Random(int a, int b)
+inline int __vectorcall Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-__FasterFunc(float) Random(float a, float b)
+inline float __vectorcall Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;
@@ -284,4 +284,12 @@ public:
 	};
 };
 
+/*template<typename T0, typename... T>
+struct TypeHash
+{
+	enum
+	{
+		Result = typeid(T0).hash_code() + typeid...(T).hash_code();
+	};
+}*/
 #endif // !__ONWIND_H__

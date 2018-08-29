@@ -79,8 +79,11 @@
     <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
     <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -119,7 +122,7 @@
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
-      <DisableSpecificWarnings>4455</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4455;238</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,12 +169,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rdparty\DXR\Include\d3d12.h" />
-    <ClInclude Include="..\3rdparty\DXR\Include\D3D12RaytracingFallback.h" />
-    <ClInclude Include="..\3rdparty\DXR\Include\D3D12RaytracingPrototypeHelpers.hpp" />
-    <ClInclude Include="..\3rdparty\DXR\Include\d3d12video.h" />
-    <ClInclude Include="..\3rdparty\DXR\Include\d3d12_1.h" />
-    <ClInclude Include="..\3rdparty\DXR\Include\dxcapi.h" />
     <ClInclude Include="..\Assets\HlslCompat.h" />
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
@@ -201,6 +198,7 @@
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="Fence.hpp" />
     <ClInclude Include="frameBuffering.h" />
+    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
@@ -240,6 +238,7 @@
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="GraphicsCard2D.h" />
+    <ClInclude Include="TransformSystem.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIText.h" />
     <ClInclude Include="Vector.hpp" />
@@ -266,6 +265,7 @@
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
+    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
     <ClCompile Include="GpuResource.cpp" />
@@ -293,6 +293,7 @@
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
+    <ClCompile Include="TransformSystem.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -406,11 +407,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rootsig_1.1</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\3rdparty\D3D12RaytracingFallback\src\FallbackLayer.vcxproj">
-      <Project>{4be280a6-1066-41ca-acdd-6bb7e532508b}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

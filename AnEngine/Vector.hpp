@@ -67,33 +67,33 @@ namespace AnEngine::DMath
 		inline static Vector2&& Cross(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
-			XMStoreFloat2(&temp.m_vector, XMVector2Cross(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+			DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVector2Cross(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline float Dot(const Vector2& v1, const Vector2& v2)
 		{
-			return XMVectorGetX(XMVector2Dot(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+			return DirectX::XMVectorGetX(DirectX::XMVector2Dot(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 		}
 
 		inline static Vector2&& Add(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
-			XMStoreFloat2(&temp.m_vector, XMVectorAdd(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+			DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector2&& Subtract(const Vector2& v1, const Vector2& v2)
 		{
 			Vector2 temp;
-			XMStoreFloat2(&temp.m_vector, XMVectorSubtract(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+			DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector2&& Multiply(const Vector2& v, const float n)
 		{
 			Vector2 temp;
-			XMStoreFloat2(&temp.m_vector, XMVectorScale(XMLoadFloat2(&v.m_vector), n));
+			DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorScale(DirectX::XMLoadFloat2(&v.m_vector), n));
 			return std::move(temp);
 		}
 
@@ -101,25 +101,25 @@ namespace AnEngine::DMath
 
 		inline Vector2& operator+=(const Vector2& v)
 		{
-			XMStoreFloat2(&m_vector, XMVectorAdd(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
+			DirectX::XMStoreFloat2(&m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat2(&m_vector), DirectX::XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector2& operator-=(const Vector2& v)
 		{
-			XMStoreFloat2(&m_vector, XMVectorSubtract(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
+			DirectX::XMStoreFloat2(&m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&m_vector), DirectX::XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector2& operator*=(const Vector2& v)
 		{
-			XMStoreFloat2(&m_vector, XMVector2Cross(XMLoadFloat2(&m_vector), XMLoadFloat2(&v.m_vector)));
+			DirectX::XMStoreFloat2(&m_vector, DirectX::XMVector2Cross(DirectX::XMLoadFloat2(&m_vector), DirectX::XMLoadFloat2(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector2& operator*=(float n)
 		{
-			XMStoreFloat2(&m_vector, XMVectorScale(XMLoadFloat2(&m_vector), n));
+			DirectX::XMStoreFloat2(&m_vector, DirectX::XMVectorScale(DirectX::XMLoadFloat2(&m_vector), n));
 			return *this;
 		}
 
@@ -142,13 +142,13 @@ namespace AnEngine::DMath
 		inline static Vector2&& Normalize(Vector2& v)
 		{
 			Vector2 temp;
-			XMStoreFloat2(&temp.m_vector, XMVector2Normalize(XMLoadFloat2(&v.m_vector)));
+			DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat2(&v.m_vector)));
 			return std::move(temp);
 		}
 
 		inline void Normalize()
 		{
-			XMStoreFloat2(&m_vector, XMVector2Normalize(XMLoadFloat2(&m_vector)));
+			DirectX::XMStoreFloat2(&m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat2(&m_vector)));
 		}
 	};
 
@@ -156,35 +156,35 @@ namespace AnEngine::DMath
 	Vector2&& operator*(const Vector2& v1, const Vector2& v2)
 	{
 		Vector2 temp;
-		XMStoreFloat2(&temp.m_vector, XMVector2Cross(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+		DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVector2Cross(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector2&& operator+(const Vector2& v1, const Vector2& v2)
 	{
 		Vector2 temp;
-		XMStoreFloat2(&temp.m_vector, XMVectorAdd(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+		DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorAdd(XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector2&& operator-(const Vector2& v1, const Vector2& v2)
 	{
 		Vector2 temp;
-		XMStoreFloat2(&temp.m_vector, XMVectorSubtract(XMLoadFloat2(&v1.m_vector), XMLoadFloat2(&v2.m_vector)));
+		DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&v1.m_vector), DirectX::XMLoadFloat2(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector2&& operator*(const Vector2& v1, const float n)
 	{
 		Vector2 temp;
-		XMStoreFloat2(&temp.m_vector, XMVectorScale(XMLoadFloat2(&v1.m_vector), n));
+		DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorScale(DirectX::XMLoadFloat2(&v1.m_vector), n));
 		return std::move(temp);
 	}
 
 	Vector2&& operator*(const float n, const Vector2& v1)
 	{
 		Vector2 temp;
-		XMStoreFloat2(&temp.m_vector, XMVectorScale(XMLoadFloat2(&v1.m_vector), n));
+		DirectX::XMStoreFloat2(&temp.m_vector, DirectX::XMVectorScale(DirectX::XMLoadFloat2(&v1.m_vector), n));
 		return std::move(temp);
 	}
 }
@@ -251,58 +251,58 @@ namespace AnEngine::DMath
 		inline static Vector3&& Cross(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
-			XMStoreFloat3(&temp.m_vector, XMVector3Cross(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+			DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector3&& Dot(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
-			XMStoreFloat3(&temp.m_vector, XMVector3Dot(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+			DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVector3Dot(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector3&& Add(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
-			XMStoreFloat3(&temp.m_vector, XMVectorAdd(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+			DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector3&& Subtract(const Vector3& v1, const Vector3& v2)
 		{
 			Vector3 temp;
-			XMStoreFloat3(&temp.m_vector, XMVectorSubtract(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+			DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline Vector3& operator+=(const Vector3& v)
 		{
-			XMStoreFloat3(&m_vector, XMVectorAdd(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&m_vector), DirectX::XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector3& operator-=(const Vector3& v)
 		{
-			XMStoreFloat3(&m_vector, XMVectorSubtract(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&m_vector), DirectX::XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector3& operator*=(const Vector3& v)
 		{
-			XMStoreFloat3(&m_vector, XMVector2Cross(XMLoadFloat3(&m_vector), XMLoadFloat3(&v.m_vector)));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMVector2Cross(DirectX::XMLoadFloat3(&m_vector), DirectX::XMLoadFloat3(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector3& operator*=(float n)
 		{
-			XMStoreFloat3(&m_vector, XMVectorScale(XMLoadFloat3(&m_vector), n));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMVectorScale(XMLoadFloat3(&m_vector), n));
 			return *this;
 		}
 
 		inline Vector3& operator=(const Vector3& v)
 		{
-			XMStoreFloat3(&m_vector, XMLoadFloat3(&v.m_vector));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMLoadFloat3(&v.m_vector));
 			return *this;
 		}
 
@@ -316,34 +316,34 @@ namespace AnEngine::DMath
 		inline static Vector3&& Normalize(const Vector3& v)
 		{
 			Vector3 temp;
-			XMStoreFloat3(&temp.m_vector, XMVector2Normalize(XMLoadFloat3(&v.m_vector)));
+			DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat3(&v.m_vector)));
 			return std::move(temp);
 		}
 
 		inline void Normalize()
 		{
-			XMStoreFloat3(&m_vector, XMVector2Normalize(XMLoadFloat3(&m_vector)));
+			DirectX::XMStoreFloat3(&m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat3(&m_vector)));
 		}
 	};
 
 	Vector3&& operator*(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
-		XMStoreFloat3(&temp.m_vector, XMVector3Cross(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+		DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector3&& operator+(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
-		XMStoreFloat3(&temp.m_vector, XMVectorAdd(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+		DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVectorAdd(XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector3&& operator-(const Vector3& v1, const Vector3& v2)
 	{
 		Vector3 temp;
-		XMStoreFloat3(&temp.m_vector, XMVectorSubtract(XMLoadFloat3(&v1.m_vector), XMLoadFloat3(&v2.m_vector)));
+		DirectX::XMStoreFloat3(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&v1.m_vector), DirectX::XMLoadFloat3(&v2.m_vector)));
 		return std::move(temp);
 	}
 }
@@ -408,58 +408,58 @@ namespace AnEngine::DMath
 		inline static Vector4&& Cross(const Vector4& v1, const Vector4& v2)
 		{
 			Vector4 temp;
-			XMStoreFloat4(&temp.m_vector, XMVector3Cross(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVector3Cross(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector4&& Dot(const Vector4& v1, const Vector4& v2)
 		{
 			Vector4 temp;
-			XMStoreFloat4(&temp.m_vector, XMVector4Dot(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVector4Dot(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector4&& Add(const Vector4& v1, const Vector4& v2)
 		{
 			Vector4 temp;
-			XMStoreFloat4(&temp.m_vector, XMVectorAdd(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline static Vector4&& Subtract(const Vector4& v1, const Vector4& v2)
 		{
 			Vector4 temp;
-			XMStoreFloat4(&temp.m_vector, XMVectorSubtract(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 			return std::move(temp);
 		}
 
 		inline Vector4& operator+=(const Vector4& v)
 		{
-			XMStoreFloat4(&m_vector, XMVectorAdd(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMVectorAdd(XMLoadFloat4(&m_vector), DirectX::XMLoadFloat4(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector4& operator-=(const Vector4& v)
 		{
-			XMStoreFloat4(&m_vector, XMVectorSubtract(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat4(&m_vector), DirectX::XMLoadFloat4(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector4& operator*=(const Vector4& v)
 		{
-			XMStoreFloat4(&m_vector, XMVector2Cross(XMLoadFloat4(&m_vector), XMLoadFloat4(&v.m_vector)));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMVector2Cross(DirectX::XMLoadFloat4(&m_vector), DirectX::XMLoadFloat4(&v.m_vector)));
 			return *this;
 		}
 
 		inline Vector4& operator*=(float n)
 		{
-			XMStoreFloat4(&m_vector, XMVectorScale(XMLoadFloat4(&m_vector), n));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMVectorScale(DirectX::XMLoadFloat4(&m_vector), n));
 			return *this;
 		}
 
 		inline Vector4& operator=(const Vector4& v)
 		{
-			XMStoreFloat4(&m_vector, XMLoadFloat4(&v.m_vector));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMLoadFloat4(&v.m_vector));
 			return *this;
 		}
 
@@ -471,27 +471,27 @@ namespace AnEngine::DMath
 		inline static Vector4&& Normalize(const Vector4& v)
 		{
 			Vector4 temp;
-			XMStoreFloat4(&temp.m_vector, XMVector2Normalize(XMLoadFloat4(&v.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat4(&v.m_vector)));
 			return std::move(temp);
 		}
 
 		inline void Normalize()
 		{
-			XMStoreFloat4(&m_vector, XMVector2Normalize(XMLoadFloat4(&m_vector)));
+			DirectX::XMStoreFloat4(&m_vector, DirectX::XMVector2Normalize(DirectX::XMLoadFloat4(&m_vector)));
 		}
 	};
 
 	Vector4&& operator+(const Vector4& v1, const Vector4& v2)
 	{
 		Vector4 temp;
-		XMStoreFloat4(&temp.m_vector, XMVectorAdd(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+		DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVectorAdd(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 		return std::move(temp);
 	}
 
 	Vector4&& operator-(const Vector4& v1, const Vector4& v2)
 	{
 		Vector4 temp;
-		XMStoreFloat4(&temp.m_vector, XMVectorSubtract(XMLoadFloat4(&v1.m_vector), XMLoadFloat4(&v2.m_vector)));
+		DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 		return std::move(temp);
 	}
 }

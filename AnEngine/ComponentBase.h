@@ -13,3 +13,7 @@ namespace AnEngine::Game
 	};
 }
 #endif // __COMPONENTBASE_H__
+
+/*
+ * 一个Component能且只能属于一个Entity
+ */

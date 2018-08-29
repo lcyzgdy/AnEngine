@@ -2,7 +2,7 @@
 #ifndef __BEHAVIOURSYSTEM_H__
 #define __BEHAVIOURSYSTEM_H__
 
-#include "GameObject.h"
+#include "GameEntity.h"
 #include <tuple>
 
 namespace AnEngine::Game
@@ -14,15 +14,24 @@ namespace AnEngine::Game
 		GroupBatch
 	};
 
-	template<typename ...T>
+	template<typename T0, typename ...T>
 	class BehaviourSystem
 	{
-		void SystemInitialize()
-		{
-			std::list<GameObject*> entities;
-		}
+		std::vector<GameEntity*> m_entities;
+		const ScheduleMode m_how;
+
 	public:
+		BehaviourSystem(ScheduleMode scheduleMode) : m_entities(GameEntity::FindEntitiesByComponentType<T0, T...>()), m_how(scheduleMode)
+		{
+		}
+
 		virtual ~BehaviourSystem() = default;
+	};
+
+	class IParallelSystem
+	{
+	public:
+		virtual void Execute(int index) = 0;
 	};
 }
 

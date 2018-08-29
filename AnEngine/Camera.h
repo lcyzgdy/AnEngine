@@ -8,6 +8,7 @@
 #include "ShaderClass.h"
 #include "MultiBuffer.hpp"
 #include "DMath.hpp"
+#include "Matrix.hpp"
 
 namespace AnEngine::Game
 {
@@ -29,9 +30,9 @@ namespace AnEngine::Game
 		float m_farDistance;
 		float m_viewField;
 
-		Matrix4x4 m_viewMatrix;
-		Matrix4x4 m_projectionMatrix;
-		Matrix4x4 m_nonJitteredProjectionMatrix;
+		DMath::Matrix4x4 m_viewMatrix;
+		DMath::Matrix4x4 m_projectionMatrix;
+		DMath::Matrix4x4 m_nonJitteredProjectionMatrix;
 
 		ClearFlags m_clearFlag;
 		Color m_clearColor;
@@ -80,15 +81,15 @@ namespace AnEngine::Game
 		void ClearColor(Color color);
 		Color ClearColor();
 
-		static ColorBuffer* FindForwordTarget(Vector3&& pos);
+		static ColorBuffer* FindForwordTarget(DMath::Vector3&& pos);
 
-		Matrix4x4& ViewMatrix();
-		Matrix4x4& ProjectionMatrix();
-		Matrix4x4& NonJitteredProjectionMatrix();
+		DMath::Matrix4x4& ViewMatrix();
+		DMath::Matrix4x4& ProjectionMatrix();
+		DMath::Matrix4x4& NonJitteredProjectionMatrix();
 		void ResetProjectionMatrix();
-		void ViewMatrix(Matrix4x4& v);
-		void ProjectionMatrix(Matrix4x4& p);
-		void NonJitteredProjectionMatrix(Matrix4x4& njp);
+		void ViewMatrix(DMath::Matrix4x4& v);
+		void ProjectionMatrix(DMath::Matrix4x4& p);
+		void NonJitteredProjectionMatrix(DMath::Matrix4x4& njp);
 	};
 }
 

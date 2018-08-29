@@ -2,8 +2,8 @@
 #ifndef __DX_H__
 #define __DX_H__
 
-#include<windows.h>
-#include<iomanip>
+#include <windows.h>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <vector>

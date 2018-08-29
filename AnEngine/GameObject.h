@@ -20,6 +20,7 @@ namespace AnEngine::Game
 
 		std::mutex m_mutex;
 		bool m_active;
+
 	protected:
 		// 当前物体的父物体
 		GameObject * m_parentObject;
@@ -121,7 +122,7 @@ namespace AnEngine::Game
 		{
 			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
 			{
-				throw std::exception("_Ty is not derived ObjectBehaviour");
+				throw std::exception("Type is not derived ObjectBehaviour");
 			}
 			AddComponent(new _Ty());
 		}

@@ -16,7 +16,7 @@
 
 namespace AnEngine::DMath
 {
-	template<size_t n>
+	/*template<size_t n>
 	struct Vector
 	{
 	public:
@@ -493,7 +493,17 @@ namespace AnEngine::DMath
 		Vector4 temp;
 		DirectX::XMStoreFloat4(&temp.m_vector, DirectX::XMVectorSubtract(DirectX::XMLoadFloat4(&v1.m_vector), DirectX::XMLoadFloat4(&v2.m_vector)));
 		return std::move(temp);
-	}
+	}*/
+
+	using Vector2 = DirectX::XMFLOAT2;
+	using Vector3 = DirectX::XMFLOAT3;
+	using Vector4 = DirectX::XMFLOAT4;
+
+	using SVector = DirectX::XMVECTOR;
+	using SVector3th = DirectX::FXMVECTOR;
+	using SVector4th = DirectX::GXMVECTOR;
+	using SVector56th = DirectX::HXMVECTOR;
+	using SVector7oth = DirectX::CXMVECTOR;
 }
 
 #endif // !__AENGEIN_VECTOR_H__

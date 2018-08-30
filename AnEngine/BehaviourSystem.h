@@ -28,7 +28,7 @@ namespace AnEngine::Game
 		virtual ~BehaviourSystem() = default;
 	};
 
-	class IParallelSystem
+	class IParallel
 	{
 	public:
 		virtual void Execute(int index) = 0;

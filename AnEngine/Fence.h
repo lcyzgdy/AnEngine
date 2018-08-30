@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __FENCE_HPP__
-#define __FENCE_HPP__
+#ifndef __FENCE_H__
+#define __FENCE_H__
 
 #include "DX.h"
 //#include <functional>
@@ -50,4 +50,4 @@ namespace AnEngine::RenderCore
 }
 
 
-#endif // __FENCE_HPP__
+#endif // __FENCE_H__

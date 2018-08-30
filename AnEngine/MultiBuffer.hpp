@@ -3,7 +3,7 @@
 #define __MULTIBUFFER_H__
 
 #include "ColorBuffer.h"
-#include "Fence.hpp"
+#include "Fence.h"
 
 namespace AnEngine::RenderCore::Resource
 {

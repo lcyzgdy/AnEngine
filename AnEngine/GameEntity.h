@@ -9,7 +9,14 @@ namespace AnEngine::Game
 {
 	class GameEntity : public Object
 	{
-		std::vector<ComponentBase*> m_components;
+		/* ------Static Mathod--------- */
+		static std::vector<GameEntity*> g_entities;
+		static std::unordered_multimap<uint64_t, uint64_t> g_strToEntity;
+		static void SceneAddNewEntity(GameEntity* entity);
+		static void GameEntity::SceneRemoveEntity(GameEntity* entity);
+		/* ======Static Mathod========= */
+
+		std::vector<ComponentData*> m_components;
 
 	public:
 		std::wstring Name;
@@ -19,7 +26,7 @@ namespace AnEngine::Game
 		explicit GameEntity(std::wstring&& name);
 		virtual ~GameEntity();
 
-		void AddComponent(ComponentBase* component);
+		void AddComponent(ComponentData* component);
 
 		virtual std::wstring ToString() override;
 

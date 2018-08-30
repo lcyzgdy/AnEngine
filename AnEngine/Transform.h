@@ -6,10 +6,11 @@
 #include "Matrix.hpp"
 #include "Quaternion.hpp"
 #include "ComponentBase.h"
+#include <mutex>
 
 namespace AnEngine::Game
 {
-	class Transform : ComponentBase
+	class Transform : ComponentData
 	{
 		DMath::Vector3 m_position;
 		DMath::Quaternion m_rotation;
@@ -87,10 +88,7 @@ namespace AnEngine::Game
 
 		DMath::Matrix4x4 ObjectToWorldMatrix()
 		{
-			DMath::Matrix4x4 local(cosf(m_rotation.X()), 0, 0, m_localPosition.X(),
-				0, 0, 0, m_localPosition.Y(),
-				0, 0, 0, m_localPosition.Z(),
-				m_localScale.X(), m_localScale.Y(), m_localScale.Z(), 1);
+			DMath::Matrix4x4 local;
 			var parent = m_parent;
 			while (parent != nullptr)
 			{
@@ -100,5 +98,13 @@ namespace AnEngine::Game
 			return local;
 		}
 	};
+
+	using Position = DMath::Vector3;
+	using Rotation = DMath::Quaternion;
+	using Scale = DMath::Vector3;
+	using LocalPosition = DMath::Vector3;
+	using LocalRotation = DMath::Quaternion;
+	using LocalScale = DMath::Vector3;
+	using TransformMatrix = DMath::Matrix4x4;
 }
 #endif // !__TRANSFORM_H__

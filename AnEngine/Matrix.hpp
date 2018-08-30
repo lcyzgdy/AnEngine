@@ -8,7 +8,7 @@
 
 namespace AnEngine::DMath
 {
-	struct Matrix4x4
+	/*struct Matrix4x4
 	{
 	private:
 		//DirectX::XMFLOAT4X4
@@ -60,7 +60,10 @@ namespace AnEngine::DMath
 		Matrix4x4 XM_CALLCONV operator* (Matrix4x4& M) const;
 		Matrix4x4 operator* (float S) const;
 		Matrix4x4 operator/ (float S) const;
-	};
+	};*/
+
+
+	using Matrix4x4 = DirectX::XMMATRIX;
 }
 
 #endif // __MATRIX_HPP__

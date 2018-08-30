@@ -10,7 +10,7 @@ using namespace DirectX;
 
 namespace AnEngine::DMath
 {
-	class Quaternion
+	/*class Quaternion
 	{
 		XMFLOAT4 m_quaternion;
 	public:
@@ -86,7 +86,9 @@ namespace AnEngine::DMath
 			XMStoreFloat4(&temp.m_quaternion, XMQuaternionRotationRollPitchYaw(x, y, z));
 			return std::move(temp);
 		}
-	};
+	};*/
+
+	using Quaternion = XMVECTOR;
 }
 
 

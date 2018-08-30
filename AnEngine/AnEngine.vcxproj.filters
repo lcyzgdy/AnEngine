@@ -73,9 +73,6 @@
     <ClInclude Include="DynamicConstantBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="IEffect.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="PipelineState.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -175,9 +172,6 @@
     <ClInclude Include="MultiBuffer.hpp">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Fence.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Hash.hpp">
       <Filter>Math</Filter>
     </ClInclude>
@@ -259,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="TransformSystem.h">
       <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

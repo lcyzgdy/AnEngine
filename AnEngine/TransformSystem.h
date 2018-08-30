@@ -7,21 +7,27 @@
 
 namespace AnEngine::Game
 {
-	struct DataGroup
+	class TransformSystem : public IParallel
 	{
-		std::vector<Transform*> transform;
-
-		Transform* operator[](int i)
+		struct DataGroup : public IComponent<Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale, TransformMatrix>
 		{
-			return transform[i];
-		}
-	};
+			std::vector<Position*> position;
+			std::vector<Rotation*> rotation;
+			std::vector<Scale*> scale;
+			std::vector<LocalPosition*> localPosition;
+			std::vector<LocalRotation*> localRotation;
+			std::vector<LocalScale*> localScale;
+			std::vector<TransformMatrix*> transformMatrix;
 
-	class TransformSystem : public BehaviourSystem<Transform>, public IParallelSystem
-	{
+			std::tuple<Position*, Rotation*, Scale*, LocalPosition*, LocalRotation*, LocalScale*, TransformMatrix*> operator[](int i) override
+			{
+				return { position[i], rotation[i], scale[i], localPosition[i], localRotation[i], localScale[i], transformMatrix[i] };
+			}
+		};
+
 		DataGroup m_data;
 	public:
-		// 通过 IParallelSystem 继承
+		// 通过 IParallel 继承
 		virtual void Execute(int index) override;
 	};
 }

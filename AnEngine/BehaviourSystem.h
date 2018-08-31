@@ -32,6 +32,7 @@ namespace AnEngine::Game
 	{
 	public:
 		virtual void Execute(int index) = 0;
+		int Length;
 	};
 }
 

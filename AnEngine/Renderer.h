@@ -7,6 +7,7 @@
 #include "ColorBuffer.h"
 #include "GpuBuffer.h"
 #include "ShaderClass.h"
+#include <future>
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -19,6 +20,7 @@ namespace AnEngine::Game
 
 	class Renderer : public ObjectBehaviour
 	{
+		std::future<void> m_renderTask;
 	protected:
 		RenderCore::Resource::ColorBuffer* m_renderTarget;
 		RenderCore::GraphicPSO* m_pso;
@@ -30,6 +32,9 @@ namespace AnEngine::Game
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
+		virtual void LoadAsset() = 0;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) = 0;
+
 	public:
 		//explicit Renderer(const std::wstring& name);
 		//explicit Renderer(std::wstring&& name);
@@ -37,9 +42,6 @@ namespace AnEngine::Game
 		virtual ~Renderer() = default;
 
 		virtual void Destory() override;
-
-		virtual void LoadAsset() = 0;
-		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) = 0;
 	};
 
 	class TrangleRender : public Renderer
@@ -50,6 +52,11 @@ namespace AnEngine::Game
 		CD3DX12_VIEWPORT m_viewport;
 		CD3DX12_RECT m_scissorRect;
 
+	protected:
+		// 通过 Renderer 继承
+		virtual void LoadAsset() override;
+		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) override;
+
 	public:
 		struct Vertex
 		{
@@ -59,10 +66,6 @@ namespace AnEngine::Game
 		/*TrangleRender(const std::wstring& name);
 		TrangleRender(std::wstring&& name);*/
 		TrangleRender();
-
-		// 通过 Renderer 继承
-		virtual void LoadAsset() override;
-		virtual void OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator) override;
 
 		virtual void Destory() override;
 	};

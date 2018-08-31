@@ -1,8 +1,12 @@
 #include "CommandContext.h"
-#include "GraphicCard.h"
+#include "GraphicsCard.h"
 #include "RenderCore.h"
+#include "ManagedTask.hpp"
+#include <functional>
 
 #define in :
+
+using namespace AnEngine::Utility;
 
 namespace AnEngine::RenderCore
 {
@@ -59,6 +63,7 @@ namespace AnEngine::RenderCore
 		m_alloPool.push(allo);
 	}
 }
+/*
 namespace AnEngine::RenderCore
 {
 	ContextTask::ContextTask(CommandList * list, CommandAllocator * allocator, Fence * sync) : m_list(list), m_allo(allocator), m_syncObject(sync)
@@ -75,7 +80,7 @@ namespace AnEngine::RenderCore
 		ID3D12CommandList* lists[] = { m_list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(lists), lists);
 	}
-}
+}*/
 
 namespace AnEngine::RenderCore::Private
 {

@@ -119,7 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	Randomize();
 
-	AnEngine::Driver::GetInstance()->Initialize(window, hInstance, screenw, screenh);
+	AnEngine::Engine::GetInstance()->Initialize(window, hInstance, screenw, screenh);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();
@@ -146,7 +146,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	//BaseInput::GetInstance()->Release();
-	Driver::GetInstance()->Release();
+	Engine::GetInstance()->Release();
 	//d3dApp->OnRelease();
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;

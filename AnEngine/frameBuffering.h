@@ -21,28 +21,28 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 
 	CD3DX12_VIEWPORT viewport;
 	CD3DX12_RECT scissorRect;
-	ComPtr<IDXGISwapChain3> swapChain;
-	ComPtr<ID3D12Device> device;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	ComPtr<ID3D12DescriptorHeap> srvHeap;
-	ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
-	ComPtr<ID3D12RootSignature> rootSignature;
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
 
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12PipelineState> pipelineState;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 
-	ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
 	UINT fenceValues[r_DefaultFrameCount_const];
 
-	ComPtr<ID3D12Resource> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView;
-	ComPtr<ID3D12Resource> cubeResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> cubeResource;
 	// 应用程序资源
 
 

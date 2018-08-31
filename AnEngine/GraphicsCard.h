@@ -1,11 +1,11 @@
 #pragma once
-#ifndef __GRAPHICCARD_H__
-#define __GRAPHICCARD_H__
+#ifndef __GRAPHICSCARD_H__
+#define __GRAPHICSCARD_H__
 
-#include"DX.h"
-#include"CommandQueue.h"
-#include"RenderCoreConstants.h"
-#include<mutex>
+#include "DX.h"
+#include "CommandQueue.h"
+#include "RenderCoreConstants.h"
+#include <mutex>
 //#include"Fence.h"
 
 namespace AnEngine::RenderCore
@@ -13,8 +13,8 @@ namespace AnEngine::RenderCore
 	// 显卡设备接口。
 	class GraphicsCard : public NonCopyable
 	{
-		friend class UICore;
-
+		//friend class UI::GraphicsCard2D;
+	protected:
 		Microsoft::WRL::ComPtr<ID3D12Device2> m_device_cp;
 
 		// 渲染着色器的命令队列。
@@ -37,7 +37,7 @@ namespace AnEngine::RenderCore
 
 		std::mutex m_execMutex;
 
-		void CreateDevice(IDXGIFactory4* dxgiFactory);
+		virtual void CreateDevice(IDXGIFactory4* dxgiFactory);
 		void CreateCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 		inline void GetHardwareAdapter(_In_ IDXGIFactory2* pFactory, _Outptr_result_maybenull_ IDXGIAdapter1** ppAdapter)
@@ -67,15 +67,15 @@ namespace AnEngine::RenderCore
 
 	public:
 		GraphicsCard();
-		~GraphicsCard() = default;
+		virtual ~GraphicsCard() = default;
 
 		void Initialize(IDXGIFactory4* dxgiFactory, bool compute = false, bool copy = false);
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		const ID3D12Device* GetDevice() const;
 		ID3D12Device* GetDevice();
 		uint32_t GetNodeNum();
-
 		void ExecuteSync(_In_ uint32_t num, _In_reads_(num) ID3D12CommandList *const *ppCommandLists, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 		void IsStable(bool isStable);
@@ -87,4 +87,4 @@ namespace AnEngine::RenderCore
 	};
 }
 
-#endif // !__GRAPHICCARD_H__
+#endif // !__GRAPHICSCARD_H__

@@ -8,7 +8,7 @@
 
 namespace AnEngine
 {
-	class Driver;
+	class Engine;
 }
 
 namespace AnEngine::Game

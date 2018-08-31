@@ -76,9 +76,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)PhyX\PhysX_3.4\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,14 +118,18 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)PhyX\PhysX_3.4\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
+      <DisableSpecificWarnings>4455;238</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -160,7 +169,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Assets\HlslCompat.h" />
+    <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
+    <ClInclude Include="BehaviourSystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
@@ -168,9 +180,11 @@
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
+    <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
+    <ClInclude Include="DeferredPipeline.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />
     <ClInclude Include="DMath.hpp" />
@@ -182,16 +196,17 @@
     <ClInclude Include="DX.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
-    <ClInclude Include="Fence.hpp" />
+    <ClInclude Include="Fence.h" />
     <ClInclude Include="frameBuffering.h" />
+    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
-    <ClInclude Include="GraphicCard.h" />
+    <ClInclude Include="GraphicsCard.h" />
     <ClInclude Include="Hash.hpp" />
-    <ClInclude Include="IEffect.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ManagedTask.hpp" />
+    <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
     <ClInclude Include="MultiBuffer.hpp" />
@@ -203,6 +218,9 @@
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="Quaternion.hpp" />
+    <ClInclude Include="RayTracingHelper.hpp" />
+    <ClInclude Include="RaytracingHlslCompat.h" />
+    <ClInclude Include="RayTracingPipeline.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Renderer.h" />
@@ -218,7 +236,10 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="UICore.h" />
+    <ClInclude Include="GraphicsCard2D.h" />
+    <ClInclude Include="TransformSystem.h" />
+    <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIText.h" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
@@ -243,10 +264,11 @@
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
+    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
     <ClCompile Include="GpuResource.cpp" />
-    <ClCompile Include="GraphicCard.cpp" />
+    <ClCompile Include="GraphicsCard.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ManagedTask.cpp" />
     <ClCompile Include="MatrixBuffer.cpp" />
@@ -257,6 +279,7 @@
     <ClCompile Include="ParticlesRenderer.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
+    <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
@@ -268,7 +291,10 @@
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
-    <ClCompile Include="UICore.cpp" />
+    <ClCompile Include="GraphicsCard2D.cpp" />
+    <ClCompile Include="TransformSystem.cpp" />
+    <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +389,11 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\Assets\Raytracing.hlsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)3rdparty\DXR\Bin\x64\dxc.exe" -nologo -Zpr -Fh "$(IntDir)\CompiledShaders\%(Filename).hlsl.h" -Vn g_p%(Filename) -T lib_6_1 "%(Identity)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\CompiledShaders\%(Filename).hlsl.h</Outputs>
+    </CustomBuild>
     <FxCompile Include="..\Assets\test.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

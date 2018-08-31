@@ -3,6 +3,7 @@
 #define __CANVAS_H__
 
 #include "ObjectBehaviour.h"
+#include "UIComponent.h"
 
 namespace AnEngine::Game::UI
 {
@@ -10,6 +11,9 @@ namespace AnEngine::Game::UI
 	{
 	protected:
 		virtual void Start() override;
+		virtual void LateUpdate() override;
+	public:
+
 	};
 }
 

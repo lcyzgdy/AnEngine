@@ -18,6 +18,7 @@
 #define var auto
 #define let auto
 #define __FasterFunc(func) inline func __vectorcall
+#define procedure void
 
 #ifdef _WIN64
 
@@ -147,6 +148,15 @@ inline void ThrowIfFailed(HRESULT hr, const std::function<void(void)>& f)
 		throw std::exception("一个奇怪的错误");
 	}
 }
+inline void ThrowIfFalse(bool value)
+{
+	ThrowIfFailed(value ? S_OK : E_FAIL);
+}
+
+inline void ThrowIfFalse(bool value, const wchar_t* msg)
+{
+	ThrowIfFailed(value ? S_OK : E_FAIL);
+}
 
 template <typename T>
 inline T* SafeAcquire(T* newObject)
@@ -192,33 +202,42 @@ struct Range
 	}
 };
 
-__FasterFunc(void) Randomize()
+inline void __vectorcall Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-__FasterFunc(int) Random(int a)
+inline int __vectorcall Random(int a)
 {
 	return rand() % a;
 }
 
-__FasterFunc(float) Random()
+inline float __vectorcall Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-__FasterFunc(int) Random(int a, int b)
+inline int __vectorcall Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-__FasterFunc(float) Random(float a, float b)
+inline float __vectorcall Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;
 	return scale * range + a;
+}
+
+constexpr float operator "" f(unsigned long long i)
+{
+	return (float)i;
+}
+constexpr double operator "" lf(unsigned long long i)
+{
+	return (double)i;
 }
 
 struct NonCopyable
@@ -254,7 +273,7 @@ public:
 	{
 		return 1;
 	}
-	static  char t(void* t2)
+	static char t(void* t2)
 	{
 		return 0;
 	}
@@ -265,4 +284,12 @@ public:
 	};
 };
 
+/*template<typename T0, typename... T>
+struct TypeHash
+{
+	enum
+	{
+		Result = typeid(T0).hash_code() + typeid...(T).hash_code();
+	};
+}*/
 #endif // !__ONWIND_H__

@@ -1,17 +1,21 @@
-#include"RenderCore.h"
-#include"Screen.h"
-#include"CommandContext.h"
-#include"DescriptorHeap.hpp"
-#include"Fence.hpp"
-#include"ThreadPool.hpp"
-#include"DTimer.h"
-#include"DebugLog.h"
+#include "RenderCore.h"
+#include "Screen.h"
+#include "CommandContext.h"
+#include "DescriptorHeap.hpp"
+#include "Fence.hpp"
+#include "ThreadPool.hpp"
+#include "DTimer.h"
+#include "DebugLog.h"
+#include <dxgidebug.h>
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
 
+using namespace std;
+using namespace Microsoft::WRL;
 using namespace AnEngine::RenderCore::Resource;
 using namespace AnEngine::RenderCore::Heap;
+using namespace AnEngine::RenderCore::UI;
 using namespace AnEngine::Debug;
 
 namespace AnEngine::RenderCore
@@ -19,6 +23,7 @@ namespace AnEngine::RenderCore
 	ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
 
 	vector<unique_ptr<GraphicsCard>> r_graphicsCard;
+	unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
 	ComPtr<IDXGISwapChain3> r_swapChain_cp = nullptr;
 	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	bool r_enableHDROutput = false;
@@ -59,42 +64,60 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
-	void InitializePipeline();
-	void WaitForGpu();
+	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
+	procedure WaitForGpu();
+	procedure CreateCommonState();
 
-	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
+	procedure InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
 		uint32_t dxgiFactoryFlags = 0;
 		// 开启Debug模式
+		bool debugDxgi = false;
 #if defined(DEBUG) || defined(_DEBUG)
+
 		ComPtr<ID3D12Debug> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
 		{
 			d3dDebugController->EnableDebugLayer();
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
+
+		ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiInfoQueue))))
+		{
+			debugDxgi = true;
+
+			ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&r_dxgiFactory_cp)));
+
+			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
+			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+		}
 #endif
-		ThrowIfFailed(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
+		if (!debugDxgi)
+		{
+			ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
+		}
 
 
 		while (graphicCardCount--)
 		{
-			GraphicsCard* aRender = new GraphicsCard();
+			GraphicsCard* aRender = new GraphicsCardWithRT();
 			aRender->IsStable(isStable);
 			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
 		}
+		r_graphicsCard2D.reset(new UI::GraphicsCard2D());
+		r_graphicsCard2D->Initialize();
 		DescriptorHeapAllocator::GetInstance();
 		InitializeSwapChain(Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), r_hwnd);
-		InitializePipeline();
+
 		CreateCommonState();
 
 		r_frameCount = 0;
 	}
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
+	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = r_SwapChainBufferCount_const;
@@ -138,16 +161,24 @@ namespace AnEngine::RenderCore
 			}
 		}
 #endif
-	}
 
-	void InitializePipeline()
-	{
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
 		{
 			ComPtr<ID3D12Resource> displayPlane;
 			ThrowIfFailed(r_swapChain_cp->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
 			r_displayPlane[i] = new ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(),
 				DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+
+			// 2D平面
+			D3D11_RESOURCE_FLAGS d3d11Flags = { D3D11_BIND_RENDER_TARGET };
+			ThrowIfFailed(r_graphicsCard2D->GetDevice11On12()->CreateWrappedResource(r_displayPlane[i]->GetResource(),
+				&d3d11Flags, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT,
+				IID_PPV_ARGS(&r_graphicsCard2D->m_wrappedBackBuffers[i])));
+
+			ComPtr<IDXGISurface> surface;
+			ThrowIfFailed(r_graphicsCard2D->m_wrappedBackBuffers[i].As(&surface));
+			ThrowIfFailed(r_graphicsCard2D->m_d2dContext->CreateBitmapFromDxgiSurface(surface.Get(),
+				&r_graphicsCard2D->m_bitmapProperties, &r_graphicsCard2D->m_d2dRenderTarget[i]));
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
@@ -313,7 +344,10 @@ namespace AnEngine::RenderCore
 #endif // _DEBUG
 
 		GraphicsContext::Push(commandList, commandAllocator);
+	}
 
+	void R_Present()
+	{
 		ThrowIfFailed(r_swapChain_cp->Present(0, 0), R_GetGpuError);
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 		WaitForGpu();

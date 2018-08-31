@@ -1,6 +1,7 @@
 #include "NBody.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
+using namespace Microsoft::WRL;
 
 const float NBody::ParticleSpread = 400.0f;
 

@@ -16,7 +16,7 @@ namespace AnEngine
 		//friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 		// */
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
-		friend class Driver;
+		friend class Engine;
 		//static Screen* m_uniqueObj;
 
 		std::atomic<int> m_width;

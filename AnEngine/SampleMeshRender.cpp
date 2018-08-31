@@ -7,6 +7,7 @@ using namespace AnEngine::RenderCore;
 using namespace AnEngine;
 using namespace AnEngine::RenderCore::Heap;
 using namespace AnEngine::RenderCore::Resource;
+using namespace Microsoft::WRL;
 
 namespace AnEngine::Game
 {
@@ -302,15 +303,8 @@ namespace AnEngine::Game
 
 	void SampleMeshRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		var[shadowList, shadowAllocator] = GraphicsContext::GetOne();
-		var iShadowAllocator = shadowAllocator->GetAllocator();
-		var iShadowList = shadowList->GetCommandList();
-
 		ThrowIfFailed(iAllocator->Reset());
 		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));
-
-		ThrowIfFailed(iShadowAllocator->Reset());
-		ThrowIfFailed(iShadowList->Reset(iShadowAllocator, m_psoShadowMap->GetPSO()));
 
 		// Graphics
 		{
@@ -360,44 +354,11 @@ namespace AnEngine::Game
 			var psResourceToDepthWrite = CommonState::psResource2DepthWrite;
 			depthWriteToPsResource.Transition.pResource = m_depthStencil.Get();
 			psResourceToDepthWrite.Transition.pResource = m_depthStencil.Get();
-			iShadowList->ResourceBarrier(1, &depthWriteToPsResource);
-
-			iShadowList->SetGraphicsRootSignature(m_rootSignature.Get());
 
 			ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvHeap, m_samplerHeap };
-			iShadowList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
-			iShadowList->RSSetViewports(1, &m_viewport);
-			iShadowList->RSSetScissorRects(1, &m_scissorRect);
-			iShadowList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			iShadowList->IASetVertexBuffers(0, 1, &m_vertexBuffer->GetVbv());
-			iShadowList->IASetIndexBuffer(&m_vertexBuffer->GetIbv());
-			iShadowList->SetGraphicsRootDescriptorTable(3, m_samplerHeap->GetGPUDescriptorHandleForHeapStart());
-			iShadowList->OMSetStencilRef(0);
-
-			iShadowList->SetGraphicsRootDescriptorTable(2, m_nullSrvHandle);			// Set a null SRV for the shadow texture.
-			iShadowList->SetGraphicsRootDescriptorTable(1, m_shadowCbvHandle);
-
-			iShadowList->OMSetRenderTargets(0, nullptr, FALSE, &m_dsvHandle);
-
-			iShadowList->SetGraphicsRootDescriptorTable(0, m_cbvGpuHandle);
-			for (int i = 0; i < _countof(SampleAssets::Draws); i++)
-			{
-				SampleAssets::DrawParameters drawArgs = SampleAssets::Draws[i];
-				iShadowList->DrawIndexedInstanced(drawArgs.IndexCount, 1, drawArgs.IndexStart, drawArgs.VertexBase, 0);
-			}
-
-			iShadowList->ResourceBarrier(1, &psResourceToDepthWrite);
 		}
 
 		iList->Close();
-		iShadowList->Close();
-
-		//ID3D12CommandList* ppcommandList[] = { iShadowList };
-		//r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
-		//m_fence->GpuSignal(0);
-
-		GraphicsContext::Push(shadowList, shadowAllocator);
 	}
 
 	void SampleMeshRenderer::Destory()

@@ -60,27 +60,41 @@ namespace AnEngine::Game
 			bool operator==(const State& rhs) { return this->m_hash == rhs.m_hash; }
 		};*/
 
+		struct Event
+		{
+			uint32_t m_transState;
+			std::map<uint64_t, std::pair<int, Condition>> m_int;
+			std::map<uint64_t, std::pair<float, Condition>> m_float;
+			std::map<uint64_t, std::pair<bool, Condition>> m_bool;
+			std::vector<uint64_t> m_trigger;
+
+			bool operator<(const Event& rhs) { return this->m_transState < rhs.m_transState; }
+
+			Event(uint32_t to) : m_transState(to) {}
+		};
+
 		struct State
 		{
 		private:
-			uint64_t m_hash;
-			std::function<void()> m_func;
+			friend class StateMachine;
 
-			std::unordered_map<std::wstring, int> m_int;
-			std::unordered_map<std::wstring, float> m_float;
-			std::unordered_map<std::wstring, bool> m_bool;
-			std::unordered_map<std::wstring, bool> m_trigger;
+			uint64_t m_id;
+			std::function<void()> m_func;
+			std::vector<Event> m_events;
 
 		public:
-			State(uint64_t hash, const std::function<void()>& func) : m_hash(hash), m_func(func) {}
-			State(uint64_t hash, std::function<void()>&& func) : m_hash(hash), m_func(func) {}
+			State(uint64_t hash, const std::function<void()>& func) : m_id(hash), m_func(func) {}
+			State(uint64_t hash, std::function<void()>&& func) : m_id(hash), m_func(func) {}
 			~State() = default;
 
 			inline void Invoke() { return m_func(); }
 			inline void ReferenceInvoke() { return m_func(); }
 
-			bool operator==(const State& rhs) { return this->m_hash == rhs.m_hash; }
+			bool operator==(const State& rhs) { return this->m_id == rhs.m_id; }
 		};
+
+		friend class Scene;
+		static void StaticUpdate();
 
 	private:
 		std::unordered_map<std::wstring, uint64_t> m_str2Hash;
@@ -100,11 +114,12 @@ namespace AnEngine::Game
 		virtual void Update() final;
 
 	public:
-		StateMachine() = default;
-		virtual ~StateMachine() = default;
+		StateMachine();
+		virtual ~StateMachine();
 
 		int GetStateIndex(const std::wstring& name);
 		int GetStateIndex(std::wstring&& name);
+		std::wstring GetCurrectStateName();
 		// 增添状态机参数
 		void AddIntParam(std::wstring&& name, int initValue);
 		void AddFloatParam(std::wstring&& name, float initValue);
@@ -114,10 +129,10 @@ namespace AnEngine::Game
 		int CreateNewState(std::wstring&& name, const std::function<void()>& func);
 		int CreateNewState(std::wstring&& name, std::function<void()>&& func);
 		// 添加状态转移条件
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, uint32_t newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, float newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, bool newValue, Condition cond);
-		void AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring trggerName);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond);
+		void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName);
 		// 外部设置状态机
 		void SetInt(std::wstring&& name, int value);
 		void SetBool(std::wstring&& name, bool value);

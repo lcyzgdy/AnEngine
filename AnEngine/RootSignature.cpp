@@ -1,5 +1,8 @@
 #include "RootSignature.h"
 #include "RenderCore.h"
+
+using namespace Microsoft::WRL;
+
 namespace AnEngine::RenderCore
 {
 	RootParameter::RootParameter()

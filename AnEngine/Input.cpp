@@ -30,7 +30,7 @@ namespace AnEngine
 		memset(m_mouseButtonDownState, 0, sizeof(m_mouseButtonDownState));
 		memset(m_mouseButtonState, 0, sizeof(m_mouseButtonState));
 
-		Utility::ThreadPool::Commit(std::bind(&BaseInput::Update, this));
+		//Utility::ThreadPool::Commit(std::bind(&BaseInput::Update, this));
 	}
 
 	void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)
@@ -61,8 +61,6 @@ namespace AnEngine
 
 	void BaseInput::Release()
 	{
-		m_exit = true;
-		while (m_exit);
 		if (m_keyboard)
 		{
 			m_keyboard->Unacquire();
@@ -84,36 +82,36 @@ namespace AnEngine
 
 	void BaseInput::Update()
 	{
-		while (!m_exit)
+		//while (!m_exit)
+		//{
+		if (m_keyboard)
 		{
-			if (m_keyboard)
+			m_keyboard->GetDeviceState(sizeof(m_keyState), m_keyState);
+		}
+		if (m_mouse)
+		{
+			m_mouse->GetDeviceState(sizeof(m_mouseState), &m_mouseState);
+			for (int i = 0; i < 4; i++)
 			{
-				m_keyboard->GetDeviceState(sizeof(m_keyState), m_keyState);
-			}
-			if (m_mouse)
-			{
-				m_mouse->GetDeviceState(sizeof(m_mouseState), &m_mouseState);
-				for (int i = 0; i < 4; i++)
+				m_mouseButtonState[i] = m_mouseState.rgbButtons[i] & 0x80;
+				if ((!m_mouseButtonDownState[i]) && m_mouseButtonState[i] && (!m_mouseButtonDownFlag[i]))
 				{
-					m_mouseButtonState[i] = m_mouseState.rgbButtons[i] & 0x80;
-					if ((!m_mouseButtonDownState[i]) && m_mouseButtonState[i] && (!m_mouseButtonDownFlag[i]))
-					{
-						m_mouseButtonDownState[i] = true;
-						m_mouseButtonDownFlag[i] = true;
-					}
-					else if (m_mouseButtonDownState[i] && m_mouseButtonState[i])
-					{
-						m_mouseButtonDownState[i] = false;
-					}
-					else if (!m_mouseButtonState[i])
-					{
-						m_mouseButtonDownFlag[i] = false;
-					}
+					m_mouseButtonDownState[i] = true;
+					m_mouseButtonDownFlag[i] = true;
+				}
+				else if (m_mouseButtonDownState[i] && m_mouseButtonState[i])
+				{
+					m_mouseButtonDownState[i] = false;
+				}
+				else if (!m_mouseButtonState[i])
+				{
+					m_mouseButtonDownFlag[i] = false;
 				}
 			}
-			this_thread::sleep_for(m_delta);
 		}
-		m_exit = false;
+		//this_thread::sleep_for(m_delta);
+	//}
+	//m_exit = false;
 	}
 
 	bool BaseInput::IsAnyKeyDown()

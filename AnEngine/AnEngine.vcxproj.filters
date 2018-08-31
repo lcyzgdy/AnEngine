@@ -29,6 +29,15 @@
     <Filter Include="Graphics\Resource">
       <UniqueIdentifier>{aca8377d-6640-4eae-bfbd-fd3cdcbe689e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DXR">
+      <UniqueIdentifier>{0e021905-d8c9-4e82-8c6a-81fcc2edfa28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity">
+      <UniqueIdentifier>{1af35068-a68f-421c-8ea1-56f207ec9e07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\System">
+      <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -46,9 +55,6 @@
     <ClInclude Include="NBody.h">
       <Filter>Demos</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="CommandContext.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -65,12 +71,6 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="DynamicConstantBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicCard.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="IEffect.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="PipelineState.h">
@@ -97,16 +97,10 @@
     <ClInclude Include="Vector.hpp">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="DebugLog.h">
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="DTimer.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="DX.h">
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -117,12 +111,6 @@
     </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="Driver.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="SampleAssets.h">
       <Filter>Game</Filter>
@@ -184,12 +172,6 @@
     <ClInclude Include="MultiBuffer.hpp">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Fence.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="UICore.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Hash.hpp">
       <Filter>Math</Filter>
     </ClInclude>
@@ -214,6 +196,67 @@
     <ClInclude Include="StateMachine.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsCard2D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="UIComponent.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCard.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Graphics\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h" />
+    <ClInclude Include="RayTracingPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingHelper.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DX.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Assets\HlslCompat.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="RaytracingHlslCompat.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBase.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviourSystem.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEntity.h">
+      <Filter>Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformSystem.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -231,9 +274,6 @@
     <ClCompile Include="NBody.cpp">
       <Filter>Demos</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="CommandContext.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -250,9 +290,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Fence.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicCard.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="PipelineState.cpp">
@@ -273,9 +310,6 @@
     <ClCompile Include="DTimer.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
-    <ClCompile Include="DX.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -284,12 +318,6 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="Driver.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game</Filter>
@@ -336,9 +364,6 @@
     <ClCompile Include="MatrixBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="UICore.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DebugLog.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -356,6 +381,37 @@
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsCard2D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="UIComponent.cpp">
+      <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsCard.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Graphics\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="DX.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingPipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEntity.cpp">
+      <Filter>Game\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformSystem.cpp">
+      <Filter>Game\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +440,9 @@
       <Filter>Assets</Filter>
     </CustomBuild>
     <CustomBuild Include="compute_shader.hlsl">
+      <Filter>Assets</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\Assets\Raytracing.hlsl">
       <Filter>Assets</Filter>
     </CustomBuild>
   </ItemGroup>

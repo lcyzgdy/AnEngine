@@ -7,7 +7,7 @@
 #include"VertexBuffer.h"
 #include"MCamera.h"
 #include"SampleAssets.h"
-#include"Fence.hpp"
+#include"Fence.h"
 
 namespace AnEngine::Game
 {

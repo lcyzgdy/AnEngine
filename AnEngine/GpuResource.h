@@ -4,7 +4,7 @@
 
 #include<wrl.h>
 #include"DX.h"
-#include"Fence.hpp"
+#include"Fence.h"
 #include<functional>
 
 namespace AnEngine::RenderCore::Resource

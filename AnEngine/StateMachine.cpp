@@ -13,11 +13,63 @@ namespace AnEngine::Game
 		[](_Ty a, _Ty b) { return a < b; },
 		[](_Ty a, _Ty b) { return a <= b; },
 		[](_Ty a, _Ty b) { return a > b; },
-		[](_Ty a, _Ty b) { return a >= b; },
+		[](_Ty a, _Ty b) { return a >= b; }
 	};
+
+	vector<StateMachine*> g_stateMachines;
+
+	void StateMachine::StaticUpdate()
+	{
+		for (var i : g_stateMachines)
+		{
+			i->Update();
+		}
+	}
 
 	void StateMachine::Update()
 	{
+		m_states[m_curState].Invoke();
+		for (var ea : m_states[m_curState].m_events)
+		{
+			bool f = true;
+			for (var item : ea.m_float)
+			{
+				f = f && Cmp<float>[item.second.second](m_floatParam[item.first], item.second.first);
+			}
+			for (var item : ea.m_int)
+			{
+				f = f && Cmp<int>[item.second.second](m_intParam[item.first], item.second.first);
+			}
+			for (var item : ea.m_bool)
+			{
+				f = f && Cmp<bool>[item.second.second](m_boolParam[item.first], item.second.first);
+			}
+			for (var item : ea.m_trigger)
+			{
+				f = f && m_triggerParam[item];
+			}
+			if (f)
+			{
+				m_curState = ea.m_transState;
+
+				for (var item : ea.m_trigger)
+				{
+					m_triggerParam[item] = false;
+				}
+
+				break;
+			}
+		}
+	}
+
+	StateMachine::StateMachine()
+	{
+		g_stateMachines.push_back(this);
+	}
+
+	StateMachine::~StateMachine()
+	{
+		g_stateMachines.erase(find(g_stateMachines.begin(), g_stateMachines.end(), this));
 	}
 
 	int StateMachine::GetStateIndex(const std::wstring& name)
@@ -28,8 +80,12 @@ namespace AnEngine::Game
 
 	int StateMachine::GetStateIndex(std::wstring&& name)
 	{
-
 		return -1;
+	}
+
+	std::wstring StateMachine::GetCurrectStateName()
+	{
+		return m_stateName[m_curState];
 	}
 
 	void StateMachine::AddIntParam(wstring&& name, int initValue)
@@ -49,7 +105,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = initValue;
+		m_floatParam[h] = initValue;
 	}
 
 	void StateMachine::AddBoolParam(wstring&& name, bool initValue)
@@ -59,7 +115,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = initValue;
+		m_boolParam[h] = initValue;
 	}
 
 	void StateMachine::AddTrigerParam(wstring&& name)
@@ -69,7 +125,7 @@ namespace AnEngine::Game
 			throw exception();
 		}
 		uint64_t h = m_str2Hash[name] = m_str2Hash.size();
-		m_intParam[h] = false;
+		m_triggerParam[h] = false;
 	}
 
 	int StateMachine::CreateNewState(std::wstring && name, const std::function<void()>& func)
@@ -92,20 +148,64 @@ namespace AnEngine::Game
 		return index;
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, uint32_t newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, uint32_t newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_int[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_int[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, float newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, float newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_float[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_float[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring name, bool newValue, Condition cond)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& paramName, bool newValue, Condition cond)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_bool[m_str2Hash[paramName]] = { newValue, cond };
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_bool[m_str2Hash[paramName]] = { newValue, cond };
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
-	void StateMachine::AddStateChangeCondition(uint32_t from, uint32_t to, std::wstring trggerName)
+	void StateMachine::CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tiggerName)
 	{
+		for (var i : m_states[from].m_events)
+		{
+			if (i.m_transState == to)
+			{
+				i.m_trigger.emplace_back(m_str2Hash[tiggerName]);
+				return;
+			}
+		}
+		Event ev(to);
+		ev.m_trigger.emplace_back(m_str2Hash[tiggerName]);
+		m_states[from].m_events.emplace_back(move(ev));
 	}
 
 	void StateMachine::SetInt(std::wstring&& name, int value)
@@ -115,17 +215,17 @@ namespace AnEngine::Game
 
 	void StateMachine::SetBool(std::wstring&& name, bool value)
 	{
-		m_intParam[m_str2Hash[name]] = value;
+		m_boolParam[m_str2Hash[name]] = value;
 	}
 
 	void StateMachine::SetFloat(std::wstring&& name, float value)
 	{
-		m_intParam[m_str2Hash[name]] = value;
+		m_floatParam[m_str2Hash[name]] = value;
 	}
 
 	void StateMachine::SetTrigger(std::wstring&& name)
 	{
-		m_intParam[m_str2Hash[name]] = true;
+		m_triggerParam[m_str2Hash[name]] = true;
 	}
 
 	void StateMachine::SetCurrentState(int index)

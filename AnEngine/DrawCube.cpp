@@ -1,5 +1,6 @@
 #include "DrawCube.h"
 using namespace AnEngine::RenderCore;
+using namespace Microsoft::WRL;
 
 DrawCube::DrawCube(const HWND _hwnd, const uint32_t _width, const uint32_t _height) :
 	D3D12AppBase(_hwnd, _width, _height),

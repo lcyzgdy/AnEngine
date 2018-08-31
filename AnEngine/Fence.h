@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __FENCE_HPP__
-#define __FENCE_HPP__
+#ifndef __FENCE_H__
+#define __FENCE_H__
 
 #include "DX.h"
 //#include <functional>
@@ -16,7 +16,8 @@ namespace AnEngine::RenderCore
 		//uint64_t m_fenceValue;
 		//ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32
-		HANDLE m_fenceEvent;
+		// HANDLE m_fenceEvent;
+		Microsoft::WRL::Wrappers::Event m_fenceEvent;
 #else
 		std::condition_variable m_fenceEvent;
 #endif // _WIN32
@@ -49,4 +50,4 @@ namespace AnEngine::RenderCore
 }
 
 
-#endif // __FENCE_HPP__
+#endif // __FENCE_H__

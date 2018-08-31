@@ -2,10 +2,11 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
-#include"onwind.h"
-#include"Object.h"
-#include"Transform.h"
-#include<mutex>
+#include "onwind.h"
+#include "Object.h"
+#include "Transform.h"
+#include <mutex>
+#include <queue>
 // #include"BaseBehaviour.h"
 
 namespace AnEngine::Game
@@ -18,6 +19,8 @@ namespace AnEngine::Game
 		friend class Scene;
 
 		std::mutex m_mutex;
+		bool m_active;
+
 	protected:
 		// 当前物体的父物体
 		GameObject * m_parentObject;
@@ -53,6 +56,47 @@ namespace AnEngine::Game
 			return nullptr;
 		}
 
+		template<typename _Ty>
+		std::vector<_Ty*>&& GetComponents()
+		{
+			std::vector<_Ty*> ret;
+
+			return std::move(ret);
+		}
+
+		template<typename _Ty>
+		std::vector<_Ty*> GetComponentsInChildren()
+		{
+			std::vector<_Ty*> ret;
+			std::queue<GameObject*> q;
+			for (var child : m_children)
+			{
+				q.push(child);
+			}
+			while (!q.empty())
+			{
+				for (var c : q.front()->m_component)
+				{
+					/*if (typeid(*c) == typeid(_Ty))
+					{
+						ret.push_back((_Ty*)c);
+					}*/
+					var p = dynamic_cast<_Ty*>(c);
+					if (p != nullptr)
+					{
+						ret.push_back(p);
+					}
+				}
+				for (var c : q.front()->m_children)
+				{
+					q.push(c);
+				}
+				q.pop();
+			}
+
+			return std::move(ret);
+		}
+
 		std::vector<ObjectBehaviour*> GetComponents();
 
 		template<typename _Ty = ObjectBehaviour>
@@ -60,9 +104,13 @@ namespace AnEngine::Game
 		{
 			for (var i : this->m_component)
 			{
-				var p = dynamic_cast<_Ty*>(i);
+				if (typeid(*i) == typeid(_Ty))
+				{
+					return (_Ty*)i;
+				}
+				/*var p = dynamic_cast<_Ty*>(i);
 				if (p != nullptr)
-					return p;
+					return p;*/
 			}
 			return nullptr;
 		}
@@ -74,12 +122,19 @@ namespace AnEngine::Game
 		{
 			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
 			{
-				throw std::exception("_Ty is not derived ObjectBehaviour");
+				throw std::exception("Type is not derived ObjectBehaviour");
 			}
 			AddComponent(new _Ty());
 		}
 
 		void RemoveComponent(ObjectBehaviour* component);
+		void AddChildObject(GameObject* obj);
+
+		bool Active();
+		void Active(bool b);
+
+		static GameObject* Find(const std::wstring& name);
+		static GameObject* Find(std::wstring&& name);
 	};
 }
 #endif // !__GAMEOBJECT_H__

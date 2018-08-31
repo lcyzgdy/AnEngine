@@ -41,25 +41,25 @@ namespace AnEngine
 
 	const uint64_t DTimer::GetElapsedTicks()
 	{
-		Tick(nullptr);
+		//Tick(nullptr);
 		return m_elapsedTicks;
 	}
 
 	const double DTimer::GetElapsedSeconds()
 	{
-		Tick(nullptr);
+		//Tick(nullptr);
 		return TicksToSeconds(m_elapsedTicks);
 	}
 
 	const uint64_t DTimer::GetTotalTicks()
 	{
-		Tick(nullptr);
+		//Tick(nullptr);
 		return m_totalTicks;
 	}
 
 	const double DTimer::GetTotalSeconds()
 	{
-		Tick(nullptr);
+		//Tick(nullptr);
 		return TicksToSeconds(m_totalTicks);
 	}
 
@@ -172,14 +172,5 @@ namespace AnEngine
 			m_framesThisSecond = 0;
 			m_qpcSecondCounter %= m_qpcFrequency.QuadPart;
 		}
-	}
-
-	uint64_t Timer::GetTotalTicks()
-	{
-		return DTimer::GetInstance()->GetTotalTicks();
-	}
-	double Timer::GetTotalSeconds()
-	{
-		return DTimer::GetInstance()->GetTotalSeconds();
 	}
 }

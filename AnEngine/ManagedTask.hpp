@@ -3,39 +3,29 @@
 #define __MANAGEDTASK_HPP__
 
 #include<functional>
-#include<queue>
-#include"Object.h"
+#include <queue>
+#include "Object.h"
+#include <tuple>
 
 namespace AnEngine::Utility
 {
-	//template<typename Func, typename ... Args>
-	class ManagedTask : public Object
+	template<typename _F, typename... _Ty>
+	class ManagedTask
 	{
-		//std::function<Func(Args ...)> m_task;
-		std::function<void()> m_task;
+		using FuncType = std::_Binder<std::_Unforced, _F, _Ty...>;
+		FuncType m_task;
 
 	public:
-		ManagedTask()
+		ManagedTask(_F&& f, _Ty&&... args) : m_task(std::bind(std::forward<_F>(f), std::forward<_Ty>(args)...))
 		{
 		}
+		ManagedTask(ManagedTask<_F, _Ty...>&&) = delete;
+		ManagedTask(const ManagedTask<_F, _Ty...>&) = delete;
 
 		auto Invoke()
 		{
 			return m_task();
 		}
-	};
-
-	class SceneManagedTaskQueue : public Object
-	{
-		std::queue<ManagedTask> m_taskQueue;
-
-	public:
-		SceneManagedTaskQueue(uint64_t hash);
-		~SceneManagedTaskQueue();
-		void Commit(ManagedTask&& task);
-		void InvokeAll();
-
-		static SceneManagedTaskQueue* GetSceneTask(uint64_t);
 	};
 }
 

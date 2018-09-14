@@ -2,7 +2,7 @@
 #include "Screen.h"
 #include "CommandContext.h"
 #include "DescriptorHeap.hpp"
-#include "Fence.hpp"
+#include "Fence.h"
 #include "ThreadPool.hpp"
 #include "DTimer.h"
 #include "DebugLog.h"
@@ -64,11 +64,11 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
-	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
-	procedure WaitForGpu();
-	procedure CreateCommonState();
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
+	void WaitForGpu();
+	void CreateCommonState();
 
-	procedure InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
 		uint32_t dxgiFactoryFlags = 0;
@@ -102,7 +102,7 @@ namespace AnEngine::RenderCore
 
 		while (graphicCardCount--)
 		{
-			GraphicsCard* aRender = new GraphicsCardWithRT();
+			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
 			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
@@ -117,7 +117,7 @@ namespace AnEngine::RenderCore
 		r_frameCount = 0;
 	}
 
-	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = r_SwapChainBufferCount_const;

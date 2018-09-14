@@ -18,7 +18,6 @@
 #define var auto
 #define let auto
 #define __FasterFunc(func) inline func __vectorcall
-#define procedure void
 
 #ifdef _WIN64
 

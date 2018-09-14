@@ -1,4 +1,4 @@
-#include "Fence.hpp"
+#include "Fence.h"
 #include "RenderCore.h"
 #include "DTimer.h"
 

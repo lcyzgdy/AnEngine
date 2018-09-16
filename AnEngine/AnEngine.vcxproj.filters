@@ -212,12 +212,6 @@
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Driver.h" />
-    <ClInclude Include="RayTracingPipeline.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="RayTracingHelper.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -229,9 +223,6 @@
     </ClInclude>
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
       <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="RaytracingHlslCompat.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.hpp">
       <Filter>Math</Filter>
@@ -256,6 +247,18 @@
     </ClInclude>
     <ClInclude Include="Fence.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingPipeline.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="RaytracingHlslCompat.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingHelper.hpp">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHelper.hpp">
+      <Filter>UTIL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +404,6 @@
     <ClCompile Include="DX.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="RayTracingPipeline.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game\Entity</Filter>
     </ClCompile>
@@ -412,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">
       <Filter>Game\System</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingPipeline.cpp">
+      <Filter>Graphics\DXR</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

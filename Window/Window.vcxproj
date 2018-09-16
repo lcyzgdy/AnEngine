@@ -76,6 +76,7 @@
     <IncludePath>$(SolutionDir)AnEngine\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\AnEngine\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

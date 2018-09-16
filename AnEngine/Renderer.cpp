@@ -81,7 +81,7 @@ namespace AnEngine::Game
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 
-		m_rootSignature = new RootSignature();
+		m_rootSignature = new RootSignature([]() {});
 
 		/*ComPtr<ID3DBlob> vertexShader;
 		ComPtr<ID3DBlob> pixelShader;

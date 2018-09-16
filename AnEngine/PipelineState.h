@@ -7,23 +7,22 @@
 
 namespace AnEngine::RenderCore
 {
-	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
-	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
-
 	class PipelineStateObject
 	{
 	protected:
 		//RootSignature m_rootSignature;
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState;
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature;
 
 	public:
 		PipelineStateObject();
 		~PipelineStateObject() = default;
 
 		ID3D12PipelineState* GetPSO();
-		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) = 0;
 
-		ID3D12PipelineState** operator&();
+		void SetRootSignature(std::function<void(CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&)> ParamInit);
+
+		ID3D12PipelineState** operator&() { return &m_pipelineState; }
 		//RootSignature* GetRootSignature();
 		//void SetRootSignature(const RootSignature& rootSignature);
 	};
@@ -37,7 +36,7 @@ namespace AnEngine::RenderCore
 		GraphicPSO();
 		~GraphicPSO() = default;
 
-		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
+		//virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
 		void SetBlendState(const D3D12_BLEND_DESC& blendDesc);
 		void SetRasterizerState(const D3D12_RASTERIZER_DESC& rasterizerDesc);
 		void SetDepthStencilState(const D3D12_DEPTH_STENCIL_DESC& depthStencilDesc);
@@ -73,7 +72,7 @@ namespace AnEngine::RenderCore
 		ComputePSO();
 		~ComputePSO() = default;
 
-		virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
+		//virtual void SetRootSignature(ID3D12RootSignature* rootSignature) override;
 		void SetComputeShader(const void* binary, size_t size);
 		void SetComputeShader(const D3D12_SHADER_BYTECODE& binary);
 

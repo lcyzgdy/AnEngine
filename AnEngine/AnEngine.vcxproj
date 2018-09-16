@@ -122,7 +122,7 @@
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
-      <DisableSpecificWarnings>4455;238</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4455;238;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -197,6 +197,7 @@
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="Fence.h" />
+    <ClInclude Include="FileHelper.hpp" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameObject.h" />
@@ -395,9 +396,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\CompiledShaders\%(Filename).hlsl.h</Outputs>
     </CustomBuild>
     <FxCompile Include="..\Assets\test.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GRS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RootSignature</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rootsig_1.1</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\Assets\test.hlsli">

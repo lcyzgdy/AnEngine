@@ -7,6 +7,12 @@ using namespace AnEngine::RenderCore;
 
 namespace AnEngine::RenderCore
 {
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
+}
+
+namespace AnEngine::RenderCore
+{
 	PipelineStateObject::PipelineStateObject() : m_pipelineState(nullptr)
 	{
 	}
@@ -16,9 +22,10 @@ namespace AnEngine::RenderCore
 		return m_pipelineState.Get();
 	}
 
-	ID3D12PipelineState** PipelineStateObject::operator&()
+	void PipelineStateObject::SetRootSignature(std::function<void(CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&)> ParamInit)
 	{
-		return &m_pipelineState;
+		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+		ParamInit(rootSignatureDesc);
 	}
 
 	/*RootSignature* PipelineStateObject::GetRootSignature()
@@ -31,6 +38,10 @@ namespace AnEngine::RenderCore
 		m_rootSignature = rootSignature;
 	}*/
 
+}
+
+namespace AnEngine::RenderCore
+{
 	GraphicPSO::GraphicPSO()
 	{
 		memset(&m_psoDesc, 0, sizeof(m_psoDesc));
@@ -40,10 +51,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.InputLayout.NumElements = 0;
 	}
 
-	void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	/*void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
-	}
+	}*/
 
 	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC& blendDesc)
 	{
@@ -208,20 +219,21 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
+}
 
-	/*--------------------------==============================----------------------------------*/
-
-
+/*--------------------------==============================----------------------------------*/
+namespace AnEngine::RenderCore
+{
 	ComputePSO::ComputePSO()
 	{
 		ZeroMemory(&m_psoDesc, sizeof(m_psoDesc));
 		m_psoDesc.NodeMask = 1;
 	}
 
-	void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
+	/*void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
-	}
+	}*/
 
 	void ComputePSO::SetComputeShader(const void* binary, size_t size)
 	{

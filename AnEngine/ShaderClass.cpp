@@ -3,6 +3,8 @@ using namespace std;
 
 namespace AnEngine::RenderCore
 {
+
+
 	Shader::Shader(const wstring& fileName, const string& invokeFunction, string&& shaderVersion)
 	{
 #if defined _DEBUG || defined DEBUG

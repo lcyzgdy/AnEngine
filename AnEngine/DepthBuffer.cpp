@@ -20,7 +20,7 @@ namespace AnEngine::RenderCore::Resource
 			dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2DMS;
 		}
 
-		if (m_dsvHandle[0].ptr == Resource::GpuVirtualAddressUnknown)
+		if (m_dsvHandle[0].ptr == Resource::S_GpuVirtualAddressUnknown)
 		{
 			m_dsvHandle[0] = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 			m_dsvHandle[1] = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
@@ -33,7 +33,7 @@ namespace AnEngine::RenderCore::Resource
 		DXGI_FORMAT stencilReadFormat = GetStencilFormat(format);
 		if (stencilReadFormat != DXGI_FORMAT_UNKNOWN)
 		{
-			if (m_dsvHandle[2].ptr == Resource::GpuVirtualAddressUnknown)
+			if (m_dsvHandle[2].ptr == Resource::S_GpuVirtualAddressUnknown)
 			{
 				m_dsvHandle[2] = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 				m_dsvHandle[3] = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
@@ -50,7 +50,7 @@ namespace AnEngine::RenderCore::Resource
 			m_dsvHandle[1] = m_dsvHandle[1];
 		}
 
-		if (m_depthSrvHandle.ptr == Resource::GpuVirtualAddressUnknown)
+		if (m_depthSrvHandle.ptr == Resource::S_GpuVirtualAddressUnknown)
 		{
 			m_depthSrvHandle = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		}
@@ -71,7 +71,7 @@ namespace AnEngine::RenderCore::Resource
 
 		if (stencilReadFormat != DXGI_FORMAT_UNKNOWN)
 		{
-			if (m_stencilSrvHandle.ptr == Resource::GpuVirtualAddressUnknown)
+			if (m_stencilSrvHandle.ptr == Resource::S_GpuVirtualAddressUnknown)
 			{
 				m_stencilSrvHandle = descAllocator->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 			}
@@ -83,12 +83,12 @@ namespace AnEngine::RenderCore::Resource
 	DepthBuffer::DepthBuffer(float clearDepth, uint8_t clearStencil) :
 		m_clearDepth(clearDepth), m_clearStencil(clearStencil)
 	{
-		m_dsvHandle[0].ptr = GpuVirtualAddressUnknown;
-		m_dsvHandle[1].ptr = GpuVirtualAddressUnknown;
-		m_dsvHandle[2].ptr = GpuVirtualAddressUnknown;
-		m_dsvHandle[3].ptr = GpuVirtualAddressUnknown;
-		m_depthSrvHandle.ptr = GpuVirtualAddressUnknown;
-		m_stencilSrvHandle.ptr = GpuVirtualAddressUnknown;
+		m_dsvHandle[0].ptr = S_GpuVirtualAddressUnknown;
+		m_dsvHandle[1].ptr = S_GpuVirtualAddressUnknown;
+		m_dsvHandle[2].ptr = S_GpuVirtualAddressUnknown;
+		m_dsvHandle[3].ptr = S_GpuVirtualAddressUnknown;
+		m_depthSrvHandle.ptr = S_GpuVirtualAddressUnknown;
+		m_stencilSrvHandle.ptr = S_GpuVirtualAddressUnknown;
 	}
 
 	void DepthBuffer::Create(const wstring& name, uint32_t _width, uint32_t _height,

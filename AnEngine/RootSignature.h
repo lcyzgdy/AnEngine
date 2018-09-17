@@ -34,7 +34,7 @@ namespace AnEngine::RenderCore
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature_cp;
 
 	public:
-		explicit RootSignature(std::function<void(ID3D12RootSignature**)> InitParams);
+		explicit RootSignature(ID3D12RootSignature* rootSignature);
 		RootSignature() = delete;
 		RootSignature(const RootSignature&) = delete;
 		~RootSignature() = default;

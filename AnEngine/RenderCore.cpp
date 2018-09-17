@@ -355,7 +355,7 @@ namespace AnEngine::RenderCore
 
 	void WaitForGpu()
 	{
-		var[fence] = FenceContext::GetInstance()->GetOne();
+		var[fence] = FenceContext::Instance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;

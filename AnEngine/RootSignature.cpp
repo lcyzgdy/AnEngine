@@ -86,7 +86,7 @@ namespace AnEngine::RenderCore
 {
 
 
-	RootSignature::RootSignature(function<void(ID3D12RootSignature**)> InitParams)
+	RootSignature::RootSignature(ID3D12RootSignature* rootSignature)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 		/*
@@ -97,16 +97,17 @@ namespace AnEngine::RenderCore
 		params[0].InitAsDescriptorTable(1, &range[0], D3D12_SHADER_VISIBILITY_ALL);
 		*/
 
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
+		//CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 		//rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 		//InitParams(rootSignatureDesc);
 
-		ComPtr<ID3DBlob> signature;
+		/*ComPtr<ID3DBlob> signature;
 		ComPtr<ID3DBlob> error;
 		ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
 
 		ThrowIfFailed(device->CreateRootSignature(r_graphicsCard[0]->GetNodeNum(), signature->GetBufferPointer(),
-			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp)));
+			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp)));*/
+		m_rootSignature_cp.Attach(rootSignature);
 	}
 
 	void RootSignature::Reset()

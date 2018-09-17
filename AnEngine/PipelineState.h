@@ -20,7 +20,8 @@ namespace AnEngine::RenderCore
 
 		ID3D12PipelineState* GetPSO();
 
-		void SetRootSignature(std::function<void(CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&)> ParamInit);
+		ID3D12RootSignature* GetRootSignature() { return m_rootSignature.Get(); }
+		void SetRootSignature(ID3D12RootSignature* rootSignature);
 
 		ID3D12PipelineState** operator&() { return &m_pipelineState; }
 		//RootSignature* GetRootSignature();
@@ -62,6 +63,8 @@ namespace AnEngine::RenderCore
 
 		void Finalize();
 		void Finalize(D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc);
+
+		static D3D12_RASTERIZER_DESC RastrizerDesc_Opaque;
 	};
 
 	class ComputePSO : public PipelineStateObject

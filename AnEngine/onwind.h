@@ -248,13 +248,15 @@ struct NonCopyable
 	NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
-template<typename T>
+template<class T>
 class Singleton : public NonCopyable
 {
 	inline static T* m_uniqueObj = nullptr;
 
+	template<class U> friend class Singleton;
+
 public:
-	static T* GetInstance()
+	static T* Instance()
 	{
 		if (m_uniqueObj == nullptr)
 		{

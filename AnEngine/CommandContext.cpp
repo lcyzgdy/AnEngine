@@ -138,19 +138,19 @@ namespace AnEngine::RenderCore
 
 	tuple<CommandList*, CommandAllocator*> ComputeContext::GetOne()
 	{
-		return move(GraphicsCommandContext::GetInstance()->GetOne());
+		return move(GraphicsCommandContext::Instance()->GetOne());
 	}
 
 	void ComputeContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
-		GraphicsCommandContext::GetInstance()->Push(list, allocator);
+		GraphicsCommandContext::Instance()->Push(list, allocator);
 	}
 
 	tuple<CommandList*, CommandAllocator*> GraphicsContext::GetOne()
 	{
-		return move(GraphicsCommandContext::GetInstance()->GetOne());
+		return move(GraphicsCommandContext::Instance()->GetOne());
 	}
 
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)
@@ -158,14 +158,14 @@ namespace AnEngine::RenderCore
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		var[fence] = FenceContext::GetInstance()->GetOne();
+		var[fence] = FenceContext::Instance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
 		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
 		fence->WaitForValue(fenceValue);
 
-		GraphicsCommandContext::GetInstance()->Push(list, allocator);
-		FenceContext::GetInstance()->Push(fence);
+		GraphicsCommandContext::Instance()->Push(list, allocator);
+		FenceContext::Instance()->Push(fence);
 	}
 }

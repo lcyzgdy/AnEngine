@@ -29,8 +29,8 @@ namespace AnEngine::RenderCore::Resource
 		m_elementCount(numElements), m_elementSize(elementSize)
 	{
 		m_resourceFlags = D3D12_RESOURCE_FLAG_NONE;
-		m_uav.ptr = GpuVirtualAddressUnknown;
-		m_srv.ptr = GpuVirtualAddressUnknown;
+		m_uav.ptr = S_GpuVirtualAddressUnknown;
+		m_srv.ptr = S_GpuVirtualAddressUnknown;
 
 		var device = r_graphicsCard[0]->GetDevice();
 		//D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
@@ -203,7 +203,7 @@ namespace AnEngine::RenderCore::Resource
 		srvDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
 		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
 
-		if (m_srv.ptr == GpuVirtualAddressUnknown)
+		if (m_srv.ptr == S_GpuVirtualAddressUnknown)
 		{
 			m_srv = DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		}
@@ -215,7 +215,7 @@ namespace AnEngine::RenderCore::Resource
 		uavDesc.Buffer.NumElements = (UINT)m_bufferSize / 4;
 		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
 
-		if (m_uav.ptr == GpuVirtualAddressUnknown)
+		if (m_uav.ptr == S_GpuVirtualAddressUnknown)
 			m_uav = DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		device->CreateUnorderedAccessView(m_resource_cp.Get(), nullptr, &uavDesc, m_uav);
 	}

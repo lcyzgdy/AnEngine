@@ -17,8 +17,8 @@ namespace AnEngine::RenderCore::Resource
 	ColorBuffer::ColorBuffer(const Color& clearColor) :
 		m_clearColor(clearColor), m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
 	{
-		m_rtvHandle.ptr = GpuVirtualAddressUnknown;
-		m_srvHandle.ptr = GpuVirtualAddressUnknown;
+		m_rtvHandle.ptr = S_GpuVirtualAddressUnknown;
+		m_srvHandle.ptr = S_GpuVirtualAddressUnknown;
 		memset(m_uavHandle, 0xff, sizeof(m_uavHandle));
 	}
 

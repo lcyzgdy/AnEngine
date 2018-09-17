@@ -441,7 +441,7 @@ namespace AnEngine::RenderCore::Resource
 			&resourceDesc, D3D12_RESOURCE_STATE_COMMON, &clearValue, IID_PPV_ARGS(m_resource_cp.GetAddressOf())));
 
 		m_usageState = D3D12_RESOURCE_STATE_COMMON;
-		m_gpuVirtualAddress = Resource::GpuVirtualAddressNull;
+		m_gpuVirtualAddress = Resource::S_GpuVirtualAddressNull;
 
 #ifndef RELEASE
 		m_resource_cp->SetName(name.c_str());
@@ -453,6 +453,6 @@ namespace AnEngine::RenderCore::Resource
 	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc,
 		D3D12_CLEAR_VALUE clearValue)
 	{
-		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::GpuVirtualAddressUnknown);
+		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::S_GpuVirtualAddressUnknown);
 	}
 }

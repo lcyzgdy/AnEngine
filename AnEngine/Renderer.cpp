@@ -81,7 +81,7 @@ namespace AnEngine::Game
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 
-		m_rootSignature = new RootSignature([]() {});
+		//m_rootSignature = new RootSignature([]() {});
 
 		/*ComPtr<ID3DBlob> vertexShader;
 		ComPtr<ID3DBlob> pixelShader;
@@ -121,7 +121,7 @@ namespace AnEngine::Game
 
 		m_pso = new GraphicPSO();
 		m_pso->SetInputLayout(_countof(inputElementDescs), inputElementDescs);
-		m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
+		//m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
 		m_pso->SetVertexShader(m_vertexShader->GetByteCode());
 		m_pso->SetPixelShader(m_pixelShader->GetByteCode());
 		m_pso->SetRasterizerState(CD3DX12_RASTERIZER_DESC(D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_BACK, false,

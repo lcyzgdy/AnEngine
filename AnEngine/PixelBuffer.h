@@ -34,7 +34,7 @@ namespace AnEngine::RenderCore::Resource
 
 		void CreateTextureResource(ID3D12Device* device, const wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue,
-			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = Resource::GpuVirtualAddressUnknown);
+			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = Resource::S_GpuVirtualAddressUnknown);
 
 		void CreateTextureResource(ID3D12Device* device, const wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue/*,EsramAllocator& allocator*/);

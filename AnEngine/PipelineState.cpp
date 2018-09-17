@@ -22,10 +22,9 @@ namespace AnEngine::RenderCore
 		return m_pipelineState.Get();
 	}
 
-	void PipelineStateObject::SetRootSignature(std::function<void(CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC&)> ParamInit)
+	void PipelineStateObject::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
-		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-		ParamInit(rootSignatureDesc);
+		m_rootSignature.Attach(rootSignature);
 	}
 
 	/*RootSignature* PipelineStateObject::GetRootSignature()
@@ -42,6 +41,13 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore
 {
+	D3D12_RASTERIZER_DESC GraphicPSO::RastrizerDesc_Opaque =
+	{
+		D3D12_FILL_MODE_SOLID,D3D12_CULL_MODE_BACK, FALSE, D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP,
+		D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS, TRUE, FALSE, FALSE, 0,
+		D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+	};
+
 	GraphicPSO::GraphicPSO()
 	{
 		memset(&m_psoDesc, 0, sizeof(m_psoDesc));

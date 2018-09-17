@@ -3,8 +3,6 @@ using namespace std;
 
 namespace AnEngine::RenderCore
 {
-
-
 	Shader::Shader(const wstring& fileName, const string& invokeFunction, string&& shaderVersion)
 	{
 #if defined _DEBUG || defined DEBUG
@@ -27,6 +25,18 @@ namespace AnEngine::RenderCore
 
 		ThrowIfFailed(D3DCompileFromFile(GetAssetFullPath(fileName).c_str(), nullptr, nullptr,
 			invokeFunction.c_str(), shaderVersion.c_str(), m_compileFlag, 0, &m_blob, nullptr));
+	}
+
+	Shader::Shader(const wstring& fileName)
+	{
+#ifdef _WIN64
+		//HANDLE file = CreateFileW(fileName.c_str(), GENERIC_READ, )
+#endif // _WIN32
+
+	}
+
+	Shader::Shader(wstring&& fileName)
+	{
 	}
 
 	D3D12_SHADER_BYTECODE Shader::GetByteCode()

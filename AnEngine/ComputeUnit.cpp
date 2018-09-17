@@ -10,20 +10,20 @@ namespace AnEngine::Game
 {
 	ComputeUnit::ComputeUnit(wstring&& csFileName)
 	{
-		m_rootSignature = new RootSignature();
+		//m_rootSignature = new RootSignature([]( (ID3D12RootSignature**)0 ) -> {});
 		m_cs = new ComputeShader(csFileName);
 		m_pso = new ComputePSO();
 		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
 		m_fence = new Fence();
 
-		m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
+		//m_pso->SetRootSignature(m_rootSignature->GetRootSignature());
 		m_pso->SetComputeShader(m_cs->GetByteCode());
 		m_pso->Finalize();
 	}
 
 	ComputeUnit::ComputeUnit(const wstring & csFileName)
 	{
-		m_rootSignature = new RootSignature();
+		//m_rootSignature = new RootSignature();
 		m_pso = new ComputePSO();
 		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE));
 		m_fence = new Fence();

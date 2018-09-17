@@ -32,11 +32,11 @@ namespace AnEngine::RenderCore::Resource
 		// 创建颜色缓冲区，如果提供了地址则不会分配内存。虚拟地址允许重命名缓冲器（对于跨越帧重用ESRAM特别有用）。？？
 		ColorBuffer(const std::wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 			DXGI_FORMAT format, D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT,
-			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
+			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = S_GpuVirtualAddressUnknown);
 		// 创建颜色缓冲区，提供MSAA支持。此时需要先渲染到内存中支持MSAA的一块缓冲区中，然后再提交到交换链中。
 		ColorBuffer(const std::wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 			uint32_t msaaSampleCount, DXGI_FORMAT format, D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT,
-			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
+			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = S_GpuVirtualAddressUnknown);
 		//ColorBuffer(const wstring& name, GraphicsCard* device, uint32_t frameIndex, IDXGISwapChain3* swapChain);
 		ColorBuffer(const std::wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
@@ -52,7 +52,7 @@ namespace AnEngine::RenderCore::Resource
 
 					// 创建颜色缓冲区，如果提供了地址则不会分配内存。虚拟地址允许重命名缓冲器（对于跨越帧重用ESRAM特别有用）。？？
 		void CreateArray(const std::wstring& name, uint32_t _width, uint32_t _height, uint32_t arrayCount,
-			DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = GpuVirtualAddressUnknown);
+			DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = S_GpuVirtualAddressUnknown);
 
 		// 获取CPU可访问的句柄
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSrv() const;
@@ -66,6 +66,8 @@ namespace AnEngine::RenderCore::Resource
 
 		void SetAsRenderTargetView();
 	};
+
+
 }
 
 #endif // !__COLORBUFFER_H__

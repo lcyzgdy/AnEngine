@@ -8,22 +8,23 @@ using namespace AnEngine::RenderCore::Resource;
 
 namespace AnEngine::RenderCore::Resource
 {
-	ColorBuffer::ColorBuffer() :
+	/*ColorBuffer::ColorBuffer() :
 		PixelBuffer(), m_clearColor(Color(0.0f, 0.0f, 0.0f)),
 		m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
 	{
-	}
+	}*/
 
-	ColorBuffer::ColorBuffer(const Color& clearColor) :
+	/*ColorBuffer::ColorBuffer(const Color& clearColor) :
 		m_clearColor(clearColor), m_numMipMaps(0), m_fragmentCount(1), m_sampleCount(1)
 	{
 		m_rtvHandle.ptr = S_GpuVirtualAddressUnknown;
 		m_srvHandle.ptr = S_GpuVirtualAddressUnknown;
 		memset(m_uavHandle, 0xff, sizeof(m_uavHandle));
-	}
+	}*/
 
 	ColorBuffer::ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
-		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : m_numMipMaps(numMips),
+		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : PixelBuffer(),
+		m_numMipMaps(numMips),
 		m_fragmentCount(1)
 	{
 		GraphicsCard* device = r_graphicsCard[0].get();

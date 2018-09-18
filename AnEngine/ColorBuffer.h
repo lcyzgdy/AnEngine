@@ -26,9 +26,9 @@ namespace AnEngine::RenderCore::Resource
 			uint32_t arraySize, uint32_t numMips = 1);
 
 	public:
-		ColorBuffer();
+		ColorBuffer() = delete;
 		//~ColorBuffer() = default;
-		ColorBuffer(const Color& clearColor);
+		//ColorBuffer(const Color& clearColor);
 		// 创建颜色缓冲区，如果提供了地址则不会分配内存。虚拟地址允许重命名缓冲器（对于跨越帧重用ESRAM特别有用）。？？
 		ColorBuffer(const std::wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
 			DXGI_FORMAT format, D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT,

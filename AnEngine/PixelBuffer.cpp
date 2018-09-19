@@ -13,45 +13,30 @@ namespace AnEngine::RenderCore::Resource
 	{
 	}
 
-	uint32_t PixelBuffer::GetWidth()
+	PixelBuffer::PixelBuffer(const D3D12_RESOURCE_DESC& desc) : m_width(desc.Width), m_height(desc.Height),
+		m_size(desc.DepthOrArraySize), m_format(desc.Format)
 	{
-		return m_width;
 	}
 
-	uint32_t PixelBuffer::GetHeight()
+	PixelBuffer::PixelBuffer(D3D12_RESOURCE_DESC&& desc) : m_width(desc.Width), m_height(desc.Height),
+		m_size(desc.DepthOrArraySize), m_format(desc.Format)
 	{
-		return m_height;
 	}
 
-	uint32_t PixelBuffer::GetDepth()
-	{
-		return m_size;
-	}
-
-	DXGI_FORMAT PixelBuffer::GetFormat()
-	{
-		return m_format;
-	}
-
-	void PixelBuffer::SetBankRotation(uint32_t rotationAmount)
-	{
-		m_bankRotation = rotationAmount;
-	}
-
-	D3D12_RESOURCE_DESC PixelBuffer::DescribeAsGBuffer()
+	D3D12_RESOURCE_DESC PixelBuffer::DescribeAsGBuffer(uint32_t width, uint32_t height)
 	{
 		D3D12_RESOURCE_DESC desc = {};
-		desc.Alignment = 0;
-		desc.DepthOrArraySize = 0;
+		desc.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
+		desc.DepthOrArraySize = 1;
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER | D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		desc.Height = 0;
+		desc.Height = height;
 		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 		desc.MipLevels = 0;
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = 0;
-		desc.Width = 0;
+		desc.Width = width;
 		return desc;
 	}
 

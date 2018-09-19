@@ -42,18 +42,20 @@ namespace AnEngine::RenderCore::Resource
 	public:
 		PixelBuffer() = delete;
 		PixelBuffer(uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format);
-		//virtual ~PixelBuffer() = default;
+		PixelBuffer(const D3D12_RESOURCE_DESC& desc);
+		PixelBuffer(D3D12_RESOURCE_DESC&& desc);
+		virtual ~PixelBuffer() = default;
 
-		uint32_t GetWidth();
-		uint32_t GetHeight();
-		uint32_t GetDepth();
-		DXGI_FORMAT GetFormat();
+		uint32_t GetWidth() { return m_width; }
+		uint32_t GetHeight() { return m_height; }
+		uint32_t GetDepth() { return m_size; }
+		DXGI_FORMAT GetFormat() { return m_format; }
 
-		void SetBankRotation(uint32_t rotationAmount);
+		void SetBankRotation(uint32_t rotationAmount) { m_bankRotation = rotationAmount; }
 
 		//void ExportToFile(wstring& filePath, ID3D12Device* device);
 
-		static D3D12_RESOURCE_DESC DescribeAsGBuffer();
+		static D3D12_RESOURCE_DESC DescribeAsGBuffer(uint32_t width, uint32_t height);
 	};
 }
 

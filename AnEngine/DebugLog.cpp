@@ -18,23 +18,36 @@ namespace AnEngine::Debug
 	void Log(wstring l)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		fout << l << endl;
+		fout << "[Log] " << l << endl;
 	}
 
 	void Log(const wstring& l)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		fout << l << endl;
+		fout << "[Log] " << l << endl;
 	}
 
 	void Log(wstring&& l)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		fout << l << endl;
+		fout << "[Log] " << l << endl;
 	}
+
 	void Log(uint32_t u)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		fout << u << endl;
+		fout << "[Log] " << u << endl;
+	}
+
+	void LogError(const wstring& l)
+	{
+		lock_guard<mutex> lock(m_mutex);
+		fout << "[Error] " << l << endl;
+	}
+
+	void LogError(wstring&& l)
+	{
+		lock_guard<mutex> lock(m_mutex);
+		fout << "[Error] " << l << endl;
 	}
 }

@@ -17,7 +17,7 @@ namespace AnEngine::RenderCore::Resource
 		//Fence* m_fence;
 	protected:
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource_cp;
-		Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;
+		//Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;
 		D3D12_RESOURCE_STATES m_state;
 		D3D12_GPU_VIRTUAL_ADDRESS m_gpuVirtualAddress;
 

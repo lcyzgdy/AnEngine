@@ -83,16 +83,18 @@ namespace AnEngine::Game
 	Camera::Camera() : ObjectBehaviour(), m_clearFlag(ClearFlags::SkyBox)
 	{
 		{
-			var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
-				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+			/*var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);*/
+			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::GetInstance()->Width(), Screen::GetInstance()->Height()));
 			colorBuffer->SetAsRenderTargetView();
 			//m_depthBuffer = new DepthBuffer(0, 0);
 
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 		{
-			var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
-				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+			/*var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
+				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);*/
+			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::GetInstance()->Width(), Screen::GetInstance()->Height()));
 			colorBuffer->SetAsRenderTargetView();
 
 			m_colorBuffers.ManageBuffer(colorBuffer);

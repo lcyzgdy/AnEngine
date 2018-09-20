@@ -3,7 +3,7 @@
 
 namespace AnEngine::RenderCore::Resource
 {
-	void DepthBuffer::CreateDerviedViews(ID3D12Device* device, DXGI_FORMAT & format,
+	/*void DepthBuffer::CreateDerviedViews(ID3D12Device* device, DXGI_FORMAT & format,
 		Heap::DescriptorHeapAllocator* descAllocator)
 	{
 		ID3D12Resource* resource = m_resource_cp.Get();
@@ -78,20 +78,25 @@ namespace AnEngine::RenderCore::Resource
 			srvDesc.Format = stencilReadFormat;
 			device->CreateShaderResourceView(resource, &srvDesc, m_depthSrvHandle);
 		}
-	}
+	}*/
 
-	DepthBuffer::DepthBuffer(float clearDepth, uint8_t clearStencil) :
-		m_clearDepth(clearDepth), m_clearStencil(clearStencil)
+	DepthBuffer::DepthBuffer(uint32_t width, uint32_t height, float clearDepth) :
+		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_clearDepth(clearDepth)
 	{
 		m_dsvHandle[0].ptr = S_GpuVirtualAddressUnknown;
 		m_dsvHandle[1].ptr = S_GpuVirtualAddressUnknown;
 		m_dsvHandle[2].ptr = S_GpuVirtualAddressUnknown;
 		m_dsvHandle[3].ptr = S_GpuVirtualAddressUnknown;
 		m_depthSrvHandle.ptr = S_GpuVirtualAddressUnknown;
-		m_stencilSrvHandle.ptr = S_GpuVirtualAddressUnknown;
+		//m_stencilSrvHandle.ptr = S_GpuVirtualAddressUnknown;
+
+		var device = r_graphicsCard[0]->GetDevice();
+		device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES | D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER, 
+			nullptr, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&m_resource_cp));
 	}
 
-	void DepthBuffer::Create(const wstring& name, uint32_t _width, uint32_t _height,
+	/*void DepthBuffer::Create(const wstring& name, uint32_t _width, uint32_t _height,
 		DXGI_FORMAT& format, Heap::DescriptorHeapAllocator* descAllocator,
 		uint32_t numSamples, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
@@ -103,45 +108,5 @@ namespace AnEngine::RenderCore::Resource
 		clearValue.Format = format;
 		CreateTextureResource(device, name, desc, clearValue, vidMemPtr);
 		CreateDerviedViews(device, format, descAllocator);
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDsv() const
-	{
-		return m_dsvHandle[0];
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDsvDepthReadOnly() const
-	{
-		return m_dsvHandle[1];
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDsvStencilReadOnly() const
-	{
-		return m_dsvHandle[2];
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDsvReadOnly() const
-	{
-		return m_dsvHandle[3];
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDepthSrv() const
-	{
-		return m_depthSrvHandle;
-	}
-
-	inline const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetStencilSrv() const
-	{
-		return m_stencilSrvHandle;
-	}
-
-	inline float DepthBuffer::GetClearDepth() const
-	{
-		return m_clearDepth;
-	}
-
-	inline uint8_t DepthBuffer::GetClearStencil() const
-	{
-		return m_clearStencil;
-	}
+	}*/
 }

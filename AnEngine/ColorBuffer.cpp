@@ -23,8 +23,8 @@ namespace AnEngine::RenderCore::Resource
 	}*/
 
 	ColorBuffer::ColorBuffer(const wstring& name, uint32_t width, uint32_t height, uint32_t numMips,
-		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) : PixelBuffer(),
-		m_numMipMaps(numMips), m_fragmentCount(1)
+		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) :
+		PixelBuffer(width, height, 1, format), m_numMipMaps(numMips), m_fragmentCount(1)
 	{
 		GraphicsCard* device = r_graphicsCard[0].get();
 
@@ -81,14 +81,16 @@ namespace AnEngine::RenderCore::Resource
 
 	ColorBuffer::ColorBuffer(const D3D12_RESOURCE_DESC& desc) : PixelBuffer(desc)
 	{
+		ThrowIfFailed(r_graphicsCard[0]->GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, &desc, D3D12_RESOURCE_STATE_COMMON, nullptr,
+			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
 	ColorBuffer::ColorBuffer(D3D12_RESOURCE_DESC&& desc) : PixelBuffer(desc)
 	{
-		ThrowIfFailed(
-			r_graphicsCard[0]->GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-				D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, forward(desc), D3D12_RESOURCE_STATE_COMMON, nullptr,
-				IID_PPV_ARGS(&m_resource_cp)));
+		ThrowIfFailed(r_graphicsCard[0]->GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, &desc, D3D12_RESOURCE_STATE_COMMON, nullptr,
+			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
 	/*ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle)

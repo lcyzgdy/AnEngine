@@ -13,9 +13,6 @@ namespace AnEngine::RenderCore::Resource
 	{
 	protected:
 		//Color m_clearColor;
-		D3D12_CPU_DESCRIPTOR_HANDLE m_srvHandle;
-		D3D12_CPU_DESCRIPTOR_HANDLE m_rtvHandle;
-		D3D12_CPU_DESCRIPTOR_HANDLE m_uavHandle[12];
 		uint32_t m_numMipMaps;	//子纹理层数量
 		uint32_t m_fragmentCount;
 		uint32_t m_sampleCount;
@@ -64,8 +61,6 @@ namespace AnEngine::RenderCore::Resource
 		//void SetClearColor(Color clearColor);
 		//void SetMsaaMode(uint32_t numColorSample, uint32_t numCoverageSample);
 		//Color GetClearColor() const;
-
-		void SetAsRenderTargetView();
 	};
 
 

@@ -148,19 +148,4 @@ namespace AnEngine::RenderCore::Resource
 	{
 		return m_clearColor;
 	}*/
-
-	void ColorBuffer::SetAsRenderTargetView()
-	{
-		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-
-		//Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(device->GetDevice());
-		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		var aaa = m_resource_cp->GetDesc();
-		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, handle);
-		//m_rtvHandle = rtv->GetHandle().GetCpuHandle();
-		m_rtvHandle = handle;
-		//rtv->OffsetHandle(device->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
-
-		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
-	}
 }

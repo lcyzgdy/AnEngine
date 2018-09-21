@@ -86,7 +86,7 @@ namespace AnEngine::Game
 			/*var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);*/
 			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::GetInstance()->Width(), Screen::GetInstance()->Height()));
-			colorBuffer->SetAsRenderTargetView();
+			colorBuffer->SetAsRtv();
 			//m_depthBuffer = new DepthBuffer(0, 0);
 
 			m_colorBuffers.ManageBuffer(colorBuffer);
@@ -95,7 +95,7 @@ namespace AnEngine::Game
 			/*var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);*/
 			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::GetInstance()->Width(), Screen::GetInstance()->Height()));
-			colorBuffer->SetAsRenderTargetView();
+			colorBuffer->SetAsRtv();
 
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
@@ -107,12 +107,12 @@ namespace AnEngine::Game
 		//m_colorBuffer->Create(this->name, Screen::GetInstance()->Width(), Screen::GetInstance()->Height(), DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UINT);
 		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
-		colorBuffer->SetAsRenderTargetView();
+		colorBuffer->SetAsRtv();
 		m_colorBuffers.ManageBuffer(colorBuffer);
 
 		colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
-		colorBuffer->SetAsRenderTargetView();
+		colorBuffer->SetAsRtv();
 		m_colorBuffers.ManageBuffer(colorBuffer);
 
 		m_depthBuffer = new DepthBuffer(0, 0);
@@ -124,14 +124,14 @@ namespace AnEngine::Game
 			var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 			colorBuffer->SetClearColor(Color::Blue);
-			colorBuffer->SetAsRenderTargetView();
+			colorBuffer->SetAsRtv();
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 		//m_depthBuffer = new DepthBuffer(0, 0);
 		{
 			var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 				Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
-			colorBuffer->SetAsRenderTargetView();
+			colorBuffer->SetAsRtv();
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 	}
@@ -141,13 +141,13 @@ namespace AnEngine::Game
 		var colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 		colorBuffer->SetClearColor(Color::Blue);
-		colorBuffer->SetAsRenderTargetView();
+		colorBuffer->SetAsRtv();
 		m_depthBuffer = new DepthBuffer(0, 0);
 
 		m_colorBuffers.ManageBuffer(colorBuffer);
 		colorBuffer = new ColorBuffer(L"", Screen::GetInstance()->Width(),
 			Screen::GetInstance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
-		colorBuffer->SetAsRenderTargetView();
+		colorBuffer->SetAsRtv();
 		m_colorBuffers.ManageBuffer(colorBuffer);
 	}*/
 

@@ -80,6 +80,23 @@ namespace AnEngine::RenderCore::Resource
 		}
 	}*/
 
+	D3D12_RESOURCE_DESC DepthBuffer::DescribeAsDepthBuffer()
+	{
+		D3D12_RESOURCE_DESC desc;
+		desc.Width = m_width;
+		desc.Height = m_height;
+		desc.Format = m_format;
+		desc.DepthOrArraySize = 1;
+		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		desc.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
+		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER | D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+		desc.MipLevels = 0;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
+		return desc;
+	}
+
 	DepthBuffer::DepthBuffer(uint32_t width, uint32_t height, float clearDepth) :
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_clearDepth(clearDepth)
 	{
@@ -92,8 +109,8 @@ namespace AnEngine::RenderCore::Resource
 
 		var device = r_graphicsCard[0]->GetDevice();
 		device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES | D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER, 
-			nullptr, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&m_resource_cp));
+			D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES | D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER,
+			&DescribeAsDepthBuffer(), D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&m_resource_cp));
 	}
 
 	/*void DepthBuffer::Create(const wstring& name, uint32_t _width, uint32_t _height,

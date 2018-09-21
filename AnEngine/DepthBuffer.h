@@ -18,7 +18,7 @@ namespace AnEngine::RenderCore::Resource
 
 		/*void CreateDerviedViews(ID3D12Device* device, DXGI_FORMAT& format,
 			Heap::DescriptorHeapAllocator* descAllocator);*/
-
+		D3D12_RESOURCE_DESC DescribeAsDepthBuffer();
 	public:
 		DepthBuffer() = delete;
 		DepthBuffer(uint32_t width, uint32_t height, float clearDepth = 0.0f);

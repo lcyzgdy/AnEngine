@@ -16,6 +16,11 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t m_bankRotation;
 		DXGI_FORMAT m_format;
 
+		D3D12_CPU_DESCRIPTOR_HANDLE m_rtvHandle;
+		D3D12_CPU_DESCRIPTOR_HANDLE m_dsvHandle;
+		D3D12_CPU_DESCRIPTOR_HANDLE m_srvHandle;
+		D3D12_CPU_DESCRIPTOR_HANDLE m_uavHandle[12];
+
 		static DXGI_FORMAT GetBaseFormat(DXGI_FORMAT format);
 		static DXGI_FORMAT GetUAVFormat(DXGI_FORMAT format);
 		static DXGI_FORMAT GetDSVFormat(DXGI_FORMAT format);
@@ -56,6 +61,9 @@ namespace AnEngine::RenderCore::Resource
 		//void ExportToFile(wstring& filePath, ID3D12Device* device);
 
 		static D3D12_RESOURCE_DESC DescribeAsGBuffer(uint32_t width, uint32_t height);
+
+		void SetAsRtv();
+		void SetAsDsv();
 	};
 }
 

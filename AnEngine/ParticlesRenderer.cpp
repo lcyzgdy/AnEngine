@@ -282,7 +282,7 @@ namespace AnEngine::Game
 
 		iList->ResourceBarrier(1, &commonToRenderTarget);
 
-		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_renderTarget->GetRTV());
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_renderTarget->GetRtv());
 		iList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 		iList->ClearRenderTargetView(rtvHandle, r_ClearColor_const_float, 0, nullptr);
 

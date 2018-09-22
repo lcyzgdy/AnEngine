@@ -7,12 +7,6 @@ using namespace AnEngine::RenderCore::Heap;
 
 namespace AnEngine::RenderCore::Resource
 {
-	/*PixelBuffer::PixelBuffer() :
-		m_width(0), m_height(0), m_format(DXGI_FORMAT_UNKNOWN), m_bankRotation(0),
-		m_size(0), GpuResource()
-	{
-	}*/
-
 	PixelBuffer::PixelBuffer(uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format) :
 		m_width(width), m_height(height), m_size(depthOrArraySize), m_format(format)
 	{
@@ -28,36 +22,12 @@ namespace AnEngine::RenderCore::Resource
 	{
 	}
 
-	D3D12_RESOURCE_DESC PixelBuffer::DescribeAsGBuffer(uint32_t width, uint32_t height)
-	{
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
-		desc.DepthOrArraySize = 1;
-		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER | D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		desc.Height = height;
-		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-		desc.MipLevels = 0;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = 0;
-		desc.Width = width;
-		return desc;
-	}
-
 	void PixelBuffer::SetAsRtv()
 	{
 		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-
-		//Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>* rtv = new Heap::DescriptorHeap<D3D12_DESCRIPTOR_HEAP_TYPE_RTV>(device->GetDevice());
 		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		//var aaa = m_resource_cp->GetDesc();
 		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, handle);
-		//m_rtvHandle = rtv->GetHandle().GetCpuHandle();
 		m_rtvHandle = handle;
-		//rtv->OffsetHandle(device->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
-
-		//m_fence = new Fence(r_graphicsCard[0]->GetCommandQueue());
 	}
 
 	void PixelBuffer::SetAsDsv()
@@ -66,6 +36,14 @@ namespace AnEngine::RenderCore::Resource
 		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 		device->CreateDepthStencilView(m_resource_cp.Get(), nullptr, handle);
 		m_dsvHandle = handle;
+	}
+
+	void PixelBuffer::SetAsSrv()
+	{
+		var device = r_graphicsCard[0]->GetDevice();
+		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		device->CreateShaderResourceView(m_resource_cp.Get(), nullptr, handle);
+		m_srvHandle = handle;
 	}
 
 	/*void PixelBuffer::ExportToFile(wstring & filePath, ID3D12Device* device)

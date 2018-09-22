@@ -19,7 +19,6 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_CPU_DESCRIPTOR_HANDLE m_rtvHandle;
 		D3D12_CPU_DESCRIPTOR_HANDLE m_dsvHandle;
 		D3D12_CPU_DESCRIPTOR_HANDLE m_srvHandle;
-		D3D12_CPU_DESCRIPTOR_HANDLE m_uavHandle[12];
 
 		static DXGI_FORMAT GetBaseFormat(DXGI_FORMAT format);
 		static DXGI_FORMAT GetUAVFormat(DXGI_FORMAT format);
@@ -34,15 +33,12 @@ namespace AnEngine::RenderCore::Resource
 		static D3D12_RESOURCE_DESC DescribeMsaaTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize,
 			uint32_t numMips, DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& msaaQl);
 
-		/*void AssociateWithResource(ID3D12Device* device, const wstring& name,
-			ID3D12Resource* resource, D3D12_RESOURCE_STATES currentState);*/
-
 		void CreateTextureResource(ID3D12Device* device, const wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue,
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = Resource::S_GpuVirtualAddressUnknown);
 
 		void CreateTextureResource(ID3D12Device* device, const wstring& name,
-			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue/*,EsramAllocator& allocator*/);
+			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue);
 
 	public:
 		PixelBuffer() = delete;
@@ -58,12 +54,9 @@ namespace AnEngine::RenderCore::Resource
 
 		void SetBankRotation(uint32_t rotationAmount) { m_bankRotation = rotationAmount; }
 
-		//void ExportToFile(wstring& filePath, ID3D12Device* device);
-
-		static D3D12_RESOURCE_DESC DescribeAsGBuffer(uint32_t width, uint32_t height);
-
 		void SetAsRtv();
 		void SetAsDsv();
+		void SetAsSrv();
 	};
 }
 

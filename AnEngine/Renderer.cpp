@@ -167,10 +167,10 @@ namespace AnEngine::Game
 		iList->RSSetViewports(1, &m_viewport);
 		iList->RSSetScissorRects(1, &m_scissorRect);
 
-		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
-		//iList->ClearRenderTargetView(m_renderTarget->GetRTV(), { 0.0f, 0.0f, 0, 1 }, 0, nullptr);
+		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRtv()), false, nullptr);
+		//iList->ClearRenderTargetView(m_renderTarget->GetRtv(), { 0.0f, 0.0f, 0, 1 }, 0, nullptr);
 		//float color[4] = { 0, 0, 0, 1 };
-		//iList->ClearRenderTargetView(m_renderTarget->GetRTV(), color, 0, nullptr);
+		//iList->ClearRenderTargetView(m_renderTarget->GetRtv(), color, 0, nullptr);
 		iList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		iList->IASetVertexBuffers(0, 1, &(m_vertexBuffer->VertexBufferView()));
 		iList->DrawInstanced(3, 1, 0, 0);

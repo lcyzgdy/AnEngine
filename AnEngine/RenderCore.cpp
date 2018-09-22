@@ -298,7 +298,7 @@ namespace AnEngine::RenderCore
 		//iList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
-		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRTV(), clearColor, 0, nullptr);
+		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
@@ -331,7 +331,7 @@ namespace AnEngine::RenderCore
 
 		iList->ResourceBarrier(barrier1.size(), barrier1.begin());
 		float color[4] = { 0, 0, 0, 1 };
-		iList->ClearRenderTargetView(r_displayPlane[frameIndex]->GetRTV(), color, 0, nullptr);
+		iList->ClearRenderTargetView(r_displayPlane[frameIndex]->GetRtv(), color, 0, nullptr);
 		iList->ResolveSubresource(frame, 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 		iList->ResourceBarrier(barrier2.size(), barrier2.begin());
 

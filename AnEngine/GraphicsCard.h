@@ -73,17 +73,17 @@ namespace AnEngine::RenderCore
 		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		const ID3D12Device* GetDevice() const;
-		ID3D12Device* GetDevice();
-		uint32_t GetNodeNum();
+		const ID3D12Device* GetDevice() const { return m_device_cp.Get(); }
+		ID3D12Device* GetDevice() { return m_device_cp.Get(); }
+		uint32_t GetNodeNum() { return m_node; }
 		void ExecuteSync(_In_ uint32_t num, _In_reads_(num) ID3D12CommandList *const *ppCommandLists, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
-		void IsStable(bool isStable);
+		void IsStable(bool isStable) { m_stableFlag = isStable; }
 
-		void GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		void GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		//void GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+		//void GpuSignal(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
-		HRESULT GetDeviceRemovedReason();
+		HRESULT GetDeviceRemovedReason() { return m_device_cp->GetDeviceRemovedReason(); }
 	};
 }
 

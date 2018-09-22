@@ -14,7 +14,6 @@ namespace AnEngine::RenderCore
 
 	GraphicsCommandContext::GraphicsCommandContext()
 	{
-
 	}
 
 	GraphicsCommandContext::~GraphicsCommandContext()
@@ -63,24 +62,6 @@ namespace AnEngine::RenderCore
 		m_alloPool.push(allo);
 	}
 }
-/*
-namespace AnEngine::RenderCore
-{
-	ContextTask::ContextTask(CommandList * list, CommandAllocator * allocator, Fence * sync) : m_list(list), m_allo(allocator), m_syncObject(sync)
-	{
-	}
-
-	ContextTask::ContextTask(std::tuple<CommandList*, CommandAllocator*, Fence*>&& tp) : m_list(get<CommandList*>(tp)),
-		m_allo(get<CommandAllocator*>(tp)), m_syncObject(get<Fence*>(tp))
-	{
-	}
-
-	void ContextTask::Run()
-	{
-		ID3D12CommandList* lists[] = { m_list->GetCommandList() };
-		r_graphicsCard[0]->ExecuteSync(_countof(lists), lists);
-	}
-}*/
 
 namespace AnEngine::RenderCore::Private
 {
@@ -150,7 +131,7 @@ namespace AnEngine::RenderCore
 
 	tuple<CommandList*, CommandAllocator*> GraphicsContext::GetOne()
 	{
-		return move(GraphicsCommandContext::Instance()->GetOne());
+		return GraphicsCommandContext::Instance()->GetOne();
 	}
 
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)

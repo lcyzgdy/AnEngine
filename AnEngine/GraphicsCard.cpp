@@ -102,21 +102,6 @@ namespace AnEngine::RenderCore
 		}
 	}
 
-	const ID3D12Device* GraphicsCard::GetDevice() const
-	{
-		return m_device_cp.Get();
-	}
-
-	ID3D12Device * GraphicsCard::GetDevice()
-	{
-		return m_device_cp.Get();
-	}
-
-	uint32_t GraphicsCard::GetNodeNum()
-	{
-		return m_node;
-	}
-
 	void GraphicsCard::ExecuteSync(uint32_t num, ID3D12CommandList * const * ppCommandLists, D3D12_COMMAND_LIST_TYPE type)
 	{
 		//lock_guard<std::mutex> lock(m_execMutex);
@@ -142,12 +127,7 @@ namespace AnEngine::RenderCore
 		}
 	}
 
-	void GraphicsCard::IsStable(bool isStable)
-	{
-		m_stableFlag = isStable;
-	}
-
-	void GraphicsCard::GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type)
+	/*void GraphicsCard::GpuWait(ID3D12Fence* fence, uint64_t value, D3D12_COMMAND_LIST_TYPE type)
 	{
 		ID3D12CommandQueue* commandQueue = GetCommandQueue(type);
 		commandQueue->Wait(fence, value);
@@ -157,12 +137,7 @@ namespace AnEngine::RenderCore
 	{
 		ID3D12CommandQueue* commandQueue = GetCommandQueue(type);
 		commandQueue->Signal(fence, value);
-	}
-
-	HRESULT GraphicsCard::GetDeviceRemovedReason()
-	{
-		return m_device_cp->GetDeviceRemovedReason();
-	}
+	}*/
 
 	const ID3D12CommandQueue* GraphicsCard::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
 	{

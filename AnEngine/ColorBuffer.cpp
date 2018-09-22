@@ -93,59 +93,26 @@ namespace AnEngine::RenderCore::Resource
 			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
-	/*ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle)
-	{
-		var device = r_graphicsCard[0]->GetDevice();
-		// 和资源进行关联，状态是present（呈现）。
-		AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
-		m_rtvHandle = handle;
-		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, m_rtvHandle);
-	}*/
 
-	/*D3D12_RESOURCE_FLAGS ColorBuffer::CombineResourceFlags() const
-	{
-		return D3D12_RESOURCE_FLAGS();
-	}*/
 
-	/*uint32_t ColorBuffer::ComputeNumMips(uint32_t width, uint32_t height)
-	{
-		return uint32_t();
-	}*/
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/*void ColorBuffer::CreateDerivedViews(ID3D12Device* device, DXGI_FORMAT format, uint32_t arraySize, uint32_t numMips)
-	{
-	}*/
 
-	/*void ColorBuffer::Create(const wstring & name, uint32_t _width, uint32_t _height, uint32_t numMips, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
-	{
-	}*/
 
-	/*void ColorBuffer::CreateArray(const wstring& name, uint32_t _width, uint32_t _height, uint32_t arrayCount, DXGI_FORMAT format, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
+	D3D12_RESOURCE_DESC ColorBuffer::DescribeAsGBuffer(uint32_t width, uint32_t height)
 	{
-	}*/
-
-	const D3D12_CPU_DESCRIPTOR_HANDLE& ColorBuffer::GetRTV() const
-	{
-		return m_rtvHandle;
+		D3D12_RESOURCE_DESC desc = {};
+		desc.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
+		desc.DepthOrArraySize = 1;
+		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_CROSS_ADAPTER | D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.Height = height;
+		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+		desc.MipLevels = 0;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
+		desc.Width = width;
+		return desc;
 	}
-
-	const D3D12_CPU_DESCRIPTOR_HANDLE& ColorBuffer::GetUav() const
-	{
-		return m_uavHandle[0];
-	}
-
-	/*void ColorBuffer::SetClearColor(Color clearColor)
-	{
-		m_clearColor = clearColor;
-	}*/
-
-	/*void ColorBuffer::SetMsaaMode(uint32_t numColorSample, uint32_t numCoverageSample)
-	{
-
-	}*/
-
-	/*Color ColorBuffer::GetClearColor() const
-	{
-		return m_clearColor;
-	}*/
 }

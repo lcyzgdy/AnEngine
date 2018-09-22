@@ -100,13 +100,6 @@ namespace AnEngine::RenderCore::Resource
 	DepthBuffer::DepthBuffer(uint32_t width, uint32_t height, float clearDepth) :
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_clearDepth(clearDepth)
 	{
-		m_dsvHandle[0].ptr = S_GpuVirtualAddressUnknown;
-		m_dsvHandle[1].ptr = S_GpuVirtualAddressUnknown;
-		m_dsvHandle[2].ptr = S_GpuVirtualAddressUnknown;
-		m_dsvHandle[3].ptr = S_GpuVirtualAddressUnknown;
-		m_depthSrvHandle.ptr = S_GpuVirtualAddressUnknown;
-		//m_stencilSrvHandle.ptr = S_GpuVirtualAddressUnknown;
-
 		var device = r_graphicsCard[0]->GetDevice();
 		device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES | D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER,

@@ -13,39 +13,29 @@ namespace AnEngine::RenderCore
 	class Fence
 	{
 		Microsoft::WRL::ComPtr<ID3D12Fence> m_fence;
-		//uint64_t m_fenceValue;
-		//ID3D12CommandQueue* m_commandQueue;
 #ifdef _WIN32
 		// HANDLE m_fenceEvent;
 		Microsoft::WRL::Wrappers::Event m_fenceEvent;
 #else
 		std::condition_variable m_fenceEvent;
 #endif // _WIN32
-		//uint64_t m_fenceValue;
-		//uint64_t m_curFenceValue;
 		uint64_t m_fenceValue;
-		uint64_t m_curFenceValue;
+		uint64_t m_completeValue;
 
 		std::mutex m_mutex;
 
 	public:
-		//explicit Fence(ID3D12CommandQueue* targetQueue);
 		Fence();
 		~Fence();
 
-		ID3D12Fence* GetFence();
-		uint64_t GetFenceValue();
-
-		ID3D12Fence* operator->();
-
-		//void CpuWait(uint64_t semap);
-		//void CpuSignal(uint64_t semap);
-
-		//void GpuWait(uint64_t semap);
-		//void GpuSignal(uint64_t semap);
+		ID3D12Fence* GetFence() { return m_fence.Get(); }
+		uint64_t GetFenceValue() { return m_fenceValue; }
 
 		void WaitForGpu();
 		void WaitForValue(uint64_t fenceValue);
+
+		void SetCompeteValue(uint64_t fenceValue) { m_fenceValue = fenceValue; }
+		bool Complete() { return m_fence->GetCompletedValue() >= m_fenceValue; }
 	};
 }
 

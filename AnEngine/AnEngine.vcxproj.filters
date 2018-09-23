@@ -211,7 +211,6 @@
     <ClInclude Include="Color.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Driver.h" />
     <ClInclude Include="DX.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -260,6 +259,10 @@
     <ClInclude Include="FileHelper.hpp">
       <Filter>UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="FenceContext.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -400,7 +403,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="DX.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -416,6 +418,10 @@
     <ClCompile Include="RayTracingPipeline.cpp">
       <Filter>Graphics\DXR</Filter>
     </ClCompile>
+    <ClCompile Include="FenceContext.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

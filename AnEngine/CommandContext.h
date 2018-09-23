@@ -63,18 +63,6 @@ namespace AnEngine::RenderCore::Private
 
 namespace AnEngine::RenderCore
 {
-	class FenceContext : public ::Singleton<FenceContext>, public IContext<Fence*>
-	{
-		std::queue<Fence*> m_pool;
-	public:
-		// 通过 IContext 继承
-		virtual std::tuple<Fence*> GetOne() override;
-		virtual void Push(Fence* fence) override;
-	};
-}
-
-namespace AnEngine::RenderCore
-{
 	class ComputeContext
 	{
 	public:

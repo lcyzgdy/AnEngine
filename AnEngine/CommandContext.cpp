@@ -2,6 +2,7 @@
 #include "GraphicsCard.h"
 #include "RenderCore.h"
 #include "ManagedTask.hpp"
+#include "FenceContext.h"
 #include <functional>
 
 #define in :
@@ -85,31 +86,13 @@ namespace AnEngine::RenderCore::Private
 		m_alloPool.pop();
 		return { list, allocator };
 	}
+
 	void ComputeCommandContext::Push(CommandList* list, CommandAllocator* allo)
 	{
 		lock_guard<mutex> lockw(m_writerMutex);
 		lock_guard<mutex> lock(m_mutex);
 		m_pool.push(list);
 		m_alloPool.push(allo);
-	}
-}
-namespace AnEngine::RenderCore
-{
-	std::tuple<Fence*> FenceContext::GetOne()
-	{
-		if (m_pool.empty())
-		{
-			var p = new Fence();
-			return p;
-		}
-		var p = m_pool.front();
-		m_pool.pop();
-		return { p };
-	}
-
-	void FenceContext::Push(Fence* fence)
-	{
-		m_pool.push(fence);
 	}
 }
 
@@ -144,7 +127,7 @@ namespace AnEngine::RenderCore
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
 		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
-		fence->WaitForValue(fenceValue);
+		//fence->WaitForValue(fenceValue);
 
 		GraphicsCommandContext::Instance()->Push(list, allocator);
 		FenceContext::Instance()->Push(fence);

@@ -12,7 +12,7 @@ using namespace AnEngine::RenderCore;
 
 namespace AnEngine::Game
 {
-	void Scene::OnInit()
+	/*void Scene::OnInit()
 	{
 		queue<GameObject*> q;
 		for (var i : m_objects)
@@ -129,7 +129,7 @@ namespace AnEngine::Game
 		{
 			RemoveObject(i);
 		}
-	}
+	}*/
 
 	Scene::Scene(std::wstring _name) : name(_name)
 	{

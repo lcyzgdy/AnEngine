@@ -70,6 +70,11 @@ inline LPCWSTR ToLPCWSTR(const char* l)
 	return wcstring;
 }
 
+inline std::string WStringToString(const std::wstring& wl)
+{
+
+}
+
 inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 {
 	if (path == nullptr)

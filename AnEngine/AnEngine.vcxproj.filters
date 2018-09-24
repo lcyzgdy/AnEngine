@@ -263,6 +263,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="SenceManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -422,6 +425,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="SenceManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

@@ -232,7 +232,7 @@
     <ClInclude Include="SampleParticles.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="SenceManager.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StateMachine.h" />
@@ -291,7 +291,7 @@
     <ClCompile Include="SampleParticles.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="SenceManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />

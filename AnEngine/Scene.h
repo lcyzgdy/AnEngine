@@ -40,8 +40,10 @@ namespace AnEngine::Game
 		//virtual void OnRelease() override;
 
 	public:
-		Scene(std::wstring _name);
-		~Scene() = default;
+		//Scene(std::wstring _name);
+		Scene(std::wstring&& _name);
+		Scene(const std::wstring& _name);
+		virtual ~Scene() = default;
 
 		std::wstring name;
 

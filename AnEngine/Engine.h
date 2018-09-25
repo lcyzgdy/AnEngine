@@ -12,13 +12,13 @@
 
 namespace AnEngine
 {
-	class Engine : public Object
+	class Engine : public ::Singleton<Engine>
 	{
+		friend class ::Singleton<Engine>;
+
 		bool m_initialized;
 		bool m_running;
-		Game::Scene* m_scene;
-		std::mutex m_mutex;
-		std::future<void> m_future;
+		//std::mutex m_mutex;
 
 		Engine() = default;
 		virtual ~Engine() = default;
@@ -28,8 +28,19 @@ namespace AnEngine
 		void AfterUpdate();
 
 	public:
+		enum UpdateEvent
+		{
+		};
 
-		static Engine* GetInstance();
+		enum RenderEvent
+		{
+			BeforeGBuffer,
+			AfterGBuffer,
+			AfterLighting,
+			AfterShadow,
+			AfterProcess
+		};
+
 
 		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Release();

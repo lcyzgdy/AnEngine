@@ -18,9 +18,9 @@ namespace AnEngine
 	void Engine::OnUpdate()
 	{
 		lock_guard<mutex> lock(m_mutex);
-		m_scene->BeforeUpdate();
-		m_scene->OnUpdate();
-		m_scene->AfterUpdate();
+		//m_scene->BeforeUpdate();
+		//m_scene->OnUpdate();
+		//m_scene->AfterUpdate();
 		Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this));
 	}
 
@@ -35,11 +35,11 @@ namespace AnEngine
 		}
 	}
 
-	Engine* Engine::GetInstance()
+	/*Engine* Engine::GetInstance()
 	{
 		static Engine driver;
 		return &driver;
-	}
+	}*/
 
 	void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
 	{
@@ -61,7 +61,7 @@ namespace AnEngine
 	void Engine::StartScene(Game::Scene* behaviour)
 	{
 		m_scene = behaviour;
-		behaviour->OnInit();
+		//behaviour->OnInit();
 		m_running = true;
 		Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this));
 	}
@@ -69,6 +69,6 @@ namespace AnEngine
 	void Engine::EndBehaviour()
 	{
 		//m_future.wait();
-		m_scene->OnRelease();
+		//m_scene->OnRelease();
 	}
 }

@@ -263,7 +263,7 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="SenceManager.h">
+    <ClInclude Include="SceneManager.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -425,7 +425,7 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="SenceManager.cpp">
+    <ClCompile Include="SceneManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

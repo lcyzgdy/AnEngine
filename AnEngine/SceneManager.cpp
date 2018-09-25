@@ -1,4 +1,4 @@
-#include "SenceManager.h"
+#include "SceneManager.h"
 
 using namespace std;
 

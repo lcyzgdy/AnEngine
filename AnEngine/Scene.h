@@ -14,7 +14,7 @@ namespace AnEngine::Game
 	class Scene : public Object//, public NonCopyable
 	{
 		// Scene直接调度BaseBehaviour
-		friend class ::AnEngine::Engine;
+		//friend class ::AnEngine::Engine;
 
 		std::vector<GameObject*> m_objects;
 		//std::vector<ObjectBehaviour*> m_objects;
@@ -49,6 +49,7 @@ namespace AnEngine::Game
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
+		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
 	};
 }
 

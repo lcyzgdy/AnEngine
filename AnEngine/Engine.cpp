@@ -4,29 +4,42 @@
 #include "Input.h"
 #include "ThreadPool.hpp"
 #include "DTimer.h"
+#include "SceneManager.h"
 
 namespace AnEngine
 {
 	void Engine::BeforeUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
-		BaseInput::GetInstance()->Update();
+		//lock_guard<mutex> lock(m_mutex);
 		DTimer::GetInstance()->Tick(nullptr);
+		BaseInput::GetInstance()->Update();
 		Utility::ThreadPool::Commit(bind(&Engine::OnUpdate, this));
 	}
 
 	void Engine::OnUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
-		//m_scene->BeforeUpdate();
-		//m_scene->OnUpdate();
-		//m_scene->AfterUpdate();
+		var activeScene = Game::SceneManager::ActiveScene();
+		for (var obj : activeScene->GetAllGameObject())
+		{
+			if (!obj->Active()) continue;
+			for (var be : obj->GetComponents())
+			{
+				be->BeforeUpdate();
+			}
+			for (var be : obj->GetComponents())
+			{
+				be->Update();
+			}
+			for (var be : obj->GetComponents())
+			{
+				be->AfterUpdate();
+			}
+		}
 		Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this));
 	}
 
 	void Engine::AfterUpdate()
 	{
-		lock_guard<mutex> lock(m_mutex);
 		RenderCore::R_Present();
 		BaseInput::GetInstance()->ZeroInputState();
 		if (m_running)
@@ -58,10 +71,8 @@ namespace AnEngine
 		BaseInput::GetInstance()->Release();
 	}
 
-	void Engine::StartScene(Game::Scene* behaviour)
+	void Engine::StartScene()
 	{
-		m_scene = behaviour;
-		//behaviour->OnInit();
 		m_running = true;
 		Utility::ThreadPool::Commit(bind(&Engine::BeforeUpdate, this));
 	}

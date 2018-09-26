@@ -8,12 +8,10 @@
 
 namespace AnEngine::Game
 {
-	class Scene;
-
 	class ObjectBehaviour : public BaseBehaviour//, public GameObject
 	{
-		friend class Scene;
-		friend class GameObject;
+		friend class Engine;
+		//friend class GameObject;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() final;

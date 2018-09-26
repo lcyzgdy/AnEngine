@@ -45,7 +45,7 @@ namespace AnEngine
 		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Release();
 
-		void StartScene(Game::Scene* behaviour);
+		void StartScene();
 		void EndBehaviour();
 	};
 }

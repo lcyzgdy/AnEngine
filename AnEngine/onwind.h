@@ -18,7 +18,6 @@
 #define var auto
 #define let auto
 #define __FasterFunc(func) inline func __vectorcall
-#define procedure void
 
 #ifdef _WIN64
 
@@ -69,6 +68,11 @@ inline LPCWSTR ToLPCWSTR(const char* l)
 	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
 	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
 	return wcstring;
+}
+
+inline std::string WStringToString(const std::wstring& wl)
+{
+
 }
 
 inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
@@ -157,6 +161,9 @@ inline void ThrowIfFalse(bool value, const wchar_t* msg)
 {
 	ThrowIfFailed(value ? S_OK : E_FAIL);
 }
+
+#define IF_FAILED ThrowIfFailed(
+#define THROW )
 
 template <typename T>
 inline T* SafeAcquire(T* newObject)
@@ -249,13 +256,15 @@ struct NonCopyable
 	NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
-template<typename T>
+template<class T>
 class Singleton : public NonCopyable
 {
 	inline static T* m_uniqueObj = nullptr;
 
+	template<class U> friend class Singleton;
+
 public:
-	static T* GetInstance()
+	static T* Instance()
 	{
 		if (m_uniqueObj == nullptr)
 		{

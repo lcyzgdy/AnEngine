@@ -6,13 +6,14 @@
 #include "RenderCore.h"
 #include "StateMachine.h"
 #include "Camera.h"
+#include "SceneManager.h"
 using namespace std;
 using namespace AnEngine::Utility;
 using namespace AnEngine::RenderCore;
 
 namespace AnEngine::Game
 {
-	void Scene::OnInit()
+	/*void Scene::OnInit()
 	{
 		queue<GameObject*> q;
 		for (var i : m_objects)
@@ -129,11 +130,16 @@ namespace AnEngine::Game
 		{
 			RemoveObject(i);
 		}
+	}*/
+
+	Scene::Scene(wstring&& _name) : name(_name)
+	{
+		SceneManager::AddNewScene(this);
 	}
 
-	Scene::Scene(std::wstring _name) : name(_name)
+	Scene::Scene(const wstring& _name) : name(_name)
 	{
-
+		SceneManager::AddNewScene(this);
 	}
 
 	void Scene::AddObject(GameObject* obj)

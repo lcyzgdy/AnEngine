@@ -7,6 +7,12 @@ using namespace AnEngine::RenderCore;
 
 namespace AnEngine::RenderCore
 {
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_graphicPSOMap;
+	static std::map<uint32_t, Microsoft::WRL::ComPtr<ID3D12PipelineState>> r_s_computePSOMap;
+}
+
+namespace AnEngine::RenderCore
+{
 	PipelineStateObject::PipelineStateObject() : m_pipelineState(nullptr)
 	{
 	}
@@ -16,9 +22,9 @@ namespace AnEngine::RenderCore
 		return m_pipelineState.Get();
 	}
 
-	ID3D12PipelineState** PipelineStateObject::operator&()
+	void PipelineStateObject::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
-		return &m_pipelineState;
+		m_rootSignature.Attach(rootSignature);
 	}
 
 	/*RootSignature* PipelineStateObject::GetRootSignature()
@@ -31,6 +37,17 @@ namespace AnEngine::RenderCore
 		m_rootSignature = rootSignature;
 	}*/
 
+}
+
+namespace AnEngine::RenderCore
+{
+	D3D12_RASTERIZER_DESC GraphicPSO::RastrizerDesc_Opaque =
+	{
+		D3D12_FILL_MODE_SOLID,D3D12_CULL_MODE_BACK, FALSE, D3D12_DEFAULT_DEPTH_BIAS, D3D12_DEFAULT_DEPTH_BIAS_CLAMP,
+		D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS, TRUE, FALSE, FALSE, 0,
+		D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF
+	};
+
 	GraphicPSO::GraphicPSO()
 	{
 		memset(&m_psoDesc, 0, sizeof(m_psoDesc));
@@ -40,10 +57,10 @@ namespace AnEngine::RenderCore
 		m_psoDesc.InputLayout.NumElements = 0;
 	}
 
-	void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
+	/*void GraphicPSO::SetRootSignature(ID3D12RootSignature * rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
-	}
+	}*/
 
 	void GraphicPSO::SetBlendState(const D3D12_BLEND_DESC& blendDesc)
 	{
@@ -208,20 +225,21 @@ namespace AnEngine::RenderCore
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
+}
 
-	/*--------------------------==============================----------------------------------*/
-
-
+/*--------------------------==============================----------------------------------*/
+namespace AnEngine::RenderCore
+{
 	ComputePSO::ComputePSO()
 	{
 		ZeroMemory(&m_psoDesc, sizeof(m_psoDesc));
 		m_psoDesc.NodeMask = 1;
 	}
 
-	void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
+	/*void ComputePSO::SetRootSignature(ID3D12RootSignature* rootSignature)
 	{
 		m_psoDesc.pRootSignature = rootSignature;
-	}
+	}*/
 
 	void ComputePSO::SetComputeShader(const void* binary, size_t size)
 	{

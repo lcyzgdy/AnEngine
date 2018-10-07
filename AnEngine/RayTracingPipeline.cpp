@@ -34,7 +34,7 @@ namespace AnEngine::RenderCore
 
 	void RaytracingPipeline::CreateRootSignatures()
 	{
-		// ȫ�ָ�ǩ��
+		// 全局根签名
 		{
 			CD3DX12_DESCRIPTOR_RANGE UAVDescriptor;
 			UAVDescriptor.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0);
@@ -44,7 +44,7 @@ namespace AnEngine::RenderCore
 			CD3DX12_ROOT_SIGNATURE_DESC globalRootSignatureDesc(ARRAYSIZE(rootParameters), rootParameters);
 			SerializeAndCreateRaytracingRootSignature(globalRootSignatureDesc, &m_rtGlobalRootSignature);
 		}
-		// �ֲ���ǩ��
+		// 局部根签名
 		{
 			CD3DX12_ROOT_PARAMETER rootParameters[LocalRootSignatureParams::Count];
 			rootParameters[LocalRootSignatureParams::ViewportConstantSlot].InitAsConstants(SizeOfInUint32(m_rayGenCB), 0, 0);
@@ -52,7 +52,7 @@ namespace AnEngine::RenderCore
 			localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
 			SerializeAndCreateRaytracingRootSignature(localRootSignatureDesc, &m_rtLocalRootSignature);
 		}
-		// �յı��ظ�ǩ��
+		// 空的本地根签名
 		{
 			CD3DX12_ROOT_SIGNATURE_DESC localRootSignatureDesc(D3D12_DEFAULT);
 			localRootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
@@ -72,7 +72,7 @@ namespace AnEngine::RenderCore
 
 	void RaytracingPipeline::CreateLocalRootSignatureSubobjects(CD3D12_STATE_OBJECT_DESC* raytracingPipeline)
 	{
-		// Ray gen shader�����õľֲ���ǩ��
+		// Ray gen shader中所用的局部根签名
 		{
 			var localRootSignature = raytracingPipeline->CreateSubobject<CD3D12_LOCAL_ROOT_SIGNATURE_SUBOBJECT>();
 			localRootSignature->SetRootSignature(m_rtLocalRootSignature.Get());
@@ -104,29 +104,29 @@ namespace AnEngine::RenderCore
 		InitializeRaytracing();
 		CreateRootSignatures();
 
-		// ����7����ϳ�RTPSO���Ӷ���
-		// �Ӷ�����Ҫͨ��Ĭ�ϻ���ʽ������DXIL����������ɫ�����������
-		// Ĭ�Ϲ���������û���κ�����������κ���ͬ���͵��Ӷ����ÿ����������ɫ����ڵ㡣
-		// ����򵥵�ʾ��ʹ�ó����ظ�ǩ���Ӷ���֮���Ĭ����ɫ���������д���������ʾĿ�ĵ���ȷ������
-		// 1 * DXIL��
-		// 1 * ���������
-		// 1 * ��ɫ������
-		// 2 * ���ظ�ǩ���͹���
-		// 1 * ȫ�ָ�ǩ��
-		// 1 * �ܵ�����
+		// 创建7个组合成RTPSO的子对象：
+		// 子对象需要通过默认或显式关联与DXIL导出（即着色器）相关联。
+		// 默认关联适用于没有任何与其关联的任何相同类型的子对象的每个导出的着色器入口点。
+		// 这个简单的示例使用除本地根签名子对象之外的默认着色器关联具有纯粹用于演示目的的明确关联。
+		// 1 * DXIL库
+		// 1 * 三角形组合
+		// 1 * 着色器配置
+		// 2 * 本地根签名和关联
+		// 1 * 全局根签名
+		// 1 * 管道配置
 
 		CD3D12_STATE_OBJECT_DESC raytracingPipeline{ D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE };
 
 
-		// DXIL��
-		// ����״̬�������ɫ��������ڵ㡣������ɫ��������Ϊ�Ӷ��������Ҫͨ��DXIL���Ӷ��󴫵����ǡ�
+		// DXIL库
+		// 包含状态对象的着色器及其入口点。由于着色器不被视为子对象，因此需要通过DXIL库子对象传递它们。
 		var lib = raytracingPipeline.CreateSubobject<CD3D12_DXIL_LIBRARY_SUBOBJECT>();
 		D3D12_SHADER_BYTECODE libdxil = CD3DX12_SHADER_BYTECODE((void *)g_pRaytracing, ARRAYSIZE(g_pRaytracing));
 		lib->SetDXILLibrary(&libdxil);
 
-		//����ӿ��н��ĸ���ɫ�����������档
-		//���û��ΪDXIL���Ӷ�������ɫ����������������ɫ����������ˮ�档
-		//�����ʾ���У�Ϊ�˷������������ʡ�����ʾ������Ϊʾ��ʹ�ÿ��е�������ɫ����
+		//定义从库中将哪个着色器导出到表面。
+		//如果没有为DXIL库子对象定义着色器导出，则所有着色器都将浮出水面。
+		//在这个示例中，为了方便起见，可以省略这个示例，因为示例使用库中的所有着色器。
 		{
 			lib->DefineExport(raygenShaderName);
 			lib->DefineExport(closestHitShaderName);

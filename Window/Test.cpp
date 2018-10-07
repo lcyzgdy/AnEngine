@@ -8,6 +8,7 @@
 #include "Canvas.h"
 #include "UIText.h"
 #include "Input.h"
+#include "Camera.h"
 using namespace AnEngine;
 using namespace AnEngine::Game;
 using namespace AnEngine::RenderCore;

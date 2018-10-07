@@ -2,6 +2,7 @@
 #include "GraphicsCard.h"
 #include "RenderCore.h"
 #include "ManagedTask.hpp"
+#include "FenceContext.h"
 #include <functional>
 
 #define in :
@@ -14,7 +15,6 @@ namespace AnEngine::RenderCore
 
 	GraphicsCommandContext::GraphicsCommandContext()
 	{
-
 	}
 
 	GraphicsCommandContext::~GraphicsCommandContext()
@@ -63,24 +63,6 @@ namespace AnEngine::RenderCore
 		m_alloPool.push(allo);
 	}
 }
-/*
-namespace AnEngine::RenderCore
-{
-	ContextTask::ContextTask(CommandList * list, CommandAllocator * allocator, Fence * sync) : m_list(list), m_allo(allocator), m_syncObject(sync)
-	{
-	}
-
-	ContextTask::ContextTask(std::tuple<CommandList*, CommandAllocator*, Fence*>&& tp) : m_list(get<CommandList*>(tp)),
-		m_allo(get<CommandAllocator*>(tp)), m_syncObject(get<Fence*>(tp))
-	{
-	}
-
-	void ContextTask::Run()
-	{
-		ID3D12CommandList* lists[] = { m_list->GetCommandList() };
-		r_graphicsCard[0]->ExecuteSync(_countof(lists), lists);
-	}
-}*/
 
 namespace AnEngine::RenderCore::Private
 {
@@ -104,31 +86,13 @@ namespace AnEngine::RenderCore::Private
 		m_alloPool.pop();
 		return { list, allocator };
 	}
+
 	void ComputeCommandContext::Push(CommandList* list, CommandAllocator* allo)
 	{
 		lock_guard<mutex> lockw(m_writerMutex);
 		lock_guard<mutex> lock(m_mutex);
 		m_pool.push(list);
 		m_alloPool.push(allo);
-	}
-}
-namespace AnEngine::RenderCore
-{
-	std::tuple<Fence*> FenceContext::GetOne()
-	{
-		if (m_pool.empty())
-		{
-			var p = new Fence();
-			return p;
-		}
-		var p = m_pool.front();
-		m_pool.pop();
-		return { p };
-	}
-
-	void FenceContext::Push(Fence* fence)
-	{
-		m_pool.push(fence);
 	}
 }
 
@@ -138,19 +102,19 @@ namespace AnEngine::RenderCore
 
 	tuple<CommandList*, CommandAllocator*> ComputeContext::GetOne()
 	{
-		return move(GraphicsCommandContext::GetInstance()->GetOne());
+		return move(GraphicsCommandContext::Instance()->GetOne());
 	}
 
 	void ComputeContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
-		GraphicsCommandContext::GetInstance()->Push(list, allocator);
+		GraphicsCommandContext::Instance()->Push(list, allocator);
 	}
 
 	tuple<CommandList*, CommandAllocator*> GraphicsContext::GetOne()
 	{
-		return move(GraphicsCommandContext::GetInstance()->GetOne());
+		return GraphicsCommandContext::Instance()->GetOne();
 	}
 
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)
@@ -158,14 +122,14 @@ namespace AnEngine::RenderCore
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
 		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
-		var[fence] = FenceContext::GetInstance()->GetOne();
+		var[fence] = FenceContext::Instance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
 		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
-		fence->WaitForValue(fenceValue);
+		//fence->WaitForValue(fenceValue);
 
-		GraphicsCommandContext::GetInstance()->Push(list, allocator);
-		FenceContext::GetInstance()->Push(fence);
+		GraphicsCommandContext::Instance()->Push(list, allocator);
+		FenceContext::Instance()->Push(fence);
 	}
 }

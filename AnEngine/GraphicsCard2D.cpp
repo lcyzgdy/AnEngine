@@ -9,7 +9,7 @@ using namespace Microsoft::WRL;
 
 namespace AnEngine::RenderCore::UI
 {
-	procedure GraphicsCard2D::InitializeForText()
+	void GraphicsCard2D::InitializeForText()
 	{
 		ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &m_dWriteFactory));
 	}

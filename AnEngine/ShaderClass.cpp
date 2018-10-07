@@ -27,6 +27,18 @@ namespace AnEngine::RenderCore
 			invokeFunction.c_str(), shaderVersion.c_str(), m_compileFlag, 0, &m_blob, nullptr));
 	}
 
+	Shader::Shader(const wstring& fileName)
+	{
+#ifdef _WIN64
+		//HANDLE file = CreateFileW(fileName.c_str(), GENERIC_READ, )
+#endif // _WIN32
+
+	}
+
+	Shader::Shader(wstring&& fileName)
+	{
+	}
+
 	D3D12_SHADER_BYTECODE Shader::GetByteCode()
 	{
 		return std::move(CD3DX12_SHADER_BYTECODE(m_blob.Get()));

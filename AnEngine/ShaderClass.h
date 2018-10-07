@@ -14,6 +14,8 @@ namespace AnEngine::RenderCore
 	public:
 		Shader(const std::wstring& fileName, const std::string& invokeFunction, std::string&& shaderVersion);
 		Shader(std::wstring&& fileName, std::string&& invokeFunction, std::string&& shaderVersion);
+		Shader(const std::wstring& fileName);
+		Shader(std::wstring&& fileName);
 
 		D3D12_SHADER_BYTECODE GetByteCode();
 	};

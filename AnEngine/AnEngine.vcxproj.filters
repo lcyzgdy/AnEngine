@@ -211,13 +211,6 @@
     <ClInclude Include="Color.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Driver.h" />
-    <ClInclude Include="RayTracingPipeline.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="RayTracingHelper.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -229,9 +222,6 @@
     </ClInclude>
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
       <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="RaytracingHlslCompat.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.hpp">
       <Filter>Math</Filter>
@@ -256,6 +246,25 @@
     </ClInclude>
     <ClInclude Include="Fence.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingPipeline.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="RaytracingHlslCompat.h">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingHelper.hpp">
+      <Filter>Graphics\DXR</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHelper.hpp">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="FenceContext.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="SceneManager.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -397,11 +406,7 @@
     <ClCompile Include="Color.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="DX.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="RayTracingPipeline.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -412,6 +417,16 @@
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">
       <Filter>Game\System</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingPipeline.cpp">
+      <Filter>Graphics\DXR</Filter>
+    </ClCompile>
+    <ClCompile Include="FenceContext.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

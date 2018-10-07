@@ -308,7 +308,7 @@ namespace AnEngine::Game
 
 		// Graphics
 		{
-			D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_renderTarget->GetRTV();
+			D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_renderTarget->GetRtv();
 			iList->ClearDepthStencilView(m_dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 			var commonToRenderTarget = CommonState::commonToRenderTarget;

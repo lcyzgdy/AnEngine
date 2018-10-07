@@ -82,7 +82,7 @@ namespace AnEngine::DMath
 
 	inline uint32_t CalculateConstantBufferByteSize(uint32_t byteSize)
 	{
-		return Align(byteSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+		return Align(byteSize, 0);
 	}
 }
 

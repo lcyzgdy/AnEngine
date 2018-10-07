@@ -2,7 +2,7 @@
 #include "Screen.h"
 #include "CommandContext.h"
 #include "DescriptorHeap.hpp"
-#include "Fence.hpp"
+#include "Fence.h"
 #include "ThreadPool.hpp"
 #include "DTimer.h"
 #include "DebugLog.h"
@@ -64,11 +64,11 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
-	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
-	procedure WaitForGpu();
-	procedure CreateCommonState();
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
+	void WaitForGpu();
+	void CreateCommonState();
 
-	procedure InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
+	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		r_hwnd = hwnd;
 		uint32_t dxgiFactoryFlags = 0;
@@ -83,7 +83,7 @@ namespace AnEngine::RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 
-		ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
+		/*ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
 		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiInfoQueue))))
 		{
 			debugDxgi = true;
@@ -92,7 +92,7 @@ namespace AnEngine::RenderCore
 
 			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
 			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
-		}
+		}*/
 #endif
 		if (!debugDxgi)
 		{
@@ -102,7 +102,7 @@ namespace AnEngine::RenderCore
 
 		while (graphicCardCount--)
 		{
-			GraphicsCard* aRender = new GraphicsCardWithRT();
+			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
 			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
 			r_graphicsCard.emplace_back(aRender);
@@ -117,7 +117,7 @@ namespace AnEngine::RenderCore
 		r_frameCount = 0;
 	}
 
-	procedure InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
+	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = r_SwapChainBufferCount_const;
@@ -298,7 +298,7 @@ namespace AnEngine::RenderCore
 		//iList->ResourceBarrier(1, &commonToRenderTarget);
 		var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
-		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRTV(), clearColor, 0, nullptr);
+		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
 		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
@@ -331,7 +331,7 @@ namespace AnEngine::RenderCore
 
 		iList->ResourceBarrier(barrier1.size(), barrier1.begin());
 		float color[4] = { 0, 0, 0, 1 };
-		iList->ClearRenderTargetView(r_displayPlane[frameIndex]->GetRTV(), color, 0, nullptr);
+		iList->ClearRenderTargetView(r_displayPlane[frameIndex]->GetRtv(), color, 0, nullptr);
 		iList->ResolveSubresource(frame, 0, srcBuffer->GetResource(), 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 		iList->ResourceBarrier(barrier2.size(), barrier2.begin());
 
@@ -355,7 +355,7 @@ namespace AnEngine::RenderCore
 
 	void WaitForGpu()
 	{
-		var[fence] = FenceContext::GetInstance()->GetOne();
+		var[fence] = FenceContext::Instance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;

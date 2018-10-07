@@ -9,20 +9,6 @@
 #include"onwind.h"
 #include"CommandList.h"
 #include"Fence.h"
-/*
-namespace AnEngine::RenderCore
-{
-	class ContextTask
-	{
-		CommandList* m_list;
-		CommandAllocator* m_allo;
-		Fence* m_syncObject;
-	public:
-		ContextTask(CommandList* list, CommandAllocator* allocator, Fence* sync);
-		ContextTask(std::tuple<CommandList*, CommandAllocator*, Fence*>&& tp);
-		void Run();
-	};
-}*/
 
 namespace AnEngine::RenderCore
 {
@@ -39,14 +25,6 @@ namespace AnEngine::RenderCore
 		std::mutex m_writerMutex;
 		std::mutex m_mutex;
 	};
-	/*/
-	template<typename _List, typename _Allocator>
-	class IContext
-	{
-	public:
-		virtual std::tuple<_List, _Allocator> GetOne() = 0;
-		virtual void Push(_List, _Allocator) = 0;
-	};*/
 
 	template<typename ... _T>
 	class IContext
@@ -70,6 +48,7 @@ namespace AnEngine::RenderCore
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
+
 namespace AnEngine::RenderCore::Private
 {
 	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public IContext<CommandList*, CommandAllocator*>,
@@ -81,28 +60,17 @@ namespace AnEngine::RenderCore::Private
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
-namespace AnEngine::RenderCore
-{
-	class FenceContext : public ::Singleton<FenceContext>, public IContext<Fence*>
-	{
-		std::queue<Fence*> m_pool;
-	public:
-		// 通过 IContext 继承
-		virtual std::tuple<Fence*> GetOne() override;
-		virtual void Push(Fence* fence) override;
-	};
-}
 
 namespace AnEngine::RenderCore
 {
-	class ComputeContext
+	static class ComputeContext
 	{
 	public:
 		static std::tuple<CommandList*, CommandAllocator*> GetOne();
 		static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 
-	class GraphicsContext
+	static class GraphicsContext
 	{
 	public:
 		static std::tuple<CommandList*, CommandAllocator*> GetOne();

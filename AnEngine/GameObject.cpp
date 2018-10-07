@@ -7,12 +7,12 @@ namespace AnEngine::Game
 	unordered_multimap<wstring, GameObject*> g_gameObjects;
 
 	//GameObject::GameObject(const std::wstring& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
-	GameObject::GameObject(const std::wstring& _name) : m_parentObject(nullptr), name(_name), m_active(true), m_componentHash(0)
+	GameObject::GameObject(const std::wstring& _name) : m_parentObject(nullptr), name(_name), m_active(true)
 	{
 		g_gameObjects.emplace(_name, this);
 	}
 
-	GameObject::GameObject(std::wstring&& _name) : m_parentObject(nullptr), name(_name), m_active(true), m_componentHash(0)
+	GameObject::GameObject(std::wstring&& _name) : m_parentObject(nullptr), name(_name), m_active(true)
 	{
 		g_gameObjects.emplace(_name, this);
 	}

@@ -1,5 +1,6 @@
 #include "RootSignature.h"
 #include "RenderCore.h"
+#include <functional>
 
 using namespace Microsoft::WRL;
 
@@ -83,31 +84,33 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore
 {
-	RootSignature::RootSignature()
+
+
+	RootSignature::RootSignature(ID3D12RootSignature* rootSignature)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
+		/*
+		CD3DX12_DESCRIPTOR_RANGE1 range[1];
+		range[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
 
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
-		rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+		CD3DX12_ROOT_PARAMETER1 params[1];
+		params[0].InitAsDescriptorTable(1, &range[0], D3D12_SHADER_VISIBILITY_ALL);
+		*/
 
-		ComPtr<ID3DBlob> signature;
+		//CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
+		//rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+		//InitParams(rootSignatureDesc);
+
+		/*ComPtr<ID3DBlob> signature;
 		ComPtr<ID3DBlob> error;
 		ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error));
 
 		ThrowIfFailed(device->CreateRootSignature(r_graphicsCard[0]->GetNodeNum(), signature->GetBufferPointer(),
-			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp)));
+			signature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature_cp)));*/
+		m_rootSignature_cp.Attach(rootSignature);
 	}
 
 	void RootSignature::Reset()
 	{
-	}
-
-	ID3D12RootSignature* RootSignature::GetRootSignature()
-	{
-		return m_rootSignature_cp.Get();
-	}
-	ID3D12RootSignature** RootSignature::operator&() throw()
-	{
-		return &m_rootSignature_cp;
 	}
 }

@@ -11,9 +11,9 @@ namespace AnEngine::Game
 			0, 0, 0, (*pPosition).z,
 			0, 0, 0, 1);*/
 
-		var t = XMMatrixTranslationFromVector(*pPosition);
+		var t = XMMatrixTranslationFromVector(XMLoadFloat3(pPosition));
 		var p = XMMatrixRotationQuaternion(*pRotation);
-		var s = XMMatrixScalingFromVector(*pScale);
+		var s = XMMatrixScalingFromVector(XMLoadFloat3(pScale));
 		*pMatrix = t * p * s;
 	}
 }

@@ -1,31 +1,15 @@
-#include "Fence.hpp"
+#include "Fence.h"
 #include "RenderCore.h"
 #include "DTimer.h"
 
 namespace AnEngine::RenderCore
 {
-	/*Fence::Fence(ID3D12CommandQueue* targetQueue) : m_fenceValue(0), m_curFenceValue(0)
-	{
-		var device = r_graphicsCard[0]->GetDevice();
-		m_commandQueue = targetQueue;
-		ThrowIfFailed(device->CreateFence(m_fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
-#ifdef _WIN32
-		m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-		if (m_fenceEvent == nullptr)
-		{
-			ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
-		}
-#endif // _WIN32
-	}*/
-
-	Fence::Fence() : m_fenceValue(0), m_curFenceValue(0)
+	Fence::Fence() : m_fenceValue(0)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 		ThrowIfFailed(device->CreateFence(m_fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 #ifdef _WIN32
-		//m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 		m_fenceEvent.Attach(CreateEvent(nullptr, FALSE, FALSE, nullptr));
-		//if (m_fenceEvent == nullptr)
 		if (!m_fenceEvent.IsValid())
 		{
 			ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
@@ -37,23 +21,8 @@ namespace AnEngine::RenderCore
 	{
 #ifdef _WIN32
 		//CloseHandle(m_fenceEvent);
-		//m_fenceEvent.Get();
+		m_fenceEvent.Close();
 #endif // _WIN32
-	}
-
-	ID3D12Fence* Fence::GetFence()
-	{
-		return m_fence.Get();
-	}
-
-	uint64_t Fence::GetFenceValue()
-	{
-		return m_fenceValue;
-	}
-
-	ID3D12Fence * Fence::operator->()
-	{
-		return m_fence.Get();
 	}
 
 	/*
@@ -94,7 +63,11 @@ namespace AnEngine::RenderCore
 	*/
 	void Fence::WaitForGpu()
 	{
-
+		if (m_fence->GetCompletedValue() < m_fenceValue)
+		{
+			m_fence->SetEventOnCompletion(m_fenceValue, m_fenceEvent.Get());
+			WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, false);
+		}
 	}
 
 	void Fence::WaitForValue(uint64_t fenceValue)

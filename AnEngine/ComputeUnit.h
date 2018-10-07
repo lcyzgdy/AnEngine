@@ -5,7 +5,7 @@
 #include"DX.h"
 #include"PipelineState.h"
 #include"ShaderClass.h"
-#include"Fence.hpp"
+#include"Fence.h"
 
 namespace AnEngine::Game
 {

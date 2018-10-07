@@ -25,7 +25,7 @@ namespace AnEngine::Game
 		ThrowIfFailed(iAllocator->Reset());
 		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));
 
-		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRTV()), false, nullptr);
+		iList->OMSetRenderTargets(1, &(m_renderTarget->GetRtv()), false, nullptr);
 	}
 
 	void SpriteRenderer::Destory()

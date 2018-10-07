@@ -114,7 +114,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
@@ -122,7 +122,7 @@
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
-      <DisableSpecificWarnings>4455;238</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4455;238;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -191,12 +191,14 @@
     <ClInclude Include="DrawCube.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DrawLine.h" />
-    <ClInclude Include="Driver.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="DTimer.h" />
     <ClInclude Include="DX.h" />
     <ClInclude Include="DynamicConstantBuffer.h" />
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="Fence.h" />
+    <ClInclude Include="FenceContext.h" />
+    <ClInclude Include="FileHelper.hpp" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameObject.h" />
@@ -230,6 +232,7 @@
     <ClInclude Include="SampleParticles.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StateMachine.h" />
@@ -257,12 +260,13 @@
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
     <ClCompile Include="DrawLine.cpp" />
-    <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="DTimer.cpp" />
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
     <ClCompile Include="Fence.cpp" />
+    <ClCompile Include="FenceContext.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -287,6 +291,7 @@
     <ClCompile Include="SampleParticles.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
@@ -395,9 +400,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\CompiledShaders\%(Filename).hlsl.h</Outputs>
     </CustomBuild>
     <FxCompile Include="..\Assets\test.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GRS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RootSignature</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rootsig_1.1</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="..\Assets\test.hlsli">

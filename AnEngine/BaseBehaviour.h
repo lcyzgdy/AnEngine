@@ -15,7 +15,7 @@ namespace AnEngine::Game
 {
 	class BaseBehaviour : public NonCopyable, public Object
 	{
-		friend class Scene;
+		friend class Engine;
 
 		enum BehaviourState : int
 		{

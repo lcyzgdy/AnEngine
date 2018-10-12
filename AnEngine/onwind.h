@@ -209,6 +209,28 @@ struct Range
 	}
 };
 
+template<int Minn, int Maxn>
+struct Range
+{
+	constexpr bool operator()(int value)
+	{
+		if (value < Minn) return false;
+		if (value > Maxn) return false;
+		return true;
+	}
+};
+
+template<int Maxn>
+struct Range
+{
+	constexpr bool operator()(int value)
+	{
+		if (value < 0) return false;
+		if (value > Maxn) return false;
+		return true;
+	}
+};
+
 inline void __vectorcall Randomize()
 {
 	srand((unsigned)time(nullptr));

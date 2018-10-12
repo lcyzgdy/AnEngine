@@ -428,6 +428,9 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="triangle_shaders.hlsl">

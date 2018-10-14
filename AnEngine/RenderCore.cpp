@@ -7,6 +7,7 @@
 #include "DTimer.h"
 #include "DebugLog.h"
 #include <dxgidebug.h>
+#include "FenceContext.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -159,7 +160,7 @@ namespace AnEngine::RenderCore
 			{
 				r_enableHDROutput = true;
 			}
-		}
+	}
 #endif
 
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
@@ -182,7 +183,7 @@ namespace AnEngine::RenderCore
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-	}
+}
 
 	void CreateCommonState()
 	{

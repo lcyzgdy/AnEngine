@@ -10,7 +10,6 @@ namespace AnEngine
 {
 	void Engine::BeforeUpdate()
 	{
-		//lock_guard<mutex> lock(m_mutex);
 		DTimer::GetInstance()->Tick(nullptr);
 		BaseInput::GetInstance()->Update();
 		Utility::ThreadPool::Commit(bind(&Engine::OnUpdate, this));

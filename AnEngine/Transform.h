@@ -32,7 +32,7 @@ namespace AnEngine::Game
 
 		DMath::Matrix4x4 GetWorldMatrix()
 		{
-			Matrix4x4 local = XMMatrixIdentity();
+			DMath::Matrix4x4 local = XMMatrixIdentity();
 			var parent = m_parent;
 			while (parent != nullptr)
 			{

@@ -11,7 +11,7 @@ namespace AnEngine::Game
 	class ObjectBehaviour : public BaseBehaviour//, public GameObject
 	{
 		friend class Engine;
-		//friend class GameObject;
+		friend class GameObject;
 
 		// 通过 BaseBehaviour 继承
 		virtual void OnInit() final;
@@ -29,6 +29,7 @@ namespace AnEngine::Game
 	protected:
 		bool m_active;
 
+	public:
 		GameObject* gameObject;
 
 	protected:

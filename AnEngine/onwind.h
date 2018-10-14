@@ -210,7 +210,7 @@ struct Range
 };
 
 template<int Minn, int Maxn>
-struct Range
+struct Range1
 {
 	constexpr bool operator()(int value)
 	{
@@ -221,7 +221,7 @@ struct Range
 };
 
 template<int Maxn>
-struct Range
+struct Range0
 {
 	constexpr bool operator()(int value)
 	{

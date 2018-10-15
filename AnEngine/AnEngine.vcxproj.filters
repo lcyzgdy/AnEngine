@@ -266,6 +266,12 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="RenderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipelineType.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">

@@ -30,6 +30,7 @@ namespace AnEngine::RenderCore::Resource
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = S_GpuVirtualAddressUnknown);
 		ColorBuffer(const D3D12_RESOURCE_DESC& desc);
 		ColorBuffer(D3D12_RESOURCE_DESC&& desc);
+		ColorBuffer(const std::wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
 		// 获取CPU可访问的句柄
 		const D3D12_CPU_DESCRIPTOR_HANDLE& GetSrv() const { return m_srvHandle; }

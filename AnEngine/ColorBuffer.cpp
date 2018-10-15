@@ -93,6 +93,12 @@ namespace AnEngine::RenderCore::Resource
 			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
+	ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle) :
+		PixelBuffer(baseResource->GetDesc())
+	{
+		AssociateWithResource
+	}
+
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////

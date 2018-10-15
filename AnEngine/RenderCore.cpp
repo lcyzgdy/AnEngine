@@ -160,7 +160,7 @@ namespace AnEngine::RenderCore
 			{
 				r_enableHDROutput = true;
 			}
-	}
+		}
 #endif
 
 		for (uint32_t i = 0; i < r_SwapChainBufferCount_const; ++i)
@@ -183,7 +183,7 @@ namespace AnEngine::RenderCore
 		}
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
-}
+	}
 
 	void CreateCommonState()
 	{
@@ -297,7 +297,7 @@ namespace AnEngine::RenderCore
 		renderTargetToCommon.Transition.pResource = dstColorBuffer->GetResource();
 
 		//iList->ResourceBarrier(1, &commonToRenderTarget);
-		var clearColorTemp = dstColorBuffer->GetClearColor();
+		//var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();

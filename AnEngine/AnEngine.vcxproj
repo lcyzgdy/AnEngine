@@ -226,6 +226,8 @@
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPipeline.h" />
+    <ClInclude Include="RenderPipelineType.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />

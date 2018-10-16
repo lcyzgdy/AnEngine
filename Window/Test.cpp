@@ -56,7 +56,7 @@ void LoadScene()
 
 	testScene->AddObject(testCameraObject);
 	testScene->AddObject(canvas);
-	Engine::GetInstance()->StartScene(testScene);
+	Engine::Instance()->StartScene();
 }
 
 void TestCamera::Update()

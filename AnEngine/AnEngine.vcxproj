@@ -185,6 +185,7 @@
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="DeferredPipeline.h" />
+    <ClInclude Include="DeferredRenderPipeline.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />
     <ClInclude Include="DMath.hpp" />
@@ -258,6 +259,7 @@
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="ComputeUnit.cpp" />
     <ClCompile Include="DebugLog.cpp" />
+    <ClCompile Include="DeferredRenderPipeline.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />

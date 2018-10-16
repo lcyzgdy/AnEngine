@@ -10,9 +10,10 @@ namespace AnEngine::RenderCore
 	{
 		RenderPipelineType m_rpType;
 	public:
-		BaseRenderPipeline() { }
+		explicit BaseRenderPipeline(RenderPipelineType type) : m_rpType(type) { }
 		virtual ~BaseRenderPipeline() {	}
 
+		virtual void OnRender() = 0;
 		RenderPipelineType GetRenderPipelineType() { return m_rpType; }
 	};
 }

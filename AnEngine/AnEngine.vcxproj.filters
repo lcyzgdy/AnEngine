@@ -272,6 +272,9 @@
     <ClInclude Include="RenderPipelineType.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredRenderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -436,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderPipeline.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace AnEngine::Game
 
 		Transform* m_parent;
 
-		DMath::Matrix4x4 GetLocalMatrix()
+		DMath::Matrix4x4 ObjectToLocalMatrix()
 		{
 			var T = XMMatrixTranslationFromVector(XMLoadFloat3(&m_localPosition));
 			var R = XMMatrixRotationQuaternion(m_localRotation);
@@ -30,7 +30,7 @@ namespace AnEngine::Game
 			return T * R * S;
 		}
 
-		DMath::Matrix4x4 GetWorldMatrix()
+		DMath::Matrix4x4 LocalToWorldMatrix()
 		{
 			DMath::Matrix4x4 local = XMMatrixIdentity();
 			var parent = m_parent;
@@ -52,7 +52,7 @@ namespace AnEngine::Game
 		DMath::Vector3 Position()
 		{
 			DMath::Vector3 ret;
-			XMStoreFloat3(&ret, XMVector3Transform(XMLoadFloat3(&m_localPosition), GetWorldMatrix()));
+			XMStoreFloat3(&ret, XMVector3Transform(XMLoadFloat3(&m_localPosition), LocalToWorldMatrix()));
 			return ret;
 		}
 
@@ -62,7 +62,7 @@ namespace AnEngine::Game
 
 		void LocalPosition(const DMath::Vector3& newLocalPos) { m_localPosition = newLocalPos; }
 
-		DMath::Quaternion Rotation() { return XMVector3Transform(m_localRotation, GetWorldMatrix()); }
+		DMath::Quaternion Rotation() { return XMVector3Transform(m_localRotation, LocalToWorldMatrix()); }
 
 		//void Rotation(const DMath::Quaternion& newRotation) { m_rotation = newRotation; }
 
@@ -78,7 +78,7 @@ namespace AnEngine::Game
 
 		void LocalScale(const DMath::Vector3 newScale) { m_localScale = newScale; }
 
-		DMath::Matrix4x4 ObjectToWorldMatrix() { return GetLocalMatrix() * GetWorldMatrix(); }
+		DMath::Matrix4x4 ObjectToWorldMatrix() { return ObjectToLocalMatrix() * LocalToWorldMatrix(); }
 
 		DMath::Matrix4x4 WorldToObjectMatrix();
 	};

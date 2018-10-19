@@ -159,4 +159,14 @@ namespace AnEngine::Game
 		}
 		delete obj;
 	}
+
+	void Scene::AddEntity(GameEntity* entity)
+	{
+		m_entities.push_back(entity);
+	}
+
+	void Scene::RemoveEntity(GameEntity* entity)
+	{
+		m_entities.erase(find(m_entities.begin(), m_entities.end(), entity));
+	}
 }

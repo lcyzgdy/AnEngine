@@ -6,6 +6,7 @@
 #include "BaseBehaviour.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "GameEntity.h"
 #include <condition_variable>
 
 namespace AnEngine::Game
@@ -17,6 +18,8 @@ namespace AnEngine::Game
 		//friend class ::AnEngine::Engine;
 
 		std::vector<GameObject*> m_objects;
+
+		std::vector<GameEntity*> m_entities;
 		//std::vector<ObjectBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
@@ -50,6 +53,10 @@ namespace AnEngine::Game
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
 		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
+
+		void AddEntity(GameEntity* entity);
+		void RemoveEntity(GameEntity* entity);
+		std::vector<GameEntity*> GetAllEntities() { return m_entities; }
 	};
 }
 

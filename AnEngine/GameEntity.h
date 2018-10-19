@@ -10,10 +10,10 @@ namespace AnEngine::Game
 	class GameEntity : public Object
 	{
 		/* ------Static Mathod--------- */
-		static std::vector<GameEntity*> g_entities;
-		static std::unordered_multimap<uint64_t, uint64_t> g_strToEntity;
-		static void SceneAddNewEntity(GameEntity* entity);
-		static void GameEntity::SceneRemoveEntity(GameEntity* entity);
+		//static std::vector<GameEntity*> g_entities;
+		//static std::unordered_multimap<uint64_t, uint64_t> g_strToEntity;
+		//static void SceneAddNewEntity(GameEntity* entity);
+		//static void GameEntity::SceneRemoveEntity(GameEntity* entity);
 		/* ======Static Mathod========= */
 
 		std::vector<ComponentData*> m_components;

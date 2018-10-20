@@ -8,7 +8,9 @@ namespace AnEngine::Game
 {
 	class ComponentData : public Object
 	{
+		int id;
 	public:
+
 		virtual ~ComponentData() = default;
 	};
 

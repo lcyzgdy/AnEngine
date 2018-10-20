@@ -23,10 +23,10 @@ namespace AnEngine::Game
 
 	protected:
 		// 当前物体的父物体
-		GameObject * m_parentObject;
+		//GameObject * m_parentObject;
 
 		// 当前物体的子物体
-		std::vector<GameObject*> m_children;
+		//std::vector<GameObject*> m_children;
 
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
@@ -40,12 +40,12 @@ namespace AnEngine::Game
 		std::wstring name;
 		Transform transform;
 
-		GameObject* GetParent();
-		void SetParent(GameObject* newParent);
+		//GameObject* GetParent();
+		//void SetParent(GameObject* newParent);
 
-		std::vector<GameObject*> GetChildren();
+		//std::vector<GameObject*> GetChildren();
 
-		template<typename _Ty = GameObject>
+		/*template<typename _Ty = GameObject>
 		_Ty* GetChildByName(std::wstring& name)
 		{
 			//for (auto i = 0; i < m_children.size(); i++)
@@ -54,7 +54,7 @@ namespace AnEngine::Game
 				if (i->name == name) return static_cast<_Ty*>(gameObject);
 			}
 			return nullptr;
-		}
+		}*/
 
 		template<typename _Ty>
 		std::vector<_Ty*>&& GetComponents()
@@ -64,7 +64,7 @@ namespace AnEngine::Game
 			return std::move(ret);
 		}
 
-		template<typename _Ty>
+		/*template<typename _Ty>
 		std::vector<_Ty*> GetComponentsInChildren()
 		{
 			std::vector<_Ty*> ret;
@@ -80,7 +80,7 @@ namespace AnEngine::Game
 					/*if (typeid(*c) == typeid(_Ty))
 					{
 						ret.push_back((_Ty*)c);
-					}*/
+					}
 					var p = dynamic_cast<_Ty*>(c);
 					if (p != nullptr)
 					{
@@ -95,9 +95,9 @@ namespace AnEngine::Game
 			}
 
 			return std::move(ret);
-		}
+		}*/
 
-		std::vector<ObjectBehaviour*> GetComponents();
+		std::vector<ObjectBehaviour*> GetComponents() { return m_component; }
 
 		template<typename _Ty = ObjectBehaviour>
 		_Ty* GetComponent()
@@ -124,11 +124,11 @@ namespace AnEngine::Game
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			AddComponent(new _Ty());
+			if (GetComponent<_Ty>() == nullptr)	AddComponent(new _Ty());
 		}
 
 		void RemoveComponent(ObjectBehaviour* component);
-		void AddChildObject(GameObject* obj);
+		//void AddChildObject(GameObject* obj);
 
 		bool Active();
 		void Active(bool b);

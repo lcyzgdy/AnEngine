@@ -54,6 +54,17 @@ namespace AnEngine::Game
 		void RemoveObject(GameObject* obj);
 		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
 
+		template<typename T>
+		std::vector<T*> GetAllComponentOfType()
+		{
+			std::vector<T*> ret;
+			for (var i : m_objects)
+			{
+				if(i.)
+			}
+			return ret;
+		}
+
 		void AddEntity(GameEntity* entity);
 		void RemoveEntity(GameEntity* entity);
 		std::vector<GameEntity*> GetAllEntities() { return m_entities; }

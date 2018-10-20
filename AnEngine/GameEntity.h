@@ -50,7 +50,7 @@ namespace AnEngine::Game
 			return false;
 		}
 
-		template<typename T0, typename...T>
+		/*template<typename T0, typename...T>
 		static std::vector<GameEntity*> FindEntitiesByComponentType()
 		{
 			std::vector<GameEntity*> ret;
@@ -63,7 +63,7 @@ namespace AnEngine::Game
 				}
 			}
 			return ret;
-		}
+		}*/
 	};
 }
 

@@ -132,7 +132,7 @@ namespace AnEngine::Game
 		}
 	}*/
 
-	Scene::Scene(wstring&& _name) : name(_name)
+	Scene::Scene(wstring&& _name) : name(_name);
 	{
 		SceneManager::AddNewScene(this);
 	}

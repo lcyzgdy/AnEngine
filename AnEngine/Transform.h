@@ -5,7 +5,6 @@
 #include "Vector.hpp"
 #include "Matrix.hpp"
 #include "Quaternion.hpp"
-#include "ComponentBase.h"
 #include <mutex>
 
 namespace AnEngine::Game

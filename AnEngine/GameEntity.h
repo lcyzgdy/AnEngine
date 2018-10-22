@@ -3,9 +3,9 @@
 #define __GAMEENTITY_H__
 
 #include "onwind.h"
-#include "ComponentBase.h"
+#include "ComponentData.h"
 
-namespace AnEngine::Game
+namespace AnEngine::Game::ECS
 {
 	class GameEntity : public Object
 	{

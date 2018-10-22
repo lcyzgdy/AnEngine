@@ -57,10 +57,10 @@ namespace AnEngine::Game
 		template<typename T>
 		std::vector<T*> GetAllComponentOfType()
 		{
-			std::vector<T*> ret;
+			std::vector<T*> ret
 			for (var i : m_objects)
 			{
-				if(i.)
+				//if(i.)
 			}
 			return ret;
 		}

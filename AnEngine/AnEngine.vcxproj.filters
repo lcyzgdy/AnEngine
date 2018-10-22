@@ -35,11 +35,11 @@
     <Filter Include="Game\System">
       <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\ComponentLagicy">
-      <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Component">
       <UniqueIdentifier>{27602513-2c0d-47e5-9e05-c3ce6203a54a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ComponentLegacy">
+      <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,28 +125,28 @@
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ComputeUnit.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ObjectBehaviour.h">
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="SampleMeshRender.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ParticlesRenderer.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ColorBuffer.h">
       <Filter>Graphics\Resource</Filter>
@@ -194,7 +194,7 @@
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>Game</Filter>
@@ -203,10 +203,10 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="UIComponent.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="UIText.h">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsCard.h">
       <Filter>Graphics</Filter>
@@ -275,7 +275,10 @@
     <ClInclude Include="DeferredRenderPipeline.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentBase.h">
+    <ClInclude Include="ComponentData.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentGroup.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -344,25 +347,25 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBehaviour.cpp">
       <Filter>Game\Behaviour</Filter>
     </ClCompile>
     <ClCompile Include="ComputeUnit.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="SampleMeshRender.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ParticlesRenderer.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ColorBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
@@ -398,7 +401,7 @@
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>Game</Filter>
@@ -407,10 +410,10 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="UIComponent.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="UIText.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsCard.cpp">
       <Filter>Graphics</Filter>
@@ -441,7 +444,7 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Game\ComponentLagicy</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="DeferredRenderPipeline.cpp">
       <Filter>Graphics</Filter>

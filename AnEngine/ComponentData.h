@@ -4,20 +4,15 @@
 
 #include "Object.h"
 
-namespace AnEngine::Game
+namespace AnEngine::Game::ECS
 {
+	class Entity;
+
 	class ComponentData : public Object
 	{
-		int id;
+		Entity* m_entity;
 	public:
-
 		virtual ~ComponentData() = default;
-	};
-
-	template<typename T0, typename... T>
-	struct IComponent
-	{
-		virtual std::tuple<T0*, T*...> operator[](int i) = 0;
 	};
 }
 #endif // __COMPONENTBASE_H__

@@ -281,6 +281,9 @@
     <ClInclude Include="ComponentGroup.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
+    <ClInclude Include="GroupWarper.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">

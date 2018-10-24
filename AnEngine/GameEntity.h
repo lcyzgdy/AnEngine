@@ -5,7 +5,7 @@
 #include "onwind.h"
 #include "ComponentData.h"
 
-namespace AnEngine::Game::ECS
+namespace AnEngine::Game::ECBS
 {
 	class GameEntity : public Object
 	{

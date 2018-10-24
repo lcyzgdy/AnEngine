@@ -10,6 +10,7 @@
 using namespace std;
 using namespace AnEngine::Utility;
 using namespace AnEngine::RenderCore;
+using namespace AnEngine::Game::ECBS;
 
 namespace AnEngine::Game
 {
@@ -24,7 +25,7 @@ namespace AnEngine::Game
 		{
 			var p = q.front();
 			q.pop();
-			for (var i : p->m_component)
+			for (var i : p->m_behaviour)
 			{
 				i->OnInit();
 			}
@@ -53,7 +54,7 @@ namespace AnEngine::Game
 		{
 			var p = q.front();
 			q.pop();
-			for (var i : p->m_component)
+			for (var i : p->m_behaviour)
 			{
 				i->BeforeUpdate();
 			}
@@ -71,7 +72,7 @@ namespace AnEngine::Game
 		{
 			var p = q.front();
 			q.pop();
-			for (var i : p->m_component)
+			for (var i : p->m_behaviour)
 			{
 				if (is_same<decltype(*i), StateMachine>::value)
 				{
@@ -102,7 +103,7 @@ namespace AnEngine::Game
 		{
 			var p = q.front();
 			q.pop();
-			for (var i : p->m_component)
+			for (var i : p->m_behaviour)
 			{
 				if (i->Active())
 				{
@@ -132,7 +133,7 @@ namespace AnEngine::Game
 		}
 	}*/
 
-	Scene::Scene(wstring&& _name) : name(_name);
+	Scene::Scene(wstring&& _name) : name(_name)
 	{
 		SceneManager::AddNewScene(this);
 	}

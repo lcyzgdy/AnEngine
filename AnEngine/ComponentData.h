@@ -4,13 +4,13 @@
 
 #include "Object.h"
 
-namespace AnEngine::Game::ECS
+namespace AnEngine::Game
 {
-	class Entity;
+	class GameObject;
 
 	class ComponentData : public Object
 	{
-		Entity* m_entity;
+		GameObject* m_entity;
 	public:
 		virtual ~ComponentData() = default;
 	};

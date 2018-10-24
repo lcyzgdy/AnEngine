@@ -58,18 +58,18 @@ namespace AnEngine::Game
 		lock_guard<mutex> lock(m_mutex);
 		component->gameObject = this;
 		//component->m_scene = this->m_scene;
-		m_component.emplace_back(component);
+		m_behaviour.emplace_back(component);
 	}
 
 	void GameObject::RemoveComponent(ObjectBehaviour* component)
 	{
 		lock_guard<mutex> lock(m_mutex);
-		for (var it = m_component.begin(); it != m_component.end(); ++it)
+		for (var it = m_behaviour.begin(); it != m_behaviour.end(); ++it)
 		{
 			if (*it == component)
 			{
 				(*it)->OnRelease();
-				m_component.erase(it);
+				m_behaviour.erase(it);
 				delete *it;
 				break;
 			}
@@ -108,7 +108,7 @@ namespace AnEngine::Game
 		m_active = b;
 		if (b)
 		{
-			for (var i : m_component)
+			for (var i : m_behaviour)
 			{
 				i->OnActive();
 			}

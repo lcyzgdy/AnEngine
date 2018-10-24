@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include <mutex>
 #include <queue>
+#include "ComponentData.h"
+#include <set>
 // #include"BaseBehaviour.h"
 
 namespace AnEngine::Game
@@ -22,15 +24,10 @@ namespace AnEngine::Game
 		bool m_active;
 
 	protected:
-		// 当前物体的父物体
-		//GameObject * m_parentObject;
-
-		// 当前物体的子物体
-		//std::vector<GameObject*> m_children;
-
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
-		std::vector<ObjectBehaviour*> m_component;
+		std::vector<ObjectBehaviour*> m_behaviour;
+		std::map<size_t, ComponentData*> m_component;
 
 	public:
 		explicit GameObject(const std::wstring& name);
@@ -38,7 +35,6 @@ namespace AnEngine::Game
 		virtual ~GameObject();
 
 		std::wstring name;
-		Transform transform;
 
 		//GameObject* GetParent();
 		//void SetParent(GameObject* newParent);
@@ -61,6 +57,11 @@ namespace AnEngine::Game
 		{
 			std::vector<_Ty*> ret;
 
+			for (var i : m_component)
+			{
+				ret.push_back(i.second);
+			}
+
 			return std::move(ret);
 		}
 
@@ -75,7 +76,7 @@ namespace AnEngine::Game
 			}
 			while (!q.empty())
 			{
-				for (var c : q.front()->m_component)
+				for (var c : q.front()->m_behaviour)
 				{
 					/*if (typeid(*c) == typeid(_Ty))
 					{
@@ -97,22 +98,12 @@ namespace AnEngine::Game
 			return std::move(ret);
 		}*/
 
-		std::vector<ObjectBehaviour*> GetComponents() { return m_component; }
+		//std::vector<ObjectBehaviour*> GetComponents() { return m_behaviour; }
 
-		template<typename _Ty = ObjectBehaviour>
+		template<typename _Ty>
 		_Ty* GetComponent()
 		{
-			for (var i : this->m_component)
-			{
-				if (typeid(*i) == typeid(_Ty))
-				{
-					return (_Ty*)i;
-				}
-				/*var p = dynamic_cast<_Ty*>(i);
-				if (p != nullptr)
-					return p;*/
-			}
-			return nullptr;
+			return m_component[typeid(_Ty).hash_code()];
 		}
 
 		void AddComponent(ObjectBehaviour* component);
@@ -127,7 +118,7 @@ namespace AnEngine::Game
 			if (GetComponent<_Ty>() == nullptr)	AddComponent(new _Ty());
 		}
 
-		void RemoveComponent(ObjectBehaviour* component);
+		//void RemoveComponent(ObjectBehaviour* component);
 		//void AddChildObject(GameObject* obj);
 
 		bool Active();
@@ -138,3 +129,9 @@ namespace AnEngine::Game
 	};
 }
 #endif // !__GAMEOBJECT_H__
+
+
+
+/* 最终还是在 GameObject 里面添加了Component和Behaviour，如果彻底抛弃Behaviour则一些本来很简单的功能实现起来十分麻烦，
+ * 而且之前写好的状态机也会报废。
+ */

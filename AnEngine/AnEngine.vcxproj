@@ -207,6 +207,7 @@
     <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
     <ClInclude Include="GraphicsCard.h" />
+    <ClInclude Include="GroupWarper.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ManagedTask.hpp" />

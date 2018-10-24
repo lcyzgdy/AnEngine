@@ -6,16 +6,16 @@
 #include "Object.h"
 #include "ComponentData.h"
 
-namespace AnEngine::Game::ECS
+namespace AnEngine::Game
 {
 	template<typename T>
 	class ComponentGroup : public Object
 	{
-		type_info m_dataType;
+		uint64_t m_dataType;
 		std::vector<T> m_data;
 
 	public:
-		ComponentGroup() : m_dataType(typeid(T))
+		ComponentGroup() : m_dataType(typeid(T).hash_code())
 		{
 			if (!IsDerived<T, ComponentData>::Result) throw std::exception("类型不对");
 		}

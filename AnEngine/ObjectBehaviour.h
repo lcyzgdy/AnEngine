@@ -2,9 +2,9 @@
 #ifndef __OBJECTBEHAVIOUR_H__
 #define __OBJECTBEHAVIOUR_H__
 
-#include"BaseBehaviour.h"
-#include"GameObject.h"
-#include<condition_variable>
+#include "BaseBehaviour.h"
+#include "GameObject.h"
+#include <condition_variable>
 
 namespace AnEngine::Game
 {

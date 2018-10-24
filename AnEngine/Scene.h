@@ -19,7 +19,7 @@ namespace AnEngine::Game
 
 		std::vector<GameObject*> m_objects;
 
-		std::vector<GameEntity*> m_entities;
+		std::vector<ECBS::GameEntity*> m_entities;
 		//std::vector<ObjectBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
@@ -57,7 +57,7 @@ namespace AnEngine::Game
 		template<typename T>
 		std::vector<T*> GetAllComponentOfType()
 		{
-			std::vector<T*> ret
+			std::vector<T*> ret;
 			for (var i : m_objects)
 			{
 				//if(i.)
@@ -65,9 +65,9 @@ namespace AnEngine::Game
 			return ret;
 		}
 
-		void AddEntity(GameEntity* entity);
-		void RemoveEntity(GameEntity* entity);
-		std::vector<GameEntity*> GetAllEntities() { return m_entities; }
+		void AddEntity(ECBS::GameEntity* entity);
+		void RemoveEntity(ECBS::GameEntity* entity);
+		std::vector<ECBS::GameEntity*> GetAllEntities() { return m_entities; }
 	};
 }
 

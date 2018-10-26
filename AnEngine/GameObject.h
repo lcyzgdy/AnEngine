@@ -52,10 +52,10 @@ namespace AnEngine::Game
 			return nullptr;
 		}*/
 
-		template<typename _Ty>
-		std::vector<_Ty*>&& GetComponents()
+		// 获取所有组件，至于组件里有啥以及这个函数有什么用以后再说
+		std::vector<ComponentData*>&& GetComponents()
 		{
-			std::vector<_Ty*> ret;
+			std::vector<ComponentData*> ret;
 
 			for (var i : m_component)
 			{

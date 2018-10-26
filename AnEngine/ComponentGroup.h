@@ -17,9 +17,11 @@ namespace AnEngine::Game
 	public:
 		ComponentGroup() : m_dataType(typeid(T).hash_code())
 		{
-			if (!IsDerived<T, ComponentData>::Result) throw std::exception("类型不对");
 		}
 		virtual ~ComponentGroup = default;
+
+		// 开发者自己去搞数据同步，我被这个问题折腾好几天了
+		std::vector<T>& Data() { return m_data; }
 	};
 }
 

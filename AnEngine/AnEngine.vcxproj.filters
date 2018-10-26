@@ -142,9 +142,6 @@
     <ClInclude Include="SpriteRenderer.h">
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClInclude>
     <ClInclude Include="ParticlesRenderer.h">
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
@@ -282,6 +279,9 @@
       <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="GroupWarper.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -446,11 +446,11 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClCompile>
     <ClCompile Include="DeferredRenderPipeline.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

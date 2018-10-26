@@ -6,7 +6,8 @@
 #include "BaseBehaviour.h"
 #include "GameObject.h"
 #include "Camera.h"
-#include "GameEntity.h"
+//#include "GameEntity.h"
+#include "GroupWarper.h"
 #include <condition_variable>
 
 namespace AnEngine::Game
@@ -19,7 +20,9 @@ namespace AnEngine::Game
 
 		std::vector<GameObject*> m_objects;
 
-		std::vector<ECBS::GameEntity*> m_entities;
+		std::map<size_t, void*> m_componentGroups;
+
+		//std::vector<ECBS::GameEntity*> m_entities;
 		//std::vector<ObjectBehaviour*> m_objects;
 		//Camera* defaultCamera;
 
@@ -29,7 +32,7 @@ namespace AnEngine::Game
 
 		bool m_frameLoop;
 
-		ObjectBehaviour* m_canvas;
+		//ObjectBehaviour* m_canvas;
 
 		//protected:
 		// 通过 BaseBehaviour 继承
@@ -55,6 +58,12 @@ namespace AnEngine::Game
 		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
 
 		template<typename T>
+		ComponentGroup<T>* GetGroupOfType()
+		{
+			return (ComponentGroup<T>*)m_componentGroups[typeid(T).hash_code()];
+		}
+
+		template<typename T>
 		std::vector<T*> GetAllComponentOfType()
 		{
 			std::vector<T*> ret;
@@ -65,9 +74,9 @@ namespace AnEngine::Game
 			return ret;
 		}
 
-		void AddEntity(ECBS::GameEntity* entity);
+		/*void AddEntity(ECBS::GameEntity* entity);
 		void RemoveEntity(ECBS::GameEntity* entity);
-		std::vector<ECBS::GameEntity*> GetAllEntities() { return m_entities; }
+		std::vector<ECBS::GameEntity*> GetAllEntities() { return m_entities; }*/
 	};
 }
 

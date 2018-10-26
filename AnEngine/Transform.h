@@ -90,4 +90,12 @@ namespace AnEngine::Game
 	using LocalScale = DMath::Vector3;*/
 	using TransformMatrix = DMath::Matrix4x4;
 }
+
+namespace AnEngine::Game::Component
+{
+	using Position = DMath::Vector3;
+	using Rotation = DMath::Quaternion;
+	using Scale = DMath::Vector3;
+}
+
 #endif // !__TRANSFORM_H__

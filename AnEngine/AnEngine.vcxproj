@@ -172,7 +172,7 @@
     <ClInclude Include="..\Assets\HlslCompat.h" />
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
-    <ClInclude Include="BehaviourSystem.h" />
+    <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />

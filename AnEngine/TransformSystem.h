@@ -2,10 +2,10 @@
 #ifndef __TRANSFORMSYSTEM_H__
 #define __TRANSFORMSYSTEM_H__
 
-#include "BehaviourSystem.h"
+#include "IParallel.h"
 #include "Transform.h"
 
-namespace AnEngine::Game
+namespace AnEngine::Game::System
 {
 	class TransformSystem : public IParallel
 	{

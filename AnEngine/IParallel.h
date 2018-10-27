@@ -14,20 +14,6 @@ namespace AnEngine::Game
 		GroupBatch
 	};
 
-	template<typename T0, typename ...T>
-	class BehaviourSystem
-	{
-		std::vector<GameEntity*> m_entities;
-		const ScheduleMode m_how;
-
-	public:
-		BehaviourSystem(ScheduleMode scheduleMode) : m_entities(GameEntity::FindEntitiesByComponentType<T0, T...>()), m_how(scheduleMode)
-		{
-		}
-
-		virtual ~BehaviourSystem() = default;
-	};
-
 	class IParallel
 	{
 	public:

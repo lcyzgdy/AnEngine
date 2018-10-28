@@ -4,6 +4,7 @@
 
 #include "IParallel.h"
 #include "Transform.h"
+#include "ComponentGroup.h"
 
 namespace AnEngine::Game::System
 {
@@ -25,10 +26,20 @@ namespace AnEngine::Game::System
 			}
 		};*/
 
-		//DataGroup m_data;
+		ComponentGroup<Component::Position>& m_posG;
+		ComponentGroup<Component::Rotation>& m_rotG;
+		ComponentGroup<Component::Scale>& m_scaG;
+		ComponentGroup<Component::Matrix4x4>& m_objectToLocal;
+		ComponentGroup<Component::Matrix4x4>& m_localToWorld;
+		ComponentGroup<Component::Matrix4x4>& m_objectToWorld;
+
 	public:
-		// 通过 IParallel 继承
+		explicit TransformSystem(ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+			ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
+			ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world);
+		// 通过 IParallel 继承						 
 		virtual void Execute(int index) override;
+		virtual bool Check() override;
 	};
 }
 

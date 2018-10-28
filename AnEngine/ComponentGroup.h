@@ -8,6 +8,7 @@
 
 namespace AnEngine::Game
 {
+	// 保证Index索引的数据指向同一个GameObject
 	template <typename T>
 	class ComponentGroup : public Object
 	{

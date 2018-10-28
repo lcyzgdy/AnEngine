@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __BEHAVIOURSYSTEM_H__
-#define __BEHAVIOURSYSTEM_H__
+#ifndef __IPARALLER_H__
+#define __IPARALLER_H__
 
 #include "GameEntity.h"
 #include <tuple>
@@ -18,8 +18,10 @@ namespace AnEngine::Game
 	{
 	public:
 		virtual void Execute(int index) = 0;
+		virtual bool Check() { return true; }
+	protected:
 		int Length;
 	};
 }
 
-#endif // !__BEHAVIOURSYSTEM_H__
+#endif // !__IPARALLER_H__

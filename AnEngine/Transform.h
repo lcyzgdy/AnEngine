@@ -96,6 +96,8 @@ namespace AnEngine::Game::Component
 	using Position = DMath::Vector3;
 	using Rotation = DMath::Quaternion;
 	using Scale = DMath::Vector3;
+
+	using Matrix4x4 = DMath::Matrix4x4;
 }
 
 #endif // !__TRANSFORM_H__

@@ -61,7 +61,7 @@ namespace AnEngine::Game
 		m_behaviour.emplace_back(component);
 	}
 
-	void GameObject::RemoveComponent(ObjectBehaviour* component)
+	/*void GameObject::RemoveComponent(ObjectBehaviour* component)
 	{
 		lock_guard<mutex> lock(m_mutex);
 		for (var it = m_behaviour.begin(); it != m_behaviour.end(); ++it)
@@ -74,7 +74,7 @@ namespace AnEngine::Game
 				break;
 			}
 		}
-	}
+	}*/
 
 	/*void GameObject::AddChildObject(GameObject* obj)
 	{
@@ -87,7 +87,7 @@ namespace AnEngine::Game
 		if (r == g_gameObjects.end()) return nullptr;
 		return (*r).second;*/
 		var scene = SceneManager::ActiveScene();
-		scene->GetAllGameObject()
+		scene->GetAllGameObject();
 	}
 
 	GameObject* GameObject::Find(std::wstring&& name)
@@ -117,7 +117,7 @@ namespace AnEngine::Game
 		{
 			for (var i : GetComponents())
 			{
-				i->OnInvalid();
+				//i->OnInvalid();
 			}
 		}
 		/*for (var i : m_children)

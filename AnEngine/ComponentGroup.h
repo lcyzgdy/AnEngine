@@ -21,6 +21,8 @@ namespace AnEngine::Game
 
 		// 如果未来有开发者用这个引擎开发游戏，自己去搞数据同步
 		std::vector<T> &Data() { return m_data; }
+
+		T& operator[](int i) { return m_data[i]; }
 	};
 }  // namespace AnEngine::Game
 

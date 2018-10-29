@@ -284,6 +284,9 @@
     <ClInclude Include="IParallel.h">
       <Filter>Game\System</Filter>
     </ClInclude>
+    <ClInclude Include="SystemBase.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">

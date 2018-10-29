@@ -10,21 +10,17 @@ namespace AnEngine::Game::System
 		m_posG(poses), m_rotG(rots), m_scaG(scas), m_objectToLocal(obj2local), m_localToWorld(local2world), m_objectToWorld(local2world)
 	{
 		Length = m_posG.Data().size();
-		if (rots.Data().size != Length || scas.Data().size() != Length) throw exception("长度不对");
+		if (rots.Data().size != Length || scas.Data().size() != Length) throw exception("闀垮害涓嶅");
 	}
 
 	void TransformSystem::Execute(int index)
 	{
-		//var[pPosition, pRotation, pScale, pLocalPos, pLocalRot, pLocalScale, pMatrix] = m_data[index];
-		/*Matrix4x4 t(0, 0, 0, (*pPosition).x,
-			0, 0, 0, (*pPosition).y,
-			0, 0, 0, (*pPosition).z,
-			0, 0, 0, 1);*/
+		if (!Check()) return;
 
-			/*var t = XMMatrixTranslationFromVector(XMLoadFloat3(pPosition));
-			var p = XMMatrixRotationQuaternion(*pRotation);
-			var s = XMMatrixScalingFromVector(XMLoadFloat3(pScale));
-			*pMatrix = t * p * s;*/
+		var t = XMMatrixTranslationFromVector(XMLoadFloat3(&m_posG[index]));
+		var r = XMMatrixRotationQuaternion(m_rotG[index]);
+		var s = XMMatrixScalingFromVector(XMLoadFloat3(&m_scaG[index]));
+		m_objectToLocal[index] = t * r * s;
 	}
 
 	bool TransformSystem::Check()

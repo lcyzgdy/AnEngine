@@ -21,4 +21,7 @@ namespace AnEngine::RenderCore
 	void DeferredRenderPipeline::DepthPreLight()
 	{
 	}
+	void DeferredRenderPipeline::UI()
+	{
+	}
 }

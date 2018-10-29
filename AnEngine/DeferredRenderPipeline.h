@@ -12,6 +12,7 @@ namespace AnEngine::RenderCore
 		virtual void OnRender() override;
 		void GBuffer();
 		void DepthPreLight();
+		void UI();
 	public:
 		DeferredRenderPipeline() : BaseRenderPipeline(RenderPipelineType::Deferred) {}
 	};

@@ -241,6 +241,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="SystemBase.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />

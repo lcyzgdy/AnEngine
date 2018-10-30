@@ -125,4 +125,15 @@ namespace AnEngine::Game
 			i->Active(b);
 		}*/
 	}
+
+	GameObject* GameObject::Create(const std::wstring& name)
+	{
+		var scene = SceneManager::ActiveScene();
+		return nullptr;
+	}
+
+	GameObject* GameObject::Create(std::wstring&& name)
+	{
+		return nullptr;
+	}
 }

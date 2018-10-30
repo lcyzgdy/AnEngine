@@ -29,9 +29,9 @@ namespace AnEngine::Game
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<size_t, ComponentData*> m_component;
 
-	public:
 		explicit GameObject(const std::wstring& name);
 		explicit GameObject(std::wstring&& name);
+	public:
 		virtual ~GameObject();
 
 		std::wstring name;
@@ -124,6 +124,8 @@ namespace AnEngine::Game
 		bool Active();
 		void Active(bool b);
 
+		static GameObject* Create(const std::wstring& name);
+		static GameObject* Create(std::wstring&& name);
 		static GameObject* Find(const std::wstring& name);
 		static GameObject* Find(std::wstring&& name);
 	};

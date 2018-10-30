@@ -12,7 +12,10 @@ namespace AnEngine::Game::System
 	class SystemBase : Object
 	{
 		std::bitset<N> m_activeObj;
+		std::vector<GameObject>& m_objectsInScene;
+
 	public:
+		explicit SystemBase(std::vector<GameObject>& objInScene) : m_objectsInScene(objInScene) {}
 		virtual ~SystemBase() = default;
 	};
 }

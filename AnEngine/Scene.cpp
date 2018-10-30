@@ -10,7 +10,6 @@
 using namespace std;
 using namespace AnEngine::Utility;
 using namespace AnEngine::RenderCore;
-using namespace AnEngine::Game::ECBS;
 
 namespace AnEngine::Game
 {

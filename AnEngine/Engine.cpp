@@ -18,22 +18,22 @@ namespace AnEngine
 	void Engine::OnUpdate()
 	{
 		var activeScene = Game::SceneManager::ActiveScene();
-		for (var obj : activeScene->GetAllGameObject())
+		/*for (var& obj : activeScene->GetAllGameObject())
 		{
-			if (!obj->Active()) continue;
-			for (var be : obj->GetComponents())
+			if (!obj.Active()) continue;
+			for (var be : obj.GetComponents())
 			{
 				be->BeforeUpdate();
 			}
-			for (var be : obj->GetComponents())
+			for (var be : obj.GetComponents())
 			{
 				be->Update();
 			}
-			for (var be : obj->GetComponents())
+			for (var be : obj.GetComponents())
 			{
 				be->AfterUpdate();
 			}
-		}
+		}*/
 		Utility::ThreadPool::Commit(bind(&Engine::AfterUpdate, this));
 	}
 

@@ -88,6 +88,7 @@ namespace AnEngine::Game
 		return (*r).second;*/
 		var scene = SceneManager::ActiveScene();
 		scene->GetAllGameObject();
+		return nullptr;
 	}
 
 	GameObject* GameObject::Find(std::wstring&& name)
@@ -95,6 +96,7 @@ namespace AnEngine::Game
 		/*var r = g_gameObjects.find(name);
 		if (r == g_gameObjects.end()) return nullptr;
 		return (*r).second;*/
+		return nullptr;
 	}
 
 	bool GameObject::Active()
@@ -124,16 +126,5 @@ namespace AnEngine::Game
 		{
 			i->Active(b);
 		}*/
-	}
-
-	GameObject* GameObject::Create(const std::wstring& name)
-	{
-		var scene = SceneManager::ActiveScene();
-		return nullptr;
-	}
-
-	GameObject* GameObject::Create(std::wstring&& name)
-	{
-		return nullptr;
 	}
 }

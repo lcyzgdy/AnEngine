@@ -7,7 +7,7 @@
 
 namespace AnEngine::Game
 {
-	static class SceneManager : public ::Singleton<SceneManager>
+	static class SceneManager// : public ::Singleton<SceneManager>
 	{
 		static std::map<wstring, Scene*> m_scenes;
 		static Scene* m_activeScene;

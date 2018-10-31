@@ -18,7 +18,7 @@ namespace AnEngine::Game
 		// Scene直接调度BaseBehaviour
 		//friend class ::AnEngine::Engine;
 
-		std::vector<GameObject*> m_objects;
+		std::vector<GameObject> m_objects;
 
 		std::map<size_t, void*> m_componentGroups;
 
@@ -32,19 +32,6 @@ namespace AnEngine::Game
 
 		bool m_frameLoop;
 
-		//ObjectBehaviour* m_canvas;
-
-		//protected:
-		// 通过 BaseBehaviour 继承
-		//virtual void OnInit() override;
-		// 对象状态、状态机、AI、物理等
-		//virtual void BeforeUpdate() override;
-		// 脚本在这里运行
-		//virtual void OnUpdate() override;
-		// 好像没什么东西了
-		//virtual void AfterUpdate() override;
-		//virtual void OnRelease() override;
-
 	public:
 		//Scene(std::wstring _name);
 		Scene(std::wstring&& _name);
@@ -55,7 +42,7 @@ namespace AnEngine::Game
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
-		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
+		const std::vector<GameObject>& GetAllGameObject() { return m_objects; }
 
 		template<typename T>
 		ComponentGroup<T>* GetGroupOfType()
@@ -63,7 +50,7 @@ namespace AnEngine::Game
 			return (ComponentGroup<T>*)m_componentGroups[typeid(T).hash_code()];
 		}
 
-		template<typename T>
+		/*template<typename T>
 		std::vector<T*> GetAllComponentOfType()
 		{
 			std::vector<T*> ret;
@@ -72,7 +59,7 @@ namespace AnEngine::Game
 				//if(i.)
 			}
 			return ret;
-		}
+		}*/
 
 		/*void AddEntity(ECBS::GameEntity* entity);
 		void RemoveEntity(ECBS::GameEntity* entity);

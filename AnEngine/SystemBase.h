@@ -11,6 +11,7 @@ namespace AnEngine::Game::System
 	template<size_t N = 256>
 	class SystemBase : Object
 	{
+	protected:
 		std::bitset<N> m_activeObj;
 		std::vector<GameObject>& m_objectsInScene;
 

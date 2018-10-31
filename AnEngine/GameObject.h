@@ -22,16 +22,22 @@ namespace AnEngine::Game
 
 		std::mutex m_mutex;
 		bool m_active;
+		uint32_t m_id; // 在Scene容器中的编号
+
+		GameObject* m_parent;
+		std::set<GameObject*> m_children;
 
 	protected:
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
-		std::map<size_t, ComponentData*> m_component;
+		// std::map<size_t, ComponentData*> m_component;
 
-		explicit GameObject(const std::wstring& name);
-		explicit GameObject(std::wstring&& name);
 	public:
+		GameObject(const std::wstring& name);
+		GameObject(std::wstring&& name);
+		GameObject(const GameObject& rhs) = default;
+		GameObject(GameObject&& rhs) = default;
 		virtual ~GameObject();
 
 		std::wstring name;
@@ -57,10 +63,10 @@ namespace AnEngine::Game
 		{
 			std::vector<ComponentData*> ret;
 
-			for (var i : m_component)
+			/*for (var i : m_component)
 			{
 				ret.push_back(i.second);
-			}
+			}*/
 
 			return std::move(ret);
 		}
@@ -124,8 +130,9 @@ namespace AnEngine::Game
 		bool Active();
 		void Active(bool b);
 
-		static GameObject* Create(const std::wstring& name);
-		static GameObject* Create(std::wstring&& name);
+		__forceinline GameObject* Parent() { return m_parent; }
+		__forceinline uint32_t Id() { return m_id; }
+
 		static GameObject* Find(const std::wstring& name);
 		static GameObject* Find(std::wstring&& name);
 	};

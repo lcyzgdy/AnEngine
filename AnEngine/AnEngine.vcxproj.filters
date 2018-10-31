@@ -232,9 +232,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Game\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Game\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="TransformSystem.h">
       <Filter>Game\System</Filter>
     </ClInclude>
@@ -286,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="SystemBase.h">
       <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagedVector.h">
+      <Filter>UTIL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -431,9 +431,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Game\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
       <Filter>Game\Entity</Filter>
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">

@@ -19,7 +19,7 @@ Camera* testCamera;
 
 void LoadScene()
 {
-	testScene = new Scene(L"Test Scene");
+	/*testScene = new Scene(L"Test Scene");
 	GameObject* testCameraObject = new GameObject(L"Test Object");
 
 	testCamera = new Camera();
@@ -45,7 +45,7 @@ void LoadScene()
 	fsm->CreateStateTransCondition(s2, s1, L"Sin", 0f, StateMachine::Condition::Greater);
 	fsm->CreateStateTransCondition(s1, s3, L"T");
 	fsm->CreateStateTransCondition(s3, s1, L"Sin", 0.5f, StateMachine::Condition::Less);
-	testCameraObject->AddComponent(fsm);*/
+	testCameraObject->AddComponent(fsm);///
 
 	GameObject* canvas = new GameObject(L"Canvas");
 	canvas->AddComponent<Canvas>();
@@ -56,7 +56,7 @@ void LoadScene()
 
 	testScene->AddObject(testCameraObject);
 	testScene->AddObject(canvas);
-	Engine::Instance()->StartScene();
+	Engine::Instance()->StartScene();*/
 }
 
 void TestCamera::Update()
@@ -70,7 +70,7 @@ void TestCamera::Update()
 	}*/
 	//stateMachine->SetFloat(L"Sin", sin((float)Timer::GetTotalTicks() / 240000));
 	//GameObject::Find(L"Text")->GetComponent<UIText>()->Text(stateMachine->GetCurrectStateName());
-	GameObject::Find(L"Text")->GetComponent<UIText>()->Text(to_wstring(Timer::GetFPS()));
+	//GameObject::Find(L"Text")->GetComponent<UIText>()->Text(to_wstring(Timer::GetFPS()));
 }
 
 TestCamera::TestCamera() : Script()

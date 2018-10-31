@@ -15,7 +15,7 @@ namespace AnEngine::RenderCore
 	void DeferredRenderPipeline::GBuffer()
 	{
 		var scene = Game::SceneManager::ActiveScene();
-		var objs = scene->GetAllGameObject();
+		var& objs = scene->GetAllGameObject();
 	}
 
 	void DeferredRenderPipeline::DepthPreLight()

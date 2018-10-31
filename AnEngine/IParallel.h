@@ -2,7 +2,7 @@
 #ifndef __IPARALLER_H__
 #define __IPARALLER_H__
 
-#include "GameEntity.h"
+//#include "GameEntity.h"
 #include <tuple>
 
 namespace AnEngine::Game
@@ -18,9 +18,9 @@ namespace AnEngine::Game
 	{
 	public:
 		virtual void Execute(int index) = 0;
-		virtual bool Check() { return true; }
+		virtual bool Check(int index) { return true; }
 	protected:
-		int Length;
+		size_t Length;
 	};
 }
 

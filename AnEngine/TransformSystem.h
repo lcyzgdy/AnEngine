@@ -35,12 +35,12 @@ namespace AnEngine::Game::System
 		ComponentGroup<Component::Matrix4x4>& m_objectToWorld;
 
 	public:
-		explicit TransformSystem(ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+		explicit TransformSystem(std::vector<GameObject>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
 			ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
 			ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world);
 		// 通过 IParallel 继承
 		virtual void Execute(int index) override;
-		virtual bool Check() override;
+		virtual bool Check(int index) override;
 	};
 }
 

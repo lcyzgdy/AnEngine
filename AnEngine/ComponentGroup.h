@@ -17,7 +17,7 @@ namespace AnEngine::Game
 
 	public:
 		ComponentGroup() : m_dataType(typeid(T).hash_code()) {}
-		virtual ~ComponentGroup = default;
+		virtual ~ComponentGroup() = default;
 
 		// 如果未来有开发者用这个引擎开发游戏，自己去搞数据同步
 		std::vector<T> &Data() { return m_data; }

@@ -144,12 +144,12 @@ namespace AnEngine::Game
 
 	void Scene::AddObject(GameObject* obj)
 	{
-		m_objects.emplace_back(obj);
+		//m_objects.emplace_back(move(*obj));
 	}
 
 	void Scene::RemoveObject(GameObject* obj)
 	{
-		for (var it = m_objects.begin(); it != m_objects.end(); ++it)
+		/*for (var it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
 			if (*it == obj)
 			{
@@ -157,7 +157,7 @@ namespace AnEngine::Game
 				break;
 			}
 		}
-		delete obj;
+		delete obj;*/
 	}
 
 	/*void Scene::AddEntity(GameEntity* entity)

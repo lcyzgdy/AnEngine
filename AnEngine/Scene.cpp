@@ -144,7 +144,7 @@ namespace AnEngine::Game
 
 	void Scene::AddObject(GameObject* obj)
 	{
-		//m_objects.emplace_back(move(*obj));
+		m_objects.emplace_back(obj);
 	}
 
 	void Scene::RemoveObject(GameObject* obj)

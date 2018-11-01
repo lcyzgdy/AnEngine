@@ -4,7 +4,7 @@ using namespace AnEngine::DMath;
 
 namespace AnEngine::Game::System
 {
-	TransformSystem::TransformSystem(std::vector<GameObject>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+	TransformSystem::TransformSystem(const vector<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
 		ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
 		ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world) :
 		SystemBase<65536L>(objInScene),
@@ -25,7 +25,7 @@ namespace AnEngine::Game::System
 
 		m_localToWorld[index] = XMMatrixIdentity();
 
-		var parent = m_objectsInScene[index].Parent();
+		var parent = m_objectsInScene[index]->Parent();
 		while (parent != nullptr)
 		{
 			uint32_t id = parent->Id();

@@ -13,10 +13,10 @@ namespace AnEngine::Game::System
 	{
 	protected:
 		std::bitset<N> m_activeObj;
-		std::vector<GameObject>& m_objectsInScene;
+		std::vector<GameObject*> m_objectsInScene;
 
 	public:
-		explicit SystemBase(std::vector<GameObject>& objInScene) : m_objectsInScene(objInScene) {}
+		explicit SystemBase(const std::vector<GameObject*> objInScene) : m_objectsInScene(objInScene) {}
 		virtual ~SystemBase() = default;
 	};
 }

@@ -18,7 +18,7 @@ namespace AnEngine::Game
 		// Scene直接调度BaseBehaviour
 		//friend class ::AnEngine::Engine;
 
-		std::vector<GameObject> m_objects;
+		std::vector<GameObject*> m_objects;
 
 		std::map<size_t, void*> m_componentGroups;
 
@@ -42,7 +42,7 @@ namespace AnEngine::Game
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
-		const std::vector<GameObject>& GetAllGameObject() { return m_objects; }
+		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
 
 		template<typename T>
 		ComponentGroup<T>* GetGroupOfType()

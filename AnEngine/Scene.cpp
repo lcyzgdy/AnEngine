@@ -134,6 +134,7 @@ namespace AnEngine::Game
 
 	Scene::Scene(wstring&& _name) : name(_name)
 	{
+		m_objects.reserve(256);
 		SceneManager::AddNewScene(this);
 	}
 
@@ -144,6 +145,7 @@ namespace AnEngine::Game
 
 	void Scene::AddObject(GameObject* obj)
 	{
+		obj->m_id = m_objects.size();
 		m_objects.emplace_back(obj);
 	}
 

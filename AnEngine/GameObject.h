@@ -22,23 +22,30 @@ namespace AnEngine::Game
 
 		std::mutex m_mutex;
 		bool m_active;
+		bool m_destoryed;
 		uint32_t m_id; // 在Scene容器中的编号
+
+		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
 
 		GameObject* m_parent;
 		std::set<GameObject*> m_children;
+
+		static std::queue<GameObject*> s_destoryed;
 
 	protected:
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
-		// std::map<size_t, ComponentData*> m_component;
+		std::map<double, size_t> m_typeToId;
 
-	public:
+		// std::map<size_t, ComponentData*> m_component;
 		GameObject(const std::wstring& name);
 		GameObject(std::wstring&& name);
-		GameObject(const GameObject& rhs) = default;
-		GameObject(GameObject&& rhs) = default;
 		virtual ~GameObject();
+
+		static void RealDestory();
+
+	public:
 
 		std::wstring name;
 
@@ -59,17 +66,17 @@ namespace AnEngine::Game
 		}*/
 
 		// 获取所有组件，至于组件里有啥以及这个函数有什么用以后再说
-		std::vector<ComponentData*>&& GetComponents()
+		/*std::vector<ComponentData*>&& GetComponents()
 		{
 			std::vector<ComponentData*> ret;
 
 			/*for (var i : m_component)
 			{
 				ret.push_back(i.second);
-			}*/
+			}
 
 			return std::move(ret);
-		}
+		}*/
 
 		/*template<typename _Ty>
 		std::vector<_Ty*> GetComponentsInChildren()
@@ -112,9 +119,9 @@ namespace AnEngine::Game
 			return m_component[typeid(_Ty).hash_code()];
 		}
 
-		void AddComponent(ObjectBehaviour* component);
+		void AddBehaviour(ObjectBehaviour* component);
 
-		template<typename _Ty>
+		/*template<typename _Ty>
 		void AddComponent()
 		{
 			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
@@ -122,6 +129,26 @@ namespace AnEngine::Game
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
 			if (GetComponent<_Ty>() == nullptr)	AddComponent(new _Ty());
+		}*/
+
+		template<typename T>
+		T* GetBehaviour()
+		{
+			if (std::is_base_of<ObjectBehaviour, T>::value == false)
+			{
+				throw std::exception("Type is not derived ObjectBehaviour");
+			}
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) return m_behaviour[m_typeToId[[typeid(T).hash_code()]];
+			return nullptr;
+		}
+
+		template<typename T>
+		T* AddBehaviour()
+		{
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) throw std::exception("已经存在一个了");
+			m_typeToId[typeid(T).hash_code()] = m_behaviour.size();
+			m_behaviour.emplace_back(new T());
+			return *m_behaviour.rbegin();
 		}
 
 		//void RemoveComponent(ObjectBehaviour* component);
@@ -133,6 +160,9 @@ namespace AnEngine::Game
 		__forceinline GameObject* Parent() { return m_parent; }
 		__forceinline uint32_t Id() { return m_id; }
 
+		static GameObject* Create(const std::wstring& name);
+		static GameObject* Create(std::wstring&& name);
+		static void Destory(GameObject* gameObject);
 		static GameObject* Find(const std::wstring& name);
 		static GameObject* Find(std::wstring&& name);
 	};

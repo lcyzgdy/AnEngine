@@ -269,9 +269,6 @@
     <ClInclude Include="ComponentData.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentGroup.h">
-      <Filter>Game\Component</Filter>
-    </ClInclude>
     <ClInclude Include="GroupWarper.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
@@ -286,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="ManagedVector.h">
       <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentGroup.hpp">
+      <Filter>Game\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

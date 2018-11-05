@@ -4,10 +4,10 @@ using namespace AnEngine::DMath;
 
 namespace AnEngine::Game::System
 {
-	TransformSystem::TransformSystem(const vector<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+	TransformSystem::TransformSystem(deque<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
 		ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
 		ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world) :
-		SystemBase<65536L>(objInScene),
+		SystemBase(objInScene),
 		m_posG(poses), m_rotG(rots), m_scaG(scas), m_objectToLocal(obj2local), m_localToWorld(local2world), m_objectToWorld(local2world)
 	{
 		Length = m_posG.Data().size();
@@ -39,7 +39,8 @@ namespace AnEngine::Game::System
 
 	bool TransformSystem::Check(int index)
 	{
-		if (!m_activeObj[index]) return false;
+		//if (!m_activeObj[index]) return false;
+		if (m_objectsInScene[index]->Destoryed()) return false;
 		return true;
 	}
 }

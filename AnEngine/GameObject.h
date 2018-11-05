@@ -138,9 +138,11 @@ namespace AnEngine::Game
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) return m_behaviour[m_typeToId[[typeid(T).hash_code()]];
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) return m_behaviour[m_typeToId[typeid(T).hash_code()]];
 			return nullptr;
 		}
+
+		const std::vector<ObjectBehaviour*>& GetAllBehaviours() { return m_behaviour; }
 
 		template<typename T>
 		T* AddBehaviour()
@@ -154,8 +156,10 @@ namespace AnEngine::Game
 		//void RemoveComponent(ObjectBehaviour* component);
 		//void AddChildObject(GameObject* obj);
 
-		bool Active();
+		bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }
 		void Active(bool b);
+
+		bool Destoryed() { return m_destoryed; }
 
 		__forceinline GameObject* Parent() { return m_parent; }
 		__forceinline uint32_t Id() { return m_id; }

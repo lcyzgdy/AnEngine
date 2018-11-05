@@ -181,7 +181,7 @@
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="ComponentData.h" />
-    <ClInclude Include="ComponentGroup.h" />
+    <ClInclude Include="ComponentGroup.hpp" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />

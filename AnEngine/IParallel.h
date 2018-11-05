@@ -19,7 +19,6 @@ namespace AnEngine::Game
 	public:
 		virtual void Execute(int index) = 0;
 		virtual bool Check(int index) { return true; }
-	protected:
 		size_t Length;
 	};
 }

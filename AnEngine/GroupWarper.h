@@ -3,7 +3,7 @@
 #define __GROUPWARPER_H__
 
 #include "onwind.h"
-#include "ComponentGroup.h"
+#include "ComponentGroup.hpp"
 
 using namespace std;
 

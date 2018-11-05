@@ -140,12 +140,6 @@ namespace AnEngine::Game
 		return nullptr;
 	}
 
-	bool GameObject::Active()
-	{
-		if (m_destoryed) throw exception("This object has already destoryed!");
-		return m_active;
-	}
-
 	void GameObject::Active(bool b)
 	{
 		if (m_destoryed) throw exception("This object has already destoryed!");

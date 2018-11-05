@@ -4,12 +4,12 @@
 
 #include "IParallel.h"
 #include "Transform.h"
-#include "ComponentGroup.h"
+#include "ComponentGroup.hpp"
 #include "SystemBase.h"
 
 namespace AnEngine::Game::System
 {
-	class TransformSystem : public SystemBase<65536L>, public IParallel
+	class TransformSystem : public SystemBase, public IParallel
 	{
 		/*struct DataGroup : public IComponent<Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale, TransformMatrix>
 		{
@@ -35,7 +35,7 @@ namespace AnEngine::Game::System
 		ComponentGroup<Component::Matrix4x4>& m_objectToWorld;
 
 	public:
-		explicit TransformSystem(const std::vector<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+		explicit TransformSystem(std::deque<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
 			ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
 			ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world);
 		// 通过 IParallel 继承

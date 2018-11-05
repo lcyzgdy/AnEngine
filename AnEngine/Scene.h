@@ -2,13 +2,13 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
+#include <condition_variable>
 #include "onwind.h"
 #include "BaseBehaviour.h"
 #include "GameObject.h"
-#include "Camera.h"
+#include "ComponentGroup.hpp"
+#include "SystemBase.h"
 //#include "GameEntity.h"
-#include "GroupWarper.h"
-#include <condition_variable>
 
 namespace AnEngine::Game
 {
@@ -18,9 +18,12 @@ namespace AnEngine::Game
 		// Scene直接调度BaseBehaviour
 		//friend class ::AnEngine::Engine;
 
-		std::vector<GameObject*> m_objects;
+		std::deque<GameObject*> m_objects;
+		std::queue<uint32_t> m_freeObjPos;
 
 		std::map<size_t, void*> m_componentGroups;
+
+		std::deque<System::SystemBase*> m_systems;
 
 		//std::vector<ECBS::GameEntity*> m_entities;
 		//std::vector<ObjectBehaviour*> m_objects;
@@ -38,11 +41,35 @@ namespace AnEngine::Game
 		Scene(const std::wstring& _name);
 		virtual ~Scene() = default;
 
+		virtual void OnLoad() = 0;
+		virtual void OnUnload() = 0;
+
 		std::wstring name;
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
-		std::vector<GameObject*> GetAllGameObject() { return m_objects; }
+		std::deque<GameObject*> GetAllGameObject() { return m_objects; }
+
+		template<typename T>
+		void CreateComponentGroup()
+		{
+			if (m_componentGroups.find(typeid(T).hash_code()) != m_componentGroups.end()) throw std::exception("已经有一个");
+			var group = new ComponentGroup<T>();
+			m_componentGroups[typeid(T).hash_code()] = group;
+		}
+
+		template<typename T>
+		void CreateSystem()
+		{
+			if (std::is_base_of<System::SystemBase, T>::value == false) throw std::exception("这不是一个System");
+			for (var i : m_systems)
+			{
+				if (typeid(decltype(i)).hash_code() != typeid(T).hash_code()) throw std::exception("已经存在一个这种类型的System");
+			}
+			m_systems.emplace_back(new T());
+		}
+
+		const std::deque<System::SystemBase*>& GetAllSystems() { return m_systems; }
 
 		template<typename T>
 		ComponentGroup<T>* GetGroupOfType()

@@ -13,14 +13,14 @@ namespace AnEngine::Game
 	class ComponentGroup : public Object
 	{
 		uint64_t m_dataType;
-		std::vector<T> m_data;
+		std::deque<T> m_data;
 
 	public:
 		ComponentGroup() : m_dataType(typeid(T).hash_code()) {}
 		virtual ~ComponentGroup() = default;
 
 		// 如果未来有开发者用这个引擎开发游戏，自己去搞数据同步
-		std::vector<T> &Data() { return m_data; }
+		std::deque<T>& Data() { return m_data; }
 
 		T& operator[](int i) { return m_data[i]; }
 	};

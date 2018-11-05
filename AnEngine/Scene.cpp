@@ -134,7 +134,7 @@ namespace AnEngine::Game
 
 	Scene::Scene(wstring&& _name) : name(_name)
 	{
-		m_objects.reserve(256);
+		//m_objects.reserve(256);
 		SceneManager::AddNewScene(this);
 	}
 

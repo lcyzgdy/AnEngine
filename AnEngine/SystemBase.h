@@ -8,15 +8,13 @@
 
 namespace AnEngine::Game::System
 {
-	template<size_t N = 256>
 	class SystemBase : Object
 	{
 	protected:
-		std::bitset<N> m_activeObj;
-		std::vector<GameObject*> m_objectsInScene;
+		std::deque<GameObject*>& m_objectsInScene;
 
 	public:
-		explicit SystemBase(const std::vector<GameObject*> objInScene) : m_objectsInScene(objInScene) {}
+		explicit SystemBase(std::deque<GameObject*>& objInScene) : m_objectsInScene(objInScene) {}
 		virtual ~SystemBase() = default;
 	};
 }

@@ -19,6 +19,7 @@ namespace AnEngine
 		bool m_initialized;
 		bool m_running;
 		std::mutex m_sceneResMutex;
+		std::mutex m_parallelMutex;
 
 		Engine() = default;
 		virtual ~Engine() = default;

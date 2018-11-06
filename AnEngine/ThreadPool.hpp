@@ -37,6 +37,7 @@ namespace AnEngine::Utility::ThreadPool
 			ThreadPool(int size)
 			{
 				m_idleThreadNum = (size < 1) ? 1 : size;
+				m_pool.reserve(m_idleThreadNum + 1);
 				for (int i = 0; i < m_idleThreadNum; i++)
 				{
 					m_pool.emplace_back([this]()
@@ -80,8 +81,44 @@ namespace AnEngine::Utility::ThreadPool
 				return m_idleThreadNum;
 			}
 
+			template<typename F, typename ...Args>
+			auto Commit(std::_Binder<std::_Unforced, F, Args...>&& funcBinder)
+			{
+				if (m_stopped.load())
+				{
+					throw exception("Thread pool is stopped");
+				}
+				using FuncType = decltype(funcBinder());
+				var task = std::make_shared<std::packaged_task<FuncType>>(funcBinder);
+				var awaitFuture = task->get_future();
+				{
+					std::lock_guard<std::mutex> lock(m_mutex);
+					m_tasks.emplace([task] { (*task)(); });
+				}
+				m_cvTask.notify_one();
+				return std::move(awaitFuture);
+			}
+
+			template<typename F, typename ...Args>
+			auto Commit(std::_Binder<std::_Unforced, F, Args...>&& funcBinder, std::function<void()>&& callback)
+			{
+				if (m_stopped.load())
+				{
+					throw exception("Thread pool is stopped");
+				}
+				using FuncType = decltype(funcBinder());
+				var task = std::make_shared<std::packaged_task<FuncType>>(funcBinder);
+				var awaitFuture = task->get_future();
+				{
+					std::lock_guard<std::mutex> lock(m_mutex);
+					m_tasks.emplace([task] { (*task)(); callback(); });
+				}
+				m_cvTask.notify_one();
+				return std::move(awaitFuture);
+			}
+
 			template<typename F, typename ... Args>
-			var Commit(F&& f, Args&& ...args)// -> std::future<decltype(f(args...))>
+			auto Commit(F&& f, Args&& ...args)// -> std::future<decltype(f(args...))>
 			{
 				if (m_stopped.load())
 				{
@@ -102,14 +139,26 @@ namespace AnEngine::Utility::ThreadPool
 		extern ThreadPool u_s_threadPool;
 	}
 
+	template<typename F, typename ...Args>
+	__forceinline auto Commit(std::_Binder<std::_Unforced, F, Args...>&& funcBinder)
+	{
+		return Private::u_s_threadPool.Commit(funcBinder);
+	}
+
 	template<typename F, typename ... Args>
-	var Commit(F && f, Args && ...args)
+	__forceinline auto Commit(F&& f, Args&& ...args)
 	{
 		return Private::u_s_threadPool.Commit(f, args...);
 	}
 
+	template<typename F, typename ...Args>
+	__forceinline auto Commit(std::_Binder<std::_Unforced, F, Args...>&& funcBinder, std::function<void()>&& callback)
+	{
+		return Private::u_s_threadPool.Commit(funcBinder, callback);
+	}
+
 	template<typename F, typename ... Args>
-	var CommitAfter(std::future<void>&& wait, F&& f, Args&& ... args)
+	auto CommitAfter(std::future<void>&& wait, F&& f, Args&& ... args)
 	{
 		wait.get();
 		return Private::u_s_threadPool.Commit(f, args...);

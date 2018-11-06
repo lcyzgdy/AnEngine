@@ -42,10 +42,16 @@ namespace AnEngine
 			{
 				var parallel = (IParallel*)sys;
 				condition_variable cv;
+				unique_lock<mutex> lock(m_parallelMutex);
+				atomic_int32_t count = 0;
 				for (int i = 0; i < parallel->Length; i++)
 				{
-					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i));
+					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() { count++; });
 				}
+				cv.wait(lock, [&]()->bool { return count == parallel->Length; });
+			}
+			else
+			{
 			}
 		}
 		Utility::ThreadPool::Commit(bind(&Engine::UpdateBehaviour, this));

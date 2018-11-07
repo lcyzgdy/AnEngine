@@ -415,28 +415,26 @@ namespace AnEngine::RenderCore::Resource
 		return desc;
 	}
 
-	/*void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource* resource,
+	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource* resource,
 		D3D12_RESOURCE_STATES currentState)
 	{
 		(device); // 支持多适配器时要改正!!!
 
 		if (resource == nullptr) throw exception();
-		D3D12_RESOURCE_DESC ResourceDesc = resource->GetDesc();
+		D3D12_RESOURCE_DESC resourceDesc = resource->GetDesc();
 
 		m_resource_cp.Attach(resource);
 		m_state = currentState;
 
-		m_width = (uint32_t)ResourceDesc.Width;		// 暂时不关心过大的地址。
-		m_height = ResourceDesc.Height;
-		m_size = ResourceDesc.DepthOrArraySize;
-		m_format = ResourceDesc.Format;
+		m_width = (uint32_t)resourceDesc.Width;		// 暂时不关心过大的地址。
+		m_height = resourceDesc.Height;
+		m_size = resourceDesc.DepthOrArraySize;
+		m_format = resourceDesc.Format;
 
-#ifndef RELEASE
+#if defined _DEBUG || defined DEBUG
 		m_resource_cp->SetName(name.c_str());
-#else
-		(name);
 #endif
-	}*/
+	}
 
 	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name,
 		const D3D12_RESOURCE_DESC & resourceDesc, D3D12_CLEAR_VALUE clearValue,
@@ -453,14 +451,12 @@ namespace AnEngine::RenderCore::Resource
 
 #ifndef RELEASE
 		m_resource_cp->SetName(name.c_str());
-#else
-		(Name);
 #endif
 	}
 
-	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name, const D3D12_RESOURCE_DESC & resourceDesc,
+	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring& name, const D3D12_RESOURCE_DESC& resourceDesc,
 		D3D12_CLEAR_VALUE clearValue)
 	{
 		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::S_GpuVirtualAddressUnknown);
 	}
-}
+	}

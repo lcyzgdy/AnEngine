@@ -7,6 +7,7 @@
 #include "DTimer.h"
 #include "DebugLog.h"
 #include <dxgidebug.h>
+#include "FenceContext.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -296,7 +297,7 @@ namespace AnEngine::RenderCore
 		renderTargetToCommon.Transition.pResource = dstColorBuffer->GetResource();
 
 		//iList->ResourceBarrier(1, &commonToRenderTarget);
-		var clearColorTemp = dstColorBuffer->GetClearColor();
+		//var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();

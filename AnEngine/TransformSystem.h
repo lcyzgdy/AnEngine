@@ -2,14 +2,16 @@
 #ifndef __TRANSFORMSYSTEM_H__
 #define __TRANSFORMSYSTEM_H__
 
-#include "BehaviourSystem.h"
+#include "IParallel.h"
 #include "Transform.h"
+#include "ComponentGroup.hpp"
+#include "SystemBase.h"
 
-namespace AnEngine::Game
+namespace AnEngine::Game::System
 {
-	class TransformSystem : public IParallel
+	class TransformSystem : public SystemBase, public IParallel
 	{
-		struct DataGroup : public IComponent<Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale, TransformMatrix>
+		/*struct DataGroup : public IComponent<Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale, TransformMatrix>
 		{
 			std::vector<Position*> position;
 			std::vector<Rotation*> rotation;
@@ -23,12 +25,22 @@ namespace AnEngine::Game
 			{
 				return { position[i], rotation[i], scale[i], localPosition[i], localRotation[i], localScale[i], transformMatrix[i] };
 			}
-		};
+		};*/
 
-		DataGroup m_data;
+		ComponentGroup<Component::Position>& m_posG;
+		ComponentGroup<Component::Rotation>& m_rotG;
+		ComponentGroup<Component::Scale>& m_scaG;
+		ComponentGroup<Component::Matrix4x4>& m_objectToLocal;
+		ComponentGroup<Component::Matrix4x4>& m_localToWorld;
+		ComponentGroup<Component::Matrix4x4>& m_objectToWorld;
+
 	public:
+		explicit TransformSystem(std::deque<GameObject*>& objInScene, ComponentGroup<Component::Position>& poses, ComponentGroup<Component::Rotation>& rots,
+			ComponentGroup<Component::Scale>& scas, ComponentGroup<Component::Matrix4x4>& obj2local,
+			ComponentGroup<Component::Matrix4x4>& local2world, ComponentGroup<Component::Matrix4x4>&obj2world);
 		// 通过 IParallel 继承
 		virtual void Execute(int index) override;
+		virtual bool Check(int index) override;
 	};
 }
 

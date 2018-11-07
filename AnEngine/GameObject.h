@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include <mutex>
 #include <queue>
+#include "ComponentData.h"
+#include <set>
 // #include"BaseBehaviour.h"
 
 namespace AnEngine::Game
@@ -20,32 +22,39 @@ namespace AnEngine::Game
 
 		std::mutex m_mutex;
 		bool m_active;
+		bool m_destoryed;
+		uint32_t m_id; // 在Scene容器中的编号
+
+		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
+
+		GameObject* m_parent;
+		std::set<GameObject*> m_children;
+
+		static std::queue<GameObject*> s_destoryed;
 
 	protected:
-		// 当前物体的父物体
-		GameObject * m_parentObject;
-
-		// 当前物体的子物体
-		std::vector<GameObject*> m_children;
-
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, such script、renderer、rigidbody etc.
-		std::vector<ObjectBehaviour*> m_component;
+		std::vector<ObjectBehaviour*> m_behaviour;
+		std::map<double, size_t> m_typeToId;
 
-	public:
-		explicit GameObject(const std::wstring& name);
-		explicit GameObject(std::wstring&& name);
+		// std::map<size_t, ComponentData*> m_component;
+		GameObject(const std::wstring& name);
+		GameObject(std::wstring&& name);
 		virtual ~GameObject();
 
+		static void RealDestory();
+
+	public:
+
 		std::wstring name;
-		Transform transform;
 
-		GameObject* GetParent();
-		void SetParent(GameObject* newParent);
+		//GameObject* GetParent();
+		//void SetParent(GameObject* newParent);
 
-		std::vector<GameObject*> GetChildren();
+		//std::vector<GameObject*> GetChildren();
 
-		template<typename _Ty = GameObject>
+		/*template<typename _Ty = GameObject>
 		_Ty* GetChildByName(std::wstring& name)
 		{
 			//for (auto i = 0; i < m_children.size(); i++)
@@ -54,17 +63,22 @@ namespace AnEngine::Game
 				if (i->name == name) return static_cast<_Ty*>(gameObject);
 			}
 			return nullptr;
-		}
+		}*/
 
-		template<typename _Ty>
-		std::vector<_Ty*>&& GetComponents()
+		// 获取所有组件，至于组件里有啥以及这个函数有什么用以后再说
+		/*std::vector<ComponentData*>&& GetComponents()
 		{
-			std::vector<_Ty*> ret;
+			std::vector<ComponentData*> ret;
+
+			/*for (var i : m_component)
+			{
+				ret.push_back(i.second);
+			}
 
 			return std::move(ret);
-		}
+		}*/
 
-		template<typename _Ty>
+		/*template<typename _Ty>
 		std::vector<_Ty*> GetComponentsInChildren()
 		{
 			std::vector<_Ty*> ret;
@@ -75,12 +89,12 @@ namespace AnEngine::Game
 			}
 			while (!q.empty())
 			{
-				for (var c : q.front()->m_component)
+				for (var c : q.front()->m_behaviour)
 				{
 					/*if (typeid(*c) == typeid(_Ty))
 					{
 						ret.push_back((_Ty*)c);
-					}*/
+					}
 					var p = dynamic_cast<_Ty*>(c);
 					if (p != nullptr)
 					{
@@ -95,46 +109,72 @@ namespace AnEngine::Game
 			}
 
 			return std::move(ret);
-		}
+		}*/
 
-		std::vector<ObjectBehaviour*> GetComponents();
-
-		template<typename _Ty = ObjectBehaviour>
-		_Ty* GetComponent()
-		{
-			for (var i : this->m_component)
-			{
-				if (typeid(*i) == typeid(_Ty))
-				{
-					return (_Ty*)i;
-				}
-				/*var p = dynamic_cast<_Ty*>(i);
-				if (p != nullptr)
-					return p;*/
-			}
-			return nullptr;
-		}
-
-		void AddComponent(ObjectBehaviour* component);
+		//std::vector<ObjectBehaviour*> GetComponents() { return m_behaviour; }
 
 		template<typename _Ty>
+		_Ty* GetComponent()
+		{
+			return m_component[typeid(_Ty).hash_code()];
+		}
+
+		void AddBehaviour(ObjectBehaviour* component);
+
+		/*template<typename _Ty>
 		void AddComponent()
 		{
 			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			AddComponent(new _Ty());
+			if (GetComponent<_Ty>() == nullptr)	AddComponent(new _Ty());
+		}*/
+
+		template<typename T>
+		T* GetBehaviour()
+		{
+			if (std::is_base_of<ObjectBehaviour, T>::value == false)
+			{
+				throw std::exception("Type is not derived ObjectBehaviour");
+			}
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) return m_behaviour[m_typeToId[typeid(T).hash_code()]];
+			return nullptr;
 		}
 
-		void RemoveComponent(ObjectBehaviour* component);
-		void AddChildObject(GameObject* obj);
+		const std::vector<ObjectBehaviour*>& GetAllBehaviours() { return m_behaviour; }
 
-		bool Active();
+		template<typename T>
+		T* AddBehaviour()
+		{
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) throw std::exception("已经存在一个了");
+			m_typeToId[typeid(T).hash_code()] = m_behaviour.size();
+			m_behaviour.emplace_back(new T());
+			return *m_behaviour.rbegin();
+		}
+
+		//void RemoveComponent(ObjectBehaviour* component);
+		//void AddChildObject(GameObject* obj);
+
+		bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }
 		void Active(bool b);
 
+		bool Destoryed() { return m_destoryed; }
+
+		__forceinline GameObject* Parent() { return m_parent; }
+		__forceinline uint32_t Id() { return m_id; }
+
+		static GameObject* Create(const std::wstring& name);
+		static GameObject* Create(std::wstring&& name);
+		static void Destory(GameObject* gameObject);
 		static GameObject* Find(const std::wstring& name);
 		static GameObject* Find(std::wstring&& name);
 	};
 }
 #endif // !__GAMEOBJECT_H__
+
+
+
+/* 最终还是在 GameObject 里面添加了Component和Behaviour，如果彻底抛弃Behaviour则一些本来很简单的功能实现起来十分麻烦，
+ * 而且之前写好的状态机也会报废。
+ */

@@ -70,7 +70,7 @@ namespace AnEngine::Game
 
 	void ObjectBehaviour::Active(bool b)
 	{
-		lock_guard<mutex> lock(m_mutex);
+		//lock_guard<mutex> lock(m_mutex);
 		m_active = b;
 		if (b)
 		{

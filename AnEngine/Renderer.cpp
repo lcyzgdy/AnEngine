@@ -25,7 +25,7 @@ namespace AnEngine::Game
 
 	void Renderer::Update()
 	{
-		m_renderTarget = Camera::FindForwordTarget(this->gameObject->transform.Position());
+		//m_renderTarget = Camera::FindForwordTarget(this->gameObject->transform.Position());
 	}
 
 	void Renderer::LateUpdate()

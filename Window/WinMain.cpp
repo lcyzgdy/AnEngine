@@ -1,7 +1,6 @@
 #include"onwind.h"
 //#include"DrawLine.h"
 #include"NBody.h"
-#include"Driver.h"
 #include"ThreadPool.hpp"
 #include"Input.h"
 #include"Screen.h"
@@ -119,7 +118,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	Randomize();
 
-	AnEngine::Engine::GetInstance()->Initialize(window, hInstance, screenw, screenh);
+	AnEngine::Engine::Instance()->Initialize(window, hInstance, screenw, screenh);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();
@@ -146,7 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	//BaseInput::GetInstance()->Release();
-	Engine::GetInstance()->Release();
+	Engine::Instance()->Release();
 	//d3dApp->OnRelease();
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;

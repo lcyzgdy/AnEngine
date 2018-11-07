@@ -35,7 +35,7 @@ namespace AnEngine::RenderCore::Resource
 		var device = r_graphicsCard[0]->GetDevice();
 		//D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
 		//m_usageState = D3D12_RESOURCE_STATE_COMMON;
-		m_usageState = D3D12_RESOURCE_STATE_GENERIC_READ;
+		m_state = D3D12_RESOURCE_STATE_GENERIC_READ;
 
 		/*D3D12_HEAP_PROPERTIES heapProps;
 		heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;

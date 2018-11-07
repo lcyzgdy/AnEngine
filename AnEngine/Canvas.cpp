@@ -16,10 +16,10 @@ namespace AnEngine::Game::UI
 	{
 		r_graphicsCard2D->Begin();
 
-		for (var each : gameObject->GetComponentsInChildren<UIComponent>())
+		/*for (var each : gameObject->GetComponentsInChildren<UIComponent>())
 		{
 			each->OnGUI();
-		}
+		}*/
 
 		r_graphicsCard2D->End();
 	}

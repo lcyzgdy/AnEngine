@@ -23,9 +23,6 @@
     <Filter Include="Game\Behaviour">
       <UniqueIdentifier>{69eba527-9265-4c33-9efa-350535938427}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Component">
-      <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Resource">
       <UniqueIdentifier>{aca8377d-6640-4eae-bfbd-fd3cdcbe689e}</UniqueIdentifier>
     </Filter>
@@ -37,6 +34,12 @@
     </Filter>
     <Filter Include="Game\System">
       <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Component">
+      <UniqueIdentifier>{27602513-2c0d-47e5-9e05-c3ce6203a54a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ComponentLegacy">
+      <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,28 +125,25 @@
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ComputeUnit.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ObjectBehaviour.h">
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="SampleMeshRender.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
-      <Filter>Game\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ParticlesRenderer.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ColorBuffer.h">
       <Filter>Graphics\Resource</Filter>
@@ -191,7 +191,7 @@
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>Game</Filter>
@@ -200,10 +200,10 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="UIComponent.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="UIText.h">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsCard.h">
       <Filter>Graphics</Filter>
@@ -232,15 +232,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Game\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentBase.h">
-      <Filter>Game\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="BehaviourSystem.h">
-      <Filter>Game\System</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Game\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="TransformSystem.h">
       <Filter>Game\System</Filter>
     </ClInclude>
@@ -265,6 +256,39 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="SceneManager.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipelineType.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentData.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupWarper.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="IParallel.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemBase.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagedVector.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentGroup.hpp">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ISerial.h">
+      <Filter>Game\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -332,25 +356,25 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBehaviour.cpp">
       <Filter>Game\Behaviour</Filter>
     </ClCompile>
     <ClCompile Include="ComputeUnit.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="SampleMeshRender.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ParticlesRenderer.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ColorBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
@@ -386,7 +410,7 @@
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="StateMachine.cpp">
       <Filter>Game</Filter>
@@ -395,10 +419,10 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="UIComponent.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="UIText.cpp">
-      <Filter>Game\Component</Filter>
+      <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsCard.cpp">
       <Filter>Graphics</Filter>
@@ -410,9 +434,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Game\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
       <Filter>Game\Entity</Filter>
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">
@@ -427,6 +448,12 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderPipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

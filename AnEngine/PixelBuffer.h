@@ -40,6 +40,10 @@ namespace AnEngine::RenderCore::Resource
 		void CreateTextureResource(ID3D12Device* device, const wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue);
 
+	protected:
+		virtual void AssociateWithResource(ID3D12Device* device, const std::wstring& name, ID3D12Resource* resource,
+			D3D12_RESOURCE_STATES currentState)  override;
+
 	public:
 		PixelBuffer() = delete;
 		PixelBuffer(uint32_t width, uint32_t height, uint32_t depthOrArraySize, DXGI_FORMAT format);

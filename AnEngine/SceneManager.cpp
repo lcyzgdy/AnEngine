@@ -6,6 +6,7 @@ namespace AnEngine::Game
 {
 	void SceneManager::AddNewScene(Scene* scene)
 	{
+		if (m_scenes.empty()) m_activeScene = scene;
 		m_scenes[scene->name] = scene;
 	}
 
@@ -16,7 +17,9 @@ namespace AnEngine::Game
 		{
 			throw exception("Load same scene");
 		}
+		m_activeScene->OnUnload();
 		m_activeScene = m_scenes[sceneName];
+		m_activeScene->OnLoad();
 	}
 
 	void SceneManager::LoadScene(wstring&& sceneName)
@@ -26,12 +29,15 @@ namespace AnEngine::Game
 		{
 			throw exception("Load same scene");
 		}
+		m_activeScene->OnUnload();
 		m_activeScene = m_scenes[sceneName];
+		m_activeScene->OnLoad();
 	}
 
 	vector<Scene*> SceneManager::GetAllScenes()
 	{
 		vector<Scene*> res;
+		res.reserve(32);
 		for (var i : m_scenes)
 		{
 			res.push_back(i.second);

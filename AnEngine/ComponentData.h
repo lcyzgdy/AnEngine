@@ -6,16 +6,13 @@
 
 namespace AnEngine::Game
 {
+	class GameObject;
+
 	class ComponentData : public Object
 	{
+		GameObject* m_entity;
 	public:
 		virtual ~ComponentData() = default;
-	};
-
-	template<typename T0, typename... T>
-	struct IComponent
-	{
-		virtual std::tuple<T0*, T*...> operator[](int i) = 0;
 	};
 }
 #endif // __COMPONENTBASE_H__

@@ -122,7 +122,7 @@
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
-      <DisableSpecificWarnings>4455;238;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4455;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,7 +172,7 @@
     <ClInclude Include="..\Assets\HlslCompat.h" />
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
-    <ClInclude Include="BehaviourSystem.h" />
+    <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
@@ -180,11 +180,13 @@
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
-    <ClInclude Include="ComponentBase.h" />
+    <ClInclude Include="ComponentData.h" />
+    <ClInclude Include="ComponentGroup.hpp" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
     <ClInclude Include="DeferredPipeline.h" />
+    <ClInclude Include="DeferredRenderPipeline.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />
     <ClInclude Include="DMath.hpp" />
@@ -200,14 +202,16 @@
     <ClInclude Include="FenceContext.h" />
     <ClInclude Include="FileHelper.hpp" />
     <ClInclude Include="frameBuffering.h" />
-    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />
     <ClInclude Include="GpuResource.h" />
     <ClInclude Include="GraphicsCard.h" />
+    <ClInclude Include="GroupWarper.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ISerial.h" />
     <ClInclude Include="ManagedTask.hpp" />
+    <ClInclude Include="ManagedVector.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
@@ -226,6 +230,8 @@
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderCoreConstants.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPipeline.h" />
+    <ClInclude Include="RenderPipelineType.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
@@ -236,6 +242,7 @@
     <ClInclude Include="ShaderClass.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="SystemBase.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
@@ -256,6 +263,7 @@
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="ComputeUnit.cpp" />
     <ClCompile Include="DebugLog.cpp" />
+    <ClCompile Include="DeferredRenderPipeline.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
     <ClCompile Include="DrawCube.cpp" />
@@ -268,7 +276,6 @@
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="FenceContext.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
     <ClCompile Include="GpuResource.cpp" />
@@ -297,6 +304,7 @@
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="TransformSystem.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />

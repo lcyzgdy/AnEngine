@@ -93,6 +93,15 @@ namespace AnEngine::RenderCore::Resource
 			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
+	ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle) :
+		PixelBuffer(baseResource->GetDesc())
+	{
+		var device = r_graphicsCard[0]->GetDevice();
+		AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
+		m_rtvHandle = handle;
+		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, m_rtvHandle);
+	}
+
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////

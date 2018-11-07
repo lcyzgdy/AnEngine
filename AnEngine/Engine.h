@@ -18,29 +18,17 @@ namespace AnEngine
 
 		bool m_initialized;
 		bool m_running;
-		//std::mutex m_mutex;
+		std::mutex m_sceneResMutex;
+		std::mutex m_parallelMutex;
 
 		Engine() = default;
 		virtual ~Engine() = default;
 
-		void BeforeUpdate();
-		void OnUpdate();
-		void AfterUpdate();
+		void UpdateBottom();
+		void UpdateSystem();
+		void UpdateBehaviour();
 
 	public:
-		enum UpdateEvent
-		{
-		};
-
-		enum RenderEvent
-		{
-			BeforeGBuffer,
-			AfterGBuffer,
-			AfterLighting,
-			AfterShadow,
-			AfterProcess
-		};
-
 
 		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Release();

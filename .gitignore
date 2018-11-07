@@ -264,7 +264,9 @@ __pycache__/
 [Pp]hys[Xx]/
 PhysX/
 [Pp]hysX/
-3rdparty/
+3rdparty/[Pp]hys[Xx]/
+3rdparty/DXR/
+3rdparty/D3D12RaytracingFallback/
 
 # Assets
 *.bin

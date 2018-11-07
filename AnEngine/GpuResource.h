@@ -23,6 +23,10 @@ namespace AnEngine::RenderCore::Resource
 
 		// 当使用VirtualAlloc()释放内存时从这里记录。
 		void* m_p_userAllocatedMemory;
+
+		virtual void AssociateWithResource(ID3D12Device* device, const std::wstring& name, ID3D12Resource* resource,
+			D3D12_RESOURCE_STATES currentState) {};
+
 	public:
 		GpuResource(); // For inheritance
 		//GpuResource(ID3D12Resource* p_resource, D3D12_RESOURCE_STATES currentState);

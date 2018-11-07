@@ -12,6 +12,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <queue>
 #include <map>
 #include <functional>
 
@@ -205,6 +206,28 @@ struct Range
 	{
 		if (value < minn) return false;
 		if (value > maxn) return false;
+		return true;
+	}
+};
+
+template<int Minn, int Maxn>
+struct Range1
+{
+	constexpr bool operator()(int value)
+	{
+		if (value < Minn) return false;
+		if (value > Maxn) return false;
+		return true;
+	}
+};
+
+template<int Maxn>
+struct Range0
+{
+	constexpr bool operator()(int value)
+	{
+		if (value < 0) return false;
+		if (value > Maxn) return false;
 		return true;
 	}
 };

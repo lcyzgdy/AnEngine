@@ -6,6 +6,7 @@
 #include "DTimer.h"
 #include "SceneManager.h"
 #include "IParallel.h"
+#include "ISerial.h"
 
 using namespace std;
 using namespace AnEngine::Game;
@@ -15,16 +16,12 @@ namespace AnEngine
 	void Engine::UpdateBottom()
 	{
 		BaseInput::GetInstance()->ZeroInputState();
-		if (m_running)
-		{
-			Utility::ThreadPool::Commit(bind(&Engine::UpdateSystem, this));
-		}
+		DTimer::GetInstance()->Tick(nullptr);
+		BaseInput::GetInstance()->Update();
 	}
 
 	void Engine::UpdateSystem()
 	{
-		DTimer::GetInstance()->Tick(nullptr);
-		BaseInput::GetInstance()->Update();
 		var scene = SceneManager::ActiveScene();
 
 		// 执行 Behaviour 的 BeforeUpdate，这是在 System 更新之前调用的
@@ -46,15 +43,20 @@ namespace AnEngine
 				atomic_int32_t count = 0;
 				for (int i = 0; i < parallel->Length; i++)
 				{
-					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() { count++; });
+					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() ->void { count++; });
 				}
-				cv.wait(lock, [&]()->bool { return count == parallel->Length; });
+				cv.wait(lock, [&]()->bool { return parallel->Length == count; });
 			}
-			else
+			else if (is_base_of<ISerial, decltype(*sys)>::value)
 			{
+				var serial = (ISerial*)sys;
+				for (int i = 0; i < serial->Length; i++)
+				{
+					serial->Execute(i);
+				}
 			}
 		}
-		Utility::ThreadPool::Commit(bind(&Engine::UpdateBehaviour, this));
+		//Utility::ThreadPool::Commit(bind(&Engine::UpdateBehaviour, this));
 	}
 
 	void Engine::UpdateBehaviour()
@@ -90,7 +92,7 @@ namespace AnEngine
 				be->UpdateBottom();
 			}
 		}*/
-		Utility::ThreadPool::Commit(bind(&Engine::UpdateBottom, this));
+		//Utility::ThreadPool::Commit(bind(&Engine::UpdateBottom, this));
 	}
 
 	/*Engine* Engine::GetInstance()
@@ -110,6 +112,7 @@ namespace AnEngine
 
 	void Engine::Release()
 	{
+		lock_guard<mutex> lock(m_sceneResMutex);
 		m_initialized = false;
 		m_running = false;
 		SceneManager::ActiveScene()->OnUnload();
@@ -121,6 +124,15 @@ namespace AnEngine
 		m_running = true;
 		var scene = SceneManager::ActiveScene();
 		scene->OnLoad();
-		Utility::ThreadPool::Commit(bind(&Engine::UpdateBottom, this));
+		/*Utility::ThreadPool::Commit([this]()->void
+		{
+			while (this->m_running)
+			{
+				lock_guard<mutex> lock(m_sceneResMutex);
+				this->UpdateBottom();
+				this->UpdateSystem();
+				this->UpdateBehaviour();
+			}
+		});*/
 	}
 }

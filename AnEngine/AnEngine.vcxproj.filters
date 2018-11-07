@@ -287,6 +287,9 @@
     <ClInclude Include="ComponentGroup.hpp">
       <Filter>Game\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ISerial.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">

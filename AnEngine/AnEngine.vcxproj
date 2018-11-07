@@ -209,6 +209,7 @@
     <ClInclude Include="GroupWarper.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ISerial.h" />
     <ClInclude Include="ManagedTask.hpp" />
     <ClInclude Include="ManagedVector.h" />
     <ClInclude Include="Matrix.hpp" />

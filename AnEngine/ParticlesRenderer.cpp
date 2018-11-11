@@ -308,7 +308,7 @@ namespace AnEngine::Game
 
 	void ParticlesRenderer::Update()
 	{
-		m_camera.OnUpdate(static_cast<float>(DTimer::GetInstance()->GetElapsedSeconds()));
+		m_camera.OnUpdate(static_cast<float>(DTimer::Instance()->GetElapsedSeconds()));
 
 		ConstantBufferGS vConstantBufferGS = {};
 		XMStoreFloat4x4(&vConstantBufferGS.worldViewProjection, XMMatrixMultiply(m_camera.GetViewMatrix(),

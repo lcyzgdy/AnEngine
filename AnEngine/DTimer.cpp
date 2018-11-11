@@ -30,7 +30,7 @@ namespace AnEngine
 		m_running = false;
 	}
 
-	DTimer* DTimer::GetInstance()
+	DTimer* DTimer::Instance()
 	{
 		if (m_uniqueObj == nullptr)
 		{

@@ -9,6 +9,7 @@
 #include "ObjectBehaviour.h"
 #include "Renderer.h"
 #include "Scene.h"
+#include "RenderPipeline.h"
 
 namespace AnEngine
 {
@@ -20,6 +21,8 @@ namespace AnEngine
 		bool m_running;
 		std::mutex m_sceneResMutex;
 		std::mutex m_parallelMutex;
+
+		RenderCore::BaseRenderPipeline* m_rp;
 
 		Engine() = default;
 		virtual ~Engine() = default;

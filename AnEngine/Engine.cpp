@@ -16,7 +16,7 @@ namespace AnEngine
 	void Engine::UpdateBottom()
 	{
 		BaseInput::GetInstance()->ZeroInputState();
-		DTimer::GetInstance()->Tick(nullptr);
+		DTimer::Instance()->Tick(nullptr);
 		BaseInput::GetInstance()->Update();
 	}
 
@@ -124,15 +124,26 @@ namespace AnEngine
 		m_running = true;
 		var scene = SceneManager::ActiveScene();
 		scene->OnLoad();
-		/*Utility::ThreadPool::Commit([this]()->void
+		Utility::ThreadPool::Commit([this]()->void
 		{
+			double deltaTime = 0f;
+			double totalTime = 0f;
 			while (this->m_running)
 			{
+				deltaTime = DTimer::Instance()->GetTotalSeconds() - totalTime;
+				if (deltaTime > 1.0 / 60.0)
+				{
+					totalTime = DTimer::Instance()->GetTotalSeconds();
+					Utility::ThreadPool::Commit([this]()->void
+					{
+						this->m_rp->OnRender(this->m_sceneResMutex);
+					});
+				}
 				lock_guard<mutex> lock(m_sceneResMutex);
 				this->UpdateBottom();
 				this->UpdateSystem();
 				this->UpdateBehaviour();
 			}
-		});*/
+		});
 	}
 }

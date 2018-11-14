@@ -1,27 +1,59 @@
 # AnEngine
 
-&#8195;&#8195;AnEngine是一个使用DirectX 12开发的使用组件式设计模式的游戏引擎。之前的作用是完成图形学作业。
-目前已经支持C++ 17标准，并添加了标准库模块支持（需要在VS2017的C++桌面开发项中添加标准库模块（实验性））。由于还是实验性，代码感知尚且不能，不建议使用。
+&#8195;&#8195;AnEngine是一个使用DirectX 12开发的尚未完成的游戏引擎。之前的作用是完成图形学作业，现在没什么作用。
+目前已经支持C++ 17标准。
 
 ## 特征
-* 使用了组件式设计，所有的组件继承自BaseBehaviour类，由Scene统一调度。
-* 对于游戏中可用的对象，都继承自ObjectBehaviour类，而ObjectBehaviour继承自BaseBehaviour，同时绑定到一个GameObject上，既对于游戏对象将其抽象为一个GameObject，而对于其行为使用Behaviour描述。其行为的具体内容由ObjectBehaviour中的虚函数覆写。
-* 如果想要让场景中出现一张2D图片，那么需要对该对象用一个GameObject描述，假设其名称为Sprite，而图片需要由渲染器渲染，则需要实例化一个SpriteRenderer，该类继承自Renderer，而Renderer继承自ObjectBehaviour并重写了一些虚函数。需要调用Sprite::AddComponent(SpriteRenderer)，此时Sprite::gameObject == SpriteRenderer::gameobject，其中gameObject是指向对象的指针，对于Sprite来说，其gameObject == this。
+* 使用了 ECS + Behaviour 的设计，由 Scene 统一管理，Engine 调度。
+* 游戏中的一个对象是一个 GameObject，保存在 Scene 中，Component 放在连续的内存中，可以通过下标索引，通过下标保证和 GameObject 的对应关系；Behaviour 针对少量、复用很少的组件，挂在 GameObject 上。
 
 ## 正在开发的功能
-* 丧心病狂的开始尝试DXR
+* 丧心病狂的开始尝试DXR（受到 Windows 10 1809 更新推迟影响，暂时停止开发）
+* ECS-Behaviour 模式
+* 重写可编程渲染管线
 
 ### 已完成功能
 * Sample Particles Renderer（CS计算位置，GS和PS控制形状）
-* Sample Mesh Renderer
+* Sample Mesh Renderer（由于管线重写，该项和上一项废弃）
 * MSAA（DX API实现）
 * State Machine
 * D2D
 
+#### ECS-Behaviour
+目前只实现了 Transform 系列，如坐标变换功能。System 有两种，一种是可并行的，继承自 IParaller，另一种是不可并行的。
+* IParaller
+``` c++
+class IParaller
+{
+public:
+	bool Check() = 0;
+	void Execute(size_t index) = 0;
+	size_t Length;
+}
+```
+Check中判断当前 index 的 GameObject 是否可被该 System 执行，每次执行都检查会降低效率，但目前没有找到更好的办法。
+
+内存分布（以 Transform 为例）：
+|index|0|1|....|
+|-----------|-------|-------|----|
+|GameObject*|objPtr0|objPtr1|....|
+|Position|pos0|pos1|....|
+|Rotation|rot0|rot1|....|
+|........|||
+||||
+如果某个 GameObject 没有 Component，则对应的 Component 应令其 active = false，且在 System 的 Check() 中进行检查。
+如果销毁某个 GameObject，则将对应的 GameObject 标记为以销毁，并在 Check() 中执行检查。如果新建一个 GameObject，则优先使用已销毁位置的 Component 和 GameObject。
+* ISerial
+
+对于不可并行却要用 ECS System 的，继承自该类。但对于串行执行的，一般都有彼此间的依赖，如果数量不多建议使用 Behaviour。
+* ObjectBehaviour
+
+对于 ECS 模式，数据和逻辑是分离的，但对于 Behaviour，数据和逻辑是放在一起的。其中 BeforeUpdate() 在 System 调度前调用，Update()和 LateUpdate() 在 System 调度后调用。
+
 #### 状态机
-状态机(StateMachine)在命名空间AnEngine::Game中，继承自ObjectBehaviour类。一个状态机包括参数、状态和转移条件。
+状态机(State Machine)在命名空间AnEngine::Game中，继承自 ObjectBehaviour 类。一个状态机包括参数、状态和转移条件。在引入 ECS 后，状态机暂时只针对 Behaviour 起作用。
 * 参数
-参数是可以从外部设置的状态机内部变量，由int、float、bool和Trigger四种类型。其中Trigger是特殊的bool，只能从外部设置为true，使用后自动变为false。
+参数是可以从外部设置的状态机内部变量，由 int、float、bool和Trigger 四种类型。其中Trigger是特殊的bool，只能从外部设置为true，使用后自动变为false。
 ``` cpp
 void SetInt(std::wstring&& name, int value);
 void SetBool(std::wstring&& name, bool value);
@@ -45,7 +77,7 @@ void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tigger
 
 ## 系统要求
 * Windows 10 17134或更新
-* Visual Studio 2017，需要C++游戏开发组件、Windows 10 SDK 17134、VC++ ATL
+* Visual Studio 2017，需要 C++ 游戏开发组件、Windows 10 SDK 17134、VC++ ATL
 * [Fallback Layer for DXR](https://github.com/Microsoft/DirectX-Graphics-Samples)
 
 ## 开始
@@ -141,3 +173,5 @@ while (msg.message != WM_QUIT)
 }
 ......
 ```
+
+### 由于某些原因，暂停开发，明年再说

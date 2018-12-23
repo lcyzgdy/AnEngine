@@ -34,13 +34,13 @@ public:
 Check中判断当前 index 的 GameObject 是否可被该 System 执行，每次执行都检查会降低效率，但目前没有找到更好的办法。
 
 内存分布（以 Transform 为例）：
+
 |index|0|1|....|
 |-----------|-------|-------|----|
 |GameObject*|objPtr0|objPtr1|....|
 |Position|pos0|pos1|....|
 |Rotation|rot0|rot1|....|
 |........|||
-||||
 如果某个 GameObject 没有 Component，则对应的 Component 应令其 active = false，且在 System 的 Check() 中进行检查。
 如果销毁某个 GameObject，则将对应的 GameObject 标记为以销毁，并在 Check() 中执行检查。如果新建一个 GameObject，则优先使用已销毁位置的 Component 和 GameObject。
 * ISerial

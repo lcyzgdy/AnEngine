@@ -281,9 +281,6 @@
     <ClInclude Include="SystemBase.h">
       <Filter>Game\System</Filter>
     </ClInclude>
-    <ClInclude Include="ManagedVector.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentGroup.hpp">
       <Filter>Game\Component</Filter>
     </ClInclude>

@@ -14,9 +14,9 @@ namespace AnEngine::RenderCore::Resource
 		uint32_t m_index;
 		bool m_ok;
 
-		Fence* m_fence;
-		uint64_t m_fenceValues[_N];
-		HANDLE m_fenceEvent;
+		//Fence* m_fence;
+		//uint64_t m_fenceValues[_N];
+		//HANDLE m_fenceEvent;
 
 	public:
 		MultiBuffer() : m_index(0), m_ok(false)

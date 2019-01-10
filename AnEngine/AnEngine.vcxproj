@@ -108,7 +108,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
+      <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -123,7 +123,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
       <DisableSpecificWarnings>4455;</DisableSpecificWarnings>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <ControlFlowGuard>false</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,7 +212,6 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="ISerial.h" />
     <ClInclude Include="ManagedTask.hpp" />
-    <ClInclude Include="ManagedVector.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />

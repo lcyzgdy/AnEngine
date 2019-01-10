@@ -23,7 +23,7 @@ namespace AnEngine::Game
 		std::mutex m_mutex;
 		bool m_active;
 		bool m_destoryed;
-		uint32_t m_id; // 在Scene容器中的编号
+		uint64_t m_id; // 在Scene容器中的编号
 
 		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
 

@@ -12,6 +12,7 @@ namespace AnEngine::RenderCore
 		void DepthPreLight();
 		void Shadow();
 		void UI();
+		void PostProcess();
 	public:
 		DeferredRenderPipeline() : BaseRenderPipeline(RenderPipelineType::Deferred) {}
 		// 通过 BaseRenderPipeline 继承

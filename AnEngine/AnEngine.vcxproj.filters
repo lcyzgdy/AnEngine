@@ -226,9 +226,6 @@
     <ClInclude Include="Matrix.hpp">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="DeferredPipeline.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game\Entity</Filter>
     </ClInclude>

@@ -186,7 +186,6 @@
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
     <ClInclude Include="DebugLog.h" />
-    <ClInclude Include="DeferredPipeline.h" />
     <ClInclude Include="DeferredRenderPipeline.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="DescriptorHeap.hpp" />

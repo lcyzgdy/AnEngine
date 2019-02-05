@@ -174,4 +174,8 @@ while (msg.message != WM_QUIT)
 ......
 ```
 
+### 第三方引用说明
+* [OpenFBX](https://github.com/nem0/OpenFBX)
+* [D3D12Raytracing](https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/Samples/Desktop/D3D12Raytracing/readme.md)
+
 ### 由于某些原因，暂停开发，明年再说

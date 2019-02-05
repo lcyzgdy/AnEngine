@@ -1,6 +1,7 @@
 #include "DeferredRenderPipeline.h"
 #include "SceneManager.h"
 #include "MeshRendererComponent.h"
+#include "Lighting.h"
 
 using namespace std;
 using namespace AnEngine::Game;
@@ -11,53 +12,53 @@ namespace AnEngine::RenderCore
 	void DeferredRenderPipeline::OnRender(std::mutex& sceneResMutex)
 	{
 		FenceContext::Instance()->WaitAllFence();
-		{
-			/* GBuffer½×¶Î£¬äÖÈ¾ËùÓĞÉãÏñ»úµÄ GBuffer¡¢Depth Buffer¡¢Normal Buffer */
-			lock_guard<mutex> lock(sceneResMutex);
-			GBuffer();
-		}
-		{
-			/* ¶ÔÓÚ³¡¾°ÖĞµÄÃ¿Ò»¸ö¹âÔ´£¬»æÖÆÆäÉî¶ÈÍ¼£¬ÒÔÉú³ÉÒõÓ°¡£ */
-			lock_guard<mutex> lock(sceneResMutex);
-			DepthPreLight();
-		}
-		{
-			/* ÒõÓ° */
-			Shadow();
-		}
-		{
-			/* ·´Éä */
-		}
-		{
-			/* Ê¹ÓÃÇ°ÏòäÖÈ¾´¦Àí°ëÍ¸Ã÷ÎïÌå */
-		}
-		{
-			/* È«ÆÁºó´¦Àí */
 
-		}
+		/* GBufferé˜¶æ®µï¼Œæ¸²æŸ“æ‰€æœ‰æ‘„åƒæœºçš„ GBufferã€Depthã€Normal */
+		//lock_guard<mutex> lock(sceneResMutex);
+		GBuffer();
 
-		{
-			/* »æÖÆUI×é¼ş */
-			UI();
-		}
+		/* å¯¹äºåœºæ™¯ä¸­çš„æ¯ä¸€ä¸ªå…‰æºï¼Œç»˜åˆ¶å…¶æ·±åº¦å›¾ï¼Œä»¥ç”Ÿæˆé˜´å½±ã€‚ */
+		//lock_guard<mutex> lock(sceneResMutex);
+		DepthPreLight();
+
+		/* é˜´å½± */
+		FenceContext::Instance()->WaitAllFence();
+		Shadow();
+
+		/* åå°„ */
+
+		/* ä½¿ç”¨å‰å‘æ¸²æŸ“å¤„ç†åŠé€æ˜ç‰©ä½“ */
+
+		/* å¤©ç©ºç›’ */
+
+		/* å…¨å±åå¤„ç† */
+		FenceContext::Instance()->WaitAllFence();
+		PostProcess();
+
+		/* ç»˜åˆ¶UIç»„ä»¶ */
+		UI();
 	}
 
 	void DeferredRenderPipeline::GBuffer()
 	{
 		var scene = Game::SceneManager::ActiveScene();
-		var objs = scene->GetGroupOfType<Component::MeshRenderer>();	// ´Ó³¡¾°ÖĞ»ñÈ¡ËùÓĞµÄ Mesh Renderer ×é¼ş½øĞĞäÖÈ¾
+		// ç½‘æ ¼æ¸²æŸ“å™¨æ˜¯ ECS ç»„ç»‡çš„
+		var objs = scene->GetGroupOfType<Component::MeshRenderer>();	// ä»åœºæ™¯ä¸­è·å–æ‰€æœ‰çš„ Mesh Renderer ç»„ä»¶è¿›è¡Œæ¸²æŸ“
 		const auto& mrs = *objs;
 		var[list, allocator] = GraphicsContext::GetOne();
 		var ilist = list->GetCommandList();
 		var iallocator = allocator->GetAllocator();
 		ThrowIfFailed(iallocator->Reset());
 
-
+		ThrowIfFailed(ilist->Close());
 		GraphicsContext::Push(list, allocator);
 	}
 
 	void DeferredRenderPipeline::DepthPreLight()
 	{
+		var scene = Game::SceneManager::ActiveScene();
+		// ç¯å…‰æ˜¯ Behaviour ç»„ç»‡çš„
+
 	}
 
 	void DeferredRenderPipeline::Shadow()

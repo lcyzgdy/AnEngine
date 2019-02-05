@@ -287,6 +287,12 @@
     <ClInclude Include="MeshRendererComponent.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
+    <ClInclude Include="LightingType.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Game\Behaviour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -451,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Game\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Game\Behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

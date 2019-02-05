@@ -210,6 +210,8 @@
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ISerial.h" />
+    <ClInclude Include="Lighting.h" />
+    <ClInclude Include="LightingType.h" />
     <ClInclude Include="ManagedTask.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
@@ -281,6 +283,7 @@
     <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="GraphicsCard.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="ManagedTask.cpp" />
     <ClCompile Include="MatrixBuffer.cpp" />
     <ClCompile Include="MCamera.cpp" />

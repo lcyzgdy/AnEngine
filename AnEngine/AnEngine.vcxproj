@@ -76,10 +76,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(SolutionDir)3rdparty\OpenFBX;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
-    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\lib\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
@@ -118,7 +118,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\OpenFBX;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
@@ -216,6 +216,7 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRendererComponent.h" />
     <ClInclude Include="MultiBuffer.hpp" />
     <ClInclude Include="NBody.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="ManagedTask.cpp" />
     <ClCompile Include="MatrixBuffer.cpp" />
     <ClCompile Include="MCamera.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NBody.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectBehaviour.cpp" />

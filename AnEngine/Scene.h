@@ -31,9 +31,7 @@ namespace AnEngine::Game
 
 		//std::condition_variable m_cv;
 		std::mutex m_behaviourMutex;
-		uint32_t m_complateCount;
-
-		bool m_frameLoop;
+		//uint32_t m_complateCount;
 
 	public:
 		//Scene(std::wstring _name);

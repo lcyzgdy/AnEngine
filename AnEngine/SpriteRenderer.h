@@ -9,10 +9,10 @@ namespace AnEngine::Game
 {
 	class SpriteRenderer : public Renderer
 	{
-		RenderCore::Resource::Texture* m_texture;
+		Resource::Texture* m_texture;
 	public:
 		explicit SpriteRenderer();
-		explicit SpriteRenderer(RenderCore::Resource::Texture* tex);
+		explicit SpriteRenderer(Resource::Texture* tex);
 		virtual ~SpriteRenderer() = default;
 
 		// 通过 Renderer 继承
@@ -21,8 +21,8 @@ namespace AnEngine::Game
 
 		virtual void Destory() override;
 
-		RenderCore::Resource::Texture* GetTexture();
-		void SetTexture(RenderCore::Resource::Texture* newTex);
+		Resource::Texture* GetTexture();
+		void SetTexture(Resource::Texture* newTex);
 	};
 }
 

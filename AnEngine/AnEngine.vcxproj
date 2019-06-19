@@ -173,6 +173,7 @@
     <ClInclude Include="..\Assets\HlslCompat.h" />
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h" />
     <ClInclude Include="BaseBehaviour.h" />
+    <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="LightingType.h" />
     <ClInclude Include="ManagedTask.hpp" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MatrixBuffer.h" />
     <ClInclude Include="MCamera.h" />
@@ -247,6 +249,7 @@
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SystemBase.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="GraphicsCard2D.h" />
@@ -276,6 +279,7 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="DynamicConstantBuffer.cpp" />
     <ClCompile Include="ExecuteIndirect.cpp" />
+    <ClCompile Include="FbxImporter.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="FenceContext.cpp" />
     <ClCompile Include="frameBuffering.cpp" />
@@ -307,6 +311,7 @@
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
     <ClCompile Include="Transform.cpp" />

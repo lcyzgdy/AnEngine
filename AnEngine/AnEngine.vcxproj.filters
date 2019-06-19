@@ -16,10 +16,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{77a4bda5-5672-44b9-b105-4cea4b8f4f66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Game\Behaviour">
       <UniqueIdentifier>{69eba527-9265-4c33-9efa-350535938427}</UniqueIdentifier>
     </Filter>
@@ -41,7 +37,11 @@
     <Filter Include="Game\ComponentLegacy">
       <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\Shader">
+    <Filter Include="Resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shader">
       <UniqueIdentifier>{d7d240c5-02fa-4935-b3a8-23f055a1cd6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -161,9 +161,6 @@
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
     <ClInclude Include="PixelBuffer.h">
-      <Filter>Graphics\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
@@ -291,13 +288,25 @@
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
     <ClInclude Include="..\Assets\HlslCompat.h">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Assets</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxImporter.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImporter.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -467,46 +476,54 @@
     <ClCompile Include="Lighting.cpp">
       <Filter>Game\Behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="FbxImporter.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureImporter.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="constbuffers_shaders.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="cube_shader.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="execute_indirect_shaders.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="framebuffer_shaders.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="nBodyGravityCS.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="ParticleDraw.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="..\Assets\Raytracing.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="texture_shaders.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="triangle_shaders.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Assets\test.hlsl">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\test.hlsli">
-      <Filter>Assets\Shader</Filter>
+      <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

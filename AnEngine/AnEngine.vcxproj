@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(SolutionDir)3rdparty\OpenFBX;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(SolutionDir)3rdparty\OpenFBX;$(SolutionDir)3rdparty\Assimp\include;$(SolutionDir)3rdparty\Assimp\build\include;$(IncludePath)</IncludePath>
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
     <LibraryPath>$(SolutionDir)3rdparty\DXR\Lib\X64;$(SolutionDir)Build\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Build\lib\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
@@ -118,7 +118,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\OpenFBX;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\PhyX\PhysX_3.4\Include;$(SolutionDir)3rdparty\DXR\Include;$(SolutionDir)3rdparty\OpenFBX;$(SolutionDir)3rdparty\D3D12RaytracingFallback\Include;$(SolutionDir)3rdparty\Assimp\include</AdditionalIncludeDirectories>
       <EnableModules>true</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>

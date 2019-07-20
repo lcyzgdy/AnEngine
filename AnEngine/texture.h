@@ -4,9 +4,9 @@
 
 #include "GpuResource.h"
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine::Resource
 {
-	class Texture : public GpuResource
+	class Texture : public RenderCore::Resource::GpuResource
 	{
 	public:
 		explicit Texture();

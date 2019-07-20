@@ -1,5 +1,6 @@
 #include "FbxImporter.h"
 #include "Mesh.h"
+#include "assimp/scene.h"
 
 using namespace std;
 
@@ -41,6 +42,18 @@ namespace AnEngine::Resource
 		}
 
 		ofbx::Texture* tex;
+		return nullptr;
+	}
+#elif defined ASSIMP
+	std::byte* LoadFbxFromFile(const wstring& filePath)
+	{
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile("", 0);
+		int meshCount = scene->mNumMeshes;
+		for (int i = 0; i < meshCount; i++)
+		{
+			scene->mMeshes[i]->mNumVertices;
+		}
 		return nullptr;
 	}
 #endif // OPENFBX

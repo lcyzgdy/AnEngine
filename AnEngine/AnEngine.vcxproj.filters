@@ -290,9 +290,6 @@
     <ClInclude Include="..\Assets\HlslCompat.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
       <Filter>Shader</Filter>
     </ClInclude>
@@ -306,6 +303,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
@@ -479,10 +479,10 @@
     <ClCompile Include="FbxImporter.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="TextureImporter.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="TextureImporter.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
   </ItemGroup>

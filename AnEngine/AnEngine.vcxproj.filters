@@ -308,6 +308,12 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="ResourcePool.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="UniqueId.hpp">
+      <Filter>UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -483,6 +489,12 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcePool.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
   </ItemGroup>

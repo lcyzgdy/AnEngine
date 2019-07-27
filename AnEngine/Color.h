@@ -11,6 +11,8 @@ namespace AnEngine::RenderCore::Resource
 	{
 		//XMVECTOR m_color;
 		XMFLOAT4 m_color;
+		bool m_hdr;
+		float m_hdrIntensity;
 
 		Color(XMVECTOR vec);
 		Color(const XMVECTORF32& vec);
@@ -19,6 +21,7 @@ namespace AnEngine::RenderCore::Resource
 		Color();
 		Color(const Color& color);
 		Color(float r, float g, float b, float a = 1.0f);
+		Color(bool enableHdr, float hdrIntensity, float r, float g, float b, float a = 1.0f);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color(uint32_t rgbaLittleEndian);
 

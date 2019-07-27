@@ -237,6 +237,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderPipeline.h" />
     <ClInclude Include="RenderPipelineType.h" />
+    <ClInclude Include="ResourcePool.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="TransformSystem.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIText.h" />
+    <ClInclude Include="UniqueId.hpp" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
@@ -302,6 +304,7 @@
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ResourcePool.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="SampleMeshRender.cpp" />
     <ClCompile Include="SampleParticles.cpp" />
@@ -311,6 +314,7 @@
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />

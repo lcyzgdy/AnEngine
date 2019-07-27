@@ -5,7 +5,7 @@
 #include <d2d1_3.h>
 using namespace DirectX;
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine
 {
 	class Color
 	{

@@ -208,9 +208,6 @@
     <ClInclude Include="GraphicsCard.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Graphics\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -314,6 +311,7 @@
     <ClInclude Include="UniqueId.hpp">
       <Filter>UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -451,9 +449,6 @@
     <ClCompile Include="GraphicsCard.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Graphics\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="DX.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -497,6 +492,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

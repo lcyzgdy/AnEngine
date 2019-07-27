@@ -13,7 +13,7 @@ namespace AnEngine::Resource
 	{
 		friend std::byte* LoadFbxFromFile(const std::wstring&);
 
-		std::vector<DMath::Vector4> m_vertices;
+		std::vector<DMath::Vector3> m_vertices;
 		std::vector<DMath::Vector3> m_normals;
 		std::vector<uint32_t> m_triangles;
 
@@ -30,7 +30,7 @@ namespace AnEngine::Resource
 		std::vector<DMath::Matrix4x4> m_bindPose;
 
 
-		std::vector<AnEngine::RenderCore::Resource::Color> m_colors;
+		std::vector<Color> m_colors;
 
 	public:
 		uint32_t VerticesCount() { return m_vertices.size(); }

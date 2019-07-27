@@ -1,6 +1,6 @@
 #include "Color.h"
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine
 {
 	Color::Color() : m_color(g_XMOne)
 	{

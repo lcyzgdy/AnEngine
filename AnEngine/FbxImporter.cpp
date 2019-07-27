@@ -1,8 +1,12 @@
+#include "assimp/scene.h"
 #include "FbxImporter.h"
 #include "Mesh.h"
-#include "assimp/scene.h"
+#include "ResourcePool.h"
+#include "Vector.hpp"
+#include "Color.h"
 
 using namespace std;
+using namespace AnEngine::DMath;
 
 namespace AnEngine::Resource
 {
@@ -50,9 +54,36 @@ namespace AnEngine::Resource
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile("", 0);
 		int meshCount = scene->mNumMeshes;
-		for (int i = 0; i < meshCount; i++)
+		if (meshCount > 0)
 		{
-			scene->mMeshes[i]->mNumVertices;
+			for (int i = 0; i < meshCount; i++)
+			{
+				var pMesh = ResourcePool::Instance()->ImportMeshFromFile();
+				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+				{
+					Vector3 vert(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z);
+					pMesh->m_vertices.emplace_back(vert);
+
+					if (scene->mMeshes[i]->HasVertexColors(j))
+					{
+						var pp = scene->mMeshes[i]->mColors[0];
+						Color col(pp->r, pp->g, pp->b, pp->a);
+						pMesh->m_colors.emplace_back(col);
+					}
+					if (scene->mMeshes[i]->HasTextureCoords(j))
+					{
+						// TODO:
+					}
+				}
+				if (scene->mMeshes[i]->HasNormals())
+				{
+					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+					{
+						Vector3 norl(scene->mMeshes[i]->mNormals[j].x, scene->mMeshes[i]->mNormals[j].y, scene->mMeshes[i]->mNormals[j].z);
+						pMesh->m_normals.emplace_back(norl);
+					}
+				}
+			}
 		}
 		return nullptr;
 	}

@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace AnEngine::RenderCore;
-using namespace AnEngine::RenderCore::Resource;
+
 
 namespace AnEngine::Game::UI
 {
@@ -50,7 +50,7 @@ namespace AnEngine::Game::UI
 		m_text = text;
 	}
 
-	void UIText::Text(std::wstring && text)
+	void UIText::Text(std::wstring&& text)
 	{
 		m_text = text;
 	}

@@ -18,17 +18,16 @@ namespace AnEngine::Game::UI
 		virtual void OnGUI() override;
 
 	public:
-#define GLO ::AnEngine::RenderCore
 		UIText();
-		UIText(std::wstring&& text, GLO::Resource::Color&& color);
-		UIText(const std::wstring& text, const GLO::Resource::Color& color);
+		UIText(std::wstring&& text, Color&& color);
+		UIText(const std::wstring& text, const Color& color);
 
 		std::wstring Text();
 		void Text(const std::wstring& text);
 		void Text(std::wstring&& text);
 
-		void ResetTextColor(const GLO::Resource::Color& color);
-		void ResetTextColor(GLO::Resource::Color&& color);
+		void ResetTextColor(const Color& color);
+		void ResetTextColor(Color&& color);
 #undef GLO
 	};
 }

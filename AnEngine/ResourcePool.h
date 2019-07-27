@@ -8,7 +8,7 @@
 
 namespace AnEngine::Resource
 {
-	class ResourcePool : Singleton<ResourcePool>
+	class ResourcePool : public Singleton<ResourcePool>
 	{
 		friend class Singleton<ResourcePool>;
 

@@ -47,7 +47,7 @@ inline LPCWSTR ToLPCWSTR(std::string& orig)
 	size_t origsize = orig.length() + 1;
 	//const size_t newsize = 100;
 	//size_t convertedChars = 0;
-	wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t) *(origsize - 1));
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (origsize - 1));
 	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
 	return wcstring;
 }
@@ -197,15 +197,15 @@ struct Range
 {
 	T m_maxn, m_minn;
 
-	Range(const T& _minn, const T& _maxn) :maxn(_maxn), minn(_minn)
+	Range(const T& _minn, const T& _maxn) :m_maxn(_maxn), m_minn(_minn)
 	{
 		if (m_minn > m_maxn) throw std::exception("Min argument is greater than max argument");
 	}
 
 	bool Has(T& value)
 	{
-		if (value < minn) return false;
-		if (value > maxn) return false;
+		if (value < m_minn) return false;
+		if (value > m_maxn) return false;
 		return true;
 	}
 };

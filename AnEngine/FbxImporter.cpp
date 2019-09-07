@@ -1,9 +1,19 @@
-#include "assimp/scene.h"
 #include "FbxImporter.h"
 #include "Mesh.h"
 #include "ResourcePool.h"
 #include "Vector.hpp"
 #include "Color.h"
+
+#if defined OPENFBX
+
+#include "ofbx.h"
+
+#elif defined ASSIMP
+
+#include "assimp/scene.h"
+#include "assimp/Importer.hpp"
+
+#endif	
 
 using namespace std;
 using namespace AnEngine::DMath;

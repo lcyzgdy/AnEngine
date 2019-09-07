@@ -13,7 +13,7 @@ namespace AnEngine::Resource
 		DXGI_FORMAT m_format;
 
 	public:
-		explicit Texture();
+		explicit Texture() = default;
 		~Texture() = default;
 
 		inline uint32_t Width() { return m_width; }

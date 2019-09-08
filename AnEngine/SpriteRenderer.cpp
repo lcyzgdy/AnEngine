@@ -3,7 +3,7 @@
 #include "DTimer.h"
 #include "CommandContext.h"
 using namespace AnEngine::RenderCore;
-using namespace AnEngine::RenderCore::Resource;
+using namespace AnEngine::Resource;
 
 namespace AnEngine::Game
 {

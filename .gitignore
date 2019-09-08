@@ -261,12 +261,10 @@ __pycache__/
 *.pyc
 
 # SubModule
-[Pp]hys[Xx]/
-PhysX/
-[Pp]hysX/
-3rdparty/[Pp]hys[Xx]/
-3rdparty/DXR/
-3rdparty/D3D12RaytracingFallback/
+3rdparty/
 
 # Assets
 *.bin
+
+Assets/
+Build/

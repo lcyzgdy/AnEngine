@@ -1,12 +1,13 @@
 #include "Color.h"
+using namespace DirectX;
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine
 {
 	Color::Color() : m_color(g_XMOne)
 	{
 	}
 
-	Color::Color(const Color & color) : m_color(color.m_color)
+	Color::Color(const Color& color) : m_color(color.m_color)
 	{
 	}
 
@@ -28,6 +29,10 @@ namespace AnEngine::RenderCore::Resource
 		//m_color = XMFLOAT4(r, g, b, a);
 		//XMStoreFloat4(&m_color, XMVectorSet(r, g, b, a));
 		m_color = { r, g, b, a };
+	}
+
+	Color::Color(bool enableHdr, float hdrIntensity, float r, float g, float b, float a)
+	{
 	}
 
 	Color::Color(uint32_t rgbaLittleEndian)
@@ -64,14 +69,14 @@ namespace AnEngine::RenderCore::Resource
 		return m_color.w;
 	}
 
-	bool Color::operator==(const Color & rhs) const
+	bool Color::operator==(const Color& rhs) const
 	{
 		//return XMVector4Equal(m_color, rhs.m_color);
 		return m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w;
 	}
 
-	bool Color::operator!=(const Color & rhs) const
+	bool Color::operator!=(const Color& rhs) const
 	{
 		//return !XMVector4Equal(m_color, rhs.m_color);
 		return !(m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
@@ -230,7 +235,7 @@ namespace AnEngine::RenderCore::Resource
 		XMStoreInt4(reinterpret_cast<uint32_t*>(&m_color), vec);
 	}
 
-	Color32::Color32(const XMVECTORF32 & vec)
+	Color32::Color32(const XMVECTORF32& vec)
 	{
 	}
 
@@ -262,13 +267,13 @@ namespace AnEngine::RenderCore::Resource
 		return m_color.w;
 	}
 
-	bool Color32::operator==(const Color32 & rhs) const
+	bool Color32::operator==(const Color32& rhs) const
 	{
 		return m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w;
 	}
 
-	bool Color32::operator!=(const Color32 & rhs) const
+	bool Color32::operator!=(const Color32& rhs) const
 	{
 		return !(m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w);
@@ -302,7 +307,7 @@ namespace AnEngine::RenderCore::Resource
 		m_color.w = a;
 	}
 
-	int * Color32::GetPtr(void)
+	int* Color32::GetPtr(void)
 	{
 		return reinterpret_cast<int*>(&m_color);
 	}
@@ -319,7 +324,7 @@ namespace AnEngine::RenderCore::Resource
 		return Color32();
 	}
 
-	Color32 Color32::FromSRGB(Color32 & srgb) const
+	Color32 Color32::FromSRGB(Color32& srgb) const
 	{
 		return Color32();
 	}
@@ -329,7 +334,7 @@ namespace AnEngine::RenderCore::Resource
 		return Color32();
 	}
 
-	Color32 Color32::FromREC709(Color32 & srgb) const
+	Color32 Color32::FromREC709(Color32& srgb) const
 	{
 		return Color32();
 	}

@@ -16,10 +16,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{77a4bda5-5672-44b9-b105-4cea4b8f4f66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Game\Behaviour">
       <UniqueIdentifier>{69eba527-9265-4c33-9efa-350535938427}</UniqueIdentifier>
     </Filter>
@@ -40,6 +36,16 @@
     </Filter>
     <Filter Include="Game\ComponentLegacy">
       <UniqueIdentifier>{468e9004-e0a1-45f9-96fb-7a94ae28fc4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{d7d240c5-02fa-4935-b3a8-23f055a1cd6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AssetWrapper">
+      <UniqueIdentifier>{71ff50fa-904f-4f2b-8944-7f2810d79be0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +166,6 @@
     <ClInclude Include="PixelBuffer.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Graphics\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
@@ -177,9 +180,6 @@
     </ClInclude>
     <ClInclude Include="DMath.hpp">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="onwind.h">
-      <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="ThreadPool.hpp">
       <Filter>UTIL</Filter>
@@ -208,26 +208,14 @@
     <ClInclude Include="GraphicsCard.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Graphics\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="DX.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\Assets\HlslCompat.h">
-      <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Assets\RaytracingHlslCompat.h">
-      <Filter>Assets</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.hpp">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredPipeline.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game\Entity</Filter>
@@ -281,9 +269,6 @@
     <ClInclude Include="SystemBase.h">
       <Filter>Game\System</Filter>
     </ClInclude>
-    <ClInclude Include="ManagedVector.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentGroup.hpp">
       <Filter>Game\Component</Filter>
     </ClInclude>
@@ -292,6 +277,40 @@
     </ClInclude>
     <ClInclude Include="MeshRendererComponent.h">
       <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="LightingType.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Game\Behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="UniqueId.hpp">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="onwind.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxImporter.h">
+      <Filter>AssetWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImporter.h">
+      <Filter>AssetWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetsConfig.h">
+      <Filter>AssetWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetsDatabase.h">
+      <Filter>AssetWrapper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -430,9 +449,6 @@
     <ClCompile Include="GraphicsCard.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Graphics\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="DX.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -458,45 +474,61 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Game\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Game\Behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="FbxImporter.cpp">
+      <Filter>AssetWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureImporter.cpp">
+      <Filter>AssetWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetsDatabase.cpp">
+      <Filter>AssetWrapper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="triangle_shaders.hlsl">
-      <Filter>Assets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="texture_shaders.hlsl">
-      <Filter>Assets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ParticleDraw.hlsl">
-      <Filter>Assets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="nBodyGravityCS.hlsl">
-      <Filter>Assets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="framebuffer_shaders.hlsl">
-      <Filter>Assets</Filter>
-    </CustomBuild>
-    <CustomBuild Include="execute_indirect_shaders.hlsl">
-      <Filter>Assets</Filter>
+    <CustomBuild Include="compute_shader.hlsl">
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="constbuffers_shaders.hlsl">
-      <Filter>Assets</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
     <CustomBuild Include="cube_shader.hlsl">
-      <Filter>Assets</Filter>
+      <Filter>Shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="compute_shader.hlsl">
-      <Filter>Assets</Filter>
+    <CustomBuild Include="execute_indirect_shaders.hlsl">
+      <Filter>Shader</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\Assets\Raytracing.hlsl">
-      <Filter>Assets</Filter>
+    <CustomBuild Include="framebuffer_shaders.hlsl">
+      <Filter>Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="nBodyGravityCS.hlsl">
+      <Filter>Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ParticleDraw.hlsl">
+      <Filter>Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="texture_shaders.hlsl">
+      <Filter>Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="triangle_shaders.hlsl">
+      <Filter>Shader</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Assets\test.hlsli">
-      <Filter>Assets</Filter>
-    </FxCompile>
     <FxCompile Include="..\Assets\test.hlsl">
-      <Filter>Assets</Filter>
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\test.hlsli">
+      <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

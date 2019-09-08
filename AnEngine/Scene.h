@@ -13,7 +13,7 @@
 namespace AnEngine::Game
 {
 	// Scene仅作为GameObject的集合，同时待ECS完成后也是Entity或Component的集合。
-	class Scene : public Object//, public NonCopyable
+	class DLL_API Scene : public Object//, public NonCopyable
 	{
 		// Scene直接调度BaseBehaviour
 		//friend class ::AnEngine::Engine;
@@ -31,9 +31,7 @@ namespace AnEngine::Game
 
 		//std::condition_variable m_cv;
 		std::mutex m_behaviourMutex;
-		uint32_t m_complateCount;
-
-		bool m_frameLoop;
+		//uint32_t m_complateCount;
 
 	public:
 		//Scene(std::wstring _name);

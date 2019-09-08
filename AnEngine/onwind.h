@@ -27,7 +27,7 @@
 
 #ifdef UNICODE
 
-#define SOLUTION_DIR L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
+constexpr auto SOLUTION_DIR = L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine";
 
 #define Strcpy(a,b) wcscpy_s(a, b)
 #define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), L"Error", 0)
@@ -42,12 +42,14 @@
 #endif // _DEBUG || DEBUG
 
 
+#define DLL_API __declspec(dllexport)
+
 inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
 	size_t origsize = orig.length() + 1;
 	//const size_t newsize = 100;
 	//size_t convertedChars = 0;
-	wchar_t *wcstring = (wchar_t *)malloc(sizeof(wchar_t) *(origsize - 1));
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (origsize - 1));
 	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
 	return wcstring;
 }
@@ -163,8 +165,8 @@ inline void ThrowIfFalse(bool value, const wchar_t* msg)
 	ThrowIfFailed(value ? S_OK : E_FAIL);
 }
 
-#define IF_FAILED ThrowIfFailed(
-#define THROW )
+// #define IF_FAILED ThrowIfFailed(
+// #define THROW )
 
 template <typename T>
 inline T* SafeAcquire(T* newObject)
@@ -197,15 +199,15 @@ struct Range
 {
 	T m_maxn, m_minn;
 
-	Range(const T& _minn, const T& _maxn) :maxn(_maxn), minn(_minn)
+	Range(const T& _minn, const T& _maxn) :m_maxn(_maxn), m_minn(_minn)
 	{
 		if (m_minn > m_maxn) throw std::exception("Min argument is greater than max argument");
 	}
 
 	bool Has(T& value)
 	{
-		if (value < minn) return false;
-		if (value > maxn) return false;
+		if (value < m_minn) return false;
+		if (value > m_maxn) return false;
 		return true;
 	}
 };
@@ -232,29 +234,29 @@ struct Range0
 	}
 };
 
-inline void __vectorcall Randomize()
+__forceinline void __vectorcall Randomize()
 {
 	srand((unsigned)time(nullptr));
 }
 
-inline int __vectorcall Random(int a)
+__forceinline int __vectorcall Random(int a)
 {
 	return rand() % a;
 }
 
-inline float __vectorcall Random()
+__forceinline float __vectorcall Random()
 {
 	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 }
 
-inline int __vectorcall Random(int a, int b)
+__forceinline int __vectorcall Random(int a, int b)
 {
 	int c = rand() % b;
 	while (c < a) c = rand() % b;
 	return c;
 }
 
-inline float __vectorcall Random(float a, float b)
+__forceinline float __vectorcall Random(float a, float b)
 {
 	float scale = static_cast<float>(rand()) / RAND_MAX;
 	float range = b - a;
@@ -287,7 +289,7 @@ class Singleton : public NonCopyable
 	template<class U> friend class Singleton;
 
 public:
-	static T* Instance()
+	__forceinline static T* Instance()
 	{
 		if (m_uniqueObj == nullptr)
 		{
@@ -296,7 +298,7 @@ public:
 		return m_uniqueObj;
 	}
 };
-
+/*
 template<typename _T, typename _TBase>
 class IsDerived
 {
@@ -314,7 +316,7 @@ public:
 	{
 		Result = (sizeof(int) == sizeof(t((_T*)NULL))),
 	};
-};
+};*/
 
 /*template<typename T0, typename... T>
 struct TypeHash

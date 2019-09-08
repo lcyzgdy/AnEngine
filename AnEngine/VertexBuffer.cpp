@@ -5,7 +5,7 @@ using namespace AnEngine::RenderCore;
 
 namespace AnEngine::RenderCore::Resource
 {
-	VertexBuffer::VertexBuffer(D3D12_SUBRESOURCE_DATA & subData, size_t vertexDataSize, uint32_t standardVertexStride)
+	VertexBuffer::VertexBuffer(D3D12_SUBRESOURCE_DATA& subData, size_t vertexDataSize, uint32_t standardVertexStride)
 	{
 		var device = r_graphicsCard[0]->GetDevice();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();

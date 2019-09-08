@@ -4,13 +4,21 @@
 
 #include "GpuResource.h"
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine::Resource
 {
-	class Texture : public GpuResource
+	class Texture
 	{
+		uint32_t m_width;
+		uint32_t m_height;
+		DXGI_FORMAT m_format;
+
 	public:
-		explicit Texture();
+		explicit Texture() = default;
 		~Texture() = default;
+
+		inline uint32_t Width() { return m_width; }
+		inline uint32_t Height() { return m_height; }
+		inline DXGI_FORMAT Format() { return m_format; }
 	};
 }
 #endif

@@ -3,22 +3,25 @@
 #define __COLOR_H__
 #include <DirectXMath.h>
 #include <d2d1_3.h>
-using namespace DirectX;
+#include "onwind.h"
 
-namespace AnEngine::RenderCore::Resource
+namespace AnEngine
 {
-	class Color
+	class DLL_API Color
 	{
 		//XMVECTOR m_color;
-		XMFLOAT4 m_color;
+		DirectX::XMFLOAT4 m_color;
+		bool m_hdr;
+		float m_hdrIntensity;
 
-		Color(XMVECTOR vec);
-		Color(const XMVECTORF32& vec);
+		Color(DirectX::XMVECTOR vec);
+		Color(const DirectX::XMVECTORF32& vec);
 
 	public:
 		Color();
 		Color(const Color& color);
 		Color(float r, float g, float b, float a = 1.0f);
+		Color(bool enableHdr, float hdrIntensity, float r, float g, float b, float a = 1.0f);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color(uint32_t rgbaLittleEndian);
 
@@ -71,11 +74,11 @@ namespace AnEngine::RenderCore::Resource
 	class Color32
 	{
 		//XMVECTOR m_color;
-		XMINT4 m_color;
+		DirectX::XMINT4 m_color;
 	public:
 		Color32() = default;
-		Color32(XMVECTOR vec);
-		Color32(const XMVECTORF32& vec);
+		Color32(DirectX::XMVECTOR vec);
+		Color32(const DirectX::XMVECTORF32& vec);
 		Color32(int r, int g, int b, int a = 255);
 		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color32(uint32_t rgbaLittleEndian);

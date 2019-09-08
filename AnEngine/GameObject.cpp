@@ -7,6 +7,7 @@ namespace AnEngine::Game
 {
 	//unordered_multimap<wstring, GameObject*> g_gameObjects;
 
+	std::queue<GameObject*> GameObject::s_destoryed;
 
 	//GameObject::GameObject(const std::wstring& _name) : gameObject(this), m_parentObject(nullptr), name(_name)
 	GameObject::GameObject(const std::wstring& _name) : name(_name), m_active(true), m_id(-1)

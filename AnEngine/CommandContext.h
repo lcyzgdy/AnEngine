@@ -63,14 +63,14 @@ namespace AnEngine::RenderCore::Private
 
 namespace AnEngine::RenderCore
 {
-	static class ComputeContext
+	class ComputeContext
 	{
 	public:
 		static std::tuple<CommandList*, CommandAllocator*> GetOne();
 		static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 
-	static class GraphicsContext
+	class GraphicsContext
 	{
 	public:
 		static std::tuple<CommandList*, CommandAllocator*> GetOne();

@@ -27,7 +27,7 @@ namespace AnEngine::RenderCore::UI
 
 		ComPtr<ID3D11Device> d3d11Device;
 		ThrowIfFailed(D3D11On12CreateDevice(r_graphicsCard[0]->GetDevice(), d3d11DeviceFlags, nullptr, 0,
-			reinterpret_cast<IUnknown**>(r_graphicsCard[0]->GetCommandQueueAddress()), 1, 0, &d3d11Device,
+			reinterpret_cast<IUnknown * *>(r_graphicsCard[0]->GetCommandQueueAddress()), 1, 0, &d3d11Device,
 			&m_d3d11DeviceContext, nullptr));
 
 		ThrowIfFailed(d3d11Device.As(&m_d3d11On12Device));
@@ -89,7 +89,7 @@ namespace AnEngine::RenderCore::UI
 			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 50, L"en-us", format));
 	}
 
-	void GraphicsCard2D::CreateTextBrush(ID2D1SolidColorBrush** brush, const Resource::Color& color)
+	void GraphicsCard2D::CreateTextBrush(ID2D1SolidColorBrush** brush, const Color& color)
 	{
 		//ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(color.ToD2DColor(), brush));
 		ThrowIfFailed(m_d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), brush));

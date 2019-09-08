@@ -363,4 +363,11 @@ namespace AnEngine::RenderCore
 		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
 		fence->WaitForValue(fenceValue);
 	}
+
+}
+namespace AnEngine::RenderCore
+{
+	GraphicsDevice::GraphicsDevice()
+	{
+	}
 }

@@ -13,7 +13,7 @@
 
 namespace AnEngine
 {
-	class Engine : public ::Singleton<Engine>
+	class DLL_API Engine : public Singleton<Engine>
 	{
 		friend class ::Singleton<Engine>;
 

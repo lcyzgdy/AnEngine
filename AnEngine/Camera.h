@@ -12,7 +12,7 @@
 
 namespace AnEngine::Game
 {
-	class Camera : public ObjectBehaviour
+	class DLL_API Camera : public ObjectBehaviour
 	{
 	public:
 		enum ClearFlags

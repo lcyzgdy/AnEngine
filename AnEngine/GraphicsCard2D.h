@@ -51,7 +51,7 @@ namespace AnEngine::RenderCore::UI
 		ID2D1DeviceContext2* GetContext();
 
 		void CreateTextFormat(IDWriteTextFormat** format);
-		void CreateTextBrush(ID2D1SolidColorBrush** brush, const Resource::Color& color);
+		void CreateTextBrush(ID2D1SolidColorBrush** brush, const Color& color);
 		void DrawText1(const wchar_t* text, uint32_t length, IDWriteTextFormat* format, ID2D1Brush* brush);
 	};
 }

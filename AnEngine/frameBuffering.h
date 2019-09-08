@@ -6,15 +6,13 @@
 #include"DX.h"
 #include"Input.h"
 #include"RenderCore.h"
-using namespace AnEngine::RenderCore;
-using namespace AnEngine;
 
-class FrameBuffering :public D3D12AppBase, public D3D12Base
+class FrameBuffering :public AnEngine::D3D12AppBase, public AnEngine::D3D12Base
 {
 	struct Vertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
 	UINT frameIndex;
@@ -24,10 +22,10 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 	Microsoft::WRL::ComPtr<IDXGISwapChain3> swapChain;
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators[AnEngine::RenderCore::r_DefaultFrameCount_const];
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap;
-	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[r_DefaultFrameCount_const];
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[AnEngine::RenderCore::r_DefaultFrameCount_const];
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	UINT rtvDescriptorSize;
 	UINT srvDescriptorSize;
@@ -37,7 +35,7 @@ class FrameBuffering :public D3D12AppBase, public D3D12Base
 
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
 	HANDLE fenceEvent;
-	UINT fenceValues[r_DefaultFrameCount_const];
+	UINT fenceValues[AnEngine::RenderCore::r_DefaultFrameCount_const];
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;

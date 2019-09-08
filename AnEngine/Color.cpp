@@ -1,4 +1,5 @@
 #include "Color.h"
+using namespace DirectX;
 
 namespace AnEngine
 {

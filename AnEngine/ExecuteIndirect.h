@@ -11,14 +11,14 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
-		XMFLOAT3 position;
+		DirectX::XMFLOAT3 position;
 	};
 	struct SceneConstantBuffer
 	{
-		XMFLOAT4 velocity;
-		XMFLOAT4 offset;
-		XMFLOAT4 color;
-		XMFLOAT4X4 projection;	// 投影
+		DirectX::XMFLOAT4 velocity;
+		DirectX::XMFLOAT4 offset;
+		DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT4X4 projection;	// 投影
 		float padding[36];	// 常量缓冲区是256字节对齐。
 	};
 	struct CSRootConstants

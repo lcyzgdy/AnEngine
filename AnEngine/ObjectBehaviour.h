@@ -8,7 +8,7 @@
 
 namespace AnEngine::Game
 {
-	class ObjectBehaviour : public BaseBehaviour//, public GameObject
+	class DLL_API ObjectBehaviour : public BaseBehaviour//, public GameObject
 	{
 		friend class Engine;
 		friend class GameObject;

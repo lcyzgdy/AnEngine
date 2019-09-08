@@ -13,8 +13,8 @@ class DrawLine :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
 	UINT frameIndex;
@@ -83,8 +83,8 @@ class DrawLineWithWu :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
 	UINT frameIndex;
@@ -153,8 +153,8 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 {
 	struct Vertex
 	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
 	UINT frameIndex;

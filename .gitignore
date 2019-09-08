@@ -265,3 +265,6 @@ __pycache__/
 
 # Assets
 *.bin
+
+Assets/
+Build/

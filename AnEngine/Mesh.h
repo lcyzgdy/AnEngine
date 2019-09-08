@@ -7,11 +7,16 @@
 #include "Matrix.hpp"
 #include "Color.h"
 
+namespace AnEngine::AssetsWrapper
+{
+	std::byte* LoadFbxFromFile(const std::wstring&);
+}
+
 namespace AnEngine::Resource
 {
 	class Mesh
 	{
-		friend std::byte* LoadFbxFromFile(const std::wstring&);
+		friend std::byte* AnEngine::AssetsWrapper::LoadFbxFromFile(const std::wstring&);
 
 		std::vector<DMath::Vector3> m_vertices;
 		std::vector<DMath::Vector3> m_normals;

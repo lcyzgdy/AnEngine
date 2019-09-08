@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __ASSETSDATABASE_H__
-#define __ASSETSDATABASE_H__
+#ifndef __RESOURCEPOOL_H__
+#define __RESOURCEPOOL_H__
 
 #include "Mesh.h"
 #include "Texture.h"
@@ -19,7 +19,10 @@ namespace AnEngine::AssetsWrapper
 		AssetsDatabase();
 		Resource::Mesh* ImportMeshFromFile();
 		Resource::Texture* ImportTextureFromFile();
+
+		static const std::wstring s_AssetsPath;
 	};
+
 }
 
-#endif // !__ASSETSDATABASE_H__
+#endif // !__RESOURCEPOOL_H__

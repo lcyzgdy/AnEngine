@@ -1,8 +1,9 @@
 
 #include "FbxImporter.h"
 using namespace std;
+using namespace AnEngine::AssetsWrapper;
 
 int main()
 {
-	cout << "Hello AnEngine.Test!" << endl;
+	LoadFbxFromFile( L"");
 }

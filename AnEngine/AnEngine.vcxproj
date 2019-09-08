@@ -127,6 +127,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
@@ -236,7 +237,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderPipeline.h" />
     <ClInclude Include="RenderPipelineType.h" />
-    <ClInclude Include="ResourcePool.h" />
+    <ClInclude Include="AssetsDatabase.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
@@ -303,7 +304,7 @@
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ResourcePool.cpp" />
+    <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="SampleMeshRender.cpp" />
     <ClCompile Include="SampleParticles.cpp" />

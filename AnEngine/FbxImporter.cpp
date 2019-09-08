@@ -17,8 +17,9 @@
 
 using namespace std;
 using namespace AnEngine::DMath;
+using namespace AnEngine::Resource;
 
-namespace AnEngine::Resource
+namespace AnEngine::AssetsWrapper
 {
 #ifdef OPENFBX
 	std::byte* LoadFbxFromFile(const wstring& filePath)
@@ -68,7 +69,7 @@ namespace AnEngine::Resource
 		{
 			for (int i = 0; i < meshCount; i++)
 			{
-				var pMesh = ResourcePool::Instance()->ImportMeshFromFile();
+				Mesh* pMesh = AssetsDatabase::Instance()->ImportMeshFromFile();
 				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 				{
 					Vector3 vert(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z);

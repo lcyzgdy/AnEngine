@@ -1,6 +1,9 @@
 #include "frameBuffering.h"
 
 using namespace Microsoft::WRL;
+using namespace DirectX;
+using namespace AnEngine;
+using namespace AnEngine::RenderCore;
 
 FrameBuffering::FrameBuffering(const HWND _hwnd, const UINT _width, const UINT _height) :
 	D3D12AppBase(_hwnd, _width, _height),

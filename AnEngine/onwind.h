@@ -42,6 +42,8 @@ constexpr auto SOLUTION_DIR = L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEng
 #endif // _DEBUG || DEBUG
 
 
+#define DLL_API __declspec(dllexport)
+
 inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
 	size_t origsize = orig.length() + 1;
@@ -163,8 +165,8 @@ inline void ThrowIfFalse(bool value, const wchar_t* msg)
 	ThrowIfFailed(value ? S_OK : E_FAIL);
 }
 
-#define IF_FAILED ThrowIfFailed(
-#define THROW )
+// #define IF_FAILED ThrowIfFailed(
+// #define THROW )
 
 template <typename T>
 inline T* SafeAcquire(T* newObject)

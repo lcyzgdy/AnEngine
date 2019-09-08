@@ -309,7 +309,7 @@
     <ClInclude Include="AssetsConfig.h">
       <Filter>AssetWrapper</Filter>
     </ClInclude>
-    <ClInclude Include="ResourcePool.h">
+    <ClInclude Include="AssetsDatabase.h">
       <Filter>AssetWrapper</Filter>
     </ClInclude>
   </ItemGroup>
@@ -490,7 +490,7 @@
     <ClCompile Include="TextureImporter.cpp">
       <Filter>AssetWrapper</Filter>
     </ClCompile>
-    <ClCompile Include="ResourcePool.cpp">
+    <ClCompile Include="AssetsDatabase.cpp">
       <Filter>AssetWrapper</Filter>
     </ClCompile>
   </ItemGroup>

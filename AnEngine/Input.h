@@ -20,7 +20,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace AnEngine
 {
-	class BaseInput
+	class DLL_API BaseInput : public Singleton<BaseInput>
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future

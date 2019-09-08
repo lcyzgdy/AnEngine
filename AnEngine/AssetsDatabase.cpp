@@ -6,6 +6,8 @@ using namespace AnEngine::Resource;
 
 namespace AnEngine::AssetsWrapper
 {
+	const wstring AssetsDatabase::s_AssetsPath = L"";
+
 	AssetsDatabase::AssetsDatabase()
 	{
 	}
@@ -23,4 +25,4 @@ namespace AnEngine::AssetsWrapper
 		m_textures.emplace(newid, Texture());
 		return &m_textures[newid];
 	}
-}
+} 

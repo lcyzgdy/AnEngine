@@ -6,9 +6,9 @@
 
 #include "onwind.h"
 
-namespace AnEngine::Resource
+namespace AnEngine::AssetsWrapper
 {
-	std::byte* LoadFbxFromFile(const std::wstring&);
+	DLL_API std::byte* LoadFbxFromFile(const std::wstring&);
 }
 
 #endif // !__FBXIMPORTER_H__

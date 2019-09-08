@@ -2,6 +2,7 @@
 #include <string>
 
 using namespace Microsoft::WRL;
+using namespace DirectX;
 
 const uint32_t ExecuteIndirect::commandSizePerFrame = triangleCount * sizeof(IndirectCommand);
 const uint32_t ExecuteIndirect::commandBufferCounterOffset = AlignForUavCounter(ExecuteIndirect::commandSizePerFrame);

@@ -8,7 +8,7 @@
 
 namespace AnEngine::AssetsWrapper
 {
-	class AssetsDatabase : public Singleton<AssetsDatabase>
+	class DLL_API AssetsDatabase : public Singleton<AssetsDatabase>
 	{
 		friend class Singleton<AssetsDatabase>;
 

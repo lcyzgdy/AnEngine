@@ -26,6 +26,7 @@ namespace AnEngine
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
 		// 类的友元函数只能位于同一命名空间下。
 		// ************************************************************************************************
+		// 为了同步鼠标在屏幕上的位置，只好用这种方法在外部设置.
 		friend LRESULT WINAPI::WinProc(HWND, unsigned int, WPARAM, LPARAM);
 		friend class Engine;
 		//friend int WINAPI ::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);

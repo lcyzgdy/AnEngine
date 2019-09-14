@@ -19,15 +19,12 @@ namespace AnEngine::Game
 		//friend class ::AnEngine::Engine;
 
 		std::deque<GameObject*> m_objects;
-		std::queue<uint32_t> m_freeObjPos;
+		std::queue<uint32_t> m_freeObjPos;	// 已经被删除掉的对象
 
 		std::map<size_t, void*> m_componentGroups;
 
 		std::deque<System::SystemBase*> m_systems;
 
-		//std::vector<ECBS::GameEntity*> m_entities;
-		//std::vector<ObjectBehaviour*> m_objects;
-		//Camera* defaultCamera;
 
 		//std::condition_variable m_cv;
 		std::mutex m_behaviourMutex;
@@ -59,7 +56,7 @@ namespace AnEngine::Game
 		template<typename T>
 		void CreateSystem()
 		{
-			if (std::is_base_of<System::SystemBase, T>::value == false) throw std::exception("这不是一个System");
+			if (constexpr std::is_base_of<System::SystemBase, T>::value == false) throw std::exception("这不是一个System");
 			for (var i : m_systems)
 			{
 				if (typeid(decltype(i)).hash_code() != typeid(T).hash_code()) throw std::exception("已经存在一个这种类型的System");

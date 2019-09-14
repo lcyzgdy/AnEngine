@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="AssetsConfig.h" />
     <ClInclude Include="BaseBehaviour.h" />
+    <ClInclude Include="Delegate.h" />
     <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />

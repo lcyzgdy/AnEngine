@@ -3,26 +3,43 @@
 
 using namespace std;
 using namespace AnEngine::Resource;
+using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
 	const wstring AssetsDatabase::s_AssetsPath = L"";
 
+	uint64_t AssetsDatabase::AddMesh(Mesh* mesh)
+	{
+		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		m_meshes[instanceId] = mesh;
+		return instanceId;
+	}
+
+	uint64_t AssetsDatabase::AddTexture(Texture* tex)
+	{
+		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		m_textures[instanceId] = tex;
+		return instanceId;
+	}
+
 	AssetsDatabase::AssetsDatabase()
 	{
+
 	}
 
-	Mesh* AssetsDatabase::ImportMeshFromFile()
+	AssetsDatabase::~AssetsDatabase()
 	{
-		uint64_t newid = UniqueId::Instance()->GetUniqueId();
-		m_meshes.emplace(newid, Mesh());
-		return &m_meshes[newid];
+		for (var i : m_meshes)
+		{
+			delete i.second;
+		}
+		for (var i : m_textures)
+		{
+			delete i.second;
+		}
 	}
-
-	Texture* AssetsDatabase::ImportTextureFromFile()
+	void AssetsDatabase::RefreshAssets()
 	{
-		uint64_t newid = UniqueId::Instance()->GetUniqueId();
-		m_textures.emplace(newid, Texture());
-		return &m_textures[newid];
 	}
-} 
+}

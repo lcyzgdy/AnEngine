@@ -69,7 +69,8 @@ namespace AnEngine::AssetsWrapper
 		{
 			for (int i = 0; i < meshCount; i++)
 			{
-				Mesh* pMesh = AssetsDatabase::Instance()->ImportMeshFromFile();
+				// Mesh* pMesh = AssetsDatabase::Instance()->ImportMeshFromFile();
+				Mesh* pMesh = new Mesh();
 				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 				{
 					Vector3 vert(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z);

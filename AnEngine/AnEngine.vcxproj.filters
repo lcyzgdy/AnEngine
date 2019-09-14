@@ -312,6 +312,9 @@
     <ClInclude Include="AssetsDatabase.h">
       <Filter>AssetWrapper</Filter>
     </ClInclude>
+    <ClInclude Include="Delegate.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">

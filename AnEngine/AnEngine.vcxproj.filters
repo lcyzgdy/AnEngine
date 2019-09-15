@@ -312,7 +312,7 @@
     <ClInclude Include="AssetsDatabase.h">
       <Filter>AssetWrapper</Filter>
     </ClInclude>
-    <ClInclude Include="Delegate.h">
+    <ClInclude Include="Delegate.hpp">
       <Filter>UTIL</Filter>
     </ClInclude>
   </ItemGroup>

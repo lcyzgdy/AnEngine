@@ -6,4 +6,5 @@ using namespace AnEngine::AssetsWrapper;
 int main()
 {
 	LoadFbxFromFile( L"");
+	
 }

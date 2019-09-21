@@ -56,10 +56,11 @@ namespace AnEngine::Game
 		template<typename T>
 		void CreateSystem()
 		{
-			if (constexpr std::is_base_of<System::SystemBase, T>::value == false) throw std::exception("这不是一个System");
+			if constexpr (std::is_base_of<System::SystemBase, T>::value == false) throw std::exception("这不是一个System");
 			for (var i : m_systems)
 			{
-				if (typeid(decltype(i)).hash_code() != typeid(T).hash_code()) throw std::exception("已经存在一个这种类型的System");
+				if (std::is_same<decltype(i), T>::value) throw std::exception("已经存在一个这种类型的System");
+				//if (typeid(decltype(i)).hash_code() != typeid(T).hash_code()) throw std::exception("已经存在一个这种类型的System");
 			}
 			m_systems.emplace_back(new T());
 		}

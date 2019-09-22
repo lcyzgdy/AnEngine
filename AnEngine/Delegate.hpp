@@ -6,6 +6,15 @@
 
 namespace AnEngine
 {
+	namespace
+	{
+		template<class _C, typename _Rt, typename... _Args>
+		class MemberFunctionWrapper
+		{
+
+		};
+	}
+
 	template<typename _Rt, typename ... _Args>
 	class DLL_API Delegate
 	{

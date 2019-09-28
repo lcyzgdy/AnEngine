@@ -11,7 +11,13 @@ namespace AnEngine
 		template<class _C, typename _Rt, typename... _Args>
 		class MemberFunctionWrapper
 		{
-
+			_C* m_this;
+			std::function<_Rt(_Args...)> m_func;
+		public:
+			_Rt operator()(_Args...args)
+			{
+				return m_this->m_func(args...);
+			}
 		};
 	}
 

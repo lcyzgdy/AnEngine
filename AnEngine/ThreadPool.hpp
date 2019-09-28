@@ -37,32 +37,32 @@ namespace AnEngine::Utility::ThreadPool
 			ThreadPool(int size)
 			{
 				m_idleThreadNum = (size < 1) ? 1 : size;
-				m_pool.reserve(m_idleThreadNum + 1);
+				m_pool.reserve(static_cast<size_t>(m_idleThreadNum) + 1);
 				for (int i = 0; i < m_idleThreadNum; i++)
 				{
 					m_pool.emplace_back([this]()
-					{
-						while (!this->m_stopped)
 						{
-							std::function<void()> task;
+							while (!this->m_stopped)
 							{
-								std::unique_lock<std::mutex> lock(this->m_mutex);
-								this->m_cvTask.wait(lock, [this]()
+								std::function<void()> task;
 								{
-									return this->m_stopped.load() || !this->m_tasks.empty();
-								});
-								if (this->m_stopped && this->m_tasks.empty())
-								{
-									return;
+									std::unique_lock<std::mutex> lock(this->m_mutex);
+									this->m_cvTask.wait(lock, [this]()
+										{
+											return this->m_stopped.load() || !this->m_tasks.empty();
+										});
+									if (this->m_stopped && this->m_tasks.empty())
+									{
+										return;
+									}
+									task = move(this->m_tasks.front());
+									this->m_tasks.pop();
 								}
-								task = move(this->m_tasks.front());
-								this->m_tasks.pop();
+								m_idleThreadNum--;
+								task();
+								m_idleThreadNum++;
 							}
-							m_idleThreadNum--;
-							task();
-							m_idleThreadNum++;
-						}
-					});
+						});
 				}
 			}
 

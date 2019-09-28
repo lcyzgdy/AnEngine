@@ -20,6 +20,7 @@ namespace AnEngine::Game
 		virtual void Execute(int index) = 0;
 		virtual bool Check(int index) { return true; }
 		size_t Length;
+		// virtual ~IParallel() = 0;
 	};
 }
 

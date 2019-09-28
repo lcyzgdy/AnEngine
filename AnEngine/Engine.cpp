@@ -43,7 +43,7 @@ namespace AnEngine
 				atomic_int32_t count = 0;
 				for (int i = 0; i < parallel->Length; i++)
 				{
-					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() ->void { count++; });
+					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() { count++; });
 				}
 				cv.wait(lock, [&]()->bool { return parallel->Length == count; });
 			}

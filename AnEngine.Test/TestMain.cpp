@@ -51,12 +51,12 @@ int main()
 	cout << f1.target<decltype(lambda1)>() << endl;*/
 	A a(6);
 	A b(10);
-	onTest += bind(&(A::F), a, std::_Ph<1>());
-	onTest += bind(&(A::F), b, std::_Ph<1>());
-	function<int(int)> f = bind(&(A::F), b, std::_Ph<1>());
+	onTest += Utility::MakeDelegateClassHelper(&(A::F), &a);
+	onTest += Utility::MakeDelegateClassHelper(&(A::F), &b);
+	// function<int(int)> f = bind(&(A::F), b, std::_Ph<1>());
 	// cout << typeid(f).name() << endl;
-	cout << f(3) << endl;
-	cout << onTest(3)[0] << endl;
+	// cout << f(3) << endl;
+	cout << onTest(3)[0] << ends << onTest(3)[1] << endl;
 	//// cout << typeid(decltype(lambda1)).name() << endl;
 	//function<void()> f = f;// []() {cout << "test lambda" << endl; };
 	//cout << f.target_type().name() << endl;

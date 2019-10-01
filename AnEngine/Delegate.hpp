@@ -8,15 +8,40 @@ namespace AnEngine
 {
 	namespace
 	{
-		template<class _C, typename _Rt, typename... _Args>
+		template<class _C, typename _Ret, typename ..._Args>
 		class MemberFunctionWrapper
 		{
-			_C* m_this;
-			std::function<_Rt(_Args...)> m_func;
+			typedef _Ret(_C::* MemberFunctionPtrType)(_Args...);
+			_C* m_classPtr;
+			MemberFunctionPtrType m_func;
+
 		public:
-			_Rt operator()(_Args...args)
+			MemberFunctionWrapper(MemberFunctionPtrType fun, _C* class_ptr) :m_func(fun), m_classPtr(class_ptr) {}
+
+			_Ret operator()(_Args&& ...args)
 			{
-				return m_this->m_func(args...);
+				return (m_classPtr->*m_func)(args...);
+			}
+
+
+			bool operator==(const MemberFunctionWrapper<_C, _Ret, _Args...>& other) const
+			{
+				if (m_classPtr == other.m_classPtr && m_func == other.m_func)
+					return true;
+				return false;
+			}
+
+			bool operator==(MemberFunctionWrapper<_C, _Ret, _Args...>&& other) const
+			{
+				if (m_classPtr == other.m_classPtr && m_func == other.m_func)
+					return true;
+				return false;
+			}
+
+			template<typename T>
+			bool operator==(const T&&)const
+			{
+				return false;
 			}
 		};
 	}
@@ -48,6 +73,11 @@ namespace AnEngine
 			}
 			m_tasks.emplace_back(func);
 			return *this;
+		}
+
+		template<class _C>
+		Delegate& operator+=(MemberFunctionWrapper<_C, _Rt, _Args...>&& classMemFunc)
+		{
 		}
 
 		Delegate& operator-=(const _FunctionType& func)
@@ -94,6 +124,15 @@ namespace AnEngine
 				}
 				return res;
 			}
+		}
+	};
+
+	namespace Utility
+	{
+		template<typename _C, typename _Ret, typename ..._Args>
+		auto MakeDelegateClassHelper(_Ret(_C::* class_func_type)(_Args...), _C* class_ptr)
+		{
+			return MemberFunctionWrapper<_C, _Ret, _Args...>(class_func_type, class_ptr);
 		}
 	};
 }

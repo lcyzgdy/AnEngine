@@ -7,7 +7,7 @@ using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
-	const wstring AssetsDatabase::s_AssetsPath = L"";
+	const string AssetsDatabase::s_AssetsPath = "";
 
 	uint64_t AssetsDatabase::AddMesh(Mesh* mesh)
 	{

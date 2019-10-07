@@ -500,6 +500,9 @@ namespace AnEngine::DMath
 	using Vector4 = DirectX::XMFLOAT4;
 
 	using SVector = DirectX::XMVECTOR;
+	using SVector2 = DirectX::XMVECTOR;
+	using SVector3 = DirectX::XMVECTOR;
+	using SVector4 = DirectX::XMVECTOR;
 	using SVector3th = DirectX::FXMVECTOR;
 	using SVector4th = DirectX::GXMVECTOR;
 	using SVector56th = DirectX::HXMVECTOR;

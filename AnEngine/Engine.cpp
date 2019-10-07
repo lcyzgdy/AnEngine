@@ -115,7 +115,7 @@ namespace AnEngine
 		lock_guard<mutex> lock(m_sceneResMutex);
 		m_initialized = false;
 		m_running = false;
-		SceneManager::ActiveScene()->OnUnload();
+		SceneManager::ActiveScene()->onUnload();
 		BaseInput::GetInstance()->Release();
 	}
 
@@ -123,7 +123,7 @@ namespace AnEngine
 	{
 		m_running = true;
 		var scene = SceneManager::ActiveScene();
-		scene->OnLoad();
+		scene->onLoad();
 		Utility::ThreadPool::Commit([this]()->void
 			{
 				double deltaTime = 0f;

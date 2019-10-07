@@ -11,7 +11,7 @@ namespace AnEngine::Game
 		sm->m_scenes[scene->name] = scene;
 	}
 
-	void SceneManager::LoadScene(const wstring& sceneName)
+	void SceneManager::LoadScene(const string& sceneName)
 	{
 		var sm = Instance();
 		if (sm->m_scenes.count(sceneName) == 0) throw exception("No scene named ");
@@ -19,12 +19,12 @@ namespace AnEngine::Game
 		{
 			throw exception("Load same scene");
 		}
-		sm->m_activeScene->OnUnload();
+		sm->m_activeScene->onUnload();
 		sm->m_activeScene = sm->m_scenes[sceneName];
-		sm->m_activeScene->OnLoad();
+		sm->m_activeScene->onLoad();
 	}
 
-	void SceneManager::LoadScene(wstring&& sceneName)
+	void SceneManager::LoadScene(string&& sceneName)
 	{
 		var sm = Instance();
 		if (sm->m_scenes.count(sceneName) == 0) throw exception("No scene named ");
@@ -32,9 +32,9 @@ namespace AnEngine::Game
 		{
 			throw exception("Load same scene");
 		}
-		sm->m_activeScene->OnUnload();
+		sm->m_activeScene->onUnload();
 		sm->m_activeScene = sm->m_scenes[sceneName];
-		sm->m_activeScene->OnLoad();
+		sm->m_activeScene->onLoad();
 	}
 
 	vector<Scene*> SceneManager::GetAllScenes()

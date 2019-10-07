@@ -46,9 +46,9 @@ namespace AnEngine::Game
 
 	class TrangleRender : public Renderer
 	{
-		::AnEngine::RenderCore::Resource::ByteAddressBuffer* m_vertexBuffer;
-		::AnEngine::RenderCore::VertexShader* m_vertexShader;
-		::AnEngine::RenderCore::PixelShader* m_pixelShader;
+		AnEngine::RenderCore::Resource::ByteAddressBuffer* m_vertexBuffer;
+		AnEngine::RenderCore::VertexShader* m_vertexShader;
+		AnEngine::RenderCore::PixelShader* m_pixelShader;
 		CD3DX12_VIEWPORT m_viewport;
 		CD3DX12_RECT m_scissorRect;
 
@@ -60,8 +60,8 @@ namespace AnEngine::Game
 	public:
 		struct Vertex
 		{
-			XMFLOAT3 position;
-			XMFLOAT4 color;
+			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT4 color;
 		};
 		/*TrangleRender(const std::wstring& name);
 		TrangleRender(std::wstring&& name);*/

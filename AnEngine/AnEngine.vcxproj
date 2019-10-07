@@ -45,6 +45,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -113,7 +114,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
@@ -255,7 +256,6 @@
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="GraphicsCard2D.h" />
-    <ClInclude Include="TransformSystem.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIText.h" />
     <ClInclude Include="UniqueId.hpp" />
@@ -320,7 +320,6 @@
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="TransformSystem.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

@@ -7,23 +7,25 @@ using namespace std;
 using namespace AnEngine::AssetsWrapper;
 using namespace AnEngine;
 
-void F()
+
+int F(int p)
 {
 	cout << __FUNCDNAME__ << endl;
+	return p + 4;
 }
 
-void G()
+int G(int p)
 {
 	cout << __FUNCDNAME__ << endl;
+	return p + 5;
 }
 
 class A
 {
 	int m_p;
 public:
-	A(int p)
+	A(int p) :m_p(p)
 	{
-		m_p = p;
 	}
 	int F(int p)
 	{
@@ -33,7 +35,7 @@ public:
 	}
 };
 
-int main()
+int main1()
 {
 	Delegate<int, int> onTest;
 	/*
@@ -43,25 +45,21 @@ int main()
 	onTest -= F;
 	onTest();
 	*/
-	// auto lambda2 = []() {cout << "BBB" << endl; };
-/*
-	auto lambda1 = []() {cout << "AAA" << endl; };
-	function<void()> f1(lambda1);
-	cout << typeid(decltype(lambda1)).name() << endl;
-	cout << f1.target<decltype(lambda1)>() << endl;*/
 	A a(6);
 	A b(10);
 	onTest += Utility::MakeDelegateClassHelper(&(A::F), &a);
 	onTest += Utility::MakeDelegateClassHelper(&(A::F), &b);
-	// function<int(int)> f = bind(&(A::F), b, std::_Ph<1>());
-	// cout << typeid(f).name() << endl;
-	// cout << f(3) << endl;
-	cout << onTest(3)[0] << ends << onTest(3)[1] << endl;
-	//// cout << typeid(decltype(lambda1)).name() << endl;
-	//function<void()> f = f;// []() {cout << "test lambda" << endl; };
-	//cout << f.target_type().name() << endl;
-	//var temp = f.target<void(*)()>();
-	//cout << temp << endl;
-	//cout << *temp << endl;
+	// cout << onTest(3)[0] << ends << onTest(3)[1] << endl;
+	var res = onTest(3);
+	cout << res[0] << ends << res[1] << endl;
+	onTest -= Utility::MakeDelegateClassHelper(&(A::F), &b);
+	res = onTest(3);
+	onTest += F;
+	onTest += G;
+	res = onTest(3);
+	onTest -= F;
+	res = onTest(3);
+	onTest += [](int p) {return p + 2; };
+	res = onTest(3);
 	return 0;
 }

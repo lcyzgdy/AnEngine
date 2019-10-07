@@ -6,7 +6,6 @@
 #include<DirectXMath.h>
 #include"Vector.hpp"
 #include<cmath>
-using namespace DirectX;
 
 namespace AnEngine::DMath
 {
@@ -88,7 +87,8 @@ namespace AnEngine::DMath
 		}
 	};*/
 
-	using Quaternion = XMVECTOR;
+	using Quaternion = DirectX::XMFLOAT4;
+	using SQuaternion = DirectX::XMVECTOR;
 }
 
 

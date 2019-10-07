@@ -63,7 +63,8 @@ namespace AnEngine::DMath
 	};*/
 
 
-	using Matrix4x4 = DirectX::XMMATRIX;
+	using Matrix4x4 = DirectX::XMFLOAT4X4;
+	using SMatrix4x4 = DirectX::XMMATRIX;
 }
 
 #endif // __MATRIX_HPP__

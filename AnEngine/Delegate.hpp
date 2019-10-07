@@ -6,17 +6,25 @@
 
 namespace AnEngine
 {
+	class SameDelegateException : public std::exception
+	{
+	public:
+		SameDelegateException() : std::exception("已经委托相同的函数")
+		{
+		}
+	};
+
 	namespace
 	{
 		template<class _C, typename _Ret, typename ..._Args>
-		class MemberFunctionWrapper
+		class _MemberFunctionWrapper
 		{
 			typedef _Ret(_C::* MemberFunctionPtrType)(_Args...);
 			_C* m_classPtr;
 			MemberFunctionPtrType m_func;
 
 		public:
-			MemberFunctionWrapper(MemberFunctionPtrType fun, _C* class_ptr) :m_func(fun), m_classPtr(class_ptr) {}
+			_MemberFunctionWrapper(MemberFunctionPtrType fun, _C* class_ptr) :m_func(fun), m_classPtr(class_ptr) {}
 
 			_Ret operator()(_Args&& ...args)
 			{
@@ -24,17 +32,21 @@ namespace AnEngine
 			}
 
 
-			bool operator==(const MemberFunctionWrapper<_C, _Ret, _Args...>& other) const
+			bool operator==(const _MemberFunctionWrapper<_C, _Ret, _Args...>& other) const
 			{
 				if (m_classPtr == other.m_classPtr && m_func == other.m_func)
+				{
 					return true;
+				}
 				return false;
 			}
 
-			bool operator==(MemberFunctionWrapper<_C, _Ret, _Args...>&& other) const
+			bool operator==(_MemberFunctionWrapper<_C, _Ret, _Args...>&& other) const
 			{
 				if (m_classPtr == other.m_classPtr && m_func == other.m_func)
+				{
 					return true;
+				}
 				return false;
 			}
 
@@ -55,41 +67,106 @@ namespace AnEngine
 		std::list<_FunctionType> m_tasks;
 
 	public:
+		~Delegate()
+		{
+			m_tasks.clear();
+		}
+
 		Delegate& operator+=(const _FunctionType& func)
 		{
-			for (var i : m_tasks)
+#if DEBUG || _DEBUG
+			for (var it = m_tasks.begin(); it != m_tasks.end(); ++it)
 			{
-				if (*(i.target<_FunctionPrtType>()) == *(func.target<_FunctionPrtType>())) return *this;
+				var fPtr = (*it).target<_FunctionPrtType>();
+				var gPtr = func.target<_FunctionPrtType>();
+				if (fPtr && gPtr && *fPtr == *gPtr)
+				{
+					throw SameDelegateException();
+				}
 			}
-			m_tasks.push_back(func);
+#endif
+			m_tasks.emplace_back(func);
 			return *this;
 		}
 
 		Delegate& operator+=(_FunctionType&& func)
 		{
-			for (var i : m_tasks)
+#if _DEBUG
+			for (var it = m_tasks.begin(); it != m_tasks.end(); ++it)
 			{
-				if (*(i.target<_FunctionPrtType>()) == *(func.target<_FunctionPrtType>())) return *this;
+				var fPtr = (*it).target<_FunctionPrtType>();
+				var gPtr = func.target<_FunctionPrtType>();
+				if (fPtr && gPtr && *fPtr == *gPtr)
+				{
+					throw SameDelegateException();
+				}
 			}
+#endif
 			m_tasks.emplace_back(func);
 			return *this;
 		}
 
 		template<class _C>
-		Delegate& operator+=(MemberFunctionWrapper<_C, _Rt, _Args...>&& classMemFunc)
+		Delegate& operator+=(const _MemberFunctionWrapper<_C, _Rt, _Args...>& classMemFunc)
 		{
+#if _DEBUG
+			var itr = std::find_if(m_tasks.begin(), m_tasks.end(),
+				[&](_FunctionType& f)
+				{
+					var fPtr = f.target<_MemberFunctionWrapper<_C, _Rt, _Args...>>();
+					if (fPtr && *fPtr == classMemFunc)
+					{
+						return true;
+					}
+					return false;
+				});
+
+			if (itr != m_tasks.end())
+			{
+				throw SameDelegateException();
+			}
+#endif
+			m_tasks.emplace_back(classMemFunc);
+			return *this;
+		}
+
+		template<class _C>
+		Delegate& operator+=(_MemberFunctionWrapper<_C, _Rt, _Args...>&& classMemFunc)
+		{
+#if _DEBUG
+			var itr = std::find_if(m_tasks.begin(), m_tasks.end(),
+				[&](_FunctionType& f)
+				{
+					var fPtr = f.target<_MemberFunctionWrapper<_C, _Rt, _Args...>>();
+					if (fPtr && *fPtr == classMemFunc)
+					{
+						return true;
+					}
+					return false;
+				});
+
+			if (itr != m_tasks.end())
+			{
+				throw SameDelegateException();
+			}
+#endif
+			m_tasks.emplace_back(classMemFunc);
+			return *this;
 		}
 
 		Delegate& operator-=(const _FunctionType& func)
 		{
 			for (var it = m_tasks.begin(); it != m_tasks.end(); ++it)
 			{
-				if (*(func.target<_FunctionPrtType>()) == *((*it).target<_FunctionPrtType>()))
+				var fPtr = (*it).target<_FunctionPrtType>();
+				var gPtr = func.target<_FunctionPrtType>();
+				if (fPtr && gPtr && *fPtr == *gPtr)
 				{
 					m_tasks.erase(it);
 					break;
 				}
 			}
+
 			return *this;
 		}
 
@@ -97,11 +174,56 @@ namespace AnEngine
 		{
 			for (var it = m_tasks.begin(); it != m_tasks.end(); ++it)
 			{
-				if (*(func.target<_FunctionPrtType>()) == *((*it).target<_FunctionPrtType>()))
+				var fPtr = (*it).target<_FunctionPrtType>();
+				var gPtr = func.target<_FunctionPrtType>();
+				if (fPtr && gPtr && *fPtr == *gPtr)
 				{
 					m_tasks.erase(it);
 					break;
 				}
+			}
+
+			return *this;
+		}
+
+		template<class _C>
+		Delegate& operator-=(const _MemberFunctionWrapper<_C, _Rt, _Args...>& classMemFunc)
+		{
+			var itr = std::find_if(m_tasks.begin(), m_tasks.end(),
+				[&](_FunctionType& f)
+				{
+					var fPtr = f.target<_MemberFunctionWrapper<_C, _Rt, _Args...>>();
+					if (fPtr && *fPtr == classMemFunc)
+					{
+						return true;
+					}
+					return false;
+				});
+
+			if (itr != m_tasks.end())
+			{
+				m_tasks.erase(itr);
+			}
+			return *this;
+		}
+
+		template<class _C>
+		Delegate& operator-=(_MemberFunctionWrapper<_C, _Rt, _Args...>&& classMemFunc)
+		{
+			var itr = std::find_if(m_tasks.begin(), m_tasks.end(),
+				[&](_FunctionType& f)
+				{
+					var _fun = f.target<_MemberFunctionWrapper<_C, _Rt, _Args...>>();
+					if (_fun && *_fun == classMemFunc)
+					{
+						return true;
+					}
+					return false;
+				});
+
+			if (itr != m_tasks.end())
+			{
+				m_tasks.erase(itr);
 			}
 			return *this;
 		}
@@ -130,9 +252,9 @@ namespace AnEngine
 	namespace Utility
 	{
 		template<typename _C, typename _Ret, typename ..._Args>
-		auto MakeDelegateClassHelper(_Ret(_C::* class_func_type)(_Args...), _C* class_ptr)
+		__forceinline auto MakeDelegateClassHelper(_Ret(_C::* class_func_ptr)(_Args...), _C* class_ptr)
 		{
-			return MemberFunctionWrapper<_C, _Ret, _Args...>(class_func_type, class_ptr);
+			return _MemberFunctionWrapper<_C, _Ret, _Args...>(class_func_ptr, class_ptr);
 		}
 	};
 }

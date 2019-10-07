@@ -132,13 +132,13 @@ namespace AnEngine::Game
 		}
 	}*/
 
-	Scene::Scene(wstring&& _name) : name(_name)
+	Scene::Scene(string&& _name) : name(_name)
 	{
 		//m_objects.reserve(256);
 		SceneManager::AddNewScene(this);
 	}
 
-	Scene::Scene(const wstring& _name) : name(_name)
+	Scene::Scene(const string& _name) : name(_name)
 	{
 		SceneManager::AddNewScene(this);
 	}

@@ -5,10 +5,12 @@
 #define ASSIMP
 
 #include "onwind.h"
+#include "AssetsConfig.h"
 
 namespace AnEngine::AssetsWrapper
 {
-	DLL_API std::byte* LoadFbxFromFile(const std::wstring&);
+	DLL_API LoadAssetsStatusCode LoadFbxFromFile(const std::string&);
+	DLL_API LoadAssetsStatusCode LoadFbxFromFile(std::string&&);
 }
 
 #endif // !__FBXIMPORTER_H__

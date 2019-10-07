@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "ComponentGroup.hpp"
 #include "SystemBase.h"
+#include "Delegate.hpp"
 //#include "GameEntity.h"
 
 namespace AnEngine::Game
@@ -32,14 +33,16 @@ namespace AnEngine::Game
 
 	public:
 		//Scene(std::wstring _name);
-		Scene(std::wstring&& _name);
-		Scene(const std::wstring& _name);
+		Scene(std::string&& _name);
+		Scene(const std::string& _name);
 		virtual ~Scene() = default;
 
-		virtual void OnLoad() = 0;
-		virtual void OnUnload() = 0;
+		// virtual void OnLoad() = 0;
+		// virtual void OnUnload() = 0;
+		Delegate<void> onLoad;
+		Delegate<void> onUnload;
 
-		std::wstring name;
+		std::string name;
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);

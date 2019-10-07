@@ -6,32 +6,31 @@
 #include "Texture.h"
 #include "onwind.h"
 #include "Scene.h"
+#include "GameObject.h"
 
 namespace AnEngine::AssetsWrapper
 {
 	class DLL_API AssetsDatabase : public Singleton<AssetsDatabase>
 	{
 		friend class Singleton<AssetsDatabase>;
+		// friend class AnEngine::Resource::Mesh;
+		// friend class AnEngine::Resource::Texture;
 
 		std::map<uint64_t, Resource::Mesh*> m_meshes;
 		std::map<uint64_t, Resource::Texture*> m_textures;
-
-		Game::Scene* m_editor;
-
-	protected:
-		friend class AnEngine::Resource::Mesh;
-		friend class AnEngine::Resource::Texture;
-
-		uint64_t AddMesh(AnEngine::Resource::Mesh* mesh);
-		uint64_t AddTexture(AnEngine::Resource::Texture* tex);
+		std::map<uint64_t, Game::GameObject*> m_objects;
+		// Game::Scene* m_editor;
 
 	public:
 		AssetsDatabase();
 		~AssetsDatabase();
 
+		uint64_t AddMesh(AnEngine::Resource::Mesh* mesh);
+		uint64_t AddTexture(AnEngine::Resource::Texture* tex);
+
 		void RefreshAssets();
 
-		static const std::wstring s_AssetsPath;
+		static const std::string s_AssetsPath;
 	};
 
 }

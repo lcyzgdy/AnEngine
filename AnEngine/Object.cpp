@@ -12,17 +12,8 @@ namespace AnEngine
 		return Utility::GetHash(this);
 	}
 
-	wstring Object::ToString()
+	string Object::ToString()
 	{
-		wchar_t wc[256];
-		memset(wc, 0, sizeof(wc));
-		const char* c = typeid(this).name();
-		for (int i = 0;; i++)
-		{
-			if (c == '\0') break;
-			wc[i] = (wchar_t)(*c);
-			c++;
-		}
-		return move(wstring(wc));
+		return typeid(this).name();
 	}
 }

@@ -17,7 +17,8 @@ namespace AnEngine::Game
 
 	public:
 		explicit GroupWarper(uint64_t hash, void* group, size_t size) : m_typeHash(hash), m_warper(group), m_size(size)
-		{ 		}
+		{
+		}
 
 		template<typename T>
 		ComponentGroup<T>* GetGroup()

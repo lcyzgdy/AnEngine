@@ -5,6 +5,6 @@ using namespace AnEngine;
 
 int main()
 {
-	AnEngine::AssetsWrapper::LoadFbxFromFile("./Assets/unitychan.fbx");
+	AnEngine::AssetsWrapper::LoadFbxFromFile("C:/Users/PC/Documents/Code/VSProject/AnEngine/Assets/unitychan.fbx");
 	return 0;
 }

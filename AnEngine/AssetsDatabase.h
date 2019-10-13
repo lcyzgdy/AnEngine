@@ -13,8 +13,6 @@ namespace AnEngine::AssetsWrapper
 	class DLL_API AssetsDatabase : public Singleton<AssetsDatabase>
 	{
 		friend class Singleton<AssetsDatabase>;
-		// friend class AnEngine::Resource::Mesh;
-		// friend class AnEngine::Resource::Texture;
 
 		std::map<uint64_t, Resource::Mesh*> m_meshes;
 		std::map<uint64_t, Resource::Texture*> m_textures;

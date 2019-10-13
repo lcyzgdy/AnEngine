@@ -11,7 +11,7 @@ namespace AnEngine
 	public:
 		virtual ~Object();
 		virtual uint64_t GetHashCode();
-		virtual std::wstring ToString();
+		virtual std::string ToString();
 		template<typename T>
 		bool ReferenceEqual(T* rhs)
 		{

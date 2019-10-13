@@ -11,10 +11,6 @@ namespace AnEngine::Game
 {
 	class Transform
 	{
-		//DMath::Vector3 m_position;
-		//DMath::Quaternion m_rotation;
-		//DMath::Vector3 m_scale;
-
 		DMath::Vector3 m_localPosition;
 		DMath::Quaternion m_localRotation;
 		DMath::Vector3 m_localScale;

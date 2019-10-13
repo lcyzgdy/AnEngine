@@ -27,91 +27,25 @@ namespace AnEngine::Game
 
 		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
 
-		GameObject* m_parent;
-		std::set<GameObject*> m_children;
-
 		static std::queue<GameObject*> s_destoryed;
 
 	protected:
 		// 当前物体的一些组件，比如渲染器、脚本等等。
-		// Components of this object, such script、renderer、rigidbody etc.
+		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<double, size_t> m_typeToId;
 
 		// std::map<size_t, ComponentData*> m_component;
-		GameObject(const std::wstring& name);
-		GameObject(std::wstring&& name);
+		GameObject(const std::string& name);
+		GameObject(std::string&& name);
 		virtual ~GameObject();
 
 		static void RealDestory();
 
 	public:
+		std::string name;
 
-		std::wstring name;
-
-		//GameObject* GetParent();
-		//void SetParent(GameObject* newParent);
-
-		//std::vector<GameObject*> GetChildren();
-
-		/*template<typename _Ty = GameObject>
-		_Ty* GetChildByName(std::wstring& name)
-		{
-			//for (auto i = 0; i < m_children.size(); i++)
-			for (var i : m_children)
-			{
-				if (i->name == name) return static_cast<_Ty*>(gameObject);
-			}
-			return nullptr;
-		}*/
-
-		// 获取所有组件，至于组件里有啥以及这个函数有什么用以后再说
-		/*std::vector<ComponentData*>&& GetComponents()
-		{
-			std::vector<ComponentData*> ret;
-
-			/*for (var i : m_component)
-			{
-				ret.push_back(i.second);
-			}
-
-			return std::move(ret);
-		}*/
-
-		/*template<typename _Ty>
-		std::vector<_Ty*> GetComponentsInChildren()
-		{
-			std::vector<_Ty*> ret;
-			std::queue<GameObject*> q;
-			for (var child : m_children)
-			{
-				q.push(child);
-			}
-			while (!q.empty())
-			{
-				for (var c : q.front()->m_behaviour)
-				{
-					/*if (typeid(*c) == typeid(_Ty))
-					{
-						ret.push_back((_Ty*)c);
-					}
-					var p = dynamic_cast<_Ty*>(c);
-					if (p != nullptr)
-					{
-						ret.push_back(p);
-					}
-				}
-				for (var c : q.front()->m_children)
-				{
-					q.push(c);
-				}
-				q.pop();
-			}
-
-			return std::move(ret);
-		}*/
-
-		//std::vector<ObjectBehaviour*> GetComponents() { return m_behaviour; }
+	public:
 
 		template<typename _Ty>
 		_Ty* GetComponent()
@@ -120,16 +54,6 @@ namespace AnEngine::Game
 		}
 
 		void AddBehaviour(ObjectBehaviour* component);
-
-		/*template<typename _Ty>
-		void AddComponent()
-		{
-			if (IsDerived<_Ty, ObjectBehaviour>::Result == false)
-			{
-				throw std::exception("Type is not derived ObjectBehaviour");
-			}
-			if (GetComponent<_Ty>() == nullptr)	AddComponent(new _Ty());
-		}*/
 
 		template<typename T>
 		T* GetBehaviour()
@@ -161,14 +85,13 @@ namespace AnEngine::Game
 
 		bool Destoryed() { return m_destoryed; }
 
-		__forceinline GameObject* Parent() { return m_parent; }
 		__forceinline uint32_t Id() { return m_id; }
 
-		static GameObject* Create(const std::wstring& name);
-		static GameObject* Create(std::wstring&& name);
+		static GameObject* Create(const std::string& name);
+		static GameObject* Create(std::string&& name);
 		static void Destory(GameObject* gameObject);
-		static GameObject* Find(const std::wstring& name);
-		static GameObject* Find(std::wstring&& name);
+		static GameObject* Find(const std::string& name);
+		static GameObject* Find(std::string&& name);
 	};
 }
 #endif // !__GAMEOBJECT_H__

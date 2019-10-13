@@ -16,9 +16,6 @@ namespace AnEngine::Game
 	// Scene仅作为GameObject的集合，同时待ECS完成后也是Entity或Component的集合。
 	class DLL_API Scene : public Object//, public NonCopyable
 	{
-		// Scene直接调度BaseBehaviour
-		//friend class ::AnEngine::Engine;
-
 		std::deque<GameObject*> m_objects;
 		std::queue<uint32_t> m_freeObjPos;	// 已经被删除掉的对象
 
@@ -46,7 +43,7 @@ namespace AnEngine::Game
 
 		void AddObject(GameObject* obj);
 		void RemoveObject(GameObject* obj);
-		std::deque<GameObject*> GetAllGameObject() { return m_objects; }
+		const std::deque<GameObject*>& GetAllGameObjects() { return m_objects; }
 
 		template<typename T>
 		void CreateComponentGroup()

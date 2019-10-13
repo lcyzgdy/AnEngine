@@ -25,7 +25,6 @@ namespace AnEngine::AssetsWrapper
 
 	AssetsDatabase::AssetsDatabase()
 	{
-
 	}
 
 	AssetsDatabase::~AssetsDatabase()

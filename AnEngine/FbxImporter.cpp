@@ -3,6 +3,9 @@
 #include "Vector.hpp"
 #include "Color.h"
 #include "AssetsDatabase.h"
+#include "GameObject.h"
+
+#include <filesystem>
 
 #if defined OPENFBX
 
@@ -18,9 +21,18 @@
 using namespace std;
 using namespace AnEngine::DMath;
 using namespace AnEngine::Resource;
+using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
+	void BuildGameObjectRecurate(aiNode* root)
+	{
+		for (int i = 0; i < root->mNumChildren; i++)
+		{
+			BuildGameObjectRecurate(root->mChildren[i]);
+		}
+	}
+
 #ifdef OPENFBX
 	std::byte* LoadFbxFromFile(const wstring& filePath)
 	{
@@ -123,6 +135,7 @@ namespace AnEngine::AssetsWrapper
 
 	LoadAssetsStatusCode LoadFbxFromFile(string&& filePath)
 	{
+		filesystem::path fsFilePath(filePath);
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filePath, 0);
 		int meshCount = scene->mNumMeshes;
@@ -179,6 +192,8 @@ namespace AnEngine::AssetsWrapper
 		{
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
+		GameObject* go = GameObject::Create(fsFilePath.filename().string());
+		BuildGameObjectRecurate(scene->mRootNode);
 		return LoadAssetsStatusCode::OK;
 	}
 #endif // OPENFBX

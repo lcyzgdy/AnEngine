@@ -257,9 +257,6 @@
     <ClInclude Include="GroupWarper.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Game\Component</Filter>
-    </ClInclude>
     <ClInclude Include="IParallel.h">
       <Filter>Game\System</Filter>
     </ClInclude>
@@ -311,6 +308,12 @@
     </ClInclude>
     <ClInclude Include="Delegate.hpp">
       <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game\ComponentLegacy</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformSystem.h">
+      <Filter>Game\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -468,9 +471,6 @@
     <ClCompile Include="DeferredRenderPipeline.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Game\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Lighting.cpp">
       <Filter>Game\Behaviour</Filter>
     </ClCompile>
@@ -489,6 +489,12 @@
     </ClCompile>
     <ClCompile Include="AssetsDatabase.cpp">
       <Filter>AssetWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game\ComponentLegacy</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformSystem.cpp">
+      <Filter>Game\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,6 @@ namespace AnEngine::Game
 {
 	Scene::Scene(string&& _name) : name(_name)
 	{
-		//m_objects.reserve(256);
 		SceneManager::AddNewScene(this);
 	}
 
@@ -24,7 +23,7 @@ namespace AnEngine::Game
 		SceneManager::AddNewScene(this);
 	}
 
-	void Scene::AddObject(GameObject* obj)
+	void Scene::AddToScene(GameObject* obj)
 	{
 		obj->m_id = m_objects.size();
 		m_objects.emplace_back(obj);
@@ -32,24 +31,6 @@ namespace AnEngine::Game
 
 	void Scene::RemoveObject(GameObject* obj)
 	{
-		/*for (var it = m_objects.begin(); it != m_objects.end(); ++it)
-		{
-			if (*it == obj)
-			{
-				m_objects.erase(it);
-				break;
-			}
-		}
-		delete obj;*/
-	}
 
-	/*void Scene::AddEntity(GameEntity* entity)
-	{
-		m_entities.push_back(entity);
 	}
-
-	void Scene::RemoveEntity(GameEntity* entity)
-	{
-		m_entities.erase(find(m_entities.begin(), m_entities.end(), entity));
-	}*/
 }

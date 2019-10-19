@@ -172,8 +172,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllocatorBase.h" />
     <ClInclude Include="AssetsConfig.h" />
     <ClInclude Include="BaseBehaviour.h" />
+    <ClInclude Include="Chunk.h" />
+    <ClInclude Include="ChunkAllocator.h" />
     <ClInclude Include="Delegate.hpp" />
     <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="IParallel.h" />
@@ -266,6 +269,8 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkAllocator.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
     <ClCompile Include="CommandContext.cpp" />

@@ -47,6 +47,9 @@
     <Filter Include="AssetWrapper">
       <UniqueIdentifier>{71ff50fa-904f-4f2b-8944-7f2810d79be0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{6a72e7d3-b79c-4f8b-9060-e192920ff2db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -315,6 +318,15 @@
     <ClInclude Include="TransformSystem.h">
       <Filter>Game\System</Filter>
     </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="AllocatorBase.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -495,6 +507,12 @@
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">
       <Filter>Game\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkAllocator.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

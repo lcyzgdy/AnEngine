@@ -27,30 +27,24 @@ namespace AnEngine::Game
 
 		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
 
-		static std::queue<GameObject*> s_destoryed;
-
 	protected:
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<double, size_t> m_typeToId;
 
-		// std::map<size_t, ComponentData*> m_component;
 		GameObject(const std::string& name);
 		GameObject(std::string&& name);
 		virtual ~GameObject();
-
-		static void RealDestory();
 
 	public:
 		std::string name;
 
 	public:
-
 		template<typename _Ty>
 		_Ty* GetComponent()
 		{
-			return m_component[typeid(_Ty).hash_code()];
+			return nullptr;
 		}
 
 		void AddBehaviour(ObjectBehaviour* component);
@@ -80,15 +74,15 @@ namespace AnEngine::Game
 		//void RemoveComponent(ObjectBehaviour* component);
 		//void AddChildObject(GameObject* obj);
 
-		bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }
+		inline bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }
 		void Active(bool b);
 
-		bool Destoryed() { return m_destoryed; }
+		inline bool Destoryed() { return m_destoryed; }
 
 		__forceinline uint32_t Id() { return m_id; }
 
-		static GameObject* Create(const std::string& name);
-		static GameObject* Create(std::string&& name);
+		static std::shared_ptr<GameObject> Create(const std::string& name);
+		static std::shared_ptr<GameObject> Create(std::string&& name);
 		static void Destory(GameObject* gameObject);
 		static GameObject* Find(const std::string& name);
 		static GameObject* Find(std::string&& name);

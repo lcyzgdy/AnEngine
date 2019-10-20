@@ -192,7 +192,7 @@ namespace AnEngine::AssetsWrapper
 		{
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
-		GameObject* go = GameObject::Create(fsFilePath.filename().string());
+		var go = GameObject::Create(fsFilePath.filename().string());
 		BuildGameObjectRecurate(scene->mRootNode);
 		return LoadAssetsStatusCode::OK;
 	}

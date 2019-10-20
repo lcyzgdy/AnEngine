@@ -56,7 +56,6 @@ namespace AnEngine
 				}
 			}
 		}
-		//Utility::ThreadPool::Commit(bind(&Engine::UpdateBehaviour, this));
 	}
 
 	void Engine::UpdateBehaviour()
@@ -76,30 +75,7 @@ namespace AnEngine
 				b->AfterUpdate();
 			}
 		}
-		/*for (var& obj : activeScene->GetAllGameObject())
-		{
-			if (!obj.Active()) continue;
-			for (var be : obj.GetComponents())
-			{
-				be->UpdateSystem();
-			}
-			for (var be : obj.GetComponents())
-			{
-				be->Update();
-			}
-			for (var be : obj.GetComponents())
-			{
-				be->UpdateBottom();
-			}
-		}*/
-		//Utility::ThreadPool::Commit(bind(&Engine::UpdateBottom, this));
 	}
-
-	/*Engine* Engine::GetInstance()
-	{
-		static Engine driver;
-		return &driver;
-	}*/
 
 	void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
 	{

@@ -43,8 +43,8 @@ namespace AnEngine::RenderCore
 	{
 		var scene = Game::SceneManager::ActiveScene();
 		// 网格渲染器是 ECS 组织的
-		var objs = scene->GetGroupOfType<Component::MeshRenderer>();	// 从场景中获取所有的 Mesh Renderer 组件进行渲染
-		const auto& mrs = *objs;
+		//var objs = scene->GetGroupOfType<Component::MeshRenderer>();	// 从场景中获取所有的 Mesh Renderer 组件进行渲染
+		//const auto& mrs = *objs;
 		var[list, allocator] = GraphicsContext::GetOne();
 		var ilist = list->GetCommandList();
 		var iallocator = allocator->GetAllocator();

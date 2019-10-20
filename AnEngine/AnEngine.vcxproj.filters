@@ -327,6 +327,12 @@
     <ClInclude Include="AllocatorBase.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Archetype.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchetypeManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -512,6 +518,9 @@
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="ChunkAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Archetype.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>

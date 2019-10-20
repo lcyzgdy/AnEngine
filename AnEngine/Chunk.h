@@ -8,11 +8,17 @@ namespace AnEngine::Memory
 {
 	struct Chunk
 	{
-		uint32_t m_entitiesCount;
-		std::byte* m_memBegin;		// Chunk块开头
 	public:
+		uint32_t entitiesCount;
+		std::byte* memory;		// Chunk块开头
+		std::size_t offset;
+		std::size_t totalSize;
+		std::size_t entitySize;
+
 		Chunk();
 		~Chunk();
+
+		std::size_t FreeSize();
 	};
 }
 

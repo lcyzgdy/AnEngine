@@ -173,6 +173,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorBase.h" />
+    <ClInclude Include="Archetype.h" />
+    <ClInclude Include="ArchetypeManager.h" />
     <ClInclude Include="AssetsConfig.h" />
     <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Chunk.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Archetype.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Chunk.cpp" />

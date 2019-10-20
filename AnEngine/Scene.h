@@ -9,18 +9,22 @@
 #include "ComponentGroup.hpp"
 #include "SystemBase.h"
 #include "Delegate.hpp"
-//#include "GameEntity.h"
+#include "ChunkAllocator.h"
+#include "Archetype.h"
 
 namespace AnEngine::Game
 {
 	// Scene仅作为GameObject的集合，同时待ECS完成后也是Entity或Component的集合。
 	class DLL_API Scene : public Object//, public NonCopyable
 	{
-		std::deque<GameObject*> m_objects;
-		std::queue<uint32_t> m_freeObjPos;	// 已经被删除掉的对象
+		std::queue<uint32_t> m_freeObjPos;			// 已经被删除掉的对象
 		std::map<size_t, void*> m_componentGroups;
 		std::deque<System::SystemBase*> m_systems;
 		std::mutex m_behaviourMutex;
+
+		std::list<Archetype*> m_archetypeList;
+		std::map<GameObject*, Memory::Chunk*> m_objs;
+		std::deque<GameObject*> m_objects;
 
 	public:
 		Scene(std::string&& _name);

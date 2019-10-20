@@ -9,7 +9,7 @@
 #include <queue>
 #include "ComponentData.h"
 #include <set>
-// #include"BaseBehaviour.h"
+
 
 namespace AnEngine::Game
 {
@@ -19,6 +19,7 @@ namespace AnEngine::Game
 	class GameObject : public Object
 	{
 		friend class Scene;
+		// friend class std::shared_ptr<GameObject>;
 
 		std::mutex m_mutex;
 		bool m_active;
@@ -32,13 +33,14 @@ namespace AnEngine::Game
 		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<double, size_t> m_typeToId;
+	public:
+		std::string name;
+		Scene* scene;
 
 		GameObject(const std::string& name);
 		GameObject(std::string&& name);
-		virtual ~GameObject();
 
-	public:
-		std::string name;
+		virtual ~GameObject();
 
 	public:
 		template<typename _Ty>

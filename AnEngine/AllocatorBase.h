@@ -7,7 +7,7 @@ namespace AnEngine::Memory
 	class AllocatorBase
 	{
 	public:
-		virtual ~AllocatorBase() = 0;
+		virtual ~AllocatorBase() = 0 {}
 	};
 }
 

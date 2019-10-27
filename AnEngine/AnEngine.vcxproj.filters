@@ -235,9 +235,6 @@
     <ClInclude Include="RayTracingHelper.hpp">
       <Filter>Graphics\DXR</Filter>
     </ClInclude>
-    <ClInclude Include="FileHelper.hpp">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="FenceContext.h">
       <Filter>Graphics</Filter>
     </ClInclude>

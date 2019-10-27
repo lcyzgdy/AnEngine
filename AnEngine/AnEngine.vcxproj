@@ -208,7 +208,6 @@
     <ClInclude Include="ExecuteIndirect.h" />
     <ClInclude Include="Fence.h" />
     <ClInclude Include="FenceContext.h" />
-    <ClInclude Include="FileHelper.hpp" />
     <ClInclude Include="frameBuffering.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GpuBuffer.h" />

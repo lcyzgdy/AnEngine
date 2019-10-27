@@ -9,6 +9,7 @@
 #include <queue>
 #include "ComponentData.h"
 #include <set>
+#include "Archetype.h"
 
 
 namespace AnEngine::Game
@@ -33,9 +34,11 @@ namespace AnEngine::Game
 		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<double, size_t> m_typeToId;
-	public:
+		// public:
 		std::string name;
 		Scene* scene;
+		Archetype* m_archetype;
+
 
 		GameObject(const std::string& name);
 		GameObject(std::string&& name);

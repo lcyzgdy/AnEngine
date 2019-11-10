@@ -12,14 +12,14 @@ namespace AnEngine::Memory
 	{
 		friend class Singleton<ChunkAllocator>;
 
-		std::list<Chunk*> m_chunksList;
+		std::deque<std::shared_ptr<Chunk>> m_chunksList;
 
 	protected:
 		ChunkAllocator();
 		~ChunkAllocator();
 
 	public:
-		Chunk* Allocate();
+		std::shared_ptr<Chunk> Allocate();
 		void Deallocate(Chunk* chunk);
 	};
 }

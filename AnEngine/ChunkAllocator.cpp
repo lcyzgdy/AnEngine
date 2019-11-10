@@ -9,17 +9,18 @@ namespace AnEngine::Memory
 
 	ChunkAllocator::~ChunkAllocator()
 	{
-		for (var chunk : m_chunksList)
+		/*for (var chunk : m_chunksList)
 		{
-			delete chunk;
-		}
+			// delete chunk;
+			chunk.
+		}*/
 		m_chunksList.clear();
 	}
 
-	Chunk* ChunkAllocator::Allocate()
+	shared_ptr<Chunk> ChunkAllocator::Allocate()
 	{
-		var chunk = new Chunk();
-		m_chunksList.push_back(chunk);
+		var chunk = make_shared<Chunk>();
+		m_chunksList.emplace_back(chunk);
 		return chunk;
 	}
 

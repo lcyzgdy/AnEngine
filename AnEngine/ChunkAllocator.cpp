@@ -26,11 +26,11 @@ namespace AnEngine::Memory
 
 	void ChunkAllocator::Deallocate(Chunk* chunk)
 	{
-		var it = find(m_chunksList.begin(), m_chunksList.end(), chunk);
+		/*var it = find(m_chunksList.begin(), m_chunksList.end(), chunk);
 		if (it != m_chunksList.end())
 		{
 			m_chunksList.erase(it);
 		}
-		free(chunk);
+		free(chunk);*/
 	}
 }

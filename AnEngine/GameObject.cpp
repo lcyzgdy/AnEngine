@@ -29,12 +29,22 @@ namespace AnEngine::Game
 
 	std::shared_ptr<GameObject> GameObject::Create(const std::string& name)
 	{
-		return make_shared<GameObject>(name);
+		class MakeSharedHelper : public GameObject
+		{
+		public:
+			explicit MakeSharedHelper(const std::string& _name) :GameObject(_name) {}
+		};
+		return make_shared<MakeSharedHelper>(name);
 	}
 
 	std::shared_ptr<GameObject> GameObject::Create(std::string&& name)
 	{
-		return make_shared<GameObject>(name);
+		class MakeSharedHelper : public GameObject
+		{
+		public:
+			explicit MakeSharedHelper(std::string&& _name) :GameObject(_name) {}
+		};
+		return make_shared<MakeSharedHelper>(move(name));
 	}
 
 	void GameObject::Destory(GameObject* gameObject)

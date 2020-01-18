@@ -18,6 +18,7 @@
 
 #define var auto
 #define let auto
+#define 令(a) auto ##a
 #define __FasterFunc(func) inline func __vectorcall
 
 #ifdef _WIN64
@@ -54,16 +55,6 @@ inline LPCWSTR ToLPCWSTR(std::string& orig)
 	return wcstring;
 }
 
-/*inline LPCWSTR ToLPCWSTR(const char* l)
-{
-	//std::string orig(l);
-	size_t origsize = strlen(l);// orig.length() + 1;
-	//const size_t newsize = 100;
-	size_t convertedChars = 0;
-	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
-	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
-	return wcstring;
-}*/
 
 inline LPCWSTR ToLPCWSTR(const char* l)
 {
@@ -101,8 +92,6 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 
 inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
 {
-	using namespace Microsoft::WRL;
-
 	CREATEFILE2_EXTENDED_PARAMETERS extendedParams = {};
 	extendedParams.dwSize = sizeof(CREATEFILE2_EXTENDED_PARAMETERS);
 	extendedParams.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
@@ -111,7 +100,7 @@ inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
 	extendedParams.lpSecurityAttributes = nullptr;
 	extendedParams.hTemplateFile = nullptr;
 
-	Wrappers::FileHandle file(CreateFile2(filename, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extendedParams));
+	Microsoft::WRL::Wrappers::FileHandle file(CreateFile2(filename, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extendedParams));
 	if (file.Get() == INVALID_HANDLE_VALUE)
 	{
 		throw std::exception();
@@ -163,16 +152,6 @@ inline void ThrowIfFalse(bool value)
 inline void ThrowIfFalse(bool value, const wchar_t* msg)
 {
 	ThrowIfFailed(value ? S_OK : E_FAIL);
-}
-
-// #define IF_FAILED ThrowIfFailed(
-// #define THROW )
-
-template <typename T>
-inline T* SafeAcquire(T* newObject)
-{
-	if (newObject != nullptr) ((IUnknown*)newObject)->AddRef();
-	return newObject;
 }
 
 #else
@@ -298,32 +277,5 @@ public:
 		return m_uniqueObj;
 	}
 };
-/*
-template<typename _T, typename _TBase>
-class IsDerived
-{
-public:
-	static int t(_TBase* base)
-	{
-		return 1;
-	}
-	static char t(void* t2)
-	{
-		return 0;
-	}
 
-	enum
-	{
-		Result = (sizeof(int) == sizeof(t((_T*)NULL))),
-	};
-};*/
-
-/*template<typename T0, typename... T>
-struct TypeHash
-{
-	enum
-	{
-		Result = typeid(T0).hash_code() + typeid...(T).hash_code();
-	};
-}*/
 #endif // !__ONWIND_H__

@@ -2,10 +2,10 @@
 #ifndef __GPURESOURCE_H__
 #define __GPURESOURCE_H__
 
-#include<wrl.h>
-#include"DX.h"
-#include"Fence.h"
-#include<functional>
+#include <wrl.h>
+#include "DX.h"
+#include "Fence.h"
+#include <functional>
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -29,10 +29,7 @@ namespace AnEngine::RenderCore::Resource
 
 	public:
 		GpuResource(); // For inheritance
-		//GpuResource(ID3D12Resource* p_resource, D3D12_RESOURCE_STATES currentState);
 		virtual ~GpuResource();
-
-		//virtual void Release();
 
 		ID3D12Resource* operator->() { return m_resource_cp.Get(); }
 		const ID3D12Resource* operator->() const { return m_resource_cp.Get(); }
@@ -41,10 +38,6 @@ namespace AnEngine::RenderCore::Resource
 		const ID3D12Resource* GetResource() const { return m_resource_cp.Get(); }
 
 		D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress() const { return m_gpuVirtualAddress; }
-
-		//Fence* GetFence();
-
-		//void Create();
 	};
 }
 #endif // !__GPURESOURCE_H__

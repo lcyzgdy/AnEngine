@@ -37,7 +37,7 @@ namespace AnEngine
 		void Release();
 
 		void StartScene();
-		void EndBehaviour();
+		// void EndBehaviour();
 	};
 }
 

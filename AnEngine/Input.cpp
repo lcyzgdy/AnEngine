@@ -232,7 +232,7 @@ namespace AnEngine
 		memset(&m_mouseState, 0, sizeof(DIMOUSESTATE2));
 	}
 
-	BaseInput * BaseInput::GetInstance()
+	inline BaseInput* BaseInput::GetInstance()
 	{
 		static BaseInput baseInput;
 		return &baseInput;

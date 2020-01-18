@@ -29,7 +29,7 @@ namespace AnEngine::Game
 		obj->scene = this;
 		m_objects.emplace_back(obj);
 
-		m_archetypeList.rbegin();
+		// m_archetypeList.rbegin();
 	}
 
 	void Scene::RemoveObject(GameObject* obj)

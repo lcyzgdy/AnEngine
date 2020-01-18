@@ -3,7 +3,6 @@
 #define __PIXELBUFFER_H__
 #include"DX.h"
 #include"GpuResource.h"
-using namespace std;
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -33,11 +32,11 @@ namespace AnEngine::RenderCore::Resource
 		static D3D12_RESOURCE_DESC DescribeMsaaTex2D(uint32_t width, uint32_t height, uint32_t depthOrArraySize,
 			uint32_t numMips, DXGI_FORMAT format, uint32_t flags, D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& msaaQl);
 
-		void CreateTextureResource(ID3D12Device* device, const wstring& name,
+		void CreateTextureResource(ID3D12Device* device, const std::wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue,
 			D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr = Resource::S_GpuVirtualAddressUnknown);
 
-		void CreateTextureResource(ID3D12Device* device, const wstring& name,
+		void CreateTextureResource(ID3D12Device* device, const std::wstring& name,
 			const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue);
 
 	protected:

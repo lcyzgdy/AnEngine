@@ -21,6 +21,7 @@
 
 namespace AnEngine::RenderCore::Heap
 {
+	class DescriptorHeapAllocator;
 	extern DescriptorHeapAllocator r_h_heapDescAllocator;
 }
 
@@ -61,25 +62,30 @@ namespace AnEngine::RenderCore
 
 	extern std::vector<std::unique_ptr<GraphicsCard>> r_graphicsCard;
 	extern std::unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
-	//extern ComPtr<IDXGISwapChain3> r_swapChain_cp;
-	//extern Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
 	extern uint32_t r_frameIndex;
-	//extern RootSignature r_rootSignature;
+
 #ifdef _WIN32
 	extern HWND r_hwnd;
 #endif // _WIN32
-	//extern bool rrrr_runningFlag;
 	extern std::function<void(void)> R_GetGpuError;
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
-
-	//void CreateCommonState();
 
 	void RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 
 	void BlendBuffer(Resource::GpuResource* buffer);
 
 	void R_Present();
+
+	class DLL_API GpuContext : Singleton<GpuContext>
+	{
+		friend class Singleton<GpuContext>;
+
+		std::vector<std::unique_ptr<GraphicsCard>> m_devices;
+
+	public:
+
+	};
 }
 
 

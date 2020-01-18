@@ -10,7 +10,6 @@
 #include "SystemBase.h"
 #include "Delegate.hpp"
 #include "ChunkAllocator.h"
-#include "Archetype.h"
 
 namespace AnEngine::Game
 {
@@ -22,8 +21,8 @@ namespace AnEngine::Game
 		std::deque<System::SystemBase*> m_systems;
 		std::mutex m_behaviourMutex;
 
-		std::list<Archetype*> m_archetypeList;
-		std::map<GameObject*, Memory::Chunk*> m_objs;
+		// std::list<Archetype*> m_archetypeList;
+		// std::map<GameObject*, Memory::Chunk*> m_objs;
 		std::deque<GameObject*> m_objects;
 
 	public:

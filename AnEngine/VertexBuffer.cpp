@@ -77,14 +77,4 @@ namespace AnEngine::RenderCore::Resource
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
-
-	D3D12_VERTEX_BUFFER_VIEW VertexBuffer::GetVbv()
-	{
-		return m_vbv;
-	}
-
-	D3D12_INDEX_BUFFER_VIEW VertexBuffer::GetIbv()
-	{
-		return m_ibv;
-	}
 }

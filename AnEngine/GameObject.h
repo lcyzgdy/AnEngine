@@ -24,7 +24,7 @@ namespace AnEngine::Game
 		// friend std::shared_ptr<GameObject> std::make_shared(const std::string&);
 		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
 		friend void std::_Destroy_in_place(GameObject&) noexcept;
-		friend void std::_Construct_in_place(GameObject&, std::string&&) _NOEXCEPT_COND(std::is_nothrow_constructible_v<GameObject, std::string>);
+		friend void std::_Construct_in_place(GameObject&, std::string&&) noexcept(std::is_nothrow_constructible_v<GameObject, std::string>);
 
 		std::mutex m_mutex;
 		bool m_active;
@@ -79,9 +79,6 @@ namespace AnEngine::Game
 			m_behaviour.emplace_back(new T());
 			return *m_behaviour.rbegin();
 		}
-
-		//void RemoveComponent(ObjectBehaviour* component);
-		//void AddChildObject(GameObject* obj);
 
 		inline bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }
 		void Active(bool b);

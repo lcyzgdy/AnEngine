@@ -2,6 +2,8 @@
 #include "RenderCore.h"
 #include "CommandContext.h"
 #include "DescriptorHeap.hpp"
+
+using namespace std;
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Heap;
 using namespace DirectX;
@@ -149,7 +151,7 @@ namespace AnEngine::RenderCore::Resource
 		return m_vertexBuffer;
 	}
 
-	ID3D12Resource * SampleParticles::GetSrvUav()
+	ID3D12Resource* SampleParticles::GetSrvUav()
 	{
 		if (m_srvIndex == 0) return m_particleBuffer0.Get();
 		else return m_particleBuffer1.Get();
@@ -180,7 +182,7 @@ namespace AnEngine::RenderCore::Resource
 		{
 			XMFLOAT3 delta(_spread, _spread, _spread);
 
-			while (XMVectorGetX(XMVector3LengthSq(XMLoadFloat3(&delta))) > _spread * _spread)
+			while (XMVectorGetX(XMVector3LengthSq(XMLoadFloat3(&delta))) > _spread* _spread)
 			{
 				delta.x = RandomPercent() * _spread;
 				delta.y = RandomPercent() * _spread;

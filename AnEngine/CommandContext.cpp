@@ -5,8 +5,7 @@
 #include "FenceContext.h"
 #include <functional>
 
-#define in :
-
+using namespace std;
 using namespace AnEngine::Utility;
 
 namespace AnEngine::RenderCore

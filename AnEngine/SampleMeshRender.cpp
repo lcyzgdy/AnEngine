@@ -3,6 +3,8 @@
 #include "Screen.h"
 #include "DescriptorHeap.hpp"
 #include "CommandContext.h"
+
+using namespace std;
 using namespace AnEngine::RenderCore;
 using namespace AnEngine;
 using namespace AnEngine::RenderCore::Heap;
@@ -11,7 +13,7 @@ using namespace Microsoft::WRL;
 
 namespace AnEngine::Game
 {
-	SampleMeshRenderer::SampleMeshRenderer(wstring && fileName) : Renderer(), m_fileName(fileName)
+	SampleMeshRenderer::SampleMeshRenderer(wstring&& fileName) : Renderer(), m_fileName(fileName)
 	{
 		m_pso = new GraphicPSO();
 	}
@@ -171,7 +173,7 @@ namespace AnEngine::Game
 
 		for (int i = 0; i < srvCount; i++)
 		{
-			const SampleAssets::TextureResource &tex = SampleAssets::Textures[i];
+			const SampleAssets::TextureResource& tex = SampleAssets::Textures[i];
 			CD3DX12_RESOURCE_DESC texDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, tex.Width, tex.Height, 1, static_cast<uint16_t>(tex.MipLevels),
 				tex.Format, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN, D3D12_RESOURCE_FLAG_NONE);
 

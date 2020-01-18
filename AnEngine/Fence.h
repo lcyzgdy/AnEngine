@@ -3,7 +3,6 @@
 #define __FENCE_H__
 
 #include "DX.h"
-//#include <functional>
 #include<atomic>
 #include<mutex>
 #include"RenderCoreConstants.h"

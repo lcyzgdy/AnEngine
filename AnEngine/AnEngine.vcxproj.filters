@@ -50,6 +50,9 @@
     <Filter Include="Memory">
       <UniqueIdentifier>{6a72e7d3-b79c-4f8b-9060-e192920ff2db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\DirectX12">
+      <UniqueIdentifier>{d8a8180a-ea35-4791-8e35-08aa6671627e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -172,9 +175,6 @@
     <ClInclude Include="VertexBuffer.h">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixBuffer.h">
-      <Filter>Graphics\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="MultiBuffer.hpp">
       <Filter>Graphics\Resource</Filter>
     </ClInclude>
@@ -209,12 +209,6 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsCard.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="DX.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx12.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.hpp">
@@ -330,6 +324,12 @@
     <ClInclude Include="ArchetypeManager.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Graphics\DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="DX.h">
+      <Filter>Graphics\DirectX12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -434,9 +434,6 @@
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="MatrixBuffer.cpp">
-      <Filter>Graphics\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="DebugLog.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -465,9 +462,6 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsCard.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DX.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -519,6 +513,9 @@
     </ClCompile>
     <ClCompile Include="Archetype.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="DX.cpp">
+      <Filter>Graphics\DirectX12</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@
 
 #define var auto
 #define let auto
-#define 令(a) auto ##a
+#define 令(a) auto a
 #define __FasterFunc(func) inline func __vectorcall
 
 #ifdef _WIN64

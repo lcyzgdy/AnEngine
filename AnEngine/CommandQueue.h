@@ -10,7 +10,7 @@ namespace AnEngine::RenderCore
 {
 	class CommandQueue
 	{
-		friend class GraphicsCard;
+		friend class GraphicsCard_Obsolete;
 
 		Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_cp_commandQueue;
 

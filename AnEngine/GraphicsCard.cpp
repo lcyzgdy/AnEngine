@@ -237,7 +237,7 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore
 {
-	void GraphicsCard::GetHardwareAdapter(_In_ IDXGIFactory7* pFactory, _Outptr_result_maybenull_ IDXGIAdapter4** ppAdapter)
+	void GraphicsCard::GetHardwareAdapter(_In_ IDXGIFactory6* pFactory, _Outptr_result_maybenull_ IDXGIAdapter4** ppAdapter)
 	{
 		Microsoft::WRL::ComPtr<IDXGIAdapter4> adapter;
 		*ppAdapter = nullptr;
@@ -265,7 +265,7 @@ namespace AnEngine::RenderCore
 		*ppAdapter = adapter.Detach();
 	}
 
-	void GraphicsCard::CreateDevice(IDXGIFactory7* dxgiFactory)
+	void GraphicsCard::CreateDevice(IDXGIFactory6* dxgiFactory)
 	{
 		D3D_FEATURE_LEVEL featureLevel;
 
@@ -332,7 +332,7 @@ namespace AnEngine::RenderCore
 	void GraphicsCard::CreateCommandQueue()
 	{
 		令(device = m_device_cp.Get());
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 			queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -346,7 +346,7 @@ namespace AnEngine::RenderCore
 	{
 	}
 
-	void GraphicsCard::Initialize(IDXGIFactory7* dxgiFactory)
+	void GraphicsCard::Initialize(IDXGIFactory6* dxgiFactory)
 	{
 		CreateDevice(dxgiFactory);
 		CreateCommandQueue();

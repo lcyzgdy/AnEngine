@@ -87,7 +87,7 @@ namespace AnEngine::RenderCore
 	{
 		using ComCommandQueue = Microsoft::WRL::ComPtr<ID3D12CommandQueue>;
 
-		Microsoft::WRL::ComPtr<ID3D12Device6> m_device_cp;
+		Microsoft::WRL::ComPtr<ID3D12Device4> m_device_cp;
 		std::vector<ComCommandQueue> m_commandQueues;
 		std::string m_name;
 		std::mutex m_execMutex;
@@ -100,16 +100,16 @@ namespace AnEngine::RenderCore
 		uint32_t m_node;
 
 
-		void CreateDevice(IDXGIFactory7* dxgiFactory);
+		void CreateDevice(IDXGIFactory6* dxgiFactory);
 		void CreateCommandQueue();
-		void GetHardwareAdapter(_In_ IDXGIFactory7* pFactory, _Outptr_result_maybenull_ IDXGIAdapter4** ppAdapter);
+		void GetHardwareAdapter(_In_ IDXGIFactory6* pFactory, _Outptr_result_maybenull_ IDXGIAdapter4** ppAdapter);
 
 	public:
 		GraphicsCard(D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_12_1);
 		~GraphicsCard() = default;
 
-		void Initialize(IDXGIFactory7* dxgiFactory);
-		const ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT) const;
+		void Initialize(IDXGIFactory6* dxgiFactory);
+		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		inline const ID3D12Device* GetDevice() const { return m_device_cp.Get(); }
 		uint32_t GetNodeNum() { return m_node; }

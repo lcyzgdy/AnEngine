@@ -30,7 +30,7 @@ namespace AnEngine::RenderCore
 	class IContext
 	{
 	public:
-		virtual std::tuple<_T...> GetOne() = 0;
+		virtual std::tuple<_T...>&& GetOne() = 0;
 		virtual void Push(_T...) = 0;
 	};
 
@@ -44,7 +44,7 @@ namespace AnEngine::RenderCore
 
 	public:
 		// 通过 IContext 继承
-		virtual std::tuple<CommandList*, CommandAllocator*> GetOne() override;
+		virtual std::tuple<CommandList*, CommandAllocator*>&& GetOne() override;
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
@@ -56,7 +56,7 @@ namespace AnEngine::RenderCore::Private
 	{
 	public:
 		// 通过 IContext 继承
-		virtual std::tuple<CommandList*, CommandAllocator*> GetOne() override;
+		virtual std::tuple<CommandList*, CommandAllocator*>&& GetOne() override;
 		virtual void Push(CommandList*, CommandAllocator*) override;
 	};
 }
@@ -66,15 +66,15 @@ namespace AnEngine::RenderCore
 	class ComputeContext
 	{
 	public:
-		static std::tuple<CommandList*, CommandAllocator*> GetOne();
-		static void Push(CommandList* list, CommandAllocator* allocator);
+		inline static std::tuple<CommandList*, CommandAllocator*>&& GetOne();
+		inline static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 
 	class GraphicsContext
 	{
 	public:
-		static std::tuple<CommandList*, CommandAllocator*> GetOne();
-		static void Push(CommandList* list, CommandAllocator* allocator);
+		inline static std::tuple<CommandList*, CommandAllocator*>&& GetOne();
+		inline static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 }
 

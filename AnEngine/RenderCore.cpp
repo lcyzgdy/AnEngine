@@ -21,7 +21,7 @@ using namespace AnEngine::Debug;
 
 namespace AnEngine::RenderCore
 {
-	ComPtr<IDXGIFactory4> r_dxgiFactory_cp;
+	ComPtr<IDXGIFactory7> r_dxgiFactory_cp;
 
 	vector<unique_ptr<GraphicsCard>> r_graphicsCard;
 	unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
@@ -31,21 +31,11 @@ namespace AnEngine::RenderCore
 	uint32_t r_frameIndex;
 	uint64_t r_frameCount;
 
-	//Fence* r_fenceForDisplayPlane;
-	//ComPtr<ID3D12Fence> r_fence;
-	//uint64_t r_fenceValueForDisplayPlane[r_SwapChainBufferCount_const];
-	//HANDLE r_fenceEvent;
-
-	// D2D
-
-#ifdef _WIN32
-	HWND r_hwnd;
-#endif // _WIN32
-
-	//bool rrrr_runningFlag;
 	function<void(void)> R_GetGpuError = [=]()
 	{
-		var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
+		// var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
+		令(device = r_graphicsCard[0]->GetDevice());
+		var hr = device->GetDeviceRemovedReason();
 	};
 
 	namespace CommonState
@@ -71,13 +61,12 @@ namespace AnEngine::RenderCore
 
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
-		r_hwnd = hwnd;
 		uint32_t dxgiFactoryFlags = 0;
 		// 开启Debug模式
 		bool debugDxgi = false;
 #if defined(DEBUG) || defined(_DEBUG)
 
-		ComPtr<ID3D12Debug> d3dDebugController;
+		ComPtr<ID3D12Debug3> d3dDebugController;
 		if (D3D12GetDebugInterface(IID_PPV_ARGS(&d3dDebugController)))
 		{
 			d3dDebugController->EnableDebugLayer();
@@ -97,7 +86,7 @@ namespace AnEngine::RenderCore
 #endif
 		if (!debugDxgi)
 		{
-			ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
+			ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(r_dxgiFactory_cp.GetAddressOf())), R_GetGpuError);
 		}
 
 
@@ -105,7 +94,7 @@ namespace AnEngine::RenderCore
 		{
 			GraphicsCard* aRender = new GraphicsCard();
 			aRender->IsStable(isStable);
-			aRender->Initialize(r_dxgiFactory_cp.Get(), true);
+			aRender->Initialize(r_dxgiFactory_cp.Get());
 			r_graphicsCard.emplace_back(aRender);
 		}
 		r_graphicsCard2D.reset(new UI::GraphicsCard2D());
@@ -133,7 +122,6 @@ namespace AnEngine::RenderCore
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
-		//Private::r_dxgiFactory_cp->Create
 		ThrowIfFailed(r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
 			nullptr, nullptr, swapChain1.GetAddressOf()));
 
@@ -364,10 +352,4 @@ namespace AnEngine::RenderCore
 		fence->WaitForValue(fenceValue);
 	}
 
-}
-namespace AnEngine::RenderCore
-{
-	GraphicsDevice::GraphicsDevice()
-	{
-	}
 }

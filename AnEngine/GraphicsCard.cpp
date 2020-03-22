@@ -127,7 +127,7 @@ namespace AnEngine::RenderCore
 		}
 	}
 
-	const ID3D12CommandQueue* GraphicsCard_Obsolete::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type) const
+	ID3D12CommandQueue* GraphicsCard_Obsolete::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
 		switch (type)
 		{
@@ -148,36 +148,6 @@ namespace AnEngine::RenderCore
 		case D3D12_COMMAND_LIST_TYPE_COPY:
 		{
 			return m_copyCommandQueue.GetCommandQueue();
-			break;
-		}
-		default:
-			break;
-		}
-		return nullptr;
-	}
-
-	ID3D12CommandQueue* GraphicsCard_Obsolete::GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
-	{
-		switch (type)
-		{
-		case D3D12_COMMAND_LIST_TYPE_DIRECT:
-		{
-			return m_renderCommandQueue.m_cp_commandQueue.Get();
-			break;
-		}
-		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
-		{
-			return nullptr;
-			break;
-		}
-		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
-		{
-			return m_computeCommandQueue.m_cp_commandQueue.Get();
-			break;
-		}
-		case D3D12_COMMAND_LIST_TYPE_COPY:
-		{
-			return m_copyCommandQueue.m_cp_commandQueue.Get();
 			break;
 		}
 		default:
@@ -242,7 +212,6 @@ namespace AnEngine::RenderCore
 		Microsoft::WRL::ComPtr<IDXGIAdapter4> adapter;
 		*ppAdapter = nullptr;
 
-
 		for (uint32_t adapterIndex = 0;
 			DXGI_ERROR_NOT_FOUND != pFactory->EnumAdapterByGpuPreference(adapterIndex, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&adapter));
 			++adapterIndex)
@@ -257,7 +226,7 @@ namespace AnEngine::RenderCore
 			}
 
 			// 检查显卡是否支持DX 12，但是不创建真实的显卡
-			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr)))
 			{
 				break;
 			}

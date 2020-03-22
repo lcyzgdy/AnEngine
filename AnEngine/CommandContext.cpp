@@ -33,7 +33,7 @@ namespace AnEngine::RenderCore
 		}
 	}
 
-	std::tuple<CommandList*, CommandAllocator*> GraphicsCommandContext::GetOne()
+	std::tuple<CommandList*, CommandAllocator*>&& GraphicsCommandContext::GetOne()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
 		if (m_pool.size() <= 0)
@@ -65,7 +65,7 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore::Private
 {
-	std::tuple<CommandList*, CommandAllocator*> ComputeCommandContext::GetOne()
+	std::tuple<CommandList*, CommandAllocator*>&& ComputeCommandContext::GetOne()
 	{
 		lock_guard<mutex> lockr(m_readerMutex);
 		if (m_pool.size() <= 0)
@@ -99,7 +99,7 @@ namespace AnEngine::RenderCore
 {
 	using namespace AnEngine::RenderCore::Private;
 
-	tuple<CommandList*, CommandAllocator*> ComputeContext::GetOne()
+	tuple<CommandList*, CommandAllocator*>&& ComputeContext::GetOne()
 	{
 		return move(GraphicsCommandContext::Instance()->GetOne());
 	}
@@ -111,7 +111,7 @@ namespace AnEngine::RenderCore
 		GraphicsCommandContext::Instance()->Push(list, allocator);
 	}
 
-	tuple<CommandList*, CommandAllocator*> GraphicsContext::GetOne()
+	tuple<CommandList*, CommandAllocator*>&& GraphicsContext::GetOne()
 	{
 		return GraphicsCommandContext::Instance()->GetOne();
 	}

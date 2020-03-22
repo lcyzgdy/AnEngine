@@ -17,14 +17,12 @@
 #include <functional>
 
 #define var auto
-#define let auto
 #define 令(a) auto a
 #define __FasterFunc(func) inline func __vectorcall
 
 #ifdef _WIN64
 
 #include <Windows.h>
-#include <wrl.h>
 
 #ifdef UNICODE
 
@@ -48,8 +46,6 @@ constexpr auto SOLUTION_DIR = L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEng
 inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
 	size_t origsize = orig.length() + 1;
-	//const size_t newsize = 100;
-	//size_t convertedChars = 0;
 	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (origsize - 1));
 	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
 	return wcstring;
@@ -260,12 +256,12 @@ struct NonCopyable
 	NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
-template<class T>
+template<typename T>
 class Singleton : public NonCopyable
 {
 	inline static T* m_uniqueObj = nullptr;
 
-	template<class U> friend class Singleton;
+	template<typename U> friend class Singleton;
 
 public:
 	__forceinline static T* Instance()

@@ -23,7 +23,7 @@
     <ProjectGuid>{9839A870-23AE-44DD-95AA-857EC1119546}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>AnEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
@@ -181,6 +181,7 @@
     <ClInclude Include="ChunkAllocator.h" />
     <ClInclude Include="Delegate.hpp" />
     <ClInclude Include="FbxImporter.h" />
+    <ClInclude Include="GpuContext.h" />
     <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
@@ -275,6 +276,7 @@
     <ClInclude Include="UniqueId.hpp" />
     <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="Win32App.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Archetype.cpp" />
@@ -350,6 +352,7 @@
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="Win32App.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

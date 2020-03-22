@@ -37,31 +37,12 @@ namespace AnEngine::RenderCore::CommonState
 
 namespace AnEngine::RenderCore
 {
-	class GraphicsDevice : public Singleton<GraphicsDevice>
-	{
-		friend class Singleton<GraphicsDevice>;
-
-		std::vector<std::unique_ptr<GraphicsCard>> m_graphicsCard;
-		std::unique_ptr<UI::GraphicsCard2D> m_graphicsCard2D;
-
-		GraphicsDevice();
-
-	public:
-		GraphicsCard* Default()
-		{
-			return m_graphicsCard[0].get();
-		}
-	};
-
 	extern bool r_enableHDROutput;
 
 	extern std::vector<std::unique_ptr<GraphicsCard>> r_graphicsCard;
 	extern std::unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
 	extern uint32_t r_frameIndex;
 
-#ifdef _WIN32
-	extern HWND r_hwnd;
-#endif // _WIN32
 	extern std::function<void(void)> R_GetGpuError;
 
 	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);

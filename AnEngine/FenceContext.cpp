@@ -3,7 +3,7 @@ using namespace std;
 
 namespace AnEngine::RenderCore
 {
-	tuple<Fence*> FenceContext::GetOne()
+	tuple<Fence*>&& FenceContext::GetOne()
 	{
 		if (m_pool.empty())
 		{

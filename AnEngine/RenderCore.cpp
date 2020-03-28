@@ -8,6 +8,7 @@
 #include "DebugLog.h"
 #include <dxgidebug.h>
 #include "FenceContext.h"
+#include "GpuContext.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -59,7 +60,7 @@ namespace AnEngine::RenderCore
 	void WaitForGpu();
 	void CreateCommonState();
 
-	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
+	/*void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable)
 	{
 		uint32_t dxgiFactoryFlags = 0;
 		// 开启Debug模式
@@ -73,16 +74,16 @@ namespace AnEngine::RenderCore
 			dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 		}
 
-		/*ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
-		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiInfoQueue))))
-		{
-			debugDxgi = true;
-
-			ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&r_dxgiFactory_cp)));
-
-			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
-			dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
-		}*/
+		// ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
+		// if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiInfoQueue))))
+		// {
+		// 	debugDxgi = true;
+		//
+		// 	ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&r_dxgiFactory_cp)));
+		//
+		// 	dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
+		// 	dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+		// }
 #endif
 		if (!debugDxgi)
 		{
@@ -105,6 +106,17 @@ namespace AnEngine::RenderCore
 		CreateCommonState();
 
 		r_frameCount = 0;
+	}
+*/
+	GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory)
+	{
+		GpuContext::Instance()->Initialize(dxgiFactory);
+		return GpuContext::Instance()->Default();
+	}
+
+	void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount)
+	{
+		GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
 	}
 
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)

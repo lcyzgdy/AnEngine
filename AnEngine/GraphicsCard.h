@@ -111,7 +111,7 @@ namespace AnEngine::RenderCore
 		void Initialize(IDXGIFactory6* dxgiFactory);
 		ID3D12CommandQueue* GetCommandQueue(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 		ID3D12CommandQueue** GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type = D3D12_COMMAND_LIST_TYPE_DIRECT);
-		inline ID3D12Device6* GetDevice() { return m_device_cp.Get(); }
+		inline ID3D12Device4* GetDevice() { return m_device_cp.Get(); }
 		uint32_t GetNodeNum() { return m_node; }
 
 		void IsStable(bool isStable) { m_stableFlag = isStable; }

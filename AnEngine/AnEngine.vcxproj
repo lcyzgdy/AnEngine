@@ -315,6 +315,7 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
+    <ClCompile Include="GpuContext.cpp" />
     <ClCompile Include="GpuResource.cpp" />
     <ClCompile Include="GraphicsCard.cpp" />
     <ClCompile Include="Input.cpp" />

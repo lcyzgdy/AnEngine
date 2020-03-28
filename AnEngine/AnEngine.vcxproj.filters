@@ -526,6 +526,9 @@
     <ClCompile Include="Win32App.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="GpuContext.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

@@ -1,7 +1,7 @@
 #include "Win32App.h"
-#include "GpuContext.h"
 #include <dxgidebug.h>
 #include <D3Dcompiler.h>
+#include "RenderCore.h"
 
 using namespace Microsoft::WRL;
 using namespace AnEngine::RenderCore;
@@ -19,6 +19,8 @@ namespace AnEngine
 
 		ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(m_dxgiFactory.GetAddressOf())));
 
+		var gCard = InitializeRender(m_dxgiFactory.Get());
+
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = m_swapBufferCount;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -33,7 +35,7 @@ namespace AnEngine
 
 		ComPtr<IDXGISwapChain1> swapChain1;
 
-		ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(GraphicsContext::Instance()->Default()->GetCommandQueue(),
+		ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(gCard->GetCommandQueue(),
 			m_hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()));
 		ThrowIfFailed(swapChain1.As(&m_swapChain));
 
@@ -64,8 +66,12 @@ namespace AnEngine
 #else
 		m_enableHdr = false;
 #endif
+		if (m_enableHdr)
+		{
+			// TODO: 支持HDR
+		}
 
-
+		AttachSwapChain(m_swapChain, m_swapBufferCount);
 	}
 
 	Win32App::Win32App(HWND hwnd, uint32_t windowWidth, uint32_t windowHeighht, uint32_t swapBufferCount, bool enableHdr,

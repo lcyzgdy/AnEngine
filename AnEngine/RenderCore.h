@@ -45,7 +45,11 @@ namespace AnEngine::RenderCore
 
 	extern std::function<void(void)> R_GetGpuError;
 
-	void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
+	// void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
+
+	GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory);
+
+	void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount);
 
 	void RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 
@@ -53,15 +57,6 @@ namespace AnEngine::RenderCore
 
 	void R_Present();
 
-	class DLL_API GpuContext : Singleton<GpuContext>
-	{
-		friend class Singleton<GpuContext>;
-
-		std::vector<std::unique_ptr<GraphicsCard>> m_devices;
-
-	public:
-
-	};
 }
 
 

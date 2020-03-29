@@ -39,17 +39,15 @@ namespace AnEngine::RenderCore
 {
 	extern bool r_enableHDROutput;
 
-	extern std::vector<std::unique_ptr<GraphicsCard>> r_graphicsCard;
+	// extern std::vector<std::unique_ptr<GraphicsCard>> r_graphicsCard;
 	extern std::unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
 	extern uint32_t r_frameIndex;
 
 	extern std::function<void(void)> R_GetGpuError;
 
 	// void InitializeRender(HWND hwnd, int graphicCardCount = 1, bool isStable = false);
-
-	GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory);
-
-	void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount);
+	// GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory);
+	// void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount);
 
 	void RenderColorBuffer(Resource::ColorBuffer* dstColorBuffer);
 

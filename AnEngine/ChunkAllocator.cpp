@@ -3,7 +3,7 @@ using namespace std;
 
 namespace AnEngine::Memory
 {
-	ChunkAllocator::ChunkAllocator() :Singleton<ChunkAllocator>::Singleton()
+	ChunkAllocator::ChunkAllocator()
 	{
 	}
 

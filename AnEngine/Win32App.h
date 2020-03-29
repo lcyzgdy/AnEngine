@@ -26,7 +26,9 @@ namespace AnEngine
 	// TODO：和GraphicContext解耦
 	class DLL_API Win32App
 	{
+		friend class Engine;
 		HWND m_hwnd;
+		HINSTANCE m_hInstance;
 		uint32_t m_dxgiFactoryFlags;
 		uint32_t m_windowWidth;
 		uint32_t m_windowHeight;
@@ -41,7 +43,7 @@ namespace AnEngine
 		void Initialize();
 
 	public:
-		Win32App(HWND hwnd, uint32_t windowWidth, uint32_t windowHeighht, uint32_t swapBufferCount = 2, bool enableHdr = false,
+		Win32App(HWND hwnd, HINSTANCE hInstance, uint32_t windowWidth, uint32_t windowHeighht, uint32_t swapBufferCount = 2, bool enableHdr = false,
 			bool isStable = false);
 
 		__forceinline void GetDxgiFactory(Microsoft::WRL::ComPtr<IDXGIFactory6>& ext)

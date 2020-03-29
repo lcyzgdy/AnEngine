@@ -1,10 +1,11 @@
 #include "DescriptorHeap.hpp"
-#include "RenderCore.h"
+// #include "RenderCore.h"
+#include "GpuContext.h"
 using namespace AnEngine::RenderCore::Resource;
 using namespace std;
 using namespace Microsoft::WRL;
 
-namespace AnEngine::RenderCore::Heap
+namespace AnEngine::RenderCore
 {
 	//DescriptorHeapAllocator r_h_heapDescAllocator;
 
@@ -105,7 +106,8 @@ namespace AnEngine::RenderCore::Heap
 
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapAllocator::Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count)
 	{
-		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default()->GetDevice();
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{
@@ -128,7 +130,8 @@ namespace AnEngine::RenderCore::Heap
 	std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> DescriptorHeapAllocator::Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type,
 		uint32_t count, D3D12_DESCRIPTOR_HEAP_FLAGS flag)
 	{
-		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default()->GetDevice();
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{
@@ -155,12 +158,12 @@ namespace AnEngine::RenderCore::Heap
 		m_cp_descriptorHeapPool.clear();
 	}
 
-	DescriptorHeapAllocator* DescriptorHeapAllocator::GetInstance()
+	/*DescriptorHeapAllocator* DescriptorHeapAllocator::GetInstance()
 	{
 		if (m_uniqueObj == nullptr)
 		{
 			m_uniqueObj = new DescriptorHeapAllocator();
 		}
 		return m_uniqueObj;
-	}
+	}*/
 }

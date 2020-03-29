@@ -85,7 +85,7 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 		*(lastSlash + 1) = L'\0';
 	}
 }
-
+/*
 inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
 {
 	CREATEFILE2_EXTENDED_PARAMETERS extendedParams = {};
@@ -123,7 +123,7 @@ inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
 
 	return S_OK;
 }
-
+*/
 inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
@@ -259,9 +259,16 @@ struct NonCopyable
 template<typename T>
 class Singleton : public NonCopyable
 {
+	friend class T;
+
 	inline static T* m_uniqueObj = nullptr;
 
 	template<typename U> friend class Singleton;
+
+	~Singleton()
+	{
+		delete m_uniqueObj;
+	}
 
 public:
 	__forceinline static T* Instance()

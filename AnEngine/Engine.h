@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "Scene.h"
 #include "RenderPipeline.h"
+#include "Win32App.h"
 
 namespace AnEngine
 {
@@ -33,8 +34,13 @@ namespace AnEngine
 
 	public:
 
-		void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
+		// void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
+		void Initialize(const Win32App& win32App);
 		void Release();
+
+		RenderCore::GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory);
+		void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount);
+
 
 		void StartScene();
 		// void EndBehaviour();

@@ -24,7 +24,7 @@ namespace AnEngine::RenderCore
 {
 	ComPtr<IDXGIFactory7> r_dxgiFactory_cp;
 
-	vector<unique_ptr<GraphicsCard>> r_graphicsCard;
+	// vector<unique_ptr<GraphicsCard>> r_graphicsCard;
 	unique_ptr<UI::GraphicsCard2D> r_graphicsCard2D;
 	ComPtr<IDXGISwapChain3> r_swapChain_cp = nullptr;
 	Resource::ColorBuffer* r_displayPlane[r_SwapChainBufferCount_const];
@@ -35,7 +35,8 @@ namespace AnEngine::RenderCore
 	function<void(void)> R_GetGpuError = [=]()
 	{
 		// var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
-		令(device = r_graphicsCard[0]->GetDevice());
+		// 令(device = r_graphicsCard[0]->GetDevice());
+		令(device = GpuContext::Instance()->Default()->GetDevice());
 		var hr = device->GetDeviceRemovedReason();
 	};
 
@@ -56,7 +57,7 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
 
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
+	// void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	void WaitForGpu();
 	void CreateCommonState();
 
@@ -118,7 +119,7 @@ namespace AnEngine::RenderCore
 	{
 		GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
 	}
-
+	/*
 	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
@@ -184,7 +185,7 @@ namespace AnEngine::RenderCore
 
 		r_frameIndex = r_swapChain_cp->GetCurrentBackBufferIndex();
 	}
-
+	*/
 	void CreateCommonState()
 	{
 		using namespace CommonState;

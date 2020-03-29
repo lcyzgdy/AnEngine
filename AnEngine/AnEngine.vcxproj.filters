@@ -333,9 +333,7 @@
     <ClInclude Include="DX.h">
       <Filter>Demos</Filter>
     </ClInclude>
-    <ClInclude Include="Win32App.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
+    <ClInclude Include="Win32App.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -523,12 +521,10 @@
     <ClCompile Include="DX.cpp">
       <Filter>Demos</Filter>
     </ClCompile>
-    <ClCompile Include="Win32App.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="GpuContext.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Win32App.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

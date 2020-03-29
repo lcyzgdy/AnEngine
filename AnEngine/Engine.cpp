@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "IParallel.h"
 #include "ISerial.h"
+#include "GpuContext.h"
 
 using namespace std;
 using namespace AnEngine::Game;
@@ -77,13 +78,21 @@ namespace AnEngine
 		}
 	}
 
-	void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
+	/*void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
 	{
 		if (m_initialized) return;
 		m_initialized = true;
 		BaseInput::GetInstance()->Initialize(hwnd, hInstance);
 		Screen::GetInstance()->Initialize(screenw, screenh);
 		RenderCore::InitializeRender(hwnd);
+	}*/
+
+	void Engine::Initialize(const Win32App& win32App)
+	{
+		if (m_initialized) return;
+		m_initialized = true;
+		BaseInput::GetInstance()->Initialize(win32App.m_hwnd, win32App.m_hInstance);
+		Screen::GetInstance()->Initialize(win32App.m_windowWidth, win32App.m_windowHeight);
 	}
 
 	void Engine::Release()
@@ -93,6 +102,17 @@ namespace AnEngine
 		m_running = false;
 		SceneManager::ActiveScene()->onUnload();
 		BaseInput::GetInstance()->Release();
+	}
+
+	RenderCore::GraphicsCard* Engine::InitializeRender(IDXGIFactory6* dxgiFactory)
+	{
+		RenderCore::GpuContext::Instance()->Initialize(dxgiFactory);
+		return RenderCore::GpuContext::Instance()->Default();
+	}
+
+	void Engine::AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount)
+	{
+		RenderCore::GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
 	}
 
 	void Engine::StartScene()

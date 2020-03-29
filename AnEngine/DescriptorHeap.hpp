@@ -2,23 +2,27 @@
 #ifndef __DESCRIPTORHEAP_H__
 #define __DESCRIPTORHEAP_H__
 
-#include<mutex>
-#include<vector>
-#include<string>
-#include<queue>
-#include"DX.h"
-#include<tuple>
+#include <mutex>
+#include <vector>
+#include <string>
+#include <queue>
+#include <tuple>
+#include "onwind.h"
+#include "DX.h"
 
+/*
 namespace AnEngine::RenderCore
 {
 	void InitializeRender(HWND hwnd, int graphicCardCount, bool isStable);
 }
+*/
 
-namespace AnEngine::RenderCore::Heap
+namespace AnEngine::RenderCore
 {
-	class DescriptorHeapAllocator
+	class DescriptorHeapAllocator : public Singleton<DescriptorHeapAllocator>
 	{
-		static DescriptorHeapAllocator* m_uniqueObj;
+		// static DescriptorHeapAllocator* m_uniqueObj;
+		friend Singleton<DescriptorHeapAllocator>;
 	protected:
 		const uint32_t m_NumDescriptorPerHeap = 256;
 		std::mutex m_mutex;
@@ -42,7 +46,7 @@ namespace AnEngine::RenderCore::Heap
 		std::tuple<ID3D12DescriptorHeap*, D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE type,
 			uint32_t count = 1, D3D12_DESCRIPTOR_HEAP_FLAGS flag = D3D12_DESCRIPTOR_HEAP_FLAG_NONE);
 
-		static DescriptorHeapAllocator* GetInstance();
+		// static DescriptorHeapAllocator* GetInstance();
 
 		//D3D12_CPU_DESCRIPTOR_HANDLE operator[](D3D12_DESCRIPTOR_HEAP_TYPE type);
 	};

@@ -15,9 +15,10 @@ namespace AnEngine::RenderCore
 
 		std::vector<std::shared_ptr<GraphicsCard>> m_graphicsCard;
 		Microsoft::WRL::ComPtr<IDXGISwapChain4> m_swapChain;
-		uint32_t m_bufferCount;
-
 		std::vector<Resource::ColorBuffer*> m_outputBuffer;
+		uint32_t m_bufferCount;
+		uint32_t m_frameIndex;
+
 
 		GpuContext() = default;
 

@@ -8,7 +8,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 namespace AnEngine
 {
-	class Screen : public NonCopyable//::Singleton<Screen>
+	class Screen : public Singleton<Screen>
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
@@ -17,6 +17,7 @@ namespace AnEngine
 		// */
 		//friend void RenderCore::InitializeRender(int graphicCardCount, bool isStable);
 		friend class Engine;
+		friend class Singleton<Screen>;
 		//static Screen* m_uniqueObj;
 
 		std::atomic<int> m_width;
@@ -43,12 +44,6 @@ namespace AnEngine
 		inline int Height()
 		{
 			return m_height;
-		}
-
-		inline static Screen* GetInstance()
-		{
-			static Screen screen;
-			return &screen;
 		}
 	};
 }

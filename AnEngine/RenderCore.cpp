@@ -9,6 +9,7 @@
 #include <dxgidebug.h>
 #include "FenceContext.h"
 #include "GpuContext.h"
+#include "CommonState.h"
 
 // 检验是否有HDR输出功能
 #define CONDITIONALLY_ENABLE_HDR_OUTPUT 1
@@ -36,10 +37,10 @@ namespace AnEngine::RenderCore
 	{
 		// var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
 		// 令(device = r_graphicsCard[0]->GetDevice());
-		令(device = GpuContext::Instance()->Default()->GetDevice());
+		令(device = GpuContext::Instance()->Default().GetDevice());
 		var hr = device->GetDeviceRemovedReason();
 	};
-
+	/*
 	namespace CommonState
 	{
 		D3D12_RESOURCE_BARRIER commonToRenderTarget;
@@ -56,7 +57,7 @@ namespace AnEngine::RenderCore
 		D3D12_RESOURCE_BARRIER depthWrite2PsResource;
 		D3D12_RESOURCE_BARRIER psResource2DepthWrite;
 	}
-
+	*/
 	// void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat = r_DefaultSwapChainFormat_const);
 	void WaitForGpu();
 	void CreateCommonState();
@@ -109,34 +110,34 @@ namespace AnEngine::RenderCore
 		r_frameCount = 0;
 	}
 */
-	GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory)
-	{
-		GpuContext::Instance()->Initialize(dxgiFactory);
-		return GpuContext::Instance()->Default();
-	}
+/*const GraphicsCard& InitializeRender(IDXGIFactory6* dxgiFactory)
+{
+	GpuContext::Instance()->Initialize(dxgiFactory);
+	return GpuContext::Instance()->Default();
+}*/
 
-	void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount)
-	{
-		GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
-	}
-	/*
-	void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
-	{
-		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = r_SwapChainBufferCount_const;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		swapChainDesc.Width = width;
-		swapChainDesc.Height = height;
-		swapChainDesc.Format = dxgiFormat;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
-		swapChainDesc.Scaling = DXGI_SCALING_NONE;
+/*void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount)
+{
+	GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
+}*/
+/*
+void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiFormat)
+{
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+	swapChainDesc.BufferCount = r_SwapChainBufferCount_const;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	swapChainDesc.Width = width;
+	swapChainDesc.Height = height;
+	swapChainDesc.Format = dxgiFormat;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
-		ComPtr<IDXGISwapChain1> swapChain1;
-		ThrowIfFailed(r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
-			nullptr, nullptr, swapChain1.GetAddressOf()));
+	ComPtr<IDXGISwapChain1> swapChain1;
+	ThrowIfFailed(r_dxgiFactory_cp->CreateSwapChainForHwnd(r_graphicsCard[0]->GetCommandQueue(), hwnd, &swapChainDesc,
+		nullptr, nullptr, swapChain1.GetAddressOf()));
 
 #ifdef _WIN32
 		r_dxgiFactory_cp->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES);
@@ -283,8 +284,6 @@ namespace AnEngine::RenderCore
 
 	void RenderColorBuffer(ColorBuffer* dstColorBuffer)
 	{
-		//var commandList = GraphicsCommandContext::GetInstance()->GetOne();
-		//var commandAllocator = GraphicsCommandAllocator::GetInstance()->GetOne();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iCommandList = commandList->GetCommandList();
 		var iCommandAllocator = commandAllocator->GetAllocator();
@@ -297,13 +296,11 @@ namespace AnEngine::RenderCore
 		commonToRenderTarget.Transition.pResource = dstColorBuffer->GetResource();
 		renderTargetToCommon.Transition.pResource = dstColorBuffer->GetResource();
 
-		//iList->ResourceBarrier(1, &commonToRenderTarget);
-		//var clearColorTemp = dstColorBuffer->GetClearColor();
 		float clearColor[4] = { 0.0f, 0.0f, 0.2f, 1.0f };
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
-		r_graphicsCard[0]->GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		GpuContext::Instance()->Default().GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -361,7 +358,7 @@ namespace AnEngine::RenderCore
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
-		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
+		GpuContext::Instance()->Default().GetCommandQueue()->Signal(iFence, fenceValue);
 		fence->WaitForValue(fenceValue);
 	}
 

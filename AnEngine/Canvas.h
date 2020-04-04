@@ -7,7 +7,7 @@
 
 namespace AnEngine::Game::UI
 {
-	class Canvas : public ObjectBehaviour
+	class DLL_API Canvas : public ObjectBehaviour
 	{
 	protected:
 		virtual void Start() override;

@@ -2,36 +2,35 @@
 #ifndef __SAMPLEMESHRENDER_H__
 #define __SAMPLEMESHRENDER_H__
 
-#include"Renderer.h"
-#include"PipelineState.h"
-#include"VertexBuffer.h"
-#include"MCamera.h"
-#include"SampleAssets.h"
-#include"Fence.h"
+#include "Renderer.h"
+#include "PipelineState.h"
+#include "VertexBuffer.h"
+#include "SampleAssets.h"
+#include "Fence.h"
 
 namespace AnEngine::Game
 {
-	class SampleMeshRenderer : public Renderer
+	class DLL_API SampleMeshRenderer : public Renderer
 	{
 		const static uint32_t NumLights = 3u;
 
 		struct LightState
 		{
-			XMFLOAT4 position;
-			XMFLOAT4 direction;
-			XMFLOAT4 color;
-			XMFLOAT4 falloff;
+			DirectX::XMFLOAT4 position;
+			DirectX::XMFLOAT4 direction;
+			DirectX::XMFLOAT4 color;
+			DirectX::XMFLOAT4 falloff;
 
-			XMFLOAT4X4 view;
-			XMFLOAT4X4 projection;
+			DirectX::XMFLOAT4X4 view;
+			DirectX::XMFLOAT4X4 projection;
 		};
 
 		struct MyConstantBuffer
 		{
-			XMFLOAT4X4 model;
-			XMFLOAT4X4 view;
-			XMFLOAT4X4 projection;
-			XMFLOAT4 ambientColor;
+			DirectX::XMFLOAT4X4 model;
+			DirectX::XMFLOAT4X4 view;
+			DirectX::XMFLOAT4X4 projection;
+			DirectX::XMFLOAT4 ambientColor;
 			BOOL sampleShadowMap;
 			BOOL padding[3];
 			LightState lights[NumLights];
@@ -70,7 +69,7 @@ namespace AnEngine::Game
 		MyConstantBuffer* mp_sceneConstantBufferWO;
 
 		LightState m_lights[NumLights];
-		LightCamera m_lightCameras[NumLights];
+		// LightCamera m_lightCameras[NumLights];
 
 		CD3DX12_VIEWPORT m_viewport;
 		CD3DX12_RECT m_scissorRect;

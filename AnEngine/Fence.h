@@ -3,9 +3,8 @@
 #define __FENCE_H__
 
 #include "DX.h"
-#include<atomic>
-#include<mutex>
-#include"RenderCoreConstants.h"
+#include <atomic>
+#include <mutex>
 
 namespace AnEngine::RenderCore
 {

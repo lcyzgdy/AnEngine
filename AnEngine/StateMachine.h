@@ -7,7 +7,7 @@
 
 namespace AnEngine::Game
 {
-	class StateMachine : public ObjectBehaviour
+	class DLL_API StateMachine : public ObjectBehaviour
 	{
 	public:
 		enum Condition

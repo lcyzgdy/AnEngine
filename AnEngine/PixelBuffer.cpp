@@ -1,9 +1,8 @@
 #include "PixelBuffer.h"
-#include "RenderCore.h"
+#include "GpuContext.h"
 #include "DescriptorHeap.hpp"
 using namespace std;
 using namespace AnEngine::RenderCore;
-using namespace AnEngine::RenderCore::Heap;
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -24,24 +23,25 @@ namespace AnEngine::RenderCore::Resource
 
 	void PixelBuffer::SetAsRtv()
 	{
-		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
+		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, handle);
 		m_rtvHandle = handle;
 	}
 
 	void PixelBuffer::SetAsDsv()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
-		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		ID3D12Device* device = GpuContext::Instance()->Default();
+		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 		device->CreateDepthStencilView(m_resource_cp.Get(), nullptr, handle);
 		m_dsvHandle = handle;
 	}
 
 	void PixelBuffer::SetAsSrv()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
-		var handle = Heap::DescriptorHeapAllocator::GetInstance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		ID3D12Device* device = GpuContext::Instance()->Default();
+		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		device->CreateShaderResourceView(m_resource_cp.Get(), nullptr, handle);
 		m_srvHandle = handle;
 	}
@@ -415,7 +415,7 @@ namespace AnEngine::RenderCore::Resource
 		return desc;
 	}
 
-	void PixelBuffer::AssociateWithResource(ID3D12Device * device, const wstring & name, ID3D12Resource* resource,
+	void PixelBuffer::AssociateWithResource(ID3D12Device* device, const wstring& name, ID3D12Resource* resource,
 		D3D12_RESOURCE_STATES currentState)
 	{
 		(device); // 支持多适配器时要改正!!!
@@ -436,8 +436,8 @@ namespace AnEngine::RenderCore::Resource
 #endif
 	}
 
-	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring & name,
-		const D3D12_RESOURCE_DESC & resourceDesc, D3D12_CLEAR_VALUE clearValue,
+	void PixelBuffer::CreateTextureResource(ID3D12Device* device, const wstring& name,
+		const D3D12_RESOURCE_DESC& resourceDesc, D3D12_CLEAR_VALUE clearValue,
 		D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
 	{
 		//this->Release();
@@ -459,4 +459,4 @@ namespace AnEngine::RenderCore::Resource
 	{
 		CreateTextureResource(device, name, resourceDesc, clearValue, Resource::S_GpuVirtualAddressUnknown);
 	}
-	}
+}

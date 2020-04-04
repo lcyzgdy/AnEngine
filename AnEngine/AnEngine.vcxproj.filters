@@ -115,15 +115,6 @@
     <ClInclude Include="DebugLog.h">
       <Filter>UTIL</Filter>
     </ClInclude>
-    <ClInclude Include="DTimer.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="MCamera.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>UTIL</Filter>
     </ClInclude>
@@ -149,12 +140,6 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="SampleMeshRender.h">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticlesRenderer.h">
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="ColorBuffer.h">
@@ -188,9 +173,6 @@
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="ManagedTask.hpp">
-      <Filter>UTIL</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Canvas.h">
@@ -272,9 +254,6 @@
     <ClInclude Include="Lighting.h">
       <Filter>Game\Behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Resource</Filter>
     </ClInclude>
@@ -285,13 +264,7 @@
       <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Color.h" />
-    <ClInclude Include="onwind.h">
-      <Filter>UTIL</Filter>
-    </ClInclude>
     <ClInclude Include="FbxImporter.h">
-      <Filter>AssetWrapper</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureImporter.h">
       <Filter>AssetWrapper</Filter>
     </ClInclude>
     <ClInclude Include="AssetsConfig.h">
@@ -334,6 +307,13 @@
       <Filter>Demos</Filter>
     </ClInclude>
     <ClInclude Include="Win32App.h" />
+    <ClInclude Include="CommonState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="onwind.h" />
+    <ClInclude Include="DTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -384,15 +364,6 @@
     <ClCompile Include="ShaderClass.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="DTimer.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="MCamera.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -412,12 +383,6 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="SampleMeshRender.cpp">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Game\ComponentLegacy</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticlesRenderer.cpp">
       <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="ColorBuffer.cpp">
@@ -445,9 +410,6 @@
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="ManagedTask.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
@@ -490,14 +452,8 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="FbxImporter.cpp">
-      <Filter>AssetWrapper</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureImporter.cpp">
       <Filter>AssetWrapper</Filter>
     </ClCompile>
     <ClCompile Include="AssetsDatabase.cpp">
@@ -525,6 +481,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Win32App.cpp" />
+    <ClCompile Include="CommonState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="DTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

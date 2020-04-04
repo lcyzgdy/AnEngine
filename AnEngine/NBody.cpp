@@ -2,6 +2,7 @@
 using namespace std;
 using namespace AnEngine::RenderCore;
 using namespace Microsoft::WRL;
+using namespace DirectX;
 
 const float NBody::ParticleSpread = 400.0f;
 
@@ -37,8 +38,8 @@ NBody::~NBody()
 
 void NBody::OnInit()
 {
-	camera.OnInit({ 0.0f, 0.0f,1500.0f });
-	camera.SetMoveSpeed(250.0f);
+	// camera.OnInit({ 0.0f, 0.0f,1500.0f });
+	// camera.SetMoveSpeed(250.0f);
 
 	InitializePipeline();
 	InitializeAssets();
@@ -51,11 +52,13 @@ void NBody::OnUpdate()
 	//timer.Tick(nullptr);
 	DTimer::Instance()->Tick(nullptr);
 	//camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
-	camera.OnUpdate(static_cast<float>(DTimer::Instance()->GetElapsedSeconds()));
+	// camera.OnUpdate(static_cast<float>(DTimer::Instance()->GetElapsedSeconds()));
 
 	ConstantBufferGS vConstantBufferGS = {};
-	XMStoreFloat4x4(&vConstantBufferGS.worldViewProjection, XMMatrixMultiply(camera.GetViewMatrix(), camera.GetProjectionMatrix(0.8f, aspectRatio, 1.0f, 5000.0f)));
-	XMStoreFloat4x4(&vConstantBufferGS.inverseView, XMMatrixInverse(nullptr, camera.GetViewMatrix()));
+	// XMStoreFloat4x4(&vConstantBufferGS.worldViewProjection, XMMatrixMultiply(camera.GetViewMatrix(), camera.GetProjectionMatrix(0.8f, aspectRatio, 1.0f, 5000.0f)));
+	// XMStoreFloat4x4(&vConstantBufferGS.inverseView, XMMatrixInverse(nullptr, camera.GetViewMatrix()));
+	XMStoreFloat4x4(&vConstantBufferGS.worldViewProjection, XMMatrixIdentity());
+	XMStoreFloat4x4(&vConstantBufferGS.inverseView, XMMatrixIdentity());
 
 	UINT8* destination = pConstantBufferGSData + sizeof(ConstantBufferGS) * frameIndex;
 	memcpy(destination, &vConstantBufferGS, sizeof(ConstantBufferGS));
@@ -105,12 +108,12 @@ void NBody::OnRelease()
 
 void NBody::OnKeyUp(UINT8 _key)
 {
-	camera.OnKeyUp(_key);
+	// camera.OnKeyUp(_key);
 }
 
 void NBody::OnKeyDown(UINT8 _key)
 {
-	camera.OnKeyDown(_key);
+	// camera.OnKeyDown(_key);
 }
 
 void NBody::InitializePipeline()

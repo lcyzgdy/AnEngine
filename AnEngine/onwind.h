@@ -259,7 +259,7 @@ struct NonCopyable
 template<typename T>
 class Singleton : public NonCopyable
 {
-	friend class T;
+	friend typename T;
 
 	inline static T* m_uniqueObj = nullptr;
 

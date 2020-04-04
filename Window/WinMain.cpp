@@ -1,9 +1,9 @@
-#include"onwind.h"
-//#include"DrawLine.h"
-#include"NBody.h"
-#include"ThreadPool.hpp"
-#include"Input.h"
-#include"Screen.h"
+#include "onwind.h"
+#include "NBody.h"
+#include "Win32App.h"
+#include "ThreadPool.hpp"
+#include "Input.h"
+#include "Screen.h"
 using namespace AnEngine;
 
 #include"Test.h"
@@ -13,10 +13,10 @@ HWND window;
 int state;
 int screenw;
 int screenh;
+Win32App* win32App;
 
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//D3D12AppBase* pD3dApp = reinterpret_cast<D3D12AppBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	switch (msg)
 	{
 	case(WM_CREATE):
@@ -32,16 +32,16 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case(WM_SETFOCUS):
 	{
-		BaseInput::GetInstance()->SetAcquire();
+		BaseInput::Instance()->SetAcquire();
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::GetInstance()->SetMousePosition(p.x, p.y);
+		BaseInput::Instance()->SetMousePosition(p.x, p.y);
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
-		BaseInput::GetInstance()->SetUnacquire();
+		BaseInput::Instance()->SetUnacquire();
 		break;
 	}
 	case(WM_MOUSEMOVE):
@@ -49,7 +49,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::GetInstance()->SetMousePosition(p.x, p.y);
+		BaseInput::Instance()->SetMousePosition(p.x, p.y);
 		break;
 	}
 	case(WM_PAINT):
@@ -117,8 +117,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return 0;
 	}
 	Randomize();
-
-	AnEngine::Engine::Instance()->Initialize(window, hInstance, screenw, screenh);
+	win32App = new Win32App(window, hInstance, screenw, screenh);
+	// AnEngine::Engine::Instance()->Initialize(window, hInstance, screenw, screenh);
+	AnEngine::Engine::Instance()->Initialize(*win32App);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();

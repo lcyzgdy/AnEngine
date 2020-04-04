@@ -7,7 +7,7 @@
 
 namespace AnEngine::Game
 {
-	class SceneManager : public Singleton<SceneManager>
+	class DLL_API SceneManager : public Singleton<SceneManager>
 	{
 		//friend class Singleton<SceneManager>;
 		std::map<std::string, Scene*> m_scenes;

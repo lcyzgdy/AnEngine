@@ -1,7 +1,9 @@
+#include <mutex>
+
 #include "PipelineState.h"
 #include "Hash.hpp"
-#include <mutex>
 #include "RenderCore.h"
+#include "GpuContext.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 
@@ -98,7 +100,7 @@ namespace AnEngine::RenderCore
 		SetRenderTargetFormats(1, &rtvFormat, dsvFormat, msaaCount, msaaQuality);
 	}
 
-	void GraphicPSO::SetRenderTargetFormats(uint32_t rtvNum, const DXGI_FORMAT * rtvFormats, DXGI_FORMAT dsvFormat, uint32_t msaaCount, UINT msaaQuality)
+	void GraphicPSO::SetRenderTargetFormats(uint32_t rtvNum, const DXGI_FORMAT* rtvFormats, DXGI_FORMAT dsvFormat, uint32_t msaaCount, UINT msaaQuality)
 	{
 		if (rtvNum <= 0 || rtvFormats == nullptr) ERRORBLOCK("RTV error");
 		for (size_t i = 0; i < rtvNum; i++)
@@ -138,59 +140,59 @@ namespace AnEngine::RenderCore
 		m_psoDesc.IBStripCutValue = indexBufferProps;
 	}
 
-	void GraphicPSO::SetVertexShader(const void * binary, size_t size)
+	void GraphicPSO::SetVertexShader(const void* binary, size_t size)
 	{
 		m_psoDesc.VS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
 	}
 
-	void GraphicPSO::SetPixelShader(const void * binary, size_t size)
+	void GraphicPSO::SetPixelShader(const void* binary, size_t size)
 	{
 		m_psoDesc.PS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
 	}
 
-	void GraphicPSO::SetGeometryShader(const void * binary, size_t size)
+	void GraphicPSO::SetGeometryShader(const void* binary, size_t size)
 	{
 		m_psoDesc.GS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
 	}
 
-	void GraphicPSO::SetHullShader(const void * binary, size_t size)
+	void GraphicPSO::SetHullShader(const void* binary, size_t size)
 	{
 		m_psoDesc.HS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
 	}
 
-	void GraphicPSO::SetDomainShader(const void * binary, size_t size)
+	void GraphicPSO::SetDomainShader(const void* binary, size_t size)
 	{
 		m_psoDesc.DS = CD3DX12_SHADER_BYTECODE(const_cast<void*>(binary), size);
 	}
 
-	void GraphicPSO::SetVertexShader(const D3D12_SHADER_BYTECODE & binary)
+	void GraphicPSO::SetVertexShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.VS = binary;
 	}
 
-	void GraphicPSO::SetPixelShader(const D3D12_SHADER_BYTECODE & binary)
+	void GraphicPSO::SetPixelShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.PS = binary;
 	}
 
-	void GraphicPSO::SetGeometryShader(const D3D12_SHADER_BYTECODE & binary)
+	void GraphicPSO::SetGeometryShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.GS = binary;
 	}
 
-	void GraphicPSO::SetHullShader(const D3D12_SHADER_BYTECODE & binary)
+	void GraphicPSO::SetHullShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.HS = binary;
 	}
 
-	void GraphicPSO::SetDomainShader(const D3D12_SHADER_BYTECODE & binary)
+	void GraphicPSO::SetDomainShader(const D3D12_SHADER_BYTECODE& binary)
 	{
 		m_psoDesc.DS = binary;
 	}
 
 	void GraphicPSO::Finalize()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)), R_GetGpuError);
 	}
 
@@ -221,7 +223,7 @@ namespace AnEngine::RenderCore
 		m_psoDesc.VS = desc.VS;*/
 		m_psoDesc = desc;
 
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
@@ -254,7 +256,7 @@ namespace AnEngine::RenderCore
 	void ComputePSO::Finalize()
 	{
 		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
 		/*size_t hashCode = Utility::GetHash(&m_psoDesc);

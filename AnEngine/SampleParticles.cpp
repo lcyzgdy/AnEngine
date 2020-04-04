@@ -2,6 +2,7 @@
 #include "RenderCore.h"
 #include "CommandContext.h"
 #include "DescriptorHeap.hpp"
+#include "GpuContext.h"
 
 using namespace std;
 using namespace AnEngine::RenderCore;
@@ -14,7 +15,7 @@ namespace AnEngine::RenderCore::Resource
 
 	SampleParticles::SampleParticles()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
@@ -121,7 +122,7 @@ namespace AnEngine::RenderCore::Resource
 
 		ThrowIfFailed(iList->Close(), R_GetGpuError);
 		ID3D12CommandList* ppList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
+		// r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -182,7 +183,7 @@ namespace AnEngine::RenderCore::Resource
 		{
 			XMFLOAT3 delta(_spread, _spread, _spread);
 
-			while (XMVectorGetX(XMVector3LengthSq(XMLoadFloat3(&delta))) > _spread* _spread)
+			while (XMVectorGetX(XMVector3LengthSq(XMLoadFloat3(&delta))) > _spread * _spread)
 			{
 				delta.x = RandomPercent() * _spread;
 				delta.y = RandomPercent() * _spread;

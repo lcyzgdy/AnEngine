@@ -1,6 +1,8 @@
+#include <functional>
+
 #include "RootSignature.h"
 #include "RenderCore.h"
-#include <functional>
+#include "GpuContext.h"
 
 using namespace Microsoft::WRL;
 
@@ -88,7 +90,7 @@ namespace AnEngine::RenderCore
 
 	RootSignature::RootSignature(ID3D12RootSignature* rootSignature)
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		/*
 		CD3DX12_DESCRIPTOR_RANGE1 range[1];
 		range[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);

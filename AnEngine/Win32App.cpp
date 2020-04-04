@@ -1,7 +1,6 @@
 #include "Win32App.h"
 #include <dxgidebug.h>
 #include <D3Dcompiler.h>
-// #include "RenderCore.h"
 #include "Engine.h"
 #include "GraphicsCard.h"
 
@@ -21,7 +20,7 @@ namespace AnEngine
 
 		ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(m_dxgiFactory.GetAddressOf())));
 
-		var gCard = Engine::Instance()->InitializeRender(m_dxgiFactory.Get());
+		var& gCard = Engine::Instance()->InitializeRender(m_dxgiFactory.Get());
 
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = m_swapBufferCount;
@@ -36,8 +35,8 @@ namespace AnEngine
 		swapChainDesc.Scaling = DXGI_SCALING_NONE;
 
 		ComPtr<IDXGISwapChain1> swapChain1;
-		
-		ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(gCard->GetCommandQueue(),
+
+		ThrowIfFailed(m_dxgiFactory->CreateSwapChainForHwnd(gCard.GetCommandQueue(),
 			m_hwnd, &swapChainDesc, nullptr, nullptr, swapChain1.GetAddressOf()));
 		ThrowIfFailed(swapChain1.As(&m_swapChain));
 

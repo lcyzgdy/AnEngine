@@ -8,6 +8,7 @@
 #include "IParallel.h"
 #include "ISerial.h"
 #include "GpuContext.h"
+#include "GraphicsCard.h"
 
 using namespace std;
 using namespace AnEngine::Game;
@@ -16,9 +17,9 @@ namespace AnEngine
 {
 	void Engine::UpdateBottom()
 	{
-		BaseInput::GetInstance()->ZeroInputState();
+		BaseInput::Instance()->ZeroInputState();
 		DTimer::Instance()->Tick(nullptr);
-		BaseInput::GetInstance()->Update();
+		BaseInput::Instance()->Update();
 	}
 
 	void Engine::UpdateSystem()
@@ -78,21 +79,12 @@ namespace AnEngine
 		}
 	}
 
-	/*void Engine::Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh)
-	{
-		if (m_initialized) return;
-		m_initialized = true;
-		BaseInput::GetInstance()->Initialize(hwnd, hInstance);
-		Screen::GetInstance()->Initialize(screenw, screenh);
-		RenderCore::InitializeRender(hwnd);
-	}*/
-
 	void Engine::Initialize(const Win32App& win32App)
 	{
 		if (m_initialized) return;
 		m_initialized = true;
-		BaseInput::GetInstance()->Initialize(win32App.m_hwnd, win32App.m_hInstance);
-		Screen::GetInstance()->Initialize(win32App.m_windowWidth, win32App.m_windowHeight);
+		BaseInput::Instance()->Initialize(win32App.m_hwnd, win32App.m_hInstance);
+		Screen::Instance()->Initialize(win32App.m_windowWidth, win32App.m_windowHeight);
 	}
 
 	void Engine::Release()
@@ -101,10 +93,10 @@ namespace AnEngine
 		m_initialized = false;
 		m_running = false;
 		SceneManager::ActiveScene()->onUnload();
-		BaseInput::GetInstance()->Release();
+		BaseInput::Instance()->Release();
 	}
 
-	RenderCore::GraphicsCard* Engine::InitializeRender(IDXGIFactory6* dxgiFactory)
+	const RenderCore::GraphicsCard& Engine::InitializeRender(IDXGIFactory6* dxgiFactory)
 	{
 		RenderCore::GpuContext::Instance()->Initialize(dxgiFactory);
 		return RenderCore::GpuContext::Instance()->Default();

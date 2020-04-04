@@ -1,7 +1,7 @@
 #include "ColorBuffer.h"
 #include "DescriptorHeap.hpp"
 #include "RenderCoreConstants.h"
-#include "RenderCore.h"
+#include "GpuContext.h"
 using namespace std;
 using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
@@ -26,11 +26,12 @@ namespace AnEngine::RenderCore::Resource
 		DXGI_FORMAT format, D3D12_HEAP_TYPE heapType, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr) :
 		PixelBuffer(width, height, 1, format), m_numMipMaps(numMips), m_fragmentCount(1)
 	{
-		GraphicsCard* device = r_graphicsCard[0].get();
+		// GraphicsCard* device = r_graphicsCard[0].get();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 
 		var desc = DescribeTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE);
 		// 确定资源大小
-		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetDevice()->GetResourceAllocationInfo(1, 1, &desc);
+		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetResourceAllocationInfo(1, 1, &desc);
 		// 创建资源堆，现在使用默认堆
 		/*D3D12_HEAP_DESC heapDesc;
 		heapDesc.SizeInBytes = allocationInfo.SizeInBytes;
@@ -52,17 +53,18 @@ namespace AnEngine::RenderCore::Resource
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_sampleCount(msaaSampleCount),
 		m_numMipMaps(numMips), m_fragmentCount(1)
 	{
-		GraphicsCard* device = r_graphicsCard[0].get();
+		// GraphicsCard* device = r_graphicsCard[0].get();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 
 		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msaaQl;
 		msaaQl.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		msaaQl.SampleCount = msaaSampleCount;
 		msaaQl.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
-		ThrowIfFailed(device->GetDevice()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msaaQl, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS)));
+		ThrowIfFailed(device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msaaQl, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS)));
 
 		var desc = DescribeMsaaTex2D(width, height, 1, numMips, format, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE | 1, msaaQl);
 		// 确定资源大小
-		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetDevice()->GetResourceAllocationInfo(0x1, 1, &desc);
+		D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetResourceAllocationInfo(0x1, 1, &desc);
 		// 创建资源堆，现在使用默认堆
 		/*D3D12_HEAP_DESC heapDesc;
 		heapDesc.SizeInBytes = allocationInfo.SizeInBytes;
@@ -81,14 +83,16 @@ namespace AnEngine::RenderCore::Resource
 
 	ColorBuffer::ColorBuffer(const D3D12_RESOURCE_DESC& desc) : PixelBuffer(desc)
 	{
-		ThrowIfFailed(r_graphicsCard[0]->GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		ID3D12Device* device = GpuContext::Instance()->Default();
+		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, &desc, D3D12_RESOURCE_STATE_COMMON, nullptr,
 			IID_PPV_ARGS(&m_resource_cp)));
 	}
 
 	ColorBuffer::ColorBuffer(D3D12_RESOURCE_DESC&& desc) : PixelBuffer(desc)
 	{
-		ThrowIfFailed(r_graphicsCard[0]->GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		ID3D12Device* device = GpuContext::Instance()->Default();
+		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES, &desc, D3D12_RESOURCE_STATE_COMMON, nullptr,
 			IID_PPV_ARGS(&m_resource_cp)));
 	}
@@ -96,7 +100,7 @@ namespace AnEngine::RenderCore::Resource
 	ColorBuffer::ColorBuffer(const wstring& name, ID3D12Resource* baseResource, D3D12_CPU_DESCRIPTOR_HANDLE handle) :
 		PixelBuffer(baseResource->GetDesc())
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		AssociateWithResource(device, name, baseResource, D3D12_RESOURCE_STATE_PRESENT);
 		m_rtvHandle = handle;
 		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, m_rtvHandle);

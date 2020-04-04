@@ -1,7 +1,6 @@
 #include "Test.h"
 #include "onwind.h"
 #include "SampleMeshRender.h"
-#include "ParticlesRenderer.h"
 #include "DTimer.h"
 #include "StateMachine.h"
 #include "DebugLog.h"

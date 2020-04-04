@@ -23,8 +23,8 @@ namespace AnEngine::Game
 		friend class std::shared_ptr<GameObject>;
 		// friend std::shared_ptr<GameObject> std::make_shared(const std::string&);
 		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
-		friend void std::_Destroy_in_place(GameObject&) noexcept;
-		friend void std::_Construct_in_place(GameObject&, std::string&&) noexcept(std::is_nothrow_constructible_v<GameObject, std::string>);
+		// friend void std::_Destroy_in_place(GameObject&) noexcept;
+		// friend void std::_Construct_in_place(GameObject&, std::string&&) noexcept(std::is_nothrow_constructible_v<GameObject, std::string>);
 
 		std::mutex m_mutex;
 		bool m_active;

@@ -51,7 +51,7 @@ namespace AnEngine::Game
 
 		iList->Dispatch(threadGroupX, threadGroupY, threadGroupZ);
 		ID3D12CommandList* ppList[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
+		// r_graphicsCard[0]->ExecuteSync(_countof(ppList), ppList);
 		//m_fence->GpuSignal(0);
 
 		ComputeContext::Push(pList, pAllocator);

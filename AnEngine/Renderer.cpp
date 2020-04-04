@@ -7,6 +7,9 @@
 #include "Camera.h"
 #include "DTimer.h"
 #include "ThreadPool.hpp"
+#include "GpuContext.h"
+#include "CommonState.h"
+
 using namespace std;
 using namespace AnEngine::RenderCore;
 
@@ -64,35 +67,16 @@ namespace AnEngine::Game
 	}
 
 	TrangleRender::TrangleRender() : Renderer(), m_viewport(0.0f, 0.0f,
-		static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
-		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()),
-			static_cast<long>(Screen::GetInstance()->Height()))
+		static_cast<float>(Screen::Instance()->Width()), static_cast<float>(Screen::Instance()->Height())),
+		m_scissorRect(0, 0, static_cast<long>(Screen::Instance()->Width()),
+			static_cast<long>(Screen::Instance()->Height()))
 	{
 	}
 
-	/*TrangleRender::TrangleRender(std::wstring && name) : Renderer(name), m_viewport(0.0f, 0.0f,
-		static_cast<float>(Screen::GetInstance()->Width()), static_cast<float>(Screen::GetInstance()->Height())),
-		m_scissorRect(0, 0, static_cast<long>(Screen::GetInstance()->Width()),
-			static_cast<long>(Screen::GetInstance()->Height()))
-	{
-	}*/
-
 	void TrangleRender::LoadAsset()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 
-		//m_rootSignature = new RootSignature([]() {});
-
-		/*ComPtr<ID3DBlob> vertexShader;
-		ComPtr<ID3DBlob> pixelShader;
-#if defined(_DEBUG)
-		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#else
-		UINT compileFlags = 0;
-#endif
-		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "VSMain", "vs_5_0", compileFlags, 0, &vertexShader, nullptr);
-		D3DCompileFromFile(GetAssetFullPath(_T("framebuffer_shaders.hlsl")).c_str(), nullptr, nullptr, "PSMain", "ps_5_0", compileFlags, 0, &pixelShader, nullptr);
-		*/
 		m_vertexShader = new VertexShader(L"framebuffer_shaders.hlsl");
 		m_pixelShader = new PixelShader(L"framebuffer_shaders.hlsl");
 

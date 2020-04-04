@@ -81,7 +81,7 @@
     <EnableCppCoreCheck>true</EnableCppCoreCheck>
     <LibraryPath>$(SolutionDir)Build\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
     <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
@@ -114,7 +114,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
@@ -179,6 +179,7 @@
     <ClInclude Include="BaseBehaviour.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkAllocator.h" />
+    <ClInclude Include="CommonState.h" />
     <ClInclude Include="Delegate.hpp" />
     <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="GpuContext.h" />
@@ -231,7 +232,6 @@
     <ClInclude Include="ManagedTask.hpp" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.hpp" />
-    <ClInclude Include="MCamera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRendererComponent.h" />
     <ClInclude Include="MultiBuffer.hpp" />
@@ -241,7 +241,6 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectBehaviour.h" />
     <ClInclude Include="onwind.h" />
-    <ClInclude Include="ParticlesRenderer.h" />
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
     <ClInclude Include="Quaternion.hpp" />
@@ -262,11 +261,8 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderClass.h" />
-    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SystemBase.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="GraphicsCard2D.h" />
@@ -289,6 +285,9 @@
     <ClCompile Include="CommandContext.cpp" />
     <ClCompile Include="CommandList.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
+    <ClCompile Include="CommonState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="ComputeUnit.cpp" />
     <ClCompile Include="DebugLog.cpp" />
     <ClCompile Include="DeferredRenderPipeline.cpp" />
@@ -321,14 +320,12 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="ManagedTask.cpp" />
-    <ClCompile Include="MCamera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NBody.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectBehaviour.cpp" />
-    <ClCompile Include="ParticlesRenderer.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
@@ -342,10 +339,7 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderClass.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StateMachine.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
     <ClCompile Include="Transform.cpp" />

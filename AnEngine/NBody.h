@@ -4,7 +4,6 @@
 
 #include"DX.h"
 #include"DTimer.h"
-#include"MCamera.h"
 #include"RenderCore.h"
 #define InterlockedGetValue(obj) InterlockedCompareExchange(obj, 0, 0)
 using namespace AnEngine;
@@ -19,19 +18,19 @@ class NBody :public D3D12AppBase, public D3D12Base
 
 	struct Particle
 	{
-		XMFLOAT4 position;
-		XMFLOAT4 velocity;
+		DirectX::XMFLOAT4 position;
+		DirectX::XMFLOAT4 velocity;
 	};
 
 	struct ParticleVertex
 	{
-		XMFLOAT4 color;
+		DirectX::XMFLOAT4 color;
 	};
 
 	struct ConstantBufferGS
 	{
-		XMFLOAT4X4 worldViewProjection;
-		XMFLOAT4X4 inverseView;
+		DirectX::XMFLOAT4X4 worldViewProjection;
+		DirectX::XMFLOAT4X4 inverseView;
 
 		float padding[32];
 		// 常量缓冲区在显存中以256字节对齐。
@@ -98,7 +97,7 @@ class NBody :public D3D12AppBase, public D3D12Base
 	UINT srvIndex[ThreadCount];		// 表示哪个例子的缓冲资源试图是SRV（0 || 1）（UAV = 1 - SRV）
 	UINT heightInstances;
 	UINT widthInstances;
-	MiCamera camera;
+	// MiCamera camera;
 	//DTimer timer;
 
 	Microsoft::WRL::ComPtr<ID3D12Fence> threadFences[ThreadCount];
@@ -147,7 +146,8 @@ class NBody :public D3D12AppBase, public D3D12Base
 	void CreateAsyncContexts();
 	void CreateVertexBuffer();
 	float RandomPercent();	// (-1, 1)
-	void InitializeParticles(_Out_writes_(_particlesNum) Particle* _pParticles, const XMFLOAT3 &_center, const XMFLOAT4 &_velocity, float _spread, UINT _particlesNum);
+	void InitializeParticles(_Out_writes_(_particlesNum) Particle* _pParticles, const DirectX::XMFLOAT3& _center, 
+		const DirectX::XMFLOAT4& _velocity, float _spread, UINT _particlesNum);
 	void CreateParticlesBuffer();
 
 	static DWORD WINAPI ThreadProc(ThreadData* _pThread);

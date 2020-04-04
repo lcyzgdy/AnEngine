@@ -3,6 +3,7 @@
 #define __SCENE_H__
 
 #include <condition_variable>
+
 #include "onwind.h"
 #include "BaseBehaviour.h"
 #include "GameObject.h"
@@ -21,8 +22,6 @@ namespace AnEngine::Game
 		std::deque<System::SystemBase*> m_systems;
 		std::mutex m_behaviourMutex;
 
-		// std::list<Archetype*> m_archetypeList;
-		// std::map<GameObject*, Memory::Chunk*> m_objs;
 		std::deque<GameObject*> m_objects;
 
 	public:

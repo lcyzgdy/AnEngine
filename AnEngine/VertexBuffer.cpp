@@ -1,5 +1,5 @@
+#include "GpuContext.h"
 #include "VertexBuffer.h"
-#include "RenderCore.h"
 #include "CommandContext.h"
 using namespace AnEngine::RenderCore;
 
@@ -7,7 +7,7 @@ namespace AnEngine::RenderCore::Resource
 {
 	VertexBuffer::VertexBuffer(D3D12_SUBRESOURCE_DATA& subData, size_t vertexDataSize, uint32_t standardVertexStride)
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
@@ -16,10 +16,10 @@ namespace AnEngine::RenderCore::Resource
 
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(vertexDataSize), D3D12_RESOURCE_STATE_COPY_DEST, nullptr,
-			IID_PPV_ARGS(&m_vertexBuffer)));
+			IID_PPV_ARGS(m_vertexBuffer.GetAddressOf())));
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(vertexDataSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-			IID_PPV_ARGS(&m_vertexBufferUpload)));
+			IID_PPV_ARGS(m_vertexBufferUpload.GetAddressOf())));
 
 		UpdateSubresources<1>(iList, m_vertexBuffer.Get(), m_vertexBufferUpload.Get(), 0, 0, 1, &subData);
 		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
@@ -30,7 +30,7 @@ namespace AnEngine::RenderCore::Resource
 
 		iList->Close();
 		ID3D12CommandList* ppCommandLists[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		/// r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -39,16 +39,16 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_SUBRESOURCE_DATA& indexData, size_t indexDataSize,
 		DXGI_FORMAT standardIndexFormat)
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(vertexDataSize), D3D12_RESOURCE_STATE_COPY_DEST, nullptr,
-			IID_PPV_ARGS(&m_vertexBuffer)));
+			IID_PPV_ARGS(m_vertexBuffer.GetAddressOf())));
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(vertexDataSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-			IID_PPV_ARGS(&m_vertexBufferUpload)));
+			IID_PPV_ARGS(m_vertexBufferUpload.GetAddressOf())));
 
 		UpdateSubresources<1>(iList, m_vertexBuffer.Get(), m_vertexBufferUpload.Get(), 0, 0, 1, &subData);
 		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
@@ -59,10 +59,10 @@ namespace AnEngine::RenderCore::Resource
 
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(indexDataSize), D3D12_RESOURCE_STATE_COPY_DEST, nullptr,
-			IID_PPV_ARGS(&m_indexBuffer)));
+			IID_PPV_ARGS(m_indexBuffer.GetAddressOf())));
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(indexDataSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-			IID_PPV_ARGS(&m_indexBufferUpload)));
+			IID_PPV_ARGS(m_indexBufferUpload.GetAddressOf())));
 
 		UpdateSubresources<1>(iList, m_indexBuffer.Get(), m_indexBufferUpload.Get(), 0, 0, 1, &indexData);
 		iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_indexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
@@ -73,7 +73,7 @@ namespace AnEngine::RenderCore::Resource
 
 		iList->Close();
 		ID3D12CommandList* ppCommandLists[] = { iList };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
+		/// r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}

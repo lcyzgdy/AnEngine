@@ -1,9 +1,10 @@
+#include <functional>
+
 #include "CommandContext.h"
 #include "GraphicsCard.h"
-#include "RenderCore.h"
 #include "ManagedTask.hpp"
 #include "FenceContext.h"
-#include <functional>
+#include "GpuContext.h"
 
 using namespace std;
 using namespace AnEngine::Utility;
@@ -107,7 +108,7 @@ namespace AnEngine::RenderCore
 	void ComputeContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+		// r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList, D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		GraphicsCommandContext::Instance()->Push(list, allocator);
 	}
 
@@ -119,13 +120,13 @@ namespace AnEngine::RenderCore
 	void GraphicsContext::Push(CommandList* list, CommandAllocator* allocator)
 	{
 		ID3D12CommandList* ppcommandList[] = { list->GetCommandList() };
-		r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
+		// r_graphicsCard[0]->ExecuteSync(_countof(ppcommandList), ppcommandList);
 
 		var[fence] = FenceContext::Instance()->GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
-		r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
+		// r_graphicsCard[0]->GetCommandQueue()->Signal(iFence, fenceValue);
 		//fence->WaitForValue(fenceValue);
 
 		GraphicsCommandContext::Instance()->Push(list, allocator);

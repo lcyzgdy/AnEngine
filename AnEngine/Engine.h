@@ -3,14 +3,13 @@
 #define __DRIVER_H__
 
 #include "onwind.h"
-#include "BaseBehaviour.h"
 #include "Scene.h"
-#include "Camera.h"
 #include "ObjectBehaviour.h"
 #include "Renderer.h"
 #include "Scene.h"
 #include "RenderPipeline.h"
 #include "Win32App.h"
+#include "GraphicsCard.h"
 
 namespace AnEngine
 {
@@ -33,12 +32,10 @@ namespace AnEngine
 		void UpdateBehaviour();
 
 	public:
-
-		// void Initialize(HWND hwnd, HINSTANCE hInstance, int screenw, int screenh);
 		void Initialize(const Win32App& win32App);
 		void Release();
 
-		RenderCore::GraphicsCard* InitializeRender(IDXGIFactory6* dxgiFactory);
+		const RenderCore::GraphicsCard& InitializeRender(IDXGIFactory6* dxgiFactory);
 		void AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount);
 
 

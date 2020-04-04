@@ -83,8 +83,6 @@ namespace AnEngine
 		void SetMousePosition(int x, int y);
 
 		void ZeroInputState();
-
-		static BaseInput* GetInstance();
 	};
 
 	enum KeyCode : uint32_t
@@ -169,7 +167,7 @@ namespace AnEngine
 		Menu = 319,
 	};
 
-	class Input
+	class DLL_API Input
 	{
 	public:
 		inline static bool GetKey(KeyCode key);

@@ -2,18 +2,17 @@
 #ifndef __COMMANDCONTEXT_H__
 #define __COMMANDCONTEXT_H__
 
-#include"DX.h"
-#include<queue>
-#include<mutex>
-#include<tuple>
-#include"onwind.h"
-#include"CommandList.h"
-#include"Fence.h"
+#include <queue>
+#include <mutex>
+#include <tuple>
+
+#include "onwind.h"
+#include "DX.h"
+#include "CommandList.h"
+#include "Fence.h"
 
 namespace AnEngine::RenderCore
 {
-	class GraphicsCard;
-
 	template<typename _List, typename _Allocator>
 	class CommandContext
 	{
@@ -63,14 +62,14 @@ namespace AnEngine::RenderCore::Private
 
 namespace AnEngine::RenderCore
 {
-	class ComputeContext
+	class DLL_API ComputeContext
 	{
 	public:
 		inline static std::tuple<CommandList*, CommandAllocator*>&& GetOne();
 		inline static void Push(CommandList* list, CommandAllocator* allocator);
 	};
 
-	class GraphicsContext
+	class DLL_API GraphicsContext
 	{
 	public:
 		inline static std::tuple<CommandList*, CommandAllocator*>&& GetOne();

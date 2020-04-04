@@ -13,9 +13,9 @@ namespace AnEngine::RenderCore
 
 	void GpuContext::Initialize(IDXGIFactory6* dxgiFactory)
 	{
-		var card = std::make_shared<GraphicsCard>();
-		card->Initialize(dxgiFactory);
-		m_graphicsCard.emplace_back(card);
+		GraphicsCard card;
+		card.Initialize(dxgiFactory);
+		m_graphicsCard.emplace_back(std::move(card));
 	}
 
 	void GpuContext::AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, const uint32_t bufferCount)
@@ -26,7 +26,7 @@ namespace AnEngine::RenderCore
 		for (int i = 0; i < m_bufferCount; i++)
 		{
 			Microsoft::WRL::ComPtr<ID3D12Resource> displayPlane;
-			ThrowIfFailed(m_swapChain->GetBuffer(i, IID_PPV_ARGS(&displayPlane)));
+			ThrowIfFailed(m_swapChain->GetBuffer(i, IID_PPV_ARGS(displayPlane.GetAddressOf())));
 			var displayBuffer = new Resource::ColorBuffer(L"Primary SwapChain Buffer", displayPlane.Detach(),
 				DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 			m_outputBuffer.push_back(displayBuffer);

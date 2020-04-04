@@ -1,15 +1,16 @@
 #include "SampleMeshRender.h"
-#include "RenderCore.h"
+#include "GpuContext.h"
 #include "Screen.h"
 #include "DescriptorHeap.hpp"
 #include "CommandContext.h"
+#include "CommonState.h"
 
 using namespace std;
-using namespace AnEngine::RenderCore;
 using namespace AnEngine;
-using namespace AnEngine::RenderCore::Heap;
+using namespace AnEngine::RenderCore;
 using namespace AnEngine::RenderCore::Resource;
 using namespace Microsoft::WRL;
+using namespace DirectX;
 
 namespace AnEngine::Game
 {
@@ -20,21 +21,21 @@ namespace AnEngine::Game
 
 	void SampleMeshRenderer::LoadAsset()
 	{
-		var device = r_graphicsCard[0]->GetDevice();
+		ID3D12Device* device = GpuContext::Instance()->Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
 		iAllocator->Reset();
 		iList->Reset(iAllocator, nullptr);
 
-		var[m_dsvHeap, m_dsvHandle, m_dsvGpuHandle] = DescriptorHeapAllocator::GetInstance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		var[m_dsvHeap, m_dsvHandle, m_dsvGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
 		const uint32_t nullSrvCount = 2;
 		const uint32_t cbvCount = 2;
 		const uint32_t srvCount = _countof(SampleAssets::Textures);
-		var[m_cbvSrvHeap, m_cbvSrvHandle, m_cbvSrvGpuHandle] = DescriptorHeapAllocator::GetInstance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		var[m_cbvSrvHeap, m_cbvSrvHandle, m_cbvSrvGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 			nullSrvCount + cbvCount + srvCount, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
-		var[m_samplerHeap, m_samplerHandle, m_samplerGpuHandle] = DescriptorHeapAllocator::GetInstance()->Allocate2(
+		var[m_samplerHeap, m_samplerHandle, m_samplerGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(
 			D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, 2, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
 		{
 			D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
@@ -65,7 +66,7 @@ namespace AnEngine::Game
 			ComPtr<ID3DBlob> error;
 			ThrowIfFailed(D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, featureData.HighestVersion, &signature, &error));
 			ThrowIfFailed(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(),
-				IID_PPV_ARGS(&m_rootSignature)));
+				IID_PPV_ARGS(m_rootSignature.GetAddressOf())));
 		}
 		{
 			ComPtr<ID3DBlob> vertexShader;
@@ -120,8 +121,8 @@ namespace AnEngine::Game
 			m_psoShadowMap->Finalize(psoDesc);
 		}
 		{
-			CD3DX12_RESOURCE_DESC shadowTextureDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<uint32_t>(Screen::GetInstance()->Width()),
-				static_cast<uint32_t>(Screen::GetInstance()->Height()), 1, 1, DXGI_FORMAT_D32_FLOAT, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
+			CD3DX12_RESOURCE_DESC shadowTextureDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<uint32_t>(Screen::Instance()->Width()),
+				static_cast<uint32_t>(Screen::Instance()->Height()), 1, 1, DXGI_FORMAT_D32_FLOAT, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
 				D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL | D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE);
 
 			D3D12_CLEAR_VALUE clearValue;
@@ -130,13 +131,13 @@ namespace AnEngine::Game
 			clearValue.DepthStencil.Stencil = 0;
 
 			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
-				&shadowTextureDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clearValue, IID_PPV_ARGS(&m_depthStencil)));
+				&shadowTextureDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clearValue, IID_PPV_ARGS(m_depthStencil.GetAddressOf())));
 
 			device->CreateDepthStencilView(m_depthStencil.Get(), nullptr, m_dsvHandle);
 		}
 		uint32_t fileSize = 0;
 		std::byte* pAssetData;
-		ThrowIfFailed(ReadDataFromFile(m_fileName.c_str(), &pAssetData, &fileSize));
+		// ThrowIfFailed(ReadDataFromFile(m_fileName.c_str(), &pAssetData, &fileSize));
 
 		D3D12_SUBRESOURCE_DATA vertexData = {};
 		vertexData.pData = pAssetData + SampleAssets::VertexDataOffset;
@@ -178,13 +179,13 @@ namespace AnEngine::Game
 				tex.Format, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN, D3D12_RESOURCE_FLAG_NONE);
 
 			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
-				&texDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&m_textures[i])));
+				&texDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(m_textures[i].GetAddressOf())));
 
 			const uint32_t subresourceCount = texDesc.DepthOrArraySize * texDesc.MipLevels;
 			uint64_t uploadBufferSize = GetRequiredIntermediateSize(m_textures[i].Get(), 0, subresourceCount);
 			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-				IID_PPV_ARGS(&m_textureUploads[i])));
+				IID_PPV_ARGS(m_textureUploads[i].GetAddressOf())));
 
 			D3D12_SUBRESOURCE_DATA textureData = {};
 			textureData.pData = pAssetData + tex.Data->Offset;
@@ -256,15 +257,15 @@ namespace AnEngine::Game
 			XMVECTOR at = XMVectorAdd(eye, XMLoadFloat4(&m_lights[i].direction));
 			XMVECTOR up = { 0, 1, 0 };
 
-			m_lightCameras[i].Set(eye, at, up);
+			// m_lightCameras[i].Set(eye, at, up);
 		}
 
 		ThrowIfFailed(iList->Close());
 		//ID3D12CommandList* ppCommandLists[] = { iList };
 		//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
-		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::GetInstance()->Width()),
-			static_cast<UINT>(Screen::GetInstance()->Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
+		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::Instance()->Width()),
+			static_cast<UINT>(Screen::Instance()->Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
 			D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 
 		D3D12_CLEAR_VALUE clearValue;
@@ -272,16 +273,16 @@ namespace AnEngine::Game
 		clearValue.DepthStencil.Depth = 1.0f;
 		clearValue.DepthStencil.Stencil = 0;
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
-			&shadowTexDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clearValue, IID_PPV_ARGS(&m_shadowTexture)));
+			&shadowTexDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clearValue, IID_PPV_ARGS(m_shadowTexture.GetAddressOf())));
 
 		uint32_t constantBufferSize = (sizeof(MyConstantBuffer) +
 			(D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT - 1)) & ~(D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT - 1);
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(constantBufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-			IID_PPV_ARGS(&m_shadowConstantBuffer)));
+			IID_PPV_ARGS(m_shadowConstantBuffer.GetAddressOf())));
 		ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(constantBufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-			IID_PPV_ARGS(&m_constantBuffer)));
+			IID_PPV_ARGS(m_constantBuffer.GetAddressOf())));
 
 		CD3DX12_RANGE readRange(0, 0);
 		ThrowIfFailed(m_shadowConstantBuffer->Map(0, &readRange, reinterpret_cast<void**>(&mp_shadowConstantBufferWO)));
@@ -305,6 +306,8 @@ namespace AnEngine::Game
 
 	void SampleMeshRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
+		ID3D12Device* device = GpuContext::Instance()->Default();
+
 		ThrowIfFailed(iAllocator->Reset());
 		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));
 
@@ -337,7 +340,7 @@ namespace AnEngine::Game
 
 			iList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 			D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvHeapStart = m_cbvGpuHandle;
-			uint32_t cbvSrvDescriptorSize = r_graphicsCard[0]->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			uint32_t cbvSrvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 			uint32_t nullSrvCount = 2;
 			for (int j = 0; j < _countof(SampleAssets::Draws); j++)
 			{

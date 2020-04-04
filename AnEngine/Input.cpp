@@ -196,7 +196,7 @@ namespace AnEngine
 
 	void BaseInput::SetMousePosition(int x, int y)
 	{
-		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::GetInstance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::GetInstance()->Height()) * 2 - 1.0f), 0.0f };
+		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::Instance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::Instance()->Height()) * 2 - 1.0f), 0.0f };
 	}
 
 	void BaseInput::SetAcquire()
@@ -230,11 +230,5 @@ namespace AnEngine
 	{
 		memset(m_keyState, 0, sizeof(m_keyState));
 		memset(&m_mouseState, 0, sizeof(DIMOUSESTATE2));
-	}
-
-	inline BaseInput* BaseInput::GetInstance()
-	{
-		static BaseInput baseInput;
-		return &baseInput;
 	}
 }

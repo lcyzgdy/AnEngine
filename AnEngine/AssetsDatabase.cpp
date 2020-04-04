@@ -16,12 +16,12 @@ namespace AnEngine::AssetsWrapper
 		return instanceId;
 	}
 
-	uint64_t AssetsDatabase::AddTexture(Texture* tex)
+	/*uint64_t AssetsDatabase::AddTexture(Texture* tex)
 	{
 		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
 		m_textures[instanceId] = tex;
 		return instanceId;
-	}
+	}*/
 
 	AssetsDatabase::AssetsDatabase()
 	{
@@ -33,10 +33,10 @@ namespace AnEngine::AssetsWrapper
 		{
 			delete i.second;
 		}
-		for (var i : m_textures)
+		/*for (var i : m_textures)
 		{
 			delete i.second;
-		}
+		}*/
 	}
 	void AssetsDatabase::RefreshAssets()
 	{

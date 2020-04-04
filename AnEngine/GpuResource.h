@@ -3,9 +3,10 @@
 #define __GPURESOURCE_H__
 
 #include <wrl.h>
+#include <functional>
+
 #include "DX.h"
 #include "Fence.h"
-#include <functional>
 
 namespace AnEngine::RenderCore::Resource
 {
@@ -14,7 +15,6 @@ namespace AnEngine::RenderCore::Resource
 
 	class GpuResource
 	{
-		//Fence* m_fence;
 	protected:
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_resource_cp;
 		//Microsoft::WRL::ComPtr<ID3D12Heap> m_heap_cp;

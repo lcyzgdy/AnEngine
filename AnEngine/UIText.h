@@ -7,7 +7,7 @@
 
 namespace AnEngine::Game::UI
 {
-	class UIText : public UIComponent
+	class DLL_API UIText : public UIComponent
 	{
 		std::wstring m_text;
 		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_textBrush;

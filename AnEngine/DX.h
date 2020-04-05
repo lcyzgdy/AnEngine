@@ -2,7 +2,6 @@
 #ifndef __DX_H__
 #define __DX_H__
 
-#include <windows.h>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -10,14 +9,12 @@
 #include <ctime>
 #include <io.h>
 #include <wrl.h>
-#include "onwind.h"
-
 #include <d3d12.h>
-#include "d3dx12.h"
 #include <D3Dcompiler.h>
 #include <DirectXMath.h>
 #include <pix.h>
 #include <dcomp.h>
+
 
 #if defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
 #include <dxgi1_6.h>
@@ -25,6 +22,8 @@
 #include <dxgi1_4.h>	// For WARP
 #endif
 
+#include "onwind.h"
+#include "d3dx12.h"
 
 #ifdef _WIN64
 

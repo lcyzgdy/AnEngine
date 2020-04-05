@@ -1,16 +1,17 @@
 #include"DX.h"
 
-#pragma comment(lib, "d3d12.lib")
-#pragma comment(lib, "dcomp.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "d3dcompiler.lib")
+// #pragma comment(lib, "d3d12.lib")
+// #pragma comment(lib, "dcomp.lib")
+// #pragma comment(lib, "dxgi.lib")
+// #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace std;
 using namespace Microsoft::WRL;
 
+#ifdef _WIN64
 namespace AnEngine
 {
-	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height) :
+	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const uint32_t _width, const uint32_t _height) :
 		hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false)
 	{
 		WCHAR _assetsPath[512];
@@ -20,7 +21,7 @@ namespace AnEngine
 		aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 	}
 
-	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title) :
+	D3D12AppBase::D3D12AppBase(const HWND _hwnd, const uint32_t _width, const uint32_t _height, const wstring& _title) :
 		hwnd(_hwnd), width(_width), height(_height), isUseWarpDevice(false), title(_title)
 	{
 		WCHAR _assetsPath[512];
@@ -58,6 +59,7 @@ namespace AnEngine
 		*ppAdapter = adapter.Detach();
 	}
 
+
 	void D3D12AppBase::ParseCommandLineArgs(_In_reads_(argc) WCHAR* argv[], int argc)
 	{
 		for (int i = 1; i < argc; ++i)
@@ -81,3 +83,4 @@ namespace AnEngine
 		SetWindowText(hwnd, windowText.c_str());
 	}
 }
+#endif

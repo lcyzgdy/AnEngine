@@ -4,6 +4,9 @@
 #include "DescriptorHeap.hpp"
 #include "CommandContext.h"
 #include "CommonState.h"
+#include "DX.h"
+
+#pragma comment(lib, "d3d12.lib")
 
 using namespace std;
 using namespace AnEngine;
@@ -186,13 +189,13 @@ namespace AnEngine::Game
 			ThrowIfFailed(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 				IID_PPV_ARGS(m_textureUploads[i].GetAddressOf())));
-
+			
 			D3D12_SUBRESOURCE_DATA textureData = {};
 			textureData.pData = pAssetData + tex.Data->Offset;
 			textureData.RowPitch = tex.Data->Pitch;
 			textureData.SlicePitch = tex.Data->Size;
 
-			UpdateSubresources(iList, m_textures[i].Get(), m_textureUploads[i].Get(), 0, 0, subresourceCount, &textureData);
+			// UpdateSubresources(iList, m_textures[i].Get(), m_textureUploads[i].Get(), 0, 0, subresourceCount, &textureData);
 			iList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_textures[i].Get(), D3D12_RESOURCE_STATE_COPY_DEST,
 				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 

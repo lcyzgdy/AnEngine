@@ -100,9 +100,6 @@
     <ClInclude Include="RootSignature.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="SampleParticles.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderClass.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -356,9 +353,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="RootSignature.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="SampleParticles.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="ShaderClass.cpp">

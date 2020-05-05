@@ -2,9 +2,10 @@
 #ifndef __FENCE_H__
 #define __FENCE_H__
 
-#include "DX.h"
 #include <atomic>
 #include <mutex>
+#include <d3d12.h>
+#include <wrl.h>
 
 namespace AnEngine::RenderCore
 {

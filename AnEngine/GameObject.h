@@ -21,15 +21,16 @@ namespace AnEngine::Game
 	{
 		friend class Scene;
 		friend class std::shared_ptr<GameObject>;
-		// friend std::shared_ptr<GameObject> std::make_shared(const std::string&);
 		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
-		// friend void std::_Destroy_in_place(GameObject&) noexcept;
-		// friend void std::_Construct_in_place(GameObject&, std::string&&) noexcept(std::is_nothrow_constructible_v<GameObject, std::string>);
+		friend void std::_Destroy_in_place<GameObject>(GameObject&) noexcept;
+		template<typename _Ty, typename... _Types>
+		friend void std::_Construct_in_place(_Ty& _Obj, _Types&&... _Args) noexcept(std::is_nothrow_constructible_v<_Ty, _Types...>);
+		friend struct std::default_delete<GameObject>;
 
 		std::mutex m_mutex;
 		bool m_active;
 		bool m_destoryed;
-		uint32_t m_id; // 在Scene容器中的编号
+		uint64_t m_id; // 在Scene容器中的编号
 
 		// Create的时候令destoryed为false，AddToScene的时候为m_id赋值，默认为-1。
 
@@ -38,10 +39,12 @@ namespace AnEngine::Game
 		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::vector<ObjectBehaviour*> m_behaviour;
 		std::map<double, size_t> m_typeToId;
-		// public:
+
 		std::string name;
 		Scene* scene;
 		Archetype* m_archetype;
+		std::vector<GameObject*> children;
+
 
 
 		GameObject(const std::string& name);
@@ -50,6 +53,8 @@ namespace AnEngine::Game
 		virtual ~GameObject();
 
 	public:
+		// GameObject(GameObject&& other);
+
 		template<typename _Ty>
 		_Ty* GetComponent()
 		{
@@ -98,6 +103,7 @@ namespace AnEngine::Game
 
 
 
-/* 最终还是在 GameObject 里面添加了Component和Behaviour，如果彻底抛弃Behaviour则一些本来很简单的功能实现起来十分麻烦，
+/*
+ * 最终还是在 GameObject 里面添加了Component和Behaviour，如果彻底抛弃Behaviour则一些本来很简单的功能实现起来十分麻烦，
  * 而且之前写好的状态机也会报废。
  */

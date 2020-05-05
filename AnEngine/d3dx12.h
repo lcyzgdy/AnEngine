@@ -12,7 +12,7 @@
 #ifndef __D3DX12_H__
 #define __D3DX12_H__
 
-#include <d3d12.h>
+#include "d3d12.h"
 
 #if defined( __cplusplus )
 
@@ -125,10 +125,10 @@ struct CD3DX12_BOX : public D3D12_BOX
         LONG Left,
         LONG Right)
     {
-        left = static_cast<UINT>(Left);
+        left = Left;
         top = 0;
         front = 0;
-        right = static_cast<UINT>(Right);
+        right = Right;
         bottom = 1;
         back = 1;
     }
@@ -138,11 +138,11 @@ struct CD3DX12_BOX : public D3D12_BOX
         LONG Right,
         LONG Bottom)
     {
-        left = static_cast<UINT>(Left);
-        top = static_cast<UINT>(Top);
+        left = Left;
+        top = Top;
         front = 0;
-        right = static_cast<UINT>(Right);
-        bottom = static_cast<UINT>(Bottom);
+        right = Right;
+        bottom = Bottom;
         back = 1;
     }
     explicit CD3DX12_BOX(
@@ -153,12 +153,12 @@ struct CD3DX12_BOX : public D3D12_BOX
         LONG Bottom,
         LONG Back)
     {
-        left = static_cast<UINT>(Left);
-        top = static_cast<UINT>(Top);
-        front = static_cast<UINT>(Front);
-        right = static_cast<UINT>(Right);
-        bottom = static_cast<UINT>(Bottom);
-        back = static_cast<UINT>(Back);
+        left = Left;
+        top = Top;
+        front = Front;
+        right = Right;
+        bottom = Bottom;
+        back = Back;
     }
 };
 inline bool operator==(const D3D12_BOX& l, const D3D12_BOX& r)
@@ -562,7 +562,6 @@ struct CD3DX12_CLEAR_VALUE : public D3D12_CLEAR_VALUE
         UINT8 stencil)
     {
         Format = format;
-        memset(&Color, 0, sizeof(Color));
         /* Use memcpy to preserve NAN values */
         memcpy(&DepthStencil.Depth, &depth, sizeof(depth));
         DepthStencil.Stencil = stencil;
@@ -849,7 +848,6 @@ struct CD3DX12_TEXTURE_COPY_LOCATION : public D3D12_TEXTURE_COPY_LOCATION
     {
         pResource = pRes;
         Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-        PlacedFootprint = {};
         SubresourceIndex = Sub;
     }
 };
@@ -1588,12 +1586,12 @@ struct CD3DX12_CPU_DESCRIPTOR_HANDLE : public D3D12_CPU_DESCRIPTOR_HANDLE
     }
     CD3DX12_CPU_DESCRIPTOR_HANDLE& Offset(INT offsetInDescriptors, UINT descriptorIncrementSize)
     {
-        ptr = SIZE_T(INT64(ptr) + INT64(offsetInDescriptors) * INT64(descriptorIncrementSize));
+        ptr += INT64(offsetInDescriptors) * UINT64(descriptorIncrementSize);
         return *this;
     }
     CD3DX12_CPU_DESCRIPTOR_HANDLE& Offset(INT offsetScaledByIncrementSize)
     {
-        ptr = SIZE_T(INT64(ptr) + INT64(offsetScaledByIncrementSize));
+        ptr += offsetScaledByIncrementSize;
         return *this;
     }
     bool operator==(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& other) const
@@ -1622,12 +1620,12 @@ struct CD3DX12_CPU_DESCRIPTOR_HANDLE : public D3D12_CPU_DESCRIPTOR_HANDLE
 
     static inline void InitOffsetted(_Out_ D3D12_CPU_DESCRIPTOR_HANDLE& handle, _In_ const D3D12_CPU_DESCRIPTOR_HANDLE& base, INT offsetScaledByIncrementSize)
     {
-        handle.ptr = SIZE_T(INT64(base.ptr) + INT64(offsetScaledByIncrementSize));
+        handle.ptr = base.ptr + offsetScaledByIncrementSize;
     }
 
     static inline void InitOffsetted(_Out_ D3D12_CPU_DESCRIPTOR_HANDLE& handle, _In_ const D3D12_CPU_DESCRIPTOR_HANDLE& base, INT offsetInDescriptors, UINT descriptorIncrementSize)
     {
-        handle.ptr = SIZE_T(INT64(base.ptr) + INT64(offsetInDescriptors) * INT64(descriptorIncrementSize));
+        handle.ptr = static_cast<SIZE_T>(base.ptr + INT64(offsetInDescriptors) * UINT64(descriptorIncrementSize));
     }
 };
 
@@ -1649,12 +1647,12 @@ struct CD3DX12_GPU_DESCRIPTOR_HANDLE : public D3D12_GPU_DESCRIPTOR_HANDLE
     }
     CD3DX12_GPU_DESCRIPTOR_HANDLE& Offset(INT offsetInDescriptors, UINT descriptorIncrementSize)
     {
-        ptr = UINT64(INT64(ptr) + INT64(offsetInDescriptors) * INT64(descriptorIncrementSize));
+        ptr += INT64(offsetInDescriptors) * UINT64(descriptorIncrementSize);
         return *this;
     }
     CD3DX12_GPU_DESCRIPTOR_HANDLE& Offset(INT offsetScaledByIncrementSize)
     {
-        ptr = UINT64(INT64(ptr) + INT64(offsetScaledByIncrementSize));
+        ptr += offsetScaledByIncrementSize;
         return *this;
     }
     inline bool operator==(_In_ const D3D12_GPU_DESCRIPTOR_HANDLE& other) const
@@ -1683,12 +1681,12 @@ struct CD3DX12_GPU_DESCRIPTOR_HANDLE : public D3D12_GPU_DESCRIPTOR_HANDLE
 
     static inline void InitOffsetted(_Out_ D3D12_GPU_DESCRIPTOR_HANDLE& handle, _In_ const D3D12_GPU_DESCRIPTOR_HANDLE& base, INT offsetScaledByIncrementSize)
     {
-        handle.ptr = UINT64(INT64(base.ptr) + INT64(offsetScaledByIncrementSize));
+        handle.ptr = base.ptr + offsetScaledByIncrementSize;
     }
 
     static inline void InitOffsetted(_Out_ D3D12_GPU_DESCRIPTOR_HANDLE& handle, _In_ const D3D12_GPU_DESCRIPTOR_HANDLE& base, INT offsetInDescriptors, UINT descriptorIncrementSize)
     {
-        handle.ptr = UINT64(INT64(base.ptr) + INT64(offsetInDescriptors) * INT64(descriptorIncrementSize));
+        handle.ptr = static_cast<UINT64>(base.ptr + INT64(offsetInDescriptors) * UINT64(descriptorIncrementSize));
     }
 };
 
@@ -1711,7 +1709,7 @@ inline void D3D12DecomposeSubresource(UINT Subresource, UINT MipLevels, UINT Arr
 inline UINT8 D3D12GetFormatPlaneCount(
     _In_ ID3D12Device* pDevice,
     DXGI_FORMAT Format
-    )
+)
 {
     D3D12_FEATURE_DATA_FORMAT_INFO formatInfo = { Format, 0 };
     if (FAILED(pDevice->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO, &formatInfo, sizeof(formatInfo))))
@@ -1883,12 +1881,12 @@ inline void MemcpySubresource(
 {
     for (UINT z = 0; z < NumSlices; ++z)
     {
-        auto pDestSlice = reinterpret_cast<BYTE*>(pDest->pData) + pDest->SlicePitch * z;
-        auto pSrcSlice = reinterpret_cast<const BYTE*>(pSrc->pData) + pSrc->SlicePitch * LONG_PTR(z);
+        BYTE* pDestSlice = reinterpret_cast<BYTE*>(pDest->pData) + pDest->SlicePitch * z;
+        const BYTE* pSrcSlice = reinterpret_cast<const BYTE*>(pSrc->pData) + pSrc->SlicePitch * z;
         for (UINT y = 0; y < NumRows; ++y)
         {
             memcpy(pDestSlice + pDest->RowPitch * y,
-                pSrcSlice + pSrc->RowPitch * LONG_PTR(y),
+                pSrcSlice + pSrc->RowPitch * y,
                 RowSizeInBytes);
         }
     }
@@ -1905,7 +1903,7 @@ inline UINT64 GetRequiredIntermediateSize(
     UINT64 RequiredSize = 0;
 
     ID3D12Device* pDevice = nullptr;
-    pDestinationResource->GetDevice(IID_ID3D12Device, reinterpret_cast<void**>(&pDevice));
+    pDestinationResource->GetDevice(__uuidof(*pDevice), reinterpret_cast<void**>(&pDevice));
     pDevice->GetCopyableFootprints(&Desc, FirstSubresource, NumSubresources, 0, nullptr, nullptr, nullptr, &RequiredSize);
     pDevice->Release();
 
@@ -1998,7 +1996,7 @@ inline UINT64 UpdateSubresources(
 
     auto Desc = pDestinationResource->GetDesc();
     ID3D12Device* pDevice = nullptr;
-    pDestinationResource->GetDevice(IID_ID3D12Device, reinterpret_cast<void**>(&pDevice));
+    pDestinationResource->GetDevice(__uuidof(*pDevice), reinterpret_cast<void**>(&pDevice));
     pDevice->GetCopyableFootprints(&Desc, FirstSubresource, NumSubresources, IntermediateOffset, pLayouts, pNumRows, pRowSizesInBytes, &RequiredSize);
     pDevice->Release();
 
@@ -2026,7 +2024,7 @@ inline UINT64 UpdateSubresources(
 
     auto Desc = pDestinationResource->GetDesc();
     ID3D12Device* pDevice = nullptr;
-    pDestinationResource->GetDevice(IID_ID3D12Device, reinterpret_cast<void**>(&pDevice));
+    pDestinationResource->GetDevice(__uuidof(*pDevice), reinterpret_cast<void**>(&pDevice));
     pDevice->GetCopyableFootprints(&Desc, FirstSubresource, NumSubresources, IntermediateOffset, Layouts, NumRows, RowSizesInBytes, &RequiredSize);
     pDevice->Release();
 
@@ -2195,8 +2193,6 @@ struct CD3DX12_RT_FORMAT_ARRAY : public D3D12_RT_FORMAT_ARRAY
 struct DefaultSampleMask { operator UINT() { return UINT_MAX; } };
 struct DefaultSampleDesc { operator DXGI_SAMPLE_DESC() { return DXGI_SAMPLE_DESC{ 1, 0 }; } };
 
-#pragma warning(push)
-#pragma warning(disable : 4324)
 template <typename InnerStructType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE Type, typename DefaultArg = InnerStructType>
 class alignas(void*) CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT
 {
@@ -2206,13 +2202,10 @@ private:
 public:
     CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT() noexcept : _Type(Type), _Inner(DefaultArg()) {}
     CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT(InnerStructType const& i) : _Type(Type), _Inner(i) {}
-    CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT& operator=(InnerStructType const& i) { _Type = Type; _Inner = i; return *this; }
-    operator InnerStructType const& () const { return _Inner; }
+    CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT& operator=(InnerStructType const& i) { _Inner = i; return *this; }
+    operator InnerStructType() const { return _Inner; }
     operator InnerStructType& () { return _Inner; }
-    InnerStructType* operator&() { return &_Inner; }
-    InnerStructType const* operator&() const { return &_Inner; }
 };
-#pragma warning(pop)
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< D3D12_PIPELINE_STATE_FLAGS, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_FLAGS>                             CD3DX12_PIPELINE_STATE_STREAM_FLAGS;
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< UINT, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_NODE_MASK>                         CD3DX12_PIPELINE_STATE_STREAM_NODE_MASK;
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< ID3D12RootSignature*, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_ROOT_SIGNATURE>                    CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE;
@@ -2723,7 +2716,7 @@ inline bool operator==(const D3D12_RENDER_PASS_DEPTH_STENCIL_DESC& a, const D3D1
 {
     if (a.cpuDescriptor.ptr != b.cpuDescriptor.ptr) return false;
     if (!(a.DepthBeginningAccess == b.DepthBeginningAccess)) return false;
-    if (!(a.StencilBeginningAccess == b.StencilBeginningAccess)) return false;
+    if (!(a.StencilBeginningAccess == b.DepthBeginningAccess)) return false;
     if (!(a.DepthEndingAccess == b.DepthEndingAccess)) return false;
     if (!(a.StencilEndingAccess == b.StencilEndingAccess)) return false;
     return true;
@@ -2903,8 +2896,8 @@ private:
     class SUBOBJECT_HELPER_BASE
     {
     public:
-        SUBOBJECT_HELPER_BASE() { Init(); }
-        virtual ~SUBOBJECT_HELPER_BASE() {}
+        SUBOBJECT_HELPER_BASE() { Init(); };
+        virtual ~SUBOBJECT_HELPER_BASE() {};
         virtual D3D12_STATE_SUBOBJECT_TYPE Type() const = 0;
         void AddToStateObject(CD3DX12_STATE_OBJECT_DESC& ContainingStateObject)
         {
@@ -3463,3 +3456,6 @@ private:
 #endif // defined( __cplusplus )
 
 #endif //__D3DX12_H__
+
+
+

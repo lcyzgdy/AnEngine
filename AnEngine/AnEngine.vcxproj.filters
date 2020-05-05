@@ -479,7 +479,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="DTimer.cpp" />
   </ItemGroup>
   <ItemGroup>

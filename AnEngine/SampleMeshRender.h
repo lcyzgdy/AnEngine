@@ -2,6 +2,8 @@
 #ifndef __SAMPLEMESHRENDER_H__
 #define __SAMPLEMESHRENDER_H__
 
+#include "d3dx12.h"
+
 #include "Renderer.h"
 #include "PipelineState.h"
 #include "VertexBuffer.h"

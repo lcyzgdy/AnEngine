@@ -9,12 +9,12 @@ namespace AnEngine::AssetsWrapper
 {
 	const string AssetsDatabase::s_AssetsPath = "";
 
-	uint64_t AssetsDatabase::AddMesh(Mesh* mesh)
+	/* uint64_t AssetsDatabase::AddMesh(Mesh* mesh)
 	{
 		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
 		m_meshes[instanceId] = mesh;
 		return instanceId;
-	}
+	}*/
 
 	/*uint64_t AssetsDatabase::AddTexture(Texture* tex)
 	{
@@ -29,9 +29,10 @@ namespace AnEngine::AssetsWrapper
 
 	AssetsDatabase::~AssetsDatabase()
 	{
-		for (var i : m_meshes)
+		for (var&& i : m_meshes)
 		{
-			delete i.second;
+			// delete i.second;
+			i.second.release();
 		}
 		/*for (var i : m_textures)
 		{
@@ -40,5 +41,12 @@ namespace AnEngine::AssetsWrapper
 	}
 	void AssetsDatabase::RefreshAssets()
 	{
+	}
+
+	Mesh* AssetsDatabase::AllocMesh()
+	{
+		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		m_meshes[instanceId] = make_unique<Mesh>();
+		return m_meshes[instanceId].get();
 	}
 }

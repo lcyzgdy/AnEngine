@@ -18,10 +18,13 @@
     <ClCompile Include="FbxImporter.Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AssetDatabase.test.cpp">
+    <ClCompile Include="Delegate.test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Delegate.test.cpp">
+    <ClCompile Include="vector.test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetDatabase.test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,8 +11,6 @@ using namespace AnEngine::Utility;
 
 namespace AnEngine::RenderCore
 {
-	//GraphicsCommandContext* GraphicsCommandContext::m_uniqueObj;
-
 	GraphicsCommandContext::GraphicsCommandContext()
 	{
 	}

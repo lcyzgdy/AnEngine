@@ -13,20 +13,21 @@ namespace AnEngine::AssetsWrapper
 	{
 		friend class Singleton<AssetsDatabase>;
 
-		std::map<uint64_t, Resource::Mesh*> m_meshes;
-		// std::map<uint64_t, Resource::Texture*> m_textures;
-		std::map<uint64_t, Game::GameObject*> m_objects;
-		// Game::Scene* m_editor;
+		std::map<uint64_t, std::unique_ptr<Resource::Mesh>> m_meshes;
+		std::map<uint64_t, std::unique_ptr<Game::GameObject>> m_objects;
 
 	public:
 		AssetsDatabase();
 		~AssetsDatabase();
 
-		uint64_t AddMesh(AnEngine::Resource::Mesh* mesh);
+		// uint64_t AddMesh(AnEngine::Resource::Mesh* mesh);
 		// uint64_t AddTexture(AnEngine::Resource::Texture* tex);
-
 		void RefreshAssets();
 
+	public:
+		Resource::Mesh* AllocMesh();
+
+	public:
 		static const std::string s_AssetsPath;
 	};
 

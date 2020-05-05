@@ -4,13 +4,16 @@
 
 #include "onwind.h"
 #include <mutex>
+#include <atomic>
 
 namespace AnEngine
 {
 	class UniqueId : public Singleton<UniqueId>
 	{
-		std::uint64_t m_uid;
-		std::mutex m_mutex;
+		friend class Singleton<UniqueId>;
+
+		std::atomic_uint64_t m_uid;
+		// std::mutex m_mutex;
 
 	public:
 		UniqueId()
@@ -20,7 +23,7 @@ namespace AnEngine
 
 		uint64_t GetUniqueId()
 		{
-			std::lock_guard<std::mutex> lock(m_mutex);
+			// std::lock_guard<std::mutex> lock(m_mutex);
 			m_uid++;
 			return m_uid;
 		}

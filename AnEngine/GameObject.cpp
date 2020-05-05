@@ -21,6 +21,11 @@ namespace AnEngine::Game
 		}
 	}
 
+	/*GameObject::GameObject(GameObject&& other) : m_behaviour(other.m_behaviour), name(other.name), scene(other.scene),
+		children(other.children)
+	{
+	}*/
+
 	void GameObject::AddBehaviour(ObjectBehaviour* component)
 	{
 		component->gameObject = this;
@@ -39,12 +44,16 @@ namespace AnEngine::Game
 
 	std::shared_ptr<GameObject> GameObject::Create(std::string&& name)
 	{
-		class MakeSharedHelper : public GameObject
+		/*class MakeSharedHelper : public GameObject
 		{
 		public:
 			explicit MakeSharedHelper(std::string&& _name) :GameObject(_name) {}
-		};
-		return make_shared<MakeSharedHelper>(move(name));
+		};*/
+		// var go = new GameObject(name);
+		// return make_shared<GameObject>(GameObject(name));
+		return make_shared<GameObject>(name);
+		// return go;
+		// return make_shared<MakeSharedHelper>(move(name));
 	}
 
 	void GameObject::Destory(GameObject* gameObject)

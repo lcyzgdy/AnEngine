@@ -18,23 +18,21 @@ namespace AnEngine::Resource
 {
 	class Mesh
 	{
-		friend AssetsWrapper::LoadAssetsStatusCode AnEngine::AssetsWrapper::LoadFbxFromFile(const std::string&);
-		friend AssetsWrapper::LoadAssetsStatusCode AnEngine::AssetsWrapper::LoadFbxFromFile(std::string&&);
+	public:
+		std::vector<DMath::Vector3> vertices;
+		std::vector<DMath::Vector3> normals;
+		std::vector<uint32_t> triangles;
 
-		std::vector<DMath::Vector3> m_vertices;
-		std::vector<DMath::Vector3> m_normals;
-		std::vector<uint32_t> m_triangles;
+		std::vector<DMath::Vector2> uv[8];
 
-		std::vector<DMath::Vector2> m_uv[8];
-
-		std::vector<float> m_boneWeights;
-		std::vector<DMath::Matrix4x4> m_bindPose;
+		std::vector<float> boneWeights;
+		std::vector<DMath::Matrix4x4> bindPose;
 
 
-		std::vector<Color> m_colors;
+		std::vector<Color> colors;
 
 	public:
-		inline uint32_t VerticesCount() { return m_vertices.size(); }
+		inline uint32_t VerticesCount() { return vertices.size(); }
 	};
 }
 

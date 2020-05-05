@@ -72,68 +72,10 @@ namespace AnEngine::AssetsWrapper
 		return nullptr;
 	}
 #elif defined ASSIMP
-	LoadAssetsStatusCode LoadFbxFromFile(const string& filePath)
-	{
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(filePath, 0);
-		int meshCount = scene->mNumMeshes;
-		if (meshCount > 0)
-		{
-			for (int i = 0; i < meshCount; i++)		// FBX包含的网格数量
-			{
-				// Mesh* pMesh = AssetsDatabase::Instance()->ImportMeshFromFile();
-				Mesh* pMesh = new Mesh();
-				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-				{
-					pMesh->m_vertices.emplace_back(Vector3(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z));
-				}
 
-				if (scene->mMeshes[i]->HasVertexColors(0))
-				{
-					var pp = scene->mMeshes[i]->mColors[0];
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-					{
-						pMesh->m_colors.emplace_back(Color(pp[j].r, pp[j].g, pp[j].b, pp[j].a));
-					}
-				}
-				else
-				{
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-					{
-						pMesh->m_colors.emplace_back(Color::White);
-					}
-				}
-				for (int k = 0; k < 8; k++)
-				{
-					if (scene->mMeshes[i]->HasTextureCoords(k))		// TODO: 支持UVW（Cube Map 或 Volume Map）
-					{
-						var pUv = scene->mMeshes[i]->mTextureCoords[k];
-						for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-						{
-							pMesh->m_uv[k].emplace_back(Vector2(pUv[j].x, pUv[j].y));
-						}
-					}
-				}
-				if (scene->mMeshes[i]->HasNormals())
-				{
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
-					{
-						Vector3 norl(scene->mMeshes[i]->mNormals[j].x, scene->mMeshes[i]->mNormals[j].y, scene->mMeshes[i]->mNormals[j].z);
-						pMesh->m_normals.emplace_back(norl);
-					}
-				}
-
-				AssetsDatabase::Instance()->AddMesh(pMesh);
-			}
-		}
-		else
-		{
-			return LoadAssetsStatusCode::NoSubMesh;
-		}
-		return LoadAssetsStatusCode::OK;
-	}
-
-	LoadAssetsStatusCode LoadFbxFromFile(string&& filePath)
+	// template<typename _Ty = string>
+	// inline LoadAssetsStatusCode LoadFbxFromFile_Internal(_Ty&& filePath)
+	inline LoadAssetsStatusCode LoadFbxFromFile_Internal(string&& filePath)
 	{
 		filesystem::path fsFilePath(filePath);
 		Assimp::Importer importer;
@@ -143,11 +85,11 @@ namespace AnEngine::AssetsWrapper
 		{
 			for (int i = 0; i < meshCount; i++)		// FBX包含的网格数量
 			{
-				// Mesh* pMesh = AssetsDatabase::Instance()->ImportMeshFromFile();
-				Mesh* pMesh = new Mesh();
+				// Mesh* pMesh = new Mesh();
+				Mesh* pMesh = AssetsDatabase::Instance()->AllocMesh();
 				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 				{
-					pMesh->m_vertices.emplace_back(Vector3(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z));
+					pMesh->vertices.emplace_back(Vector3(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z));
 				}
 
 				if (scene->mMeshes[i]->HasVertexColors(0))
@@ -155,14 +97,14 @@ namespace AnEngine::AssetsWrapper
 					var pp = scene->mMeshes[i]->mColors[0];
 					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 					{
-						pMesh->m_colors.emplace_back(Color(pp[j].r, pp[j].g, pp[j].b, pp[j].a));
+						pMesh->colors.emplace_back(Color(pp[j].r, pp[j].g, pp[j].b, pp[j].a));
 					}
 				}
 				else
 				{
 					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 					{
-						pMesh->m_colors.emplace_back(Color::White);
+						pMesh->colors.emplace_back(Color::White);
 					}
 				}
 				for (int k = 0; k < 8; k++)
@@ -172,7 +114,7 @@ namespace AnEngine::AssetsWrapper
 						var pUv = scene->mMeshes[i]->mTextureCoords[k];
 						for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 						{
-							pMesh->m_uv[k].emplace_back(Vector2(pUv[j].x, pUv[j].y));
+							pMesh->uv[k].emplace_back(Vector2(pUv[j].x, pUv[j].y));
 						}
 					}
 				}
@@ -181,20 +123,31 @@ namespace AnEngine::AssetsWrapper
 					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 					{
 						Vector3 norl(scene->mMeshes[i]->mNormals[j].x, scene->mMeshes[i]->mNormals[j].y, scene->mMeshes[i]->mNormals[j].z);
-						pMesh->m_normals.emplace_back(norl);
+						pMesh->normals.emplace_back(norl);
 					}
 				}
 
-				AssetsDatabase::Instance()->AddMesh(pMesh);
+				// AssetsDatabase::Instance()->AddMesh(pMesh);
 			}
 		}
 		else
 		{
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
-		var go = GameObject::Create(fsFilePath.filename().string());
+		var go = GameObject::Create(scene->mRootNode->mName.C_Str());
 		BuildGameObjectRecurate(scene->mRootNode);
 		return LoadAssetsStatusCode::OK;
 	}
-#endif // OPENFBX
+
+	LoadAssetsStatusCode LoadFbxFromFile(const string& filePath)
+	{
+		return LoadFbxFromFile_Internal(std::move(const_cast<string&>(filePath)));
+		// return LoadFbxFromFile_Internal(string(filePath));
+	}
+
+	LoadAssetsStatusCode LoadFbxFromFile(string&& filePath)
+	{
+		return LoadFbxFromFile_Internal(std::move(filePath));
+	}
+#endif
 }

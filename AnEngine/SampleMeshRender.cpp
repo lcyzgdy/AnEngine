@@ -4,9 +4,6 @@
 #include "DescriptorHeap.hpp"
 #include "CommandContext.h"
 #include "CommonState.h"
-#include "DX.h"
-
-#pragma comment(lib, "d3d12.lib")
 
 using namespace std;
 using namespace AnEngine;

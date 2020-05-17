@@ -12,6 +12,11 @@
 #include "Archetype.h"
 
 
+namespace AnEngine::AssetsWrapper
+{
+	class AssetsDatabase;
+}
+
 namespace AnEngine::Game
 {
 	class ObjectBehaviour;
@@ -20,8 +25,11 @@ namespace AnEngine::Game
 	class GameObject : public Object
 	{
 		friend class Scene;
+		friend class AssetsWrapper::AssetsDatabase;
 		friend class std::shared_ptr<GameObject>;
+		friend class std::unique_ptr<GameObject>;
 		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
+
 		friend void std::_Destroy_in_place<GameObject>(GameObject&) noexcept;
 		template<typename _Ty, typename... _Types>
 		friend void std::_Construct_in_place(_Ty& _Obj, _Types&&... _Args) noexcept(std::is_nothrow_constructible_v<_Ty, _Types...>);
@@ -41,7 +49,6 @@ namespace AnEngine::Game
 		std::map<double, size_t> m_typeToId;
 
 		std::string name;
-		Scene* scene;
 		Archetype* m_archetype;
 		std::vector<GameObject*> children;
 

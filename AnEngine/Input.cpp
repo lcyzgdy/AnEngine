@@ -10,7 +10,7 @@ namespace AnEngine
 {
 	BaseInput::BaseInput() :
 		m_directInput(nullptr), m_keyboard(nullptr), m_mouse(nullptr),
-		m_hwnd(NULL), m_mouseState{}, m_keyState{}, m_mouseButtonState{ 0,0,0,0,0,0,0,0,0,0 },
+		m_hwnd(NULL), m_mouseState{}, m_keyState{}, m_mouseButtonState{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		m_mouseButtonDownState{}, m_mouseButtonDownFlag{}, m_curPosition{}, m_exit(false), m_delta(20)
 	{
 	}
@@ -29,8 +29,6 @@ namespace AnEngine
 		memset(m_mouseButtonDownFlag, 0, sizeof(m_mouseButtonDownFlag));
 		memset(m_mouseButtonDownState, 0, sizeof(m_mouseButtonDownState));
 		memset(m_mouseButtonState, 0, sizeof(m_mouseButtonState));
-
-		//Utility::ThreadPool::Commit(std::bind(&BaseInput::Update, this));
 	}
 
 	void BaseInput::InitializeKeyboard(HINSTANCE _hInstance)

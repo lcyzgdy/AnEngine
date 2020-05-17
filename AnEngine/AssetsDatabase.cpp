@@ -1,6 +1,9 @@
 #include "AssetsDatabase.h"
 #include "UniqueId.hpp"
 
+#include "StringBuilder.hpp"
+
+
 using namespace std;
 using namespace AnEngine::Resource;
 using namespace AnEngine::Game;
@@ -8,20 +11,6 @@ using namespace AnEngine::Game;
 namespace AnEngine::AssetsWrapper
 {
 	const string AssetsDatabase::s_AssetsPath = "";
-
-	/* uint64_t AssetsDatabase::AddMesh(Mesh* mesh)
-	{
-		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
-		m_meshes[instanceId] = mesh;
-		return instanceId;
-	}*/
-
-	/*uint64_t AssetsDatabase::AddTexture(Texture* tex)
-	{
-		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
-		m_textures[instanceId] = tex;
-		return instanceId;
-	}*/
 
 	AssetsDatabase::AssetsDatabase()
 	{
@@ -31,14 +20,10 @@ namespace AnEngine::AssetsWrapper
 	{
 		for (var&& i : m_meshes)
 		{
-			// delete i.second;
 			i.second.release();
 		}
-		/*for (var i : m_textures)
-		{
-			delete i.second;
-		}*/
 	}
+
 	void AssetsDatabase::RefreshAssets()
 	{
 	}
@@ -48,5 +33,35 @@ namespace AnEngine::AssetsWrapper
 		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
 		m_meshes[instanceId] = make_unique<Mesh>();
 		return m_meshes[instanceId].get();
+	}
+
+	GameObject* AssetsDatabase::AllocPrefab(const std::string& name)
+	{
+		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		m_prefabs[instanceId] = unique_ptr<GameObject>(new GameObject(name));
+		return m_prefabs[instanceId].get();
+	}
+
+	GameObject* AssetsDatabase::AllocPrefab(std::string&& name)
+	{
+		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		m_prefabs[instanceId] = unique_ptr<GameObject>(new GameObject(std::move(name)));
+		return m_prefabs[instanceId].get();
+	}
+
+	std::string AssetsDatabase::StatisticsMessage()
+	{
+		ThirdParty::StringBuilder<char> sb;
+		sb.Append("Prefab count: ");
+		sb.AppendLine(to_string(m_prefabs.size()));
+		sb.Append("Mesh count: ");
+		sb.AppendLine(to_string(m_meshes.size()));
+		return sb.ToString();
+	}
+	std::ostream& AssetsDatabase::StatisticsMessageStream(std::ostream& ostream)
+	{
+		ostream << "Prefab count: " << m_prefabs.size() << endl;
+		ostream << "Mesh count: " << m_meshes.size() << endl;
+		return ostream;
 	}
 }

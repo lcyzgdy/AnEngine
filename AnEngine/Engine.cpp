@@ -114,8 +114,8 @@ namespace AnEngine
 		scene->onLoad();
 		Utility::ThreadPool::Commit([this]()->void
 			{
-				double deltaTime = 0f;
-				double totalTime = 0f;
+				double deltaTime = 0;
+				double totalTime = 0;
 				while (this->m_running)
 				{
 					deltaTime = DTimer::Instance()->GetTotalSeconds() - totalTime;

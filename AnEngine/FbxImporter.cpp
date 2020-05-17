@@ -73,8 +73,6 @@ namespace AnEngine::AssetsWrapper
 	}
 #elif defined ASSIMP
 
-	// template<typename _Ty = string>
-	// inline LoadAssetsStatusCode LoadFbxFromFile_Internal(_Ty&& filePath)
 	inline LoadAssetsStatusCode LoadFbxFromFile_Internal(string&& filePath)
 	{
 		filesystem::path fsFilePath(filePath);
@@ -85,7 +83,6 @@ namespace AnEngine::AssetsWrapper
 		{
 			for (int i = 0; i < meshCount; i++)		// FBX包含的网格数量
 			{
-				// Mesh* pMesh = new Mesh();
 				Mesh* pMesh = AssetsDatabase::Instance()->AllocMesh();
 				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
 				{
@@ -126,15 +123,13 @@ namespace AnEngine::AssetsWrapper
 						pMesh->normals.emplace_back(norl);
 					}
 				}
-
-				// AssetsDatabase::Instance()->AddMesh(pMesh);
 			}
 		}
 		else
 		{
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
-		var go = GameObject::Create(scene->mRootNode->mName.C_Str());
+		var go = AssetsDatabase::Instance()->AllocPrefab(scene->mRootNode->mName.C_Str());
 		BuildGameObjectRecurate(scene->mRootNode);
 		return LoadAssetsStatusCode::OK;
 	}
@@ -142,7 +137,6 @@ namespace AnEngine::AssetsWrapper
 	LoadAssetsStatusCode LoadFbxFromFile(const string& filePath)
 	{
 		return LoadFbxFromFile_Internal(std::move(const_cast<string&>(filePath)));
-		// return LoadFbxFromFile_Internal(string(filePath));
 	}
 
 	LoadAssetsStatusCode LoadFbxFromFile(string&& filePath)

@@ -4,6 +4,7 @@
 
 #include "onwind.h"
 #include "Chunk.h"
+#include <execution>
 
 namespace AnEngine
 {
@@ -23,7 +24,7 @@ namespace AnEngine
 		void Combine(const Archetype& other);
 		void Combine(Archetype&& other);
 
-		__forceinline void Sort() { std::sort(m_typeids.begin(), m_typeids.end()); std::unique(m_typeids.begin(), m_typeids.end()); }
+		__forceinline void Sort() { std::sort(std::execution::par, m_typeids.begin(), m_typeids.end()); std::unique(m_typeids.begin(), m_typeids.end()); }
 	};
 }
 

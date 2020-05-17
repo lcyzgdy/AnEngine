@@ -26,7 +26,6 @@ namespace AnEngine::Game
 	void Scene::AddToScene(GameObject* obj)
 	{
 		obj->m_id = m_objects.size();
-		obj->scene = this;
 		m_objects.emplace_back(obj);
 
 		// m_archetypeList.rbegin();

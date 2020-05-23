@@ -25,12 +25,14 @@ using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
-	void BuildGameObjectRecurate(aiNode* root)
+	GameObject* BuildGameObjectRecurate(aiNode* root)
 	{
+		var go = AssetsDatabase::Instance()->AllocPrefab(root->mName.C_Str());
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
 			BuildGameObjectRecurate(root->mChildren[i]);
 		}
+		return go;
 	}
 
 #ifdef OPENFBX
@@ -129,8 +131,12 @@ namespace AnEngine::AssetsWrapper
 		{
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
-		var go = AssetsDatabase::Instance()->AllocPrefab(scene->mRootNode->mName.C_Str());
-		BuildGameObjectRecurate(scene->mRootNode);
+		// var go = AssetsDatabase::Instance()->AllocPrefab(scene->mRootNode->mName.C_Str());
+		var go = AssetsDatabase::Instance()->AllocPrefab(fsFilePath.filename().generic_string());
+		for (int i = 0; i < scene->mRootNode->mNumChildren; i++)
+		{
+			BuildGameObjectRecurate(scene->mRootNode->mChildren[i]);
+		}
 		return LoadAssetsStatusCode::OK;
 	}
 

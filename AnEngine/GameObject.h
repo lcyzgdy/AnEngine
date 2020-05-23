@@ -30,7 +30,8 @@ namespace AnEngine::Game
 		friend class std::unique_ptr<GameObject>;
 		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
 
-		friend void std::_Destroy_in_place<GameObject>(GameObject&) noexcept;
+		template <class _Ty>
+		friend void std::_Destroy_in_place<_Ty>(_Ty&) noexcept;
 		template<typename _Ty, typename... _Types>
 		friend void std::_Construct_in_place(_Ty& _Obj, _Types&&... _Args) noexcept(std::is_nothrow_constructible_v<_Ty, _Types...>);
 		friend struct std::default_delete<GameObject>;
@@ -73,11 +74,14 @@ namespace AnEngine::Game
 		template<typename T>
 		T* GetBehaviour()
 		{
-			if (std::is_base_of<ObjectBehaviour, T>::value == false)
+			if constexpr (std::is_base_of<ObjectBehaviour, T>::value == false)
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) return m_behaviour[m_typeToId[typeid(T).hash_code()]];
+			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end())
+			{
+				return m_behaviour[m_typeToId[typeid(T).hash_code()]];
+			}
 			return nullptr;
 		}
 

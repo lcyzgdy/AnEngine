@@ -21,11 +21,6 @@ namespace AnEngine::Game
 		}
 	}
 
-	/*GameObject::GameObject(GameObject&& other) : m_behaviour(other.m_behaviour), name(other.name), scene(other.scene),
-		children(other.children)
-	{
-	}*/
-
 	void GameObject::AddBehaviour(ObjectBehaviour* component)
 	{
 		component->gameObject = this;

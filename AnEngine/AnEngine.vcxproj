@@ -185,6 +185,7 @@
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkAllocator.h" />
     <ClInclude Include="CommonState.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Delegate.hpp" />
     <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="GpuContext.h" />

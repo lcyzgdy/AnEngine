@@ -28,9 +28,6 @@
     <Filter Include="Game\Entity">
       <UniqueIdentifier>{1af35068-a68f-421c-8ea1-56f207ec9e07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\System">
-      <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Component">
       <UniqueIdentifier>{27602513-2c0d-47e5-9e05-c3ce6203a54a}</UniqueIdentifier>
     </Filter>
@@ -52,6 +49,9 @@
     </Filter>
     <Filter Include="Graphics\DirectX12">
       <UniqueIdentifier>{d8a8180a-ea35-4791-8e35-08aa6671627e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Job">
+      <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,16 +231,16 @@
       <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="IParallel.h">
-      <Filter>Game\System</Filter>
+      <Filter>Game\Job</Filter>
     </ClInclude>
     <ClInclude Include="SystemBase.h">
-      <Filter>Game\System</Filter>
+      <Filter>Game\Job</Filter>
     </ClInclude>
     <ClInclude Include="ComponentGroup.hpp">
       <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="ISerial.h">
-      <Filter>Game\System</Filter>
+      <Filter>Game\Job</Filter>
     </ClInclude>
     <ClInclude Include="MeshRendererComponent.h">
       <Filter>Game\Component</Filter>
@@ -277,7 +277,7 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClInclude>
     <ClInclude Include="TransformSystem.h">
-      <Filter>Game\System</Filter>
+      <Filter>Game\Job</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
       <Filter>Memory</Filter>
@@ -311,6 +311,9 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="onwind.h" />
     <ClInclude Include="DTimer.h" />
+    <ClInclude Include="Component.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -457,7 +460,7 @@
       <Filter>Game\ComponentLegacy</Filter>
     </ClCompile>
     <ClCompile Include="TransformSystem.cpp">
-      <Filter>Game\System</Filter>
+      <Filter>Game\Job</Filter>
     </ClCompile>
     <ClCompile Include="Chunk.cpp">
       <Filter>Memory</Filter>

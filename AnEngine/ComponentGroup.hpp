@@ -2,7 +2,6 @@
 #ifndef __COMPONENTGROUP_HPP__
 #define __COMPONENTGROUP_HPP__
 
-#include "ComponentData.h"
 #include "Object.h"
 #include "onwind.h"
 

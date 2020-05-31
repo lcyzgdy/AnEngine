@@ -23,7 +23,7 @@
     <ProjectGuid>{9839A870-23AE-44DD-95AA-857EC1119546}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <ProjectName>AnEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -197,7 +197,6 @@
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="CommandQueue.h" />
-    <ClInclude Include="ComponentData.h" />
     <ClInclude Include="ComponentGroup.hpp" />
     <ClInclude Include="ComputeUnit.h" />
     <ClInclude Include="dds.h" />
@@ -239,7 +238,6 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRendererComponent.h" />
     <ClInclude Include="MultiBuffer.hpp" />
     <ClInclude Include="NBody.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -271,7 +269,6 @@
     <ClInclude Include="ThreadPool.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="GraphicsCard2D.h" />
-    <ClInclude Include="TransformSystem.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIText.h" />
     <ClInclude Include="UniqueId.hpp" />
@@ -346,7 +343,6 @@
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="GraphicsCard2D.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="TransformSystem.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

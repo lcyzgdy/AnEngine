@@ -1,6 +1,5 @@
 #include "DeferredRenderPipeline.h"
 #include "SceneManager.h"
-#include "MeshRendererComponent.h"
 #include "Lighting.h"
 
 using namespace std;

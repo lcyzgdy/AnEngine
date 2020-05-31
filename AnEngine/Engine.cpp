@@ -34,30 +34,6 @@ namespace AnEngine
 				b->BeforeUpdate();
 			}
 		}
-
-		for (var sys : scene->GetAllSystems())
-		{
-			if (is_base_of<IParallel, decltype(*sys)>::value)
-			{
-				var parallel = (IParallel*)sys;
-				condition_variable cv;
-				unique_lock<mutex> lock(m_parallelMutex);
-				atomic_int32_t count = 0;
-				for (int i = 0; i < parallel->Length; i++)
-				{
-					Utility::ThreadPool::Commit(bind(&IParallel::Execute, parallel, i), [&]() { count++; });
-				}
-				cv.wait(lock, [&]()->bool { return parallel->Length == count; });
-			}
-			else if (is_base_of<ISerial, decltype(*sys)>::value)
-			{
-				var serial = (ISerial*)sys;
-				for (int i = 0; i < serial->Length; i++)
-				{
-					serial->Execute(i);
-				}
-			}
-		}
 	}
 
 	void Engine::UpdateBehaviour()

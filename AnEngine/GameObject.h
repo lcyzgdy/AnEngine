@@ -7,7 +7,6 @@
 #include "Transform.h"
 #include <mutex>
 #include <queue>
-#include "ComponentData.h"
 #include <set>
 #include "Archetype.h"
 

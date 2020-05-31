@@ -9,86 +9,60 @@
 
 namespace AnEngine::DMath
 {
-	/*class Quaternion
+	struct Quaternion
 	{
-		XMFLOAT4 m_quaternion;
+		DirectX::XMFLOAT4 m_data;
 	public:
-		Quaternion() = default;
-		Quaternion(const Quaternion& q) :m_quaternion(q.m_quaternion)
-		{
-		}
-		Quaternion(float x, float y, float z, float w) :m_quaternion(x, y, z, w)
-		{
-		}
+		Quaternion() noexcept = default;
+		Quaternion(const Quaternion& q) noexcept :m_data(q.m_data) {}
+		Quaternion(Quaternion&& q) noexcept :m_data(q.m_data) {}
+		Quaternion(float x, float y, float z, float w) noexcept :m_data(x, y, z, w) {}
+		Quaternion(const DirectX::XMVECTOR& v) noexcept { DirectX::XMStoreFloat4(&m_data, v); }
+		Quaternion(DirectX::XMVECTOR&& v) noexcept { DirectX::XMStoreFloat4(&m_data, v); }
+
+		inline Quaternion& XM_CALLCONV operator=(const DirectX::XMFLOAT4& rhs) noexcept { m_data = rhs; return *this; }
+		inline Quaternion& XM_CALLCONV operator=(const Quaternion& rhs) noexcept { m_data = rhs.m_data; return *this; }
+		inline Quaternion& XM_CALLCONV operator=(const DirectX::XMVECTOR& v) noexcept { DirectX::XMStoreFloat4(&m_data, v); return *this; }
+		inline Quaternion& XM_CALLCONV operator=(DirectX::XMFLOAT4&& rhs) noexcept { m_data = rhs; return *this; }
+		inline Quaternion& XM_CALLCONV operator=(Quaternion&& rhs) noexcept { m_data = rhs.m_data; return *this; }
+		inline Quaternion& XM_CALLCONV operator=(DirectX::XMVECTOR&& v) noexcept { DirectX::XMStoreFloat4(&m_data, v); return *this; }
+
+		inline operator DirectX::XMFLOAT4() { return m_data; }
+		inline operator DirectX::XMVECTOR() { return DirectX::XMLoadFloat4(&m_data); }
+
+		inline DirectX::XMFLOAT4* operator&() { return &m_data; }
+		inline const DirectX::XMFLOAT4* operator&() const { return &m_data; }
 
 		/////////////////////////////////////////////////////////////////////////
-		inline float X()
-		{
-			return m_quaternion.x;
-		}
+		inline float X() { return m_data.x; }
+		inline void X(float x) { m_data.x = x; }
 
-		inline void X(float x)
-		{
-			m_quaternion.x = x;
-		}
+		inline float Y() { return m_data.y; }
+		inline void Y(float y) { m_data.y = y; }
 
-		inline float Y()
-		{
-			return m_quaternion.y;
-		}
+		inline float Z() { return m_data.z; }
+		inline void Z(float z) { m_data.z = z; }
 
-		inline void Y(float y)
-		{
-			m_quaternion.y = y;
-		}
-
-		inline float Z()
-		{
-			return m_quaternion.z;
-		}
-
-		inline void Z(float z)
-		{
-			m_quaternion.z = z;
-		}
-
-		inline float W()
-		{
-			return m_quaternion.w;
-		}
-
-		inline void W(float w)
-		{
-			m_quaternion.w = w;
-		}
-
+		inline float W() { return m_data.w; }
+		inline void W(float w) { m_data.w = w; }
 		////////////////////////////////////////////////////////////////////////////////////
-
-		Vector3&& Eular()
-		{
-			Vector3 temp;
-
-			return std::move(temp);
-		}
 
 		static Quaternion&& Eular(const Vector3& v)
 		{
-			//var vv = Vector3::Normalize(v);
 			Quaternion temp;
-			XMStoreFloat4(&temp.m_quaternion, XMQuaternionRotationRollPitchYawFromVector(XMLoadFloat3(&v.m_vector)));
+			DirectX::XMStoreFloat4(&temp.m_data,
+				DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectX::XMLoadFloat3(&v)));
 			return std::move(temp);
 		}
 
-		static Quaternion&& Eular(float x, float y, float z = 0)
+		static Quaternion&& Eular(float x, float y, float z)
 		{
 			Quaternion temp;
-			XMStoreFloat4(&temp.m_quaternion, XMQuaternionRotationRollPitchYaw(x, y, z));
+			DirectX::XMStoreFloat4(&temp.m_data,
+				DirectX::XMQuaternionRotationRollPitchYaw(x, y, z));
 			return std::move(temp);
 		}
-	};*/
-
-	using Quaternion = DirectX::XMFLOAT4;
-	using SQuaternion = DirectX::XMVECTOR;
+	};
 }
 
 

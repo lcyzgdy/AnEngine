@@ -224,9 +224,6 @@
     <ClInclude Include="DeferredRenderPipeline.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentData.h">
-      <Filter>Game\Component</Filter>
-    </ClInclude>
     <ClInclude Include="GroupWarper.h">
       <Filter>Game\Component</Filter>
     </ClInclude>
@@ -241,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="ISerial.h">
       <Filter>Game\Job</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshRendererComponent.h">
-      <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="LightingType.h">
       <Filter>Graphics</Filter>
@@ -275,9 +269,6 @@
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Game\ComponentLegacy</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformSystem.h">
-      <Filter>Game\Job</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
       <Filter>Memory</Filter>
@@ -458,9 +449,6 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Game\ComponentLegacy</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformSystem.cpp">
-      <Filter>Game\Job</Filter>
     </ClCompile>
     <ClCompile Include="Chunk.cpp">
       <Filter>Memory</Filter>

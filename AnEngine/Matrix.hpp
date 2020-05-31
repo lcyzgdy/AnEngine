@@ -39,11 +39,9 @@ namespace AnEngine::DMath
 		Matrix4x4 operator*(Matrix4x4&& rhs) noexcept { return DirectX::XMMatrixMultiply(*this, rhs); }
 
 		Matrix4x4& operator*=(const Matrix4x4& rhs) noexcept { DirectX::XMStoreFloat4x4(&m_data, DirectX::XMMatrixMultiply(*this, const_cast<Matrix4x4&>(rhs))); return *this; }
+
+		Matrix4x4 Inverse() noexcept { return DirectX::XMMatrixInverse(nullptr, DirectX::XMLoadFloat4x4(&m_data)); }
 	};
-
-
-	// using Matrix4x4 = DirectX::XMFLOAT4X4;
-	// using SMatrix4x4 = DirectX::XMMATRIX;
 }
 
 #endif // __MATRIX_HPP__

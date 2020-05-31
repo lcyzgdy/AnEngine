@@ -19,24 +19,27 @@ namespace AnEngine::Game
 
 		Transform* m_parent;
 
-		DMath::Matrix4x4 LocalMatrix()
+		inline DMath::Matrix4x4 LocalMatrix() const
 		{
-			var T = DirectX::XMMatrixTranslationFromVector(m_localPosition);
-			var R = DirectX::XMMatrixRotationQuaternion(m_localRotation);
-			var S = DirectX::XMMatrixScalingFromVector(m_localScale);
-			return T * R * S;
+			return DirectX::XMMatrixAffineTransformation(m_localScale, DMath::Vector3::Zero, m_localRotation, m_localPosition);
+			// var T = DirectX::XMMatrixTranslationFromVector(m_localPosition);
+			// var R = DirectX::XMMatrixRotationQuaternion(m_localRotation);
+			// var S = DirectX::XMMatrixScalingFromVector(m_localScale);
+			// return T * R * S;
 		}
 
-		DMath::Matrix4x4 LocalToWorldMatrix()
+		inline DMath::Matrix4x4 LocalToWorldMatrix() const
 		{
 			DMath::Matrix4x4 local = DirectX::XMMatrixIdentity();
 			var parent = m_parent;
 			while (parent != nullptr)
 			{
-				var T = DirectX::XMMatrixTranslationFromVector(const_cast<DMath::Vector3&>(parent->LocalPosition()));
-				var R = DirectX::XMMatrixRotationQuaternion(const_cast<DMath::Quaternion&>(parent->LocalRotation()));
-				var S = DirectX::XMMatrixScalingFromVector(const_cast<DMath::Vector3&>(parent->LocalScale()));
-				local *= T * R * S;
+				// local *= DirectX::XMMatrixAffineTransformation(parent->m_localScale, DMath::Vector3::Zero, parent->m_localRotation, parent->m_localPosition);
+				local *= parent->LocalMatrix();
+				// var T = DirectX::XMMatrixTranslationFromVector(const_cast<DMath::Vector3&>(parent->LocalPosition()));
+				// var R = DirectX::XMMatrixRotationQuaternion(const_cast<DMath::Quaternion&>(parent->LocalRotation()));
+				// var S = DirectX::XMMatrixScalingFromVector(const_cast<DMath::Vector3&>(parent->LocalScale()));
+				// local *= T * R * S;
 				parent = parent->m_parent;
 			}
 			return local;
@@ -57,7 +60,7 @@ namespace AnEngine::Game
 
 
 
-		inline DMath::Quaternion Rotation() { return DirectX::XMVector4Transform(m_localRotation, LocalToWorldMatrix()); }
+		inline const DMath::Quaternion Rotation() const { return DirectX::XMVector4Transform(m_localRotation, LocalToWorldMatrix()); }
 		// TODO: Set from world rotation               
 		// inline DMath::Quaternion LocalRotation() { return m_localRotation; }
 		inline const DMath::Quaternion& LocalRotation() const { return m_localRotation; }
@@ -68,12 +71,12 @@ namespace AnEngine::Game
 
 
 
-		inline const DMath::Vector3& const LocalScale() { return DirectX::XMLoadFloat3(&m_localScale); }
+		inline const DMath::Vector3& LocalScale() const { return m_localScale; }
 		inline void LocalScale(const DMath::Vector3& newScale) { m_localScale = newScale; }
 
 		DMath::Matrix4x4 ObjectToWorldMatrix() { return LocalMatrix() * LocalToWorldMatrix(); }
 
-		DMath::Matrix4x4 WorldToObjectMatrix();
+		DMath::Matrix4x4 WorldToObjectMatrix() { return ObjectToWorldMatrix().Inverse(); }
 	};
 
 	/*using Position = DMath::Vector3;

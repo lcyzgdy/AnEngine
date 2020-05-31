@@ -60,15 +60,21 @@ namespace AnEngine::Game
 		virtual ~GameObject();
 
 	public:
-		// GameObject(GameObject&& other);
-
 		template<typename _Ty>
 		_Ty* GetComponent()
 		{
 			return nullptr;
 		}
 
-		void AddBehaviour(ObjectBehaviour* component);
+		template<typename _Ty>
+		_Ty* AddComponent()
+		{
+			if constexpr (std::is_base_of<Component, _Ty>::value)
+			{
+				return nullptr;
+			}
+			return nullptr;
+		}
 
 		template<typename T>
 		T* GetBehaviour()

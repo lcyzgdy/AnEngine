@@ -471,6 +471,9 @@
     </ClCompile>
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="DTimer.cpp" />
+    <ClCompile Include="Vector.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="compute_shader.hlsl">

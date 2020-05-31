@@ -7,10 +7,12 @@ namespace AnEngine::Game
 {
 	GameObject::GameObject(const std::string& _name) : name(_name), m_active(true), m_id(-1)
 	{
+		AddComponent<Transform>();
 	}
 
 	GameObject::GameObject(std::string&& _name) : name(_name), m_active(true), m_id(-1)
 	{
+		AddComponent<Transform>();
 	}
 
 	GameObject::~GameObject()
@@ -21,13 +23,7 @@ namespace AnEngine::Game
 		}
 	}
 
-	void GameObject::AddBehaviour(ObjectBehaviour* component)
-	{
-		component->gameObject = this;
-		m_behaviour.emplace_back(component);
-	}
-
-	std::shared_ptr<GameObject> GameObject::Create(const std::string& name)
+	/*std::shared_ptr<GameObject> GameObject::Create(const std::string& name)
 	{
 		class MakeSharedHelper : public GameObject
 		{
@@ -35,7 +31,7 @@ namespace AnEngine::Game
 			explicit MakeSharedHelper(const std::string& _name) :GameObject(_name) {}
 		};
 		return make_shared<MakeSharedHelper>(name);
-	}
+	}*/
 
 	std::shared_ptr<GameObject> GameObject::Create(std::string&& name)
 	{

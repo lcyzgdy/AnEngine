@@ -35,20 +35,27 @@ namespace AnEngine::DMath
 		inline Vector3& operator=(Vector3&& rhs) noexcept { m_data = rhs.m_data; return *this; }
 		inline Vector3& operator=(DirectX::XMVECTOR&& v) noexcept { DirectX::XMStoreFloat3(&m_data, v); return *this; }
 
-		inline operator DirectX::XMFLOAT3() { return m_data; }
-		inline operator DirectX::XMVECTOR() { return DirectX::XMLoadFloat3(&m_data); }
+		inline operator DirectX::XMFLOAT3() const { return m_data; }
+		inline operator DirectX::XMVECTOR() const { return DirectX::XMLoadFloat3(&m_data); }
+		inline DirectX::XMVECTOR ToXMVECTOR() const { return DirectX::XMLoadFloat3(&m_data); }
 
 		inline DirectX::XMFLOAT3* operator&() { return &m_data; }
 		inline const DirectX::XMFLOAT3* operator&() const { return &m_data; }
 
-		inline float X() { return m_data.x; }
+		inline float X() const { return m_data.x; }
 		inline void X(float x) { m_data.x = x; }
 
-		inline float Y() { return m_data.y; }
+		inline float Y() const { return m_data.y; }
 		inline void Y(float y) { m_data.y = y; }
 
-		inline float Z() { return m_data.z; }
+		inline float Z() const { return m_data.z; }
 		inline void Z(float z) { m_data.z = z; }
+
+#pragma region Static variable
+		static const Vector3 One;
+		static const Vector3 Zero;
+#pragma endregion
+
 	};
 }
 

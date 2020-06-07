@@ -27,13 +27,6 @@ namespace AnEngine
 		var scene = SceneManager::ActiveScene();
 
 		// 执行 Behaviour 的 BeforeUpdate，这是在 System 更新之前调用的
-		for (var obj : scene->GetAllGameObjects())
-		{
-			for (var b : obj->GetAllBehaviours())
-			{
-				b->BeforeUpdate();
-			}
-		}
 	}
 
 	void Engine::UpdateBehaviour()
@@ -41,17 +34,9 @@ namespace AnEngine
 		var scene = Game::SceneManager::ActiveScene();
 		for (var obj : scene->GetAllGameObjects())
 		{
-			for (var b : obj->GetAllBehaviours())
-			{
-				b->OnUpdate();
-			}
 		}
 		for (var obj : scene->GetAllGameObjects())
 		{
-			for (var b : obj->GetAllBehaviours())
-			{
-				b->AfterUpdate();
-			}
 		}
 	}
 

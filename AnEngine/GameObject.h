@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
@@ -45,12 +45,13 @@ namespace AnEngine::Game
 	protected:
 		// 当前物体的一些组件，比如渲染器、脚本等等。
 		// Components of this object, e.g. script、renderer、rigidbody etc.
-		std::vector<ObjectBehaviour*> m_behaviour;
-		std::map<double, size_t> m_typeToId;
+		std::map<double, ObjectBehaviour*> m_behaviour;
+		// std::map<double, size_t> m_typeToId;
+		std::map<double, Component*> m_component;
+
+
 
 		std::string name;
-		Archetype* m_archetype;
-		std::vector<GameObject*> children;
 
 
 
@@ -60,45 +61,60 @@ namespace AnEngine::Game
 		virtual ~GameObject();
 
 	public:
-		template<typename _Ty>
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type		>
 		_Ty* GetComponent()
 		{
-			return nullptr;
-		}
-
-		template<typename _Ty>
-		_Ty* AddComponent()
-		{
-			if constexpr (std::is_base_of<Component, _Ty>::value)
+			const double typeCode = typeid(_Ty).hash_code();
+			if (m_component.find(typeCode) != m_component.end())
 			{
-				return nullptr;
+				return (_Ty*)m_component[typeCode];
 			}
 			return nullptr;
 		}
 
-		template<typename T>
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type>
+		_Ty* AddComponent()
+		{
+			const double typeCode = typeid(_Ty).hash_code();
+			if (m_component.find(typeCode) != m_component.end())
+			{
+				return (_Ty*)m_component[typeCode];
+			}
+			var comp = new _Ty();
+			m_component[typeCode] = comp;
+			return comp;
+		}
+
+		template<typename T, typename = typename std::enable_if<std::is_base_of<ObjectBehaviour, T>::value, bool>::type>
 		T* GetBehaviour()
 		{
 			if constexpr (std::is_base_of<ObjectBehaviour, T>::value == false)
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end())
+			if (m_behaviour.find(typeid(T).hash_code()) != m_behaviour.end())
 			{
-				return m_behaviour[m_typeToId[typeid(T).hash_code()]];
+				return m_behaviour[typeid(T).hash_code()];
 			}
 			return nullptr;
 		}
 
-		const std::vector<ObjectBehaviour*>& GetAllBehaviours() { return m_behaviour; }
-
 		template<typename T>
 		T* AddBehaviour()
 		{
-			if (m_typeToId.find(typeid(T).hash_code()) != m_typeToId.end()) throw std::exception("已经存在一个了");
-			m_typeToId[typeid(T).hash_code()] = m_behaviour.size();
-			m_behaviour.emplace_back(new T());
-			return *m_behaviour.rbegin();
+			if constexpr (std::is_base_of<ObjectBehaviour, T>::value == false)
+			{
+				throw std::exception("Type is not derived ObjectBehaviour");
+			}
+			const double typeCode = typeid(T).hash_code();
+			if (m_behaviour.find(typeCode) != m_behaviour.end())
+			{
+				return m_behaviour[typeCode];
+			}
+
+			var comp = new T();
+			m_behaviour[typeCode] = comp;
+			return comp;
 		}
 
 		inline bool Active() { if (m_destoryed) throw std::exception("This object has already destoryed!");	return m_active; }

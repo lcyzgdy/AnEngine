@@ -1,13 +1,15 @@
-#pragma once
+﻿#pragma once
 #ifndef __TRANSFORM_H__
 #define __TRANSFORM_H__
 
 #include <mutex>
+#include <vector>
 
 #include "Component.h"
 #include "Vector.hpp"
 #include "Matrix.hpp"
 #include "Quaternion.hpp"
+
 
 namespace AnEngine::Game
 {
@@ -18,6 +20,7 @@ namespace AnEngine::Game
 		DMath::Vector3 m_localScale;
 
 		Transform* m_parent;
+		std::vector<Transform*> m_children;
 
 		inline DMath::Matrix4x4 LocalMatrix() const
 		{
@@ -46,7 +49,7 @@ namespace AnEngine::Game
 		}
 
 	public:
-		Transform() = default;
+		Transform() : m_localPosition(), m_localRotation(), m_localScale(1.0f, 1.0f, 1.0f), m_parent(nullptr) {};
 		virtual ~Transform() = default;
 
 		inline DMath::Vector3 Position() { return DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&m_localPosition), LocalToWorldMatrix()); }
@@ -56,7 +59,6 @@ namespace AnEngine::Game
 		inline void LocalPosition(DMath::Vector3&& newLocalPos) { m_localPosition = newLocalPos; }
 		// inline void LocalPosition(const DMath::SVector3& newLocalPos) { DirectX::XMStoreFloat3(&m_localPosition, newLocalPos); }
 		// inline void LocalPosition(DMath::SVector3&& newLocalPos) { DirectX::XMStoreFloat3(&m_localPosition, newLocalPos); }
-
 
 
 
@@ -77,6 +79,15 @@ namespace AnEngine::Game
 		DMath::Matrix4x4 ObjectToWorldMatrix() { return LocalMatrix() * LocalToWorldMatrix(); }
 
 		DMath::Matrix4x4 WorldToObjectMatrix() { return ObjectToWorldMatrix().Inverse(); }
+
+		inline Transform* Parent() const { return m_parent; }
+		inline Transform* Parent(Transform* parent) { m_parent = parent; }
+
+		inline void AddChild(Transform* child)
+		{
+			m_children.push_back(child);
+			child->m_parent = this;
+		}
 	};
 
 	/*using Position = DMath::Vector3;
@@ -84,8 +95,8 @@ namespace AnEngine::Game
 	using Scale = DMath::Vector3;
 	using LocalPosition = DMath::Vector3;
 	using LocalRotation = DMath::Quaternion;
-	using LocalScale = DMath::Vector3;*/
-	using TransformMatrix = DMath::Matrix4x4;
+	using LocalScale = DMath::Vector3;
+	using TransformMatrix = DMath::Matrix4x4;*/
 }
 
 #endif // !__TRANSFORM_H__

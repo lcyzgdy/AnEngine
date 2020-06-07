@@ -20,9 +20,13 @@
 #define 令(a) auto a
 #define __FasterFunc(func) inline func __vectorcall
 
+#ifdef _WINDOWS
+
 #ifdef _WIN64
 
 #include <Windows.h>
+
+#define DLL_API __declspec(dllexport)
 
 #ifdef UNICODE
 
@@ -39,9 +43,6 @@ constexpr auto SOLUTION_DIR = L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEng
 #else
 #define ERRORBREAK(a) (a)
 #endif // _DEBUG || DEBUG
-
-
-#define DLL_API __declspec(dllexport)
 
 inline LPCWSTR ToLPCWSTR(std::string& orig)
 {
@@ -150,17 +151,24 @@ inline void ThrowIfFalse(bool value, const wchar_t* msg)
 	ThrowIfFailed(value ? S_OK : E_FAIL);
 }
 
-#else
+#else	// UNICODE
 #define Strcpy(a,b) wcscpy(a,b);
 #define SOLUTION_DIR "C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
 #endif // !UNICODE
-#else
+#else	// _WIN64
 #ifndef UNICODE
 #define Strcpy(a,b) strcpy_s(a,b);
 #define stl(l) (l.c_str())
 
 #endif
 #endif // !_WIN64
+
+#else // _WINDOWS
+
+#define DLL_API 
+
+#endif // !_WINDOWS
+
 
 #ifdef max
 #undef max

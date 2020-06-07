@@ -53,6 +53,9 @@
     <Filter Include="Game\Job">
       <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{5ab2f88b-24bb-4898-baf9-900b9a36879b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -304,6 +307,9 @@
     <ClInclude Include="DTimer.h" />
     <ClInclude Include="Component.h">
       <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RuntimeException.h">
+      <Filter>Exception</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

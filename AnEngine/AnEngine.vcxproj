@@ -258,6 +258,7 @@
     <ClInclude Include="RenderPipelineType.h" />
     <ClInclude Include="AssetsDatabase.h" />
     <ClInclude Include="RootSignature.h" />
+    <ClInclude Include="RuntimeException.h" />
     <ClInclude Include="SampleAssets.h" />
     <ClInclude Include="SampleMeshRender.h" />
     <ClInclude Include="Scene.h" />

@@ -4,8 +4,10 @@
 using namespace std;
 using namespace AnEngine;
 
+
 int main()
 {
+	extern class __declspec(dllimport) AssetsWrapper::AssetsDatabase;
 	AnEngine::AssetsWrapper::LoadFbxFromFile("C:/Users/PC/Documents/Code/VSProject/AnEngine/Assets/unitychan.fbx");
 	cout << AssetsWrapper::AssetsDatabase::Instance()->StatisticsMessage() << endl;
 	return 0;

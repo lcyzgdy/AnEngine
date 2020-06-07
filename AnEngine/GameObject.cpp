@@ -17,34 +17,19 @@ namespace AnEngine::Game
 
 	GameObject::~GameObject()
 	{
-		for (var i : m_behaviour)
+		for (var&& i : m_behaviour)
 		{
-			delete i;
+			delete i.second;
+		}
+		for (var&& i : m_component)
+		{
+			delete i.second;
 		}
 	}
 
-	/*std::shared_ptr<GameObject> GameObject::Create(const std::string& name)
-	{
-		class MakeSharedHelper : public GameObject
-		{
-		public:
-			explicit MakeSharedHelper(const std::string& _name) :GameObject(_name) {}
-		};
-		return make_shared<MakeSharedHelper>(name);
-	}*/
-
 	std::shared_ptr<GameObject> GameObject::Create(std::string&& name)
 	{
-		/*class MakeSharedHelper : public GameObject
-		{
-		public:
-			explicit MakeSharedHelper(std::string&& _name) :GameObject(_name) {}
-		};*/
-		// var go = new GameObject(name);
-		// return make_shared<GameObject>(GameObject(name));
 		return make_shared<GameObject>(name);
-		// return go;
-		// return make_shared<MakeSharedHelper>(move(name));
 	}
 
 	void GameObject::Destory(GameObject* gameObject)
@@ -55,19 +40,11 @@ namespace AnEngine::Game
 
 	GameObject* GameObject::Find(const std::string& name)
 	{
-		/*var r = g_gameObjects.find(name);
-		if (r == g_gameObjects.end()) return nullptr;
-		return (*r).second;*/
-		var scene = SceneManager::ActiveScene();
-		scene->GetAllGameObjects();
 		return nullptr;
 	}
 
 	GameObject* GameObject::Find(std::string&& name)
 	{
-		/*var r = g_gameObjects.find(name);
-		if (r == g_gameObjects.end()) return nullptr;
-		return (*r).second;*/
 		return nullptr;
 	}
 
@@ -78,9 +55,9 @@ namespace AnEngine::Game
 		m_active = b;
 		if (b)
 		{
-			for (var i : m_behaviour)
+			for (var&& i : m_behaviour)
 			{
-				i->OnActive();
+				i.second->OnActive();
 			}
 		}
 	}

@@ -1,9 +1,10 @@
-#include "FbxImporter.h"
+﻿#include "FbxImporter.h"
 #include "Mesh.h"
 #include "Vector.hpp"
 #include "Color.h"
 #include "AssetsDatabase.h"
 #include "GameObject.h"
+#include "Transform.h"
 
 #include <filesystem>
 
@@ -25,12 +26,28 @@ using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
+	tuple<Vector3, Quaternion, Vector3> AssimpMatrixToTRS(const aiMatrix4x4& mat)
+	{
+		aiVector3D pos;
+		aiQuaternion rot;
+		aiVector3D scl;
+		mat.Decompose(scl, rot, scl);
+		return make_tuple<Vector3, Quaternion, Vector3>(Vector3(pos.x, pos.y, pos.z),
+			Quaternion(rot.x, rot.y, rot.z, rot.w), Vector3(scl.x, scl.y, scl.z));
+	}
+
 	GameObject* BuildGameObjectRecurate(aiNode* root)
 	{
 		var go = AssetsDatabase::Instance()->AllocPrefab(root->mName.C_Str());
+		Transform* trans = go->GetComponent<Transform>();
+		var&& [pos, rot, scl] = AssimpMatrixToTRS(root->mTransformation);
+		trans->LocalPosition(pos);
+		trans->LocalRotation(rot);
+		trans->LocalScale(scl);
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			BuildGameObjectRecurate(root->mChildren[i]);
+			GameObject* child = BuildGameObjectRecurate(root->mChildren[i]);
+			trans->AddChild(child->GetComponent<Transform>());
 		}
 		return go;
 	}
@@ -133,9 +150,15 @@ namespace AnEngine::AssetsWrapper
 		}
 		// var go = AssetsDatabase::Instance()->AllocPrefab(scene->mRootNode->mName.C_Str());
 		var go = AssetsDatabase::Instance()->AllocPrefab(fsFilePath.filename().generic_string());
+		var rootTrans = go->GetComponent<Transform>();
+		var&& [pos, rot, scl] = AssimpMatrixToTRS(scene->mRootNode->mTransformation);
+		rootTrans->LocalPosition(pos);
+		rootTrans->LocalRotation(rot);
+		rootTrans->LocalScale(scl);
 		for (int i = 0; i < scene->mRootNode->mNumChildren; i++)
 		{
-			BuildGameObjectRecurate(scene->mRootNode->mChildren[i]);
+			var child = BuildGameObjectRecurate(scene->mRootNode->mChildren[i]);
+			rootTrans->AddChild(child->GetComponent<Transform>());
 		}
 		return LoadAssetsStatusCode::OK;
 	}

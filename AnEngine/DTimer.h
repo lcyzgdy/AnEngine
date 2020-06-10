@@ -2,15 +2,17 @@
 #ifndef __DTIMER_H__
 #define __DTIMER_H__
 
-#include"onwind.h"
+#include "onwind.h"
+
+#include "Singleton.h"
 
 namespace AnEngine
 {
 #ifdef WIN32
-	class DTimer : public Singleton<DTimer>
+	class DLL_API DTimer : public Utility::Singleton<DTimer>
 	{
 		//static DTimer* m_uniqueObj;
-		friend class Singleton<DTimer>;
+		friend class Utility::Singleton<DTimer>;
 
 		LARGE_INTEGER m_qpcFrequency;
 		LARGE_INTEGER m_qpcLastTime;

@@ -1,8 +1,12 @@
-#include "FenceContext.h"
+﻿#include "FenceContext.h"
 using namespace std;
+
+DECLEAR_UNIQUE_OBJ(AnEngine::RenderCore::FenceContext);
+DECLEAR_INSTANCE(AnEngine::RenderCore::FenceContext);
 
 namespace AnEngine::RenderCore
 {
+
 	tuple<Fence*>&& FenceContext::GetOne()
 	{
 		if (m_pool.empty())

@@ -3,13 +3,14 @@
 #define __FENCECONTEXT_H__
 
 #include "CommandContext.h"
+#include "Singleton.h"
 
 namespace AnEngine::RenderCore
 {
 	// Fence用以维护不同设备间的同步，目前只考虑单GPU和CPU的同步
-	class FenceContext : public Singleton<FenceContext>, public IContext<Fence*>
+	class DLL_API FenceContext : public Utility::Singleton<FenceContext>, public IContext<Fence*>
 	{
-		friend class Singleton<FenceContext>;
+		friend class Utility::Singleton<FenceContext>;
 
 		std::queue<Fence*> m_pool;			// 储存可用的Fence对象
 		std::queue<Fence*> m_waitQueue;		// 储存已经进入等待的对象

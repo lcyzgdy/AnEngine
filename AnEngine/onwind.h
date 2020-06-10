@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __ONWIND_H__
 #define __ONWIND_H__
 
@@ -26,7 +26,13 @@
 
 #include <Windows.h>
 
+#ifdef _WINDLL
 #define DLL_API __declspec(dllexport)
+#else // _WINDLL
+#define DLL_API __declspec(dllimport)
+#endif // _WINDLL
+
+
 
 #ifdef UNICODE
 
@@ -86,45 +92,7 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 		*(lastSlash + 1) = L'\0';
 	}
 }
-/*
-inline HRESULT ReadDataFromFile(LPCWSTR filename, std::byte** data, UINT* size)
-{
-	CREATEFILE2_EXTENDED_PARAMETERS extendedParams = {};
-	extendedParams.dwSize = sizeof(CREATEFILE2_EXTENDED_PARAMETERS);
-	extendedParams.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
-	extendedParams.dwFileFlags = FILE_FLAG_SEQUENTIAL_SCAN;
-	extendedParams.dwSecurityQosFlags = SECURITY_ANONYMOUS;
-	extendedParams.lpSecurityAttributes = nullptr;
-	extendedParams.hTemplateFile = nullptr;
 
-	Microsoft::WRL::Wrappers::FileHandle file(CreateFile2(filename, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extendedParams));
-	if (file.Get() == INVALID_HANDLE_VALUE)
-	{
-		throw std::exception();
-	}
-
-	FILE_STANDARD_INFO fileInfo = {};
-	if (!GetFileInformationByHandleEx(file.Get(), FileStandardInfo, &fileInfo, sizeof(fileInfo)))
-	{
-		throw std::exception();
-	}
-
-	if (fileInfo.EndOfFile.HighPart != 0)
-	{
-		throw std::exception();
-	}
-
-	*data = reinterpret_cast<std::byte*>(malloc(fileInfo.EndOfFile.LowPart));
-	*size = fileInfo.EndOfFile.LowPart;
-
-	if (!ReadFile(file.Get(), *data, fileInfo.EndOfFile.LowPart, nullptr, nullptr))
-	{
-		throw std::exception();
-	}
-
-	return S_OK;
-}
-*/
 inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))
@@ -256,29 +224,5 @@ struct NonCopyable
 	NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
-template<typename T>
-class Singleton : public NonCopyable
-{
-	friend typename T;
-
-	inline static T* m_uniqueObj = nullptr;
-
-	template<typename U> friend class Singleton;
-
-	~Singleton()
-	{
-		delete m_uniqueObj;
-	}
-
-public:
-	__forceinline static T* Instance()
-	{
-		if (m_uniqueObj == nullptr)
-		{
-			m_uniqueObj = new T();
-		}
-		return m_uniqueObj;
-	}
-};
 
 #endif // !__ONWIND_H__

@@ -6,6 +6,9 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 #define KeyPress(a) ((m_keyState[a]) & 0x80)
 
+DECLEAR_UNIQUE_OBJ(AnEngine::BaseInput);
+DECLEAR_INSTANCE(AnEngine::BaseInput);
+
 namespace AnEngine
 {
 	BaseInput::BaseInput() :

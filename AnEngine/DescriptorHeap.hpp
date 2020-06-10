@@ -9,6 +9,7 @@
 #include <tuple>
 #include "onwind.h"
 #include "DX.h"
+#include "Singleton.h"
 
 /*
 namespace AnEngine::RenderCore
@@ -19,10 +20,10 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore
 {
-	class DescriptorHeapAllocator : public Singleton<DescriptorHeapAllocator>
+	class DescriptorHeapAllocator : public Utility::Singleton<DescriptorHeapAllocator>
 	{
 		// static DescriptorHeapAllocator* m_uniqueObj;
-		friend Singleton<DescriptorHeapAllocator>;
+		friend Utility::Singleton<DescriptorHeapAllocator>;
 	protected:
 		const uint32_t m_NumDescriptorPerHeap = 256;
 		std::mutex m_mutex;

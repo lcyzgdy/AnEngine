@@ -21,7 +21,7 @@ namespace AnEngine::Game
 	class ObjectBehaviour;
 
 	// 一个确定的物体
-	class GameObject : public Object
+	class DLL_API GameObject : public Object
 	{
 		friend class Scene;
 		friend class AssetsWrapper::AssetsDatabase;

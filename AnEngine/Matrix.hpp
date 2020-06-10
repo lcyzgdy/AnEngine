@@ -9,7 +9,7 @@
 
 namespace AnEngine::DMath
 {
-	struct Matrix4x4
+	struct DLL_API Matrix4x4
 	{
 	private:
 		DirectX::XMFLOAT4X4 m_data;

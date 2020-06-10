@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __RESOURCEPOOL_H__
 #define __RESOURCEPOOL_H__
 
@@ -6,12 +6,13 @@
 #include "onwind.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Singleton.h"
 
 namespace AnEngine::AssetsWrapper
 {
-	class DLL_API AssetsDatabase : public Singleton<AssetsDatabase>
+	class DLL_API AssetsDatabase : public Utility::Singleton<AssetsDatabase>
 	{
-		friend class Singleton<AssetsDatabase>;
+		friend class Utility::Singleton<AssetsDatabase>;
 
 		std::map<uint64_t, std::unique_ptr<Resource::Mesh>> m_meshes;
 		std::map<uint64_t, std::unique_ptr<Game::GameObject>> m_prefabs;
@@ -34,7 +35,6 @@ namespace AnEngine::AssetsWrapper
 	public:
 		static const std::string s_AssetsPath;
 	};
-
 }
 
 #endif // !__RESOURCEPOOL_H__

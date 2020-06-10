@@ -1,6 +1,9 @@
 #include "DTimer.h"
 #include "ThreadPool.hpp"
 
+DECLEAR_UNIQUE_OBJ(AnEngine::DTimer);
+DECLEAR_INSTANCE(AnEngine::DTimer);
+
 namespace AnEngine
 {
 	//DTimer* DTimer::m_uniqueObj = nullptr;

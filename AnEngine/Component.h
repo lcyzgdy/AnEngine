@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
 
@@ -11,9 +11,9 @@ namespace AnEngine::Game
 
 
 	/*
-	 * Component ���ڴ�����ݣ��ҽ�������ݣ��ɶ��̶߳��͵��߳�д
-	 * ��ʱ�ɷŻ�ȡ���ݵ��߼���������������
-	 * ����ӵ���޲ι��캯��
+	 * Component 用于存放数据，且仅存放数据，可多线程读和单线程写
+	 * 暂时可放获取数据的逻辑？？？？？？？
+	 * 必须拥有无参构造函数
 	 */
 	class Component
 	{
@@ -26,5 +26,5 @@ namespace AnEngine::Game
 #endif // __COMPONENT_H__
 
 /*
- * һ��Component����ֻ������һ��Entity
+ * 一个Component能且只能属于一个Entity
  */

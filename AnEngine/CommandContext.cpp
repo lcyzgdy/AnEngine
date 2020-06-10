@@ -9,6 +9,9 @@
 using namespace std;
 using namespace AnEngine::Utility;
 
+DECLEAR_UNIQUE_OBJ(AnEngine::RenderCore::GraphicsCommandContext);
+DECLEAR_INSTANCE(AnEngine::RenderCore::GraphicsCommandContext);
+
 namespace AnEngine::RenderCore
 {
 	GraphicsCommandContext::GraphicsCommandContext()

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #ifndef __ISERIAL_H__
 #define __ISERIAL_H__
 
@@ -8,8 +8,8 @@ namespace AnEngine::Game
 	class ISerial;
 
 	/*
-	 * Job ÊÇ´¿Ö´ĞĞ·½·¨£¬¿ÉÒÀÀµ Component ÖĞµÄÊı¾İ£¬²»¿ÉÒÀÀµ Behaviour µÄÊı¾İ¡£
-	 * Job ÓĞÁ½ÖÖ£¬ÕâÀïÊÇ´®ĞĞÖ´ĞĞµÄ Job£¬Òò´Ë²»½¨Òé´Ë´¦ÒÀÀµÆäËû Entity µÄComponent£¬·ñÔòĞÔÄÜ»á´ó·ùÏÂ½µ£¬¶øÇÒ¿ÉÄÜËÀËø¡£
+	 * Job æ˜¯çº¯æ‰§è¡Œæ–¹æ³•ï¼Œå¯ä¾èµ– Component ä¸­çš„æ•°æ®ï¼Œä¸å¯ä¾èµ– Behaviour çš„æ•°æ®ã€‚
+	 * Job æœ‰ä¸¤ç§ï¼Œè¿™é‡Œæ˜¯ä¸²è¡Œæ‰§è¡Œçš„ Jobï¼Œå› æ­¤ä¸å»ºè®®æ­¤å¤„ä¾èµ–å…¶ä»– Entity çš„Componentï¼Œå¦åˆ™æ€§èƒ½ä¼šå¤§å¹…ä¸‹é™ï¼Œè€Œä¸”å¯èƒ½æ­»é”ã€‚
 	 */
 	template<>
 	class ISerial<>

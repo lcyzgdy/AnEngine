@@ -1,9 +1,12 @@
-#include "DescriptorHeap.hpp"
+﻿#include "DescriptorHeap.hpp"
 // #include "RenderCore.h"
 #include "GpuContext.h"
 using namespace AnEngine::RenderCore::Resource;
 using namespace std;
 using namespace Microsoft::WRL;
+
+DECLEAR_UNIQUE_OBJ(AnEngine::RenderCore::DescriptorHeapAllocator);
+DECLEAR_INSTANCE(AnEngine::RenderCore::DescriptorHeapAllocator);
 
 namespace AnEngine::RenderCore
 {

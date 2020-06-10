@@ -5,13 +5,14 @@
 #include "onwind.h"
 #include "GraphicsCard.h"
 #include "ColorBuffer.h"
+#include "Singleton.h"
 
 namespace AnEngine::RenderCore
 {
 	// 管理所有的 device、adapter
-	class GpuContext : public Singleton<GpuContext>
+	class DLL_API GpuContext : public Utility::Singleton<GpuContext>
 	{
-		friend class Singleton<GpuContext>;
+		friend class Utility::Singleton<GpuContext>;
 		friend class Engine;
 
 		// std::vector<std::shared_ptr<GraphicsCard>> m_graphicsCard;

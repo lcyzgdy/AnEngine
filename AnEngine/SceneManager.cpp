@@ -2,6 +2,9 @@
 
 using namespace std;
 
+DECLEAR_UNIQUE_OBJ(AnEngine::Game::SceneManager);
+DECLEAR_INSTANCE(AnEngine::Game::SceneManager);
+
 namespace AnEngine::Game
 {
 	void SceneManager::AddNewScene(Scene* scene)

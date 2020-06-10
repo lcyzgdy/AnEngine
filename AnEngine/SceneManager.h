@@ -4,10 +4,12 @@
 
 #include "onwind.h"
 #include "Scene.h"
+#include "Singleton.h"
+
 
 namespace AnEngine::Game
 {
-	class DLL_API SceneManager : public Singleton<SceneManager>
+	class DLL_API SceneManager : public Utility::Singleton<SceneManager>
 	{
 		//friend class Singleton<SceneManager>;
 		std::map<std::string, Scene*> m_scenes;

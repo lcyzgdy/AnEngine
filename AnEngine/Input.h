@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
@@ -11,7 +11,9 @@
 #include <wrl.h>
 #include <atomic>
 #include <mutex>
+
 #include "BaseBehaviour.h"
+#include "Singleton.h"
 
 #pragma comment(lib, "dinput8.lib")
 
@@ -20,7 +22,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace AnEngine
 {
-	class DLL_API BaseInput : public Singleton<BaseInput>
+	class DLL_API BaseInput : public Utility::Singleton<BaseInput>
 	{
 		// 2017.10.20
 		// Friend functions only can be class's friend in same namespace. So I will redesign in the future
@@ -80,6 +82,7 @@ namespace AnEngine
 		bool GetMouseButtonUp(int _mouseButton);
 		DirectX::XMINT2 GetMousePosition();
 		DirectX::XMVECTOR GetM128MousePosition();
+
 		void SetMousePosition(int x, int y);
 
 		void ZeroInputState();

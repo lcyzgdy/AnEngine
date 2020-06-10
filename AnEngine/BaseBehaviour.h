@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #ifndef __BASEBEHAVIOUR_H__
 #define __BASEBEHAVIOUR_H__
 
-#include<mutex>
-#include"onwind.h"
-#include"Object.h"
+#include <mutex>
+#include "onwind.h"
+#include "Object.h"
 
 namespace AnEngine
 {

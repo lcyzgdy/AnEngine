@@ -5,12 +5,13 @@
 #include "onwind.h"
 #include "Chunk.h"
 #include "AllocatorBase.h"
+#include "Singleton.h"
 
 namespace AnEngine::Memory
 {
-	class ChunkAllocator : public Singleton<ChunkAllocator>, public AllocatorBase
+	class DLL_API ChunkAllocator : public Utility::Singleton<ChunkAllocator>, public AllocatorBase
 	{
-		friend class Singleton<ChunkAllocator>;
+		friend class Utility::Singleton<ChunkAllocator>;
 
 		std::deque<std::shared_ptr<Chunk>> m_chunksList;
 

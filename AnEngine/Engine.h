@@ -10,12 +10,13 @@
 #include "RenderPipeline.h"
 #include "Win32App.h"
 #include "GraphicsCard.h"
+#include "Singleton.h"
 
 namespace AnEngine
 {
-	class DLL_API Engine : public Singleton<Engine>
+	class DLL_API Engine : public Utility::Singleton<Engine>
 	{
-		friend class ::Singleton<Engine>;
+		friend class Utility::Singleton<Engine>;
 
 		bool m_initialized;
 		bool m_running;

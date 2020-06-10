@@ -10,6 +10,7 @@
 #include "DX.h"
 #include "CommandList.h"
 #include "Fence.h"
+#include "Singleton.h"
 
 namespace AnEngine::RenderCore
 {
@@ -33,10 +34,10 @@ namespace AnEngine::RenderCore
 		virtual void Push(_T...) = 0;
 	};
 
-	class GraphicsCommandContext : public ::Singleton<GraphicsCommandContext>, public IContext<CommandList*, CommandAllocator*>,
+	class GraphicsCommandContext : public Utility::Singleton<GraphicsCommandContext>, public IContext<CommandList*, CommandAllocator*>,
 		public CommandContext<CommandList*, CommandAllocator*>
 	{
-		friend class ::Singleton<GraphicsCommandContext>;
+		friend class Utility::Singleton<GraphicsCommandContext>;
 
 		GraphicsCommandContext();
 		~GraphicsCommandContext();
@@ -50,7 +51,7 @@ namespace AnEngine::RenderCore
 
 namespace AnEngine::RenderCore::Private
 {
-	class ComputeCommandContext : public ::Singleton<ComputeCommandContext>, public IContext<CommandList*, CommandAllocator*>,
+	class ComputeCommandContext : public Utility::Singleton<ComputeCommandContext>, public IContext<CommandList*, CommandAllocator*>,
 		public CommandContext<CommandList*, CommandAllocator*>
 	{
 	public:

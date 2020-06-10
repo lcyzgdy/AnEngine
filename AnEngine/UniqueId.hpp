@@ -6,11 +6,14 @@
 #include <mutex>
 #include <atomic>
 
+#include "Singleton.h"
+
 namespace AnEngine
 {
-	class UniqueId : public Singleton<UniqueId>
+	class DLL_API UniqueId : public Utility::Singleton<UniqueId>
 	{
-		friend class Singleton<UniqueId>;
+		friend class Utility::Singleton<UniqueId>;
+
 
 		std::atomic_uint64_t m_uid;
 		// std::mutex m_mutex;

@@ -5,11 +5,13 @@
 #include "onwind.h"
 #include "Archetype.h"
 
+#include "Singleton.h"
+
 namespace AnEngine
 {
-	class ArchetypeManager : public Singleton<ArchetypeManager>
+	class DLL_API ArchetypeManager : public Utility::Singleton<ArchetypeManager>
 	{
-		friend class Singleton<ArchetypeManager>;
+		friend class Utility::Singleton<ArchetypeManager>;
 		std::list<Archetype*> m_archetypeList;
 	public:
 		template<typename _Ty, typename... _Ty2>

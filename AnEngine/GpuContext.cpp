@@ -1,8 +1,12 @@
-#include "GpuContext.h"
+﻿#include "GpuContext.h"
 #include "DescriptorHeap.hpp"
+
+DECLEAR_UNIQUE_OBJ(AnEngine::RenderCore::GpuContext);
+DECLEAR_INSTANCE(AnEngine::RenderCore::GpuContext);
 
 namespace AnEngine::RenderCore
 {
+
 	GpuContext::~GpuContext()
 	{
 		for (int i = 0; i < m_outputBuffer.size(); i++)

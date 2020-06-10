@@ -265,6 +265,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderClass.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SystemBase.h" />
     <ClInclude Include="ThreadPool.hpp" />
@@ -346,6 +347,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIText.cpp" />
+    <ClCompile Include="UniqueId.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Win32App.cpp" />

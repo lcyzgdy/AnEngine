@@ -13,6 +13,9 @@
 using namespace std;
 using namespace AnEngine::Game;
 
+DECLEAR_UNIQUE_OBJ(AnEngine::Engine);
+DECLEAR_INSTANCE(AnEngine::Engine);
+
 namespace AnEngine
 {
 	void Engine::UpdateBottom()

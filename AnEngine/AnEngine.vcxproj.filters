@@ -311,6 +311,9 @@
     <ClInclude Include="RuntimeException.h">
       <Filter>Exception</Filter>
     </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>UTIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -479,6 +482,9 @@
     <ClCompile Include="DTimer.cpp" />
     <ClCompile Include="Vector.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="UniqueId.cpp">
+      <Filter>UTIL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@
 
 namespace AnEngine::AssetsWrapper
 {
-	class DLL_API AssetsDatabase : public Utility::Singleton<AssetsDatabase>
+	class AssetsDatabase : public Utility::Singleton<AssetsDatabase>
 	{
 		friend class Utility::Singleton<AssetsDatabase>;
 
@@ -29,12 +29,22 @@ namespace AnEngine::AssetsWrapper
 		Game::GameObject* AllocPrefab(const std::string& name);
 		Game::GameObject* AllocPrefab(std::string&& name);
 
-		std::string StatisticsMessage();
-		std::ostream& StatisticsMessageStream(std::ostream& ostream);
+		DLL_API std::string StatisticsMessage();
+		DLL_API std::ostream& StatisticsMessageStream(std::ostream& ostream);
+
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<AnEngine::Object, _Ty>::value, bool>::type>
+		DLL_API _Ty* LoadAssetAtPath();
 
 	public:
 		static const std::string s_AssetsPath;
 	};
+
+
+	template<typename _Ty, typename>
+	inline DLL_API _Ty* AssetsDatabase::LoadAssetAtPath()
+	{
+		return nullptr;
+	}
 }
 
 #endif // !__RESOURCEPOOL_H__

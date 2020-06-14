@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __MESH_H__
 #define __MESH_H__
 
@@ -16,7 +16,7 @@ namespace AnEngine::AssetsWrapper
 
 namespace AnEngine::Resource
 {
-	class Mesh
+	class Mesh : public Object
 	{
 	public:
 		std::vector<DMath::Vector3> vertices;

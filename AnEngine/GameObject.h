@@ -61,7 +61,7 @@ namespace AnEngine::Game
 		virtual ~GameObject();
 
 	public:
-		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type		>
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type>
 		_Ty* GetComponent()
 		{
 			const double typeCode = typeid(_Ty).hash_code();

@@ -156,7 +156,6 @@ namespace AnEngine::AssetsWrapper
 		rootTrans->LocalRotation(rot);
 		rootTrans->LocalScale(scl);
 
-		cout << AssetsDatabase::Instance() << endl;
 		for (int i = 0; i < scene->mRootNode->mNumChildren; i++)
 		{
 			var child = BuildGameObjectRecurate(scene->mRootNode->mChildren[i]);

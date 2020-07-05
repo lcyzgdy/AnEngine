@@ -36,6 +36,11 @@ namespace AnEngine::Game
 	{
 		if (gameObject->m_destoryed) throw exception("This object has already destoryed!");
 		gameObject->m_destoryed = true;
+
+		for (var&& child : gameObject->GetComponent<Transform>()->Children())
+		{
+			Destory(child->m_entity);
+		}
 	}
 
 	GameObject* GameObject::Find(const std::string& name)

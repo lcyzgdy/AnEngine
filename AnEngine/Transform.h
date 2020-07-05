@@ -83,20 +83,14 @@ namespace AnEngine::Game
 		inline Transform* Parent() const { return m_parent; }
 		inline Transform* Parent(Transform* parent) { m_parent = parent; }
 
+		inline const std::vector<Transform*>& Children() const { return m_children; }
+
 		inline void AddChild(Transform* child)
 		{
 			m_children.push_back(child);
 			child->m_parent = this;
 		}
 	};
-
-	/*using Position = DMath::Vector3;
-	using Rotation = DMath::Quaternion;
-	using Scale = DMath::Vector3;
-	using LocalPosition = DMath::Vector3;
-	using LocalRotation = DMath::Quaternion;
-	using LocalScale = DMath::Vector3;
-	using TransformMatrix = DMath::Matrix4x4;*/
 }
 
 #endif // !__TRANSFORM_H__

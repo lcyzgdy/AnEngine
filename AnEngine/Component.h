@@ -17,6 +17,8 @@ namespace AnEngine::Game
 	 */
 	class Component
 	{
+		friend class GameObject;
+	protected:
 		GameObject* m_entity;
 		std::shared_mutex m_mutex;
 	public:

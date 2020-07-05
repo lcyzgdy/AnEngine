@@ -30,6 +30,7 @@ namespace AnEngine::AssetsWrapper
 		Game::GameObject* AllocPrefab(std::string&& name);
 
 		DLL_API std::string StatisticsMessage();
+
 		DLL_API std::ostream& StatisticsMessageStream(std::ostream& ostream);
 
 		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<AnEngine::Object, _Ty>::value, bool>::type>

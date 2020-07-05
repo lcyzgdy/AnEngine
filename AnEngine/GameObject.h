@@ -55,12 +55,12 @@ namespace AnEngine::Game
 
 
 
+	public:
 		GameObject(const std::string& name);
 		GameObject(std::string&& name);
 
 		virtual ~GameObject();
 
-	public:
 		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type>
 		_Ty* GetComponent()
 		{
@@ -81,6 +81,7 @@ namespace AnEngine::Game
 				return (_Ty*)m_component[typeCode];
 			}
 			var comp = new _Ty();
+			comp->m_entity = this;
 			m_component[typeCode] = comp;
 			return comp;
 		}
@@ -124,6 +125,7 @@ namespace AnEngine::Game
 
 		__forceinline uint32_t Id() { return m_id; }
 
+	public:
 		static std::shared_ptr<GameObject> Create(const std::string& name);
 		static std::shared_ptr<GameObject> Create(std::string&& name);
 		static void Destory(GameObject* gameObject);

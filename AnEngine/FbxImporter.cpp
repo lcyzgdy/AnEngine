@@ -16,6 +16,7 @@
 
 #include "assimp/scene.h"
 #include "assimp/Importer.hpp"
+#include "assimp/postprocess.h"
 
 #endif	
 
@@ -26,32 +27,6 @@ using namespace AnEngine::Game;
 
 namespace AnEngine::AssetsWrapper
 {
-	tuple<Vector3, Quaternion, Vector3> AssimpMatrixToTRS(const aiMatrix4x4& mat)
-	{
-		aiVector3D pos;
-		aiQuaternion rot;
-		aiVector3D scl;
-		mat.Decompose(scl, rot, scl);
-		return make_tuple<Vector3, Quaternion, Vector3>(Vector3(pos.x, pos.y, pos.z),
-			Quaternion(rot.x, rot.y, rot.z, rot.w), Vector3(scl.x, scl.y, scl.z));
-	}
-
-	GameObject* BuildGameObjectRecurate(aiNode* root)
-	{
-		var go = AssetsDatabase::Instance()->AllocPrefab(root->mName.C_Str());
-		Transform* trans = go->GetComponent<Transform>();
-		var&& [pos, rot, scl] = AssimpMatrixToTRS(root->mTransformation);
-		trans->LocalPosition(pos);
-		trans->LocalRotation(rot);
-		trans->LocalScale(scl);
-		for (int i = 0; i < root->mNumChildren; i++)
-		{
-			GameObject* child = BuildGameObjectRecurate(root->mChildren[i]);
-			trans->AddChild(child->GetComponent<Transform>());
-		}
-		return go;
-	}
-
 #ifdef OPENFBX
 	std::byte* LoadFbxFromFile(const wstring& filePath)
 	{
@@ -92,53 +67,103 @@ namespace AnEngine::AssetsWrapper
 	}
 #elif defined ASSIMP
 
+	tuple<Vector3, Quaternion, Vector3> AssimpMatrixToTRS(const aiMatrix4x4& mat)
+	{
+		aiVector3D pos;
+		aiQuaternion rot;
+		aiVector3D scl;
+		mat.Decompose(scl, rot, scl);
+		return make_tuple<Vector3, Quaternion, Vector3>(Vector3(pos.x, pos.y, pos.z),
+			Quaternion(rot.x, rot.y, rot.z, rot.w), Vector3(scl.x, scl.y, scl.z));
+	}
+
+	GameObject* BuildGameObjectRecurate(aiNode* root)
+	{
+		std::cout << root->mName.C_Str() << ' ' << root->mNumMeshes << std::endl;
+
+		var go = new GameObject(root->mName.C_Str());
+		Transform* trans = go->GetComponent<Transform>();
+		var&& [pos, rot, scl] = AssimpMatrixToTRS(root->mTransformation);
+		trans->LocalPosition(pos);
+		trans->LocalRotation(rot);
+		trans->LocalScale(scl);
+
+		for (int i = 0; i < root->mNumMeshes; i++)
+		{
+			// TODO
+			// aiMesh*
+		}
+
+		for (int i = 0; i < root->mNumChildren; i++)
+		{
+			GameObject* child = BuildGameObjectRecurate(root->mChildren[i]);
+			if (child == nullptr)
+			{
+				continue;
+			}
+			trans->AddChild(child->GetComponent<Transform>());
+		}
+		return go;
+	}
+
 	inline LoadAssetsStatusCode LoadFbxFromFile_Internal(string&& filePath)
 	{
 		filesystem::path fsFilePath(filePath);
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(filePath, 0);
+		const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
 		int meshCount = scene->mNumMeshes;
 		if (meshCount > 0)
 		{
 			for (int i = 0; i < meshCount; i++)		// FBX包含的网格数量
 			{
+				aiMesh* fbxMesh = scene->mMeshes[i];
 				Mesh* pMesh = AssetsDatabase::Instance()->AllocMesh();
-				for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+				for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 				{
-					pMesh->vertices.emplace_back(Vector3(scene->mMeshes[i]->mVertices[j].x, scene->mMeshes[i]->mVertices[j].y, scene->mMeshes[i]->mVertices[j].z));
+					pMesh->vertices.emplace_back(Vector3(fbxMesh->mVertices[j].x, fbxMesh->mVertices[j].y, fbxMesh->mVertices[j].z));
 				}
 
-				if (scene->mMeshes[i]->HasVertexColors(0))
+				if (fbxMesh->HasFaces())
 				{
-					var pp = scene->mMeshes[i]->mColors[0];
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+					for (uint32_t j = 0; j < fbxMesh->mNumFaces; j++)
+					{
+						std::vector<int> triangle(fbxMesh->mFaces[j].mNumIndices);
+						std::copy(fbxMesh->mFaces[j].mIndices, fbxMesh->mFaces[j].mIndices + fbxMesh->mFaces[j].mNumIndices, triangle.begin());
+						pMesh->indices.push_back(triangle);
+					}
+				}
+
+				if (fbxMesh->HasVertexColors(0))
+				{
+					var pp = fbxMesh->mColors[0];
+					for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 					{
 						pMesh->colors.emplace_back(Color(pp[j].r, pp[j].g, pp[j].b, pp[j].a));
 					}
 				}
 				else
 				{
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+					for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 					{
 						pMesh->colors.emplace_back(Color::White);
 					}
 				}
 				for (int k = 0; k < 8; k++)
 				{
-					if (scene->mMeshes[i]->HasTextureCoords(k))		// TODO: 支持UVW（Cube Map 或 Volume Map）
+					if (fbxMesh->HasTextureCoords(k))		// TODO: 支持UVW（Cube Map 或 Volume Map）
 					{
-						var pUv = scene->mMeshes[i]->mTextureCoords[k];
-						for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+						var pUv = fbxMesh->mTextureCoords[k];
+						for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 						{
 							pMesh->uv[k].emplace_back(Vector2(pUv[j].x, pUv[j].y));
 						}
 					}
 				}
-				if (scene->mMeshes[i]->HasNormals())
+				if (fbxMesh->HasNormals())
 				{
-					for (uint32_t j = 0; j < scene->mMeshes[i]->mNumVertices; j++)
+					for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 					{
-						Vector3 norl(scene->mMeshes[i]->mNormals[j].x, scene->mMeshes[i]->mNormals[j].y, scene->mMeshes[i]->mNormals[j].z);
+						Vector3 norl(fbxMesh->mNormals[j].x, fbxMesh->mNormals[j].y, fbxMesh->mNormals[j].z);
 						pMesh->normals.emplace_back(norl);
 					}
 				}

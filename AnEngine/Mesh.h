@@ -7,6 +7,7 @@
 #include "Matrix.hpp"
 #include "Color.h"
 #include "AssetsConfig.h"
+#include "Object.h"
 
 namespace AnEngine::AssetsWrapper
 {
@@ -20,6 +21,7 @@ namespace AnEngine::Resource
 	{
 	public:
 		std::vector<DMath::Vector3> vertices;
+		std::vector<std::vector<int>> indices;
 		std::vector<DMath::Vector3> normals;
 		std::vector<uint32_t> triangles;
 
@@ -28,11 +30,12 @@ namespace AnEngine::Resource
 		std::vector<float> boneWeights;
 		std::vector<DMath::Matrix4x4> bindPose;
 
-
 		std::vector<Color> colors;
 
 	public:
 		inline uint32_t VerticesCount() { return vertices.size(); }
+		inline uint32_t SubMeshCount() { return indices.size(); }
+		inline std::vector<int>& GetSubMesh(int submeshIndex) { return indices[submeshIndex]; }
 	};
 }
 

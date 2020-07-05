@@ -8,16 +8,15 @@ using namespace std;
 using namespace AnEngine::Resource;
 using namespace AnEngine::Game;
 
-// AnEngine::AssetsWrapper::AssetsDatabase* AnEngine::AssetsWrapper::AssetsDatabase::m_uniqueObj = nullptr;
 DLL_API DECLEAR_UNIQUE_OBJ(AnEngine::AssetsWrapper::AssetsDatabase);
 DECLEAR_INSTANCE(AnEngine::AssetsWrapper::AssetsDatabase);
 /*AnEngine::AssetsWrapper::AssetsDatabase* AnEngine::Utility::Singleton<AnEngine::AssetsWrapper::AssetsDatabase>::Instance()
 {
-	if (m_uniqueObj == nullptr)
+	if (s_uniqueObj == nullptr)
 	{
-		m_uniqueObj = new AnEngine::AssetsWrapper::AssetsDatabase();
+		s_uniqueObj = new AnEngine::AssetsWrapper::AssetsDatabase();
 	}
-	return m_uniqueObj;
+	return s_uniqueObj;
 }*/
 
 namespace AnEngine::AssetsWrapper

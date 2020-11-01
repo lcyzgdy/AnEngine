@@ -47,7 +47,7 @@ namespace AnEngine::Game
 		// Components of this object, e.g. script、renderer、rigidbody etc.
 		std::map<double, ObjectBehaviour*> m_behaviour;
 		// std::map<double, size_t> m_typeToId;
-		std::map<double, Component*> m_component;
+		std::map<double, ComponentBase*> m_component;
 
 
 
@@ -61,7 +61,7 @@ namespace AnEngine::Game
 
 		virtual ~GameObject();
 
-		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type>
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<ComponentBase, _Ty>::value, bool>::type>
 		_Ty* GetComponent()
 		{
 			const double typeCode = typeid(_Ty).hash_code();
@@ -72,7 +72,7 @@ namespace AnEngine::Game
 			return nullptr;
 		}
 
-		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<Component, _Ty>::value, bool>::type>
+		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<ComponentBase, _Ty>::value, bool>::type>
 		_Ty* AddComponent()
 		{
 			const double typeCode = typeid(_Ty).hash_code();

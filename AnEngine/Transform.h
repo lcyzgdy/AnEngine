@@ -13,7 +13,7 @@
 
 namespace AnEngine::Game
 {
-	class Transform : public Component
+	class Transform : public ComponentBase
 	{
 		DMath::Vector3 m_localPosition;
 		DMath::Quaternion m_localRotation;

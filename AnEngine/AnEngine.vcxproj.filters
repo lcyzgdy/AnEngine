@@ -50,11 +50,17 @@
     <Filter Include="Graphics\DirectX12">
       <UniqueIdentifier>{d8a8180a-ea35-4791-8e35-08aa6671627e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Job">
-      <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Exception">
       <UniqueIdentifier>{5ab2f88b-24bb-4898-baf9-900b9a36879b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{6b822414-b972-4a73-997f-377bc426d940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\System">
+      <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Promise">
+      <UniqueIdentifier>{885c4510-06f5-4e9a-881b-9f7e29c423d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,9 +117,6 @@
     </ClInclude>
     <ClInclude Include="Vector.hpp">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugLog.h">
-      <Filter>UTIL</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>UTIL</Filter>
@@ -231,16 +234,16 @@
       <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="IParallel.h">
-      <Filter>Game\Job</Filter>
+      <Filter>Game\System</Filter>
     </ClInclude>
     <ClInclude Include="SystemBase.h">
-      <Filter>Game\Job</Filter>
+      <Filter>Game\System</Filter>
     </ClInclude>
     <ClInclude Include="ComponentGroup.hpp">
       <Filter>Game\Component</Filter>
     </ClInclude>
     <ClInclude Include="ISerial.h">
-      <Filter>Game\Job</Filter>
+      <Filter>Game\System</Filter>
     </ClInclude>
     <ClInclude Include="LightingType.h">
       <Filter>Graphics</Filter>
@@ -313,6 +316,30 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugLog.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="ALogger.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFilter.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRenderer.h">
+      <Filter>Game\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderSystem.h">
+      <Filter>Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="IPromise.h">
+      <Filter>Promise</Filter>
+    </ClInclude>
+    <ClInclude Include="Promise.h">
+      <Filter>Promise</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -400,9 +427,6 @@
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Graphics\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="DebugLog.cpp">
-      <Filter>UTIL</Filter>
-    </ClCompile>
     <ClCompile Include="ThreadPool.cpp">
       <Filter>UTIL</Filter>
     </ClCompile>
@@ -485,6 +509,12 @@
     </ClCompile>
     <ClCompile Include="UniqueId.cpp">
       <Filter>UTIL</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLog.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Promise.cpp">
+      <Filter>Promise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

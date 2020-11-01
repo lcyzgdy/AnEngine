@@ -88,10 +88,9 @@ namespace AnEngine::AssetsWrapper
 		trans->LocalRotation(rot);
 		trans->LocalScale(scl);
 
-		for (int i = 0; i < root->mNumMeshes; i++)
+		if (root->mNumMeshes > 1)
 		{
-			// TODO
-			// aiMesh*
+
 		}
 
 		for (int i = 0; i < root->mNumChildren; i++)

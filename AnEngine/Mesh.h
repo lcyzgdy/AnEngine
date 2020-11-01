@@ -23,7 +23,7 @@ namespace AnEngine::Resource
 		std::vector<DMath::Vector3> vertices;
 		std::vector<std::vector<int>> indices;
 		std::vector<DMath::Vector3> normals;
-		std::vector<uint32_t> triangles;
+		// std::vector<uint32_t> triangles;
 
 		std::vector<DMath::Vector2> uv[8];
 

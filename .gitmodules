@@ -1,6 +1,6 @@
 [submodule "PhysX"]
-	path = 3rdparty/PhysX
+	path = Source/3rdparty/PhysX
 	url = https://github.com/lcyzgdy/PhysX-3.4.git
 [submodule "Assimp"]
-	path = 3rdparty/Assimp
+	path = Source/3rdparty/Assimp
 	url = https://github.com/assimp/assimp.git

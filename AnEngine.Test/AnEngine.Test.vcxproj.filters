@@ -27,8 +27,5 @@
     <ClCompile Include="AssetDatabase.test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Promise.test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

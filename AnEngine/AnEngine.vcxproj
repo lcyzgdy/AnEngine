@@ -233,7 +233,6 @@
     <ClInclude Include="GroupWarper.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="IPromise.h" />
     <ClInclude Include="ISerial.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="LightingType.h" />
@@ -253,7 +252,6 @@
     <ClInclude Include="onwind.h" />
     <ClInclude Include="PipelineState.h" />
     <ClInclude Include="PixelBuffer.h" />
-    <ClInclude Include="Promise.h" />
     <ClInclude Include="Quaternion.hpp" />
     <ClInclude Include="RayTracingHelper.hpp" />
     <ClInclude Include="RaytracingHlslCompat.h" />
@@ -338,7 +336,6 @@
     <ClCompile Include="ObjectBehaviour.cpp" />
     <ClCompile Include="PipelineState.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
-    <ClCompile Include="Promise.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="Renderer.cpp" />

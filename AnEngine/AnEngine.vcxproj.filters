@@ -59,9 +59,6 @@
     <Filter Include="Game\System">
       <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Promise">
-      <UniqueIdentifier>{885c4510-06f5-4e9a-881b-9f7e29c423d9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -335,12 +332,6 @@
     <ClInclude Include="MeshRenderSystem.h">
       <Filter>Game\System</Filter>
     </ClInclude>
-    <ClInclude Include="IPromise.h">
-      <Filter>Promise</Filter>
-    </ClInclude>
-    <ClInclude Include="Promise.h">
-      <Filter>Promise</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -512,9 +503,6 @@
     </ClCompile>
     <ClCompile Include="DebugLog.cpp">
       <Filter>Logger</Filter>
-    </ClCompile>
-    <ClCompile Include="Promise.cpp">
-      <Filter>Promise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

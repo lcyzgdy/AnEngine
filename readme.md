@@ -1,23 +1,25 @@
 # AnEngine
 
+![AnEngine](./Blogs/logo.png)
+
+
 &#8195;&#8195;AnEngine是一个使用DirectX 12开发的尚未完成的游戏引擎。之前的作用是完成图形学作业，现在没什么作用。
 目前已经支持C++ 17标准。
 
 ## 特征
-* 使用了 ECS + Behaviour 的设计，由 Scene 统一管理，Engine 调度。
+* 使用了 ECS + Behaviour 的设计，正在加入Promise。
 * 游戏中的一个对象是一个 GameObject，保存在 Scene 中，Component 放在连续的内存中，可以通过下标索引，通过下标保证和 GameObject 的对应关系；Behaviour 针对少量、复用很少的组件，挂在 GameObject 上。
 
 ## 正在开发的功能
-* 丧心病狂的开始尝试DXR（受到 Windows 10 1809 更新推迟影响，暂时停止开发）
-* ECS-Behaviour 模式
-* 重写可编程渲染管线
+* JS风格的Promise，可能不那么完全遵循Promise/A+标准
+* 渲染管线Promise化
 
 ### 已完成功能
 * Sample Particles Renderer（CS计算位置，GS和PS控制形状）
 * Sample Mesh Renderer（由于管线重写，该项和上一项废弃）
 * MSAA（DX API实现）
 * State Machine
-* D2D
+* 基于D2D实现简单UI
 
 #### ECS-Behaviour
 目前只实现了 Transform 系列，如坐标变换功能。System 有两种，一种是可并行的，继承自 IParaller，另一种是不可并行的。
@@ -76,9 +78,8 @@ void CreateStateTransCondition(uint32_t from, uint32_t to, std::wstring&& tigger
 ```
 
 ## 系统要求
-* Windows 10 17134或更新
-* Visual Studio 2017，需要 C++ 游戏开发组件、Windows 10 SDK 17134、VC++ ATL
-* [Fallback Layer for DXR](https://github.com/Microsoft/DirectX-Graphics-Samples)
+* Windows 10 20H1或更新
+* Visual Studio 2019，需要 C++ 游戏开发组件、Windows 10 SDK 19041
 
 ## 开始
 在Window项目中新建头文件和源文件（Test.h，Test.cpp），头文件中引用 Driver.h。
@@ -152,7 +153,8 @@ void TestCamera::Update()
 
 TestCamera::TestCamera() : ObjectBehaviour() { }
 ```
-&#8195;&#8195;在CPP文件中对TestCamera的构造函数进行定义，这个对象并没有什么用，所以不需要在构造函数中做任何事情，只需要调用基类构造函数即可。<br/>
+&#8195;&#8195;在CPP文件中对TestCamera的构造函数进行定义，这个对象并没有什么用，所以不需要在构造函数中做任何事情，只需要调用基类构造函数即可。
+
 &#8195;&#8195;在LoadScene()中，我们创建了一个空场景testScene，一个照相机testCamera，将清空标志设置为纯色，可以通过Update()实时改变填充颜色。然后实例化一个TestCamera对象cameraScript，将脚本作为该对象的组件，即调用testCameraObject的AddComponent方法将testCamera和testCameraScript挂上去。然后创建一个状态机，设置两个状态State1和State2，当Sin值大于0的时候是State1，否则是State2。最后，将testCameraObject对象加入到场景中，使用Driver的BeginBehaviour()方法加载场景。
 
 * WinMain.cpp：
@@ -174,8 +176,15 @@ while (msg.message != WM_QUIT)
 ......
 ```
 
-### 第三方引用说明
-* [OpenFBX](https://github.com/nem0/OpenFBX)
-* [D3D12Raytracing](https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/Samples/Desktop/D3D12Raytracing/readme.md)
+## 计划
+* 实现JS风格的Promise，GPU调用尽可能Promise化；
+* 尽可能使用C++新特性；
+* 可能会接入一套好用的内存管理；
+* 加入网络模块；
 
-### 由于某些原因，暂停开发，明年再说
+## 合作者
+* 感谢[@zhxxl997](https://github.com/zhxxl997)提供的Logo
+
+## 第三方引用
+* [OpenFBX](https://github.com/nem0/OpenFBX)
+* [Assimp](https://github.com/assimp/assimp)

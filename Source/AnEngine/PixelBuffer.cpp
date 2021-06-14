@@ -1,4 +1,4 @@
-#include "PixelBuffer.h"
+﻿#include "PixelBuffer.h"
 #include "GpuContext.h"
 #include "DescriptorHeap.hpp"
 using namespace std;
@@ -24,24 +24,24 @@ namespace AnEngine::RenderCore::Resource
 	void PixelBuffer::SetAsRtv()
 	{
 		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-		ID3D12Device* device = GpuContext::Instance()->Default();
-		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		ID3D12Device* device = GpuContext::Instance().Default();
+		var handle = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		device->CreateRenderTargetView(m_resource_cp.Get(), nullptr, handle);
 		m_rtvHandle = handle;
 	}
 
 	void PixelBuffer::SetAsDsv()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
-		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		ID3D12Device* device = GpuContext::Instance().Default();
+		var handle = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 		device->CreateDepthStencilView(m_resource_cp.Get(), nullptr, handle);
 		m_dsvHandle = handle;
 	}
 
 	void PixelBuffer::SetAsSrv()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
-		var handle = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		ID3D12Device* device = GpuContext::Instance().Default();
+		var handle = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		device->CreateShaderResourceView(m_resource_cp.Get(), nullptr, handle);
 		m_srvHandle = handle;
 	}
@@ -404,7 +404,6 @@ namespace AnEngine::RenderCore::Resource
 		desc.DepthOrArraySize = static_cast<uint16_t>(depthOrArraySize);
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Flags = static_cast<D3D12_RESOURCE_FLAGS>(flags);
-		//desc.Format = GetBaseFormat(format);
 		desc.Format = format;
 		desc.Height = static_cast<uint32_t>(height);
 		desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;

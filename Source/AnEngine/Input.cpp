@@ -197,7 +197,7 @@ namespace AnEngine
 
 	void BaseInput::SetMousePosition(int x, int y)
 	{
-		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::Instance()->Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::Instance()->Height()) * 2 - 1.0f), 0.0f };
+		m_curPosition = { static_cast<float>(x) / static_cast<float>(Screen::Instance().Width()) * 2 - 1.0f, -(static_cast<float>(y) / static_cast<float>(Screen::Instance().Height()) * 2 - 1.0f), 0.0f };
 	}
 
 	void BaseInput::SetAcquire()

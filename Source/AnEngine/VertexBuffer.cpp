@@ -8,7 +8,7 @@ namespace AnEngine::RenderCore::Resource
 {
 	VertexBuffer::VertexBuffer(D3D12_SUBRESOURCE_DATA& subData, size_t vertexDataSize, uint32_t standardVertexStride)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
@@ -39,7 +39,7 @@ namespace AnEngine::RenderCore::Resource
 		D3D12_SUBRESOURCE_DATA& indexData, size_t indexDataSize,
 		DXGI_FORMAT standardIndexFormat)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 

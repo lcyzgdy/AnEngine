@@ -18,7 +18,7 @@ namespace AnEngine::Game
 		static void AddNewScene(Scene* scene);
 		static void LoadScene(const std::string& sceneName);
 		static void LoadScene(std::string&& sceneName);
-		static Scene* ActiveScene() { return Instance()->m_activeScene; }
+		static Scene* ActiveScene() { return Instance().m_activeScene; }
 		static std::vector<Scene*> GetAllScenes();
 	};
 }

@@ -1,4 +1,4 @@
-#include "Color.h"
+﻿#include "Color.h"
 using namespace DirectX;
 
 namespace AnEngine
@@ -13,7 +13,6 @@ namespace AnEngine
 
 	Color::Color(XMVECTOR vec)
 	{
-		//= vec;
 		XMStoreFloat4(&m_color, vec);
 	}
 
@@ -45,30 +44,6 @@ namespace AnEngine
 		XMStoreFloat4(&m_color, XMVectorScale(XMVectorSet(r, g, b, a), 1.0f / 255.0f));
 	}
 
-	float Color::GetR() const
-	{
-		//return XMVectorGetX(m_color);
-		return m_color.x;
-	}
-
-	float Color::GetG() const
-	{
-		//return XMVectorGetY(m_color);
-		return m_color.y;
-	}
-
-	float Color::GetB() const
-	{
-		//return XMVectorGetZ(m_color);
-		return m_color.z;
-	}
-
-	float Color::GetA() const
-	{
-		//return XMVectorGetW(m_color);
-		return m_color.w;
-	}
-
 	bool Color::operator==(const Color& rhs) const
 	{
 		//return XMVector4Equal(m_color, rhs.m_color);
@@ -81,30 +56,6 @@ namespace AnEngine
 		//return !XMVector4Equal(m_color, rhs.m_color);
 		return !(m_color.x == rhs.m_color.x && m_color.y == rhs.m_color.y
 			&& m_color.z == rhs.m_color.z && m_color.w == rhs.m_color.w);
-	}
-
-	void Color::SetR(float r)
-	{
-		//m_color = XMVectorSetX(m_color, r);
-		m_color.x = r;
-	}
-
-	void Color::SetG(float g)
-	{
-		//m_color = XMVectorSetY(m_color, g);
-		m_color.y = g;
-	}
-
-	void Color::SetB(float b)
-	{
-		//m_color = XMVectorSetZ(m_color, b);
-		m_color.z = b;
-	}
-
-	void Color::SetA(float a)
-	{
-		//m_color = XMVectorSetW(m_color, a);
-		m_color.w = a;
 	}
 
 	float* Color::GetPtr(void)
@@ -245,26 +196,6 @@ namespace AnEngine
 
 	Color32::Color32(uint32_t rgbaLittleEndian)
 	{
-	}
-
-	int Color32::R() const
-	{
-		return m_color.x;
-	}
-
-	int Color32::G() const
-	{
-		return m_color.y;
-	}
-
-	int Color32::B() const
-	{
-		return m_color.z;
-	}
-
-	int Color32::A() const
-	{
-		return m_color.w;
 	}
 
 	bool Color32::operator==(const Color32& rhs) const

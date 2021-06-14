@@ -7,7 +7,7 @@ namespace AnEngine::RenderCore
 {
 	Fence::Fence() : m_fenceValue(0)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		ThrowIfFailed(device->CreateFence(m_fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.GetAddressOf())));
 #ifdef _WIN32
 		m_fenceEvent.Attach(CreateEvent(nullptr, FALSE, FALSE, nullptr));

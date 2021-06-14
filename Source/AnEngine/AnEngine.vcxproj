@@ -190,6 +190,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Delegate.hpp" />
     <ClInclude Include="FbxImporter.h" />
+    <ClInclude Include="FencePool.h" />
     <ClInclude Include="GpuContext.h" />
     <ClInclude Include="IParallel.h" />
     <ClInclude Include="Camera.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="GroupWarper.h" />
     <ClInclude Include="Hash.hpp" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IPool.h" />
     <ClInclude Include="ISerial.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="LightingType.h" />
@@ -318,6 +320,7 @@
     <ClCompile Include="FbxImporter.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="FenceContext.cpp" />
+    <ClCompile Include="FencePool.cpp" />
     <ClCompile Include="frameBuffering.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>

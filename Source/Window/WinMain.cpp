@@ -1,4 +1,4 @@
-#include "onwind.h"
+﻿#include "onwind.h"
 #include "NBody.h"
 #include "Win32App.h"
 #include "ThreadPool.hpp"
@@ -32,16 +32,16 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case(WM_SETFOCUS):
 	{
-		BaseInput::Instance()->SetAcquire();
+		BaseInput::Instance().SetAcquire();
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::Instance()->SetMousePosition(p.x, p.y);
+		BaseInput::Instance().SetMousePosition(p.x, p.y);
 		break;
 	}
 	case(WM_KILLFOCUS):
 	{
-		BaseInput::Instance()->SetUnacquire();
+		BaseInput::Instance().SetUnacquire();
 		break;
 	}
 	case(WM_MOUSEMOVE):
@@ -49,7 +49,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		POINT p;
 		GetCursorPos(&p);
 		ScreenToClient(hwnd, &p);
-		BaseInput::Instance()->SetMousePosition(p.x, p.y);
+		BaseInput::Instance().SetMousePosition(p.x, p.y);
 		break;
 	}
 	case(WM_PAINT):
@@ -119,7 +119,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Randomize();
 	win32App = new Win32App(window, hInstance, screenw, screenh);
 	// AnEngine::Engine::Instance()->Initialize(window, hInstance, screenw, screenh);
-	AnEngine::Engine::Instance()->Initialize(*win32App);
+	AnEngine::Engine::Instance().Initialize(*win32App);
 
 	//d3dApp->SetHwnd(window);
 	//d3dApp->OnInit();
@@ -145,8 +145,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 	}
 
-	//BaseInput::GetInstance()->Release();
-	Engine::Instance()->Release();
+	Engine::Instance().Release();
 	//d3dApp->OnRelease();
 	UnregisterClass(wnd.lpszClassName, hInstance);
 	return 0;

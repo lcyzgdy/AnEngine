@@ -41,28 +41,28 @@ namespace AnEngine::Utility::ThreadPool
 				for (int i = 0; i < m_idleThreadNum; i++)
 				{
 					m_pool.emplace_back([this]()
-					{
-						while (!this->m_stopped)
 						{
-							std::function<void()> task;
+							while (!this->m_stopped)
 							{
-								std::unique_lock<std::mutex> lock(this->m_mutex);
-								this->m_cvTask.wait(lock, [this]()
+								std::function<void()> task;
 								{
-									return this->m_stopped.load() || !this->m_tasks.empty();
-								});
-								if (this->m_stopped && this->m_tasks.empty())
-								{
-									return;
+									std::unique_lock<std::mutex> lock(this->m_mutex);
+									this->m_cvTask.wait(lock, [this]()
+										{
+											return this->m_stopped.load() || !this->m_tasks.empty();
+										});
+									if (this->m_stopped && this->m_tasks.empty())
+									{
+										return;
+									}
+									task = move(this->m_tasks.front());
+									this->m_tasks.pop();
 								}
-								task = move(this->m_tasks.front());
-								this->m_tasks.pop();
+								m_idleThreadNum--;
+								task();
+								m_idleThreadNum++;
 							}
-							m_idleThreadNum--;
-							task();
-							m_idleThreadNum++;
-						}
-					});
+						});
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace AnEngine::Utility::ThreadPool
 			{
 				if (m_stopped.load())
 				{
-					throw exception("Thread pool is stopped");
+					throw std::exception("Thread pool is stopped");
 				}
 				using FuncType = decltype(funcBinder());
 				var task = std::make_shared<std::packaged_task<FuncType>>(funcBinder);
@@ -104,7 +104,7 @@ namespace AnEngine::Utility::ThreadPool
 			{
 				if (m_stopped.load())
 				{
-					throw exception("Thread pool is stopped");
+					throw std::exception("Thread pool is stopped");
 				}
 				using FuncType = decltype(funcBinder());
 				var task = std::make_shared<std::packaged_task<FuncType>>(funcBinder);
@@ -122,7 +122,7 @@ namespace AnEngine::Utility::ThreadPool
 			{
 				if (m_stopped.load())
 				{
-					throw exception("Thread pool is stopped");
+					throw std::exception("Thread pool is stopped");
 				}
 				using FuncType = decltype(f(args ...));
 				var task = std::make_shared<std::packaged_task<FuncType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));

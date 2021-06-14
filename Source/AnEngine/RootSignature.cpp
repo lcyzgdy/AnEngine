@@ -1,4 +1,4 @@
-#include <functional>
+﻿#include <functional>
 
 #include "RootSignature.h"
 #include "RenderCore.h"
@@ -90,14 +90,7 @@ namespace AnEngine::RenderCore
 
 	RootSignature::RootSignature(ID3D12RootSignature* rootSignature)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
-		/*
-		CD3DX12_DESCRIPTOR_RANGE1 range[1];
-		range[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_FLAG_DATA_STATIC);
-
-		CD3DX12_ROOT_PARAMETER1 params[1];
-		params[0].InitAsDescriptorTable(1, &range[0], D3D12_SHADER_VISIBILITY_ALL);
-		*/
+		ID3D12Device* device = GpuContext::Instance().Default();
 
 		//CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 		//rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);

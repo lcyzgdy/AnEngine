@@ -1,4 +1,4 @@
-#include "AssetsDatabase.h"
+﻿#include "AssetsDatabase.h"
 #include "UniqueId.hpp"
 
 #include "StringBuilder.hpp"
@@ -42,21 +42,21 @@ namespace AnEngine::AssetsWrapper
 
 	Mesh* AssetsDatabase::AllocMesh()
 	{
-		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		uint64_t instanceId = UniqueId::Instance().GetUniqueId();
 		m_meshes[instanceId] = make_unique<Mesh>();
 		return m_meshes[instanceId].get();
 	}
 
 	GameObject* AssetsDatabase::AllocPrefab(const std::string& name)
 	{
-		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		uint64_t instanceId = UniqueId::Instance().GetUniqueId();
 		m_prefabs[instanceId] = unique_ptr<GameObject>(new GameObject(name));
 		return m_prefabs[instanceId].get();
 	}
 
 	GameObject* AssetsDatabase::AllocPrefab(std::string&& name)
 	{
-		uint64_t instanceId = UniqueId::Instance()->GetUniqueId();
+		uint64_t instanceId = UniqueId::Instance().GetUniqueId();
 		m_prefabs[instanceId] = unique_ptr<GameObject>(new GameObject(std::move(name)));
 		return m_prefabs[instanceId].get();
 	}

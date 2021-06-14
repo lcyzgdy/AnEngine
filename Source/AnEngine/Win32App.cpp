@@ -1,4 +1,4 @@
-#include "Win32App.h"
+﻿#include "Win32App.h"
 #include <dxgidebug.h>
 #include <D3Dcompiler.h>
 #include "Engine.h"
@@ -20,7 +20,7 @@ namespace AnEngine
 
 		ThrowIfFailed(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(m_dxgiFactory.GetAddressOf())));
 
-		var& gCard = Engine::Instance()->InitializeRender(m_dxgiFactory.Get());
+		var& gCard = Engine::Instance().InitializeRender(m_dxgiFactory.Get());
 
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.BufferCount = m_swapBufferCount;
@@ -73,7 +73,7 @@ namespace AnEngine
 		}
 
 		// AttachSwapChain(m_swapChain, m_swapBufferCount);
-		Engine::Instance()->AttachSwapChain(m_swapChain, m_swapBufferCount);
+		Engine::Instance().AttachSwapChain(m_swapChain, m_swapBufferCount);
 	}
 
 	Win32App::Win32App(HWND hwnd, HINSTANCE hInstance, uint32_t windowWidth, uint32_t windowHeighht, uint32_t swapBufferCount, bool enableHdr,

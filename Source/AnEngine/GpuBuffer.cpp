@@ -1,4 +1,4 @@
-#include "GpuBuffer.h"
+﻿#include "GpuBuffer.h"
 #include "RenderCore.h"
 #include "DescriptorHeap.hpp"
 #include "DMath.hpp"
@@ -25,14 +25,14 @@ namespace AnEngine::RenderCore::Resource
 	}
 
 	GpuBuffer::GpuBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
-		const void* initialData) : m_bufferSize(numElements * elementSize),
+		const void* initialData) : m_bufferSize(numElements* elementSize),
 		m_elementCount(numElements), m_elementSize(elementSize)
 	{
 		m_resourceFlags = D3D12_RESOURCE_FLAG_NONE;
 		m_uav.ptr = S_GpuVirtualAddressUnknown;
 		m_srv.ptr = S_GpuVirtualAddressUnknown;
 
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		//D3D12_RESOURCE_DESC ResourceDesc = DescribeBuffer();
 		//m_usageState = D3D12_RESOURCE_STATE_COMMON;
 		m_state = D3D12_RESOURCE_STATE_GENERIC_READ;
@@ -54,17 +54,10 @@ namespace AnEngine::RenderCore::Resource
 		heapDesc.Properties.Type = D3D12_HEAP_TYPE_UPLOAD;
 		heapDesc.Properties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 		heapDesc.Properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-		heapDesc.Properties.CreationNodeMask = GpuContext::Instance()->Default().GetNodeNum();
-		heapDesc.Properties.VisibleNodeMask = GpuContext::Instance()->Default().GetNodeNum();
-		//heapDesc.Properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		heapDesc.Properties.CreationNodeMask = GpuContext::Instance().Default().GetNodeNum();
+		heapDesc.Properties.VisibleNodeMask = GpuContext::Instance().Default().GetNodeNum();
 		heapDesc.Alignment = 0;
 		heapDesc.Flags = D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE;
-
-		//heapDesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-		/*ThrowIfFailed(device->CreateHeap(&heapDesc, IID_PPV_ARGS(&m_heap_cp)));
-
-		ThrowIfFailed(device->CreatePlacedResource(m_heap_cp.Get(), 0, &desc, m_usageState,
-			nullptr, IID_PPV_ARGS(&m_resource_cp)));*/
 
 		ThrowIfFailed(device->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -97,12 +90,12 @@ namespace AnEngine::RenderCore::Resource
 	{
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & GpuBuffer::GetUav(void) const
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GpuBuffer::GetUav(void) const
 	{
 		return m_uav;
 	}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE & GpuBuffer::GetSrv(void) const
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GpuBuffer::GetSrv(void) const
 	{
 		return m_srv;
 	}
@@ -114,14 +107,14 @@ namespace AnEngine::RenderCore::Resource
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GpuBuffer::CreateConstantBufferView(uint32_t offset, uint32_t size) const
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		size = DMath::AlignUp(size, 16);
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC CBVDesc;
 		CBVDesc.BufferLocation = m_gpuVirtualAddress + (size_t)offset;
 		CBVDesc.SizeInBytes = size;
 
-		D3D12_CPU_DESCRIPTOR_HANDLE hCbv = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		D3D12_CPU_DESCRIPTOR_HANDLE hCbv = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		device->CreateConstantBufferView(&CBVDesc, hCbv);
 		return hCbv;
 	}
@@ -164,7 +157,7 @@ namespace AnEngine::RenderCore::Resource
 		}
 	}
 
-	void GpuUploadBuffer::Allocate(ID3D12Device* device, uint32_t bufferSize, wchar_t * resourceName)
+	void GpuUploadBuffer::Allocate(ID3D12Device* device, uint32_t bufferSize, wchar_t* resourceName)
 	{
 		var uploadHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 
@@ -186,7 +179,7 @@ namespace AnEngine::RenderCore::Resource
 
 namespace AnEngine::RenderCore::Resource
 {
-	ByteAddressBuffer::ByteAddressBuffer(const std::wstring & name, uint32_t numElements, uint32_t elementSize,
+	ByteAddressBuffer::ByteAddressBuffer(const std::wstring& name, uint32_t numElements, uint32_t elementSize,
 		const void* initialData) : GpuBuffer(name, numElements, elementSize, initialData)
 	{
 		//CreateDerivedViews();
@@ -194,7 +187,7 @@ namespace AnEngine::RenderCore::Resource
 
 	void ByteAddressBuffer::CreateDerivedViews()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
@@ -205,7 +198,7 @@ namespace AnEngine::RenderCore::Resource
 
 		if (m_srv.ptr == S_GpuVirtualAddressUnknown)
 		{
-			m_srv = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			m_srv = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		}
 		device->CreateShaderResourceView(m_resource_cp.Get(), &srvDesc, m_uav);
 
@@ -216,7 +209,7 @@ namespace AnEngine::RenderCore::Resource
 		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
 
 		if (m_uav.ptr == S_GpuVirtualAddressUnknown)
-			m_uav = DescriptorHeapAllocator::Instance()->Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			m_uav = DescriptorHeapAllocator::Instance().Allocate(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		device->CreateUnorderedAccessView(m_resource_cp.Get(), nullptr, &uavDesc, m_uav);
 	}
 }

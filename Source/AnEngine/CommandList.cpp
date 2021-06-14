@@ -1,4 +1,4 @@
-#include "CommandList.h"
+﻿#include "CommandList.h"
 #include "RenderCore.h"
 #include "GpuContext.h"
 
@@ -6,7 +6,7 @@ namespace AnEngine::RenderCore
 {
 	CommandList::CommandList(CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type) : m_desc(formatDesc)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		ThrowIfFailed(device->CreateCommandList(formatDesc.nodeMask, type, formatDesc.allocator,
 			formatDesc.pipelineState, IID_PPV_ARGS(&m_commandList)));
 		m_commandList->Close();
@@ -36,7 +36,7 @@ namespace AnEngine::RenderCore
 {
 	CommandAllocator::CommandAllocator(D3D12_COMMAND_LIST_TYPE type) : m_type(type)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		if (!SUCCEEDED(device->CreateCommandAllocator(type, IID_PPV_ARGS(&m_allocator))))
 		{
 			var hr = device->GetDeviceRemovedReason();

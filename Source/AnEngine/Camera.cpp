@@ -1,4 +1,4 @@
-#include "Camera.h"
+﻿#include "Camera.h"
 #include "RenderCore.h"
 #include "ThreadPool.hpp"
 #include "Screen.h"
@@ -27,7 +27,10 @@ namespace AnEngine::Game
 
 	void Camera::Update()
 	{
-		if (m_postProcessShader != nullptr) PostProcess();
+		if (m_postProcessShader != nullptr)
+		{
+			PostProcess();
+		}
 		m_colorBuffers.Swap();
 		BlendBuffer(m_colorBuffers.GetFront());
 
@@ -79,25 +82,25 @@ namespace AnEngine::Game
 	Camera::Camera() : ObjectBehaviour(), m_clearFlag(ClearFlags::SkyBox)
 	{
 		{
-			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::Instance()->Width(), Screen::Instance()->Height()));
+			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::Instance().Width(), Screen::Instance().Height()));
 			colorBuffer->SetAsRtv();
 
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 		{
-			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::Instance()->Width(), Screen::Instance()->Height()));
+			var colorBuffer = new ColorBuffer(ColorBuffer::DescribeAsGBuffer(Screen::Instance().Width(), Screen::Instance().Height()));
 			colorBuffer->SetAsRtv();
 
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 		{
-			var depthBuffer = new DepthBuffer(Screen::Instance()->Width(), Screen::Instance()->Height());
+			var depthBuffer = new DepthBuffer(Screen::Instance().Width(), Screen::Instance().Height());
 			depthBuffer->SetAsDsv();
 
 			m_depthBuffers.ManageBuffer(depthBuffer);
 		}
 		{
-			var depthBuffer = new DepthBuffer(Screen::Instance()->Width(), Screen::Instance()->Height());
+			var depthBuffer = new DepthBuffer(Screen::Instance().Width(), Screen::Instance().Height());
 			depthBuffer->SetAsDsv();
 
 			m_depthBuffers.ManageBuffer(depthBuffer);
@@ -107,14 +110,14 @@ namespace AnEngine::Game
 	Camera::Camera(ClearFlags clearFlag) : ObjectBehaviour(), m_clearFlag(clearFlag)
 	{
 		{
-			var colorBuffer = new ColorBuffer(L"", Screen::Instance()->Width(),
-				Screen::Instance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+			var colorBuffer = new ColorBuffer(L"", Screen::Instance().Width(),
+				Screen::Instance().Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 			colorBuffer->SetAsRtv();
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}
 		{
-			var colorBuffer = new ColorBuffer(L"", Screen::Instance()->Width(),
-				Screen::Instance()->Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
+			var colorBuffer = new ColorBuffer(L"", Screen::Instance().Width(),
+				Screen::Instance().Height(), 1, 4, DXGI_FORMAT_R8G8B8A8_UNORM);
 			colorBuffer->SetAsRtv();
 			m_colorBuffers.ManageBuffer(colorBuffer);
 		}

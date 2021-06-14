@@ -116,7 +116,7 @@ namespace AnEngine::AssetsWrapper
 			for (int i = 0; i < meshCount; i++)		// FBX包含的网格数量
 			{
 				aiMesh* fbxMesh = scene->mMeshes[i];
-				Mesh* pMesh = AssetsDatabase::Instance()->AllocMesh();
+				Mesh* pMesh = AssetsDatabase::Instance().AllocMesh();
 				for (uint32_t j = 0; j < fbxMesh->mNumVertices; j++)
 				{
 					pMesh->vertices.emplace_back(Vector3(fbxMesh->mVertices[j].x, fbxMesh->mVertices[j].y, fbxMesh->mVertices[j].z));
@@ -173,7 +173,7 @@ namespace AnEngine::AssetsWrapper
 			return LoadAssetsStatusCode::NoSubMesh;
 		}
 		// var go = AssetsDatabase::Instance()->AllocPrefab(scene->mRootNode->mName.C_Str());
-		var go = AssetsDatabase::Instance()->AllocPrefab(fsFilePath.filename().generic_string());
+		var go = AssetsDatabase::Instance().AllocPrefab(fsFilePath.filename().generic_string());
 		var rootTrans = go->GetComponent<Transform>();
 		var&& [pos, rot, scl] = AssimpMatrixToTRS(scene->mRootNode->mTransformation);
 		rootTrans->LocalPosition(pos);

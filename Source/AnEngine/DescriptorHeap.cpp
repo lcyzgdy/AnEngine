@@ -110,7 +110,7 @@ namespace AnEngine::RenderCore
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapAllocator::Allocate(D3D12_DESCRIPTOR_HEAP_TYPE type, uint32_t count)
 	{
 		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-		ID3D12Device* device = GpuContext::Instance()->Default().GetDevice();
+		ID3D12Device* device = GpuContext::Instance().Default().GetDevice();
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{
@@ -134,7 +134,7 @@ namespace AnEngine::RenderCore
 		uint32_t count, D3D12_DESCRIPTOR_HEAP_FLAGS flag)
 	{
 		// ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-		ID3D12Device* device = GpuContext::Instance()->Default().GetDevice();
+		ID3D12Device* device = GpuContext::Instance().Default().GetDevice();
 		lock_guard<mutex> lock(m_mutex);
 		if (m_currentHeap == nullptr || m_remainingFreeHandles[type] < count)
 		{

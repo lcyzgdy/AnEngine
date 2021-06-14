@@ -18,12 +18,15 @@ namespace AnEngine::Utility
 		virtual ~Singleton() = default;
 
 	public:
-		__forceinline static T* Instance();
+		__forceinline static T& Instance();
 	};
 
 
-#define DECLEAR_UNIQUE_OBJ(_TYPE) _TYPE* _TYPE::s_uniqueObj = nullptr
-#define DECLEAR_INSTANCE(_TYPE) template<> _TYPE*  AnEngine::Utility::Singleton<_TYPE>::Instance() { if (s_uniqueObj == nullptr) { s_uniqueObj = new _TYPE(); } return s_uniqueObj; }
+#define DECLEAR_UNIQUE_OBJ(_TYPE) _TYPE* _TYPE::s_uniqueObj = nullptr				// 延迟实例化
+#define DECLEAR_INSTANCE(_TYPE) template<> _TYPE&  AnEngine::Utility::Singleton<_TYPE>::Instance() { if (s_uniqueObj == nullptr) { s_uniqueObj = new _TYPE(); } return *s_uniqueObj; }
+
+
+#define DECLEAR_UNIQUE_OBJ_IMM(_TYPE) _TYPE* _TYPE::s_uniqueObj = new _TYPE()		// 立即实例化
 }
 
 #endif // !__SINGLETON_H__

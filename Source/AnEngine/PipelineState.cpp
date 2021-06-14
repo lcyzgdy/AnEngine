@@ -1,4 +1,4 @@
-#include <mutex>
+﻿#include <mutex>
 
 #include "PipelineState.h"
 #include "Hash.hpp"
@@ -192,7 +192,7 @@ namespace AnEngine::RenderCore
 
 	void GraphicPSO::Finalize()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)), R_GetGpuError);
 	}
 
@@ -223,7 +223,7 @@ namespace AnEngine::RenderCore
 		m_psoDesc.VS = desc.VS;*/
 		m_psoDesc = desc;
 
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		ThrowIfFailed(device->CreateGraphicsPipelineState(&m_psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 	}
 
@@ -256,7 +256,7 @@ namespace AnEngine::RenderCore
 	void ComputePSO::Finalize()
 	{
 		//m_psoDesc.pRootSignature = m_rootSignature->GetRootSignature();
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		if (m_psoDesc.pRootSignature == nullptr) ERRORBREAK("compute_rootsignature");
 
 		/*size_t hashCode = Utility::GetHash(&m_psoDesc);

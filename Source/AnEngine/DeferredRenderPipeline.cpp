@@ -10,7 +10,7 @@ namespace AnEngine::RenderCore
 {
 	void DeferredRenderPipeline::OnRender(std::mutex& sceneResMutex)
 	{
-		FenceContext::Instance()->WaitAllFence();
+		FenceContext::Instance().WaitAllFence();
 
 		/* GBuffer阶段，渲染所有摄像机的 GBuffer、Depth、Normal */
 		//lock_guard<mutex> lock(sceneResMutex);
@@ -21,7 +21,7 @@ namespace AnEngine::RenderCore
 		DepthPreLight();
 
 		/* 阴影 */
-		FenceContext::Instance()->WaitAllFence();
+		FenceContext::Instance().WaitAllFence();
 		Shadow();
 
 		/* 反射 */
@@ -31,7 +31,7 @@ namespace AnEngine::RenderCore
 		/* 天空盒 */
 
 		/* 全屏后处理 */
-		FenceContext::Instance()->WaitAllFence();
+		FenceContext::Instance().WaitAllFence();
 		PostProcess();
 
 		/* 绘制UI组件 */

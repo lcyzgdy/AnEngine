@@ -22,14 +22,14 @@ namespace AnEngine::RenderCore::UI
 
 	void GraphicsCard2D::Initialize()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		uint32_t dxgiFactoryFlags = 0;
 		uint32_t d3d11DeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 		D2D1_FACTORY_OPTIONS d2dFactoryOptions = {};
 
 		ComPtr<ID3D11Device> d3d11Device;
 		ThrowIfFailed(D3D11On12CreateDevice(device, d3d11DeviceFlags, nullptr, 0,
-			reinterpret_cast<IUnknown * const *>(GpuContext::Instance()->Default().GetCommandQueueAddress()), 1, 0, &d3d11Device,
+			reinterpret_cast<IUnknown* const*>(GpuContext::Instance().Default().GetCommandQueueAddress()), 1, 0, &d3d11Device,
 			&m_d3d11DeviceContext, nullptr));
 
 		ThrowIfFailed(d3d11Device.As(&m_d3d11On12Device));

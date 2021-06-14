@@ -59,6 +59,12 @@
     <Filter Include="Game\System">
       <UniqueIdentifier>{cd908e9f-7474-4783-b72b-9b4a95c4215d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{a5e5a652-e979-47e3-a153-5ef133912ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Interface">
+      <UniqueIdentifier>{eef63018-793f-4d38-8467-58c15d0bc699}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCube.h">
@@ -332,6 +338,12 @@
     <ClInclude Include="MeshRenderSystem.h">
       <Filter>Game\System</Filter>
     </ClInclude>
+    <ClInclude Include="FencePool.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="IPool.h">
+      <Filter>Common\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawCube.cpp">
@@ -503,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="DebugLog.cpp">
       <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="FencePool.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

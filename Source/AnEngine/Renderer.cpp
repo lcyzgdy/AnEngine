@@ -1,4 +1,4 @@
-#include "Renderer.h"
+﻿#include "Renderer.h"
 #include "CommandContext.h"
 #include "RenderCore.h"
 #include "GameObject.h"
@@ -67,15 +67,15 @@ namespace AnEngine::Game
 	}
 
 	TrangleRender::TrangleRender() : Renderer(), m_viewport(0.0f, 0.0f,
-		static_cast<float>(Screen::Instance()->Width()), static_cast<float>(Screen::Instance()->Height())),
-		m_scissorRect(0, 0, static_cast<long>(Screen::Instance()->Width()),
-			static_cast<long>(Screen::Instance()->Height()))
+		static_cast<float>(Screen::Instance().Width()), static_cast<float>(Screen::Instance().Height())),
+		m_scissorRect(0, 0, static_cast<long>(Screen::Instance().Width()),
+			static_cast<long>(Screen::Instance().Height()))
 	{
 	}
 
 	void TrangleRender::LoadAsset()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 
 		m_vertexShader = new VertexShader(L"framebuffer_shaders.hlsl");
 		m_pixelShader = new PixelShader(L"framebuffer_shaders.hlsl");

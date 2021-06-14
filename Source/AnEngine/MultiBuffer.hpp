@@ -1,22 +1,27 @@
-#pragma once
+﻿#pragma once
 #ifndef __MULTIBUFFER_H__
 #define __MULTIBUFFER_H__
 
 #include "ColorBuffer.h"
 #include "Fence.h"
+#include<exception>
 
 namespace AnEngine::RenderCore::Resource
 {
+	class MultiBufferFullException : std::exception
+	{
+	public:
+		MultiBufferFullException() : exception("Multi buffer is full")
+		{
+		}
+	};
+
 	template<int _N, class _Ty>
 	class MultiBuffer
 	{
 		_Ty* m_buffer[_N];
 		uint32_t m_index;
 		bool m_ok;
-
-		//Fence* m_fence;
-		//uint64_t m_fenceValues[_N];
-		//HANDLE m_fenceEvent;
 
 	public:
 		MultiBuffer() : m_index(0), m_ok(false)
@@ -30,7 +35,10 @@ namespace AnEngine::RenderCore::Resource
 
 		void ManageBuffer(_Ty* buffer)
 		{
-			if (m_ok) throw MultiBufferFullException();
+			if (m_ok)
+			{
+				throw MultiBufferFullException();
+			}
 			m_buffer[m_index] = buffer;
 			if (m_index == _N - 1)
 			{
@@ -55,16 +63,6 @@ namespace AnEngine::RenderCore::Resource
 		_Ty* GetBack()
 		{
 			return m_buffer[(m_index + 1) % _N];
-		}
-	};
-
-#include<exception>
-
-	class MultiBufferFullException : std::exception
-	{
-	public:
-		MultiBufferFullException() : exception("Multi buffer is full")
-		{
 		}
 	};
 }

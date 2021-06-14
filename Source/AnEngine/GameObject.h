@@ -9,6 +9,7 @@
 #include <queue>
 #include <set>
 #include "Archetype.h"
+#include "MetatypeHash.hpp"
 
 
 namespace AnEngine::AssetsWrapper
@@ -64,7 +65,7 @@ namespace AnEngine::Game
 		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<ComponentBase, _Ty>::value, bool>::type>
 		_Ty* GetComponent()
 		{
-			const double typeCode = typeid(_Ty).hash_code();
+			constexpr double typeCode = MetatypeHash::hash<_Ty>();
 			if (m_component.find(typeCode) != m_component.end())
 			{
 				return (_Ty*)m_component[typeCode];
@@ -75,7 +76,7 @@ namespace AnEngine::Game
 		template<typename _Ty, typename = typename std::enable_if<std::is_base_of<ComponentBase, _Ty>::value, bool>::type>
 		_Ty* AddComponent()
 		{
-			const double typeCode = typeid(_Ty).hash_code();
+			constexpr double typeCode = MetatypeHash::hash<_Ty>();
 			if (m_component.find(typeCode) != m_component.end())
 			{
 				return (_Ty*)m_component[typeCode];
@@ -93,9 +94,10 @@ namespace AnEngine::Game
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			if (m_behaviour.find(typeid(T).hash_code()) != m_behaviour.end())
+			constexpr double typeCode = MetatypeHash::hash<T>();
+			if (m_behaviour.find(typeCode) != m_behaviour.end())
 			{
-				return m_behaviour[typeid(T).hash_code()];
+				return m_behaviour[typeCode];
 			}
 			return nullptr;
 		}
@@ -107,7 +109,7 @@ namespace AnEngine::Game
 			{
 				throw std::exception("Type is not derived ObjectBehaviour");
 			}
-			const double typeCode = typeid(T).hash_code();
+			constexpr double typeCode = MetatypeHash::hash<T>();
 			if (m_behaviour.find(typeCode) != m_behaviour.end())
 			{
 				return m_behaviour[typeCode];

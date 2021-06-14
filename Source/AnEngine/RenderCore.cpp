@@ -37,7 +37,7 @@ namespace AnEngine::RenderCore
 	{
 		// var hr = r_graphicsCard[0]->GetDevice()->GetDeviceRemovedReason();
 		// 令(device = r_graphicsCard[0]->GetDevice());
-		令(device = GpuContext::Instance()->Default().GetDevice());
+		令(device = GpuContext::Instance().Default().GetDevice());
 		var hr = device->GetDeviceRemovedReason();
 	};
 	/*
@@ -300,7 +300,7 @@ void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiForma
 		iCommandList->ClearRenderTargetView(dstColorBuffer->GetRtv(), clearColor, 0, nullptr);
 		iCommandList->Close();
 		ID3D12CommandList* ppcommandList[] = { iCommandList };
-		GpuContext::Instance()->Default().GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
+		GpuContext::Instance().Default().GetCommandQueue()->ExecuteCommandLists(_countof(ppcommandList), ppcommandList);
 
 		GraphicsContext::Push(commandList, commandAllocator);
 	}
@@ -354,11 +354,11 @@ void InitializeSwapChain(int width, int height, HWND hwnd, DXGI_FORMAT dxgiForma
 
 	void WaitForGpu()
 	{
-		var[fence] = FenceContext::Instance()->GetOne();
+		var[fence] = FenceContext::Instance().GetOne();
 		var iFence = fence->GetFence();
 		uint64_t fenceValue = fence->GetFenceValue();
 		fenceValue++;
-		GpuContext::Instance()->Default().GetCommandQueue()->Signal(iFence, fenceValue);
+		GpuContext::Instance().Default().GetCommandQueue()->Signal(iFence, fenceValue);
 		fence->WaitForValue(fenceValue);
 	}
 

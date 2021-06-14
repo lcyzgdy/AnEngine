@@ -1,4 +1,4 @@
-#include "DepthBuffer.h"
+﻿#include "DepthBuffer.h"
 #include "RenderCore.h"
 #include "GpuContext.h"
 
@@ -101,23 +101,9 @@ namespace AnEngine::RenderCore::Resource
 	DepthBuffer::DepthBuffer(uint32_t width, uint32_t height, float clearDepth) :
 		PixelBuffer(width, height, 1, DXGI_FORMAT_R8G8B8A8_UNORM), m_clearDepth(clearDepth)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES | D3D12_HEAP_FLAG_SHARED_CROSS_ADAPTER,
 			&DescribeAsDepthBuffer(), D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(m_resource_cp.GetAddressOf()));
 	}
-
-	/*void DepthBuffer::Create(const wstring& name, uint32_t _width, uint32_t _height,
-		DXGI_FORMAT& format, Heap::DescriptorHeapAllocator* descAllocator,
-		uint32_t numSamples, D3D12_GPU_VIRTUAL_ADDRESS vidMemPtr)
-	{
-		ID3D12Device* device = r_graphicsCard[0]->GetDevice();
-
-		D3D12_RESOURCE_DESC desc = DescribeTex2D(_width, _height, 1, 1, format, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
-		desc.SampleDesc.Count = numSamples;
-		D3D12_CLEAR_VALUE clearValue;
-		clearValue.Format = format;
-		CreateTextureResource(device, name, desc, clearValue, vidMemPtr);
-		CreateDerviedViews(device, format, descAllocator);
-	}*/
 }

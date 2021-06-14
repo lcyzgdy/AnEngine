@@ -1,4 +1,4 @@
-#include "Engine.h"
+﻿#include "Engine.h"
 #include "RenderCore.h"
 #include "Screen.h"
 #include "Input.h"
@@ -20,9 +20,9 @@ namespace AnEngine
 {
 	void Engine::UpdateBottom()
 	{
-		BaseInput::Instance()->ZeroInputState();
-		DTimer::Instance()->Tick(nullptr);
-		BaseInput::Instance()->Update();
+		BaseInput::Instance().ZeroInputState();
+		DTimer::Instance().Tick(nullptr);
+		BaseInput::Instance().Update();
 	}
 
 	void Engine::UpdateSystem()
@@ -47,8 +47,8 @@ namespace AnEngine
 	{
 		if (m_initialized) return;
 		m_initialized = true;
-		BaseInput::Instance()->Initialize(win32App.m_hwnd, win32App.m_hInstance);
-		Screen::Instance()->Initialize(win32App.m_windowWidth, win32App.m_windowHeight);
+		BaseInput::Instance().Initialize(win32App.m_hwnd, win32App.m_hInstance);
+		Screen::Instance().Initialize(win32App.m_windowWidth, win32App.m_windowHeight);
 	}
 
 	void Engine::Release()
@@ -57,18 +57,18 @@ namespace AnEngine
 		m_initialized = false;
 		m_running = false;
 		SceneManager::ActiveScene()->onUnload();
-		BaseInput::Instance()->Release();
+		BaseInput::Instance().Release();
 	}
 
 	const RenderCore::GraphicsCard& Engine::InitializeRender(IDXGIFactory6* dxgiFactory)
 	{
-		RenderCore::GpuContext::Instance()->Initialize(dxgiFactory);
-		return RenderCore::GpuContext::Instance()->Default();
+		RenderCore::GpuContext::Instance().Initialize(dxgiFactory);
+		return RenderCore::GpuContext::Instance().Default();
 	}
 
 	void Engine::AttachSwapChain(const Microsoft::WRL::ComPtr<IDXGISwapChain4>& swapChain, uint32_t bufferCount)
 	{
-		RenderCore::GpuContext::Instance()->AttachSwapChain(swapChain, bufferCount);
+		RenderCore::GpuContext::Instance().AttachSwapChain(swapChain, bufferCount);
 	}
 
 	void Engine::StartScene()
@@ -82,11 +82,11 @@ namespace AnEngine
 				double totalTime = 0;
 				while (this->m_running)
 				{
-					deltaTime = DTimer::Instance()->GetTotalSeconds() - totalTime;
+					deltaTime = DTimer::Instance().GetTotalSeconds() - totalTime;
 					if (deltaTime > 1.0 / 60.0)
 					{
 						// 限制最高帧率为60FPS，未来这里应该修改为可配置。
-						totalTime = DTimer::Instance()->GetTotalSeconds();
+						totalTime = DTimer::Instance().GetTotalSeconds();
 						// 使用大锁的情况下不需要放另一个线程进行等待。
 						//Utility::ThreadPool::Commit([this]()->void
 						//{

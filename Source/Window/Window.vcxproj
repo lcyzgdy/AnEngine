@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Source\AnEngine\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Source\AnEngine\;$(SolutionDir)Source\3rdparty\ScatteredUtils;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Build\obj\$(Platform)\$(Configuration)\AnEngine\;$(LibraryPath)</LibraryPath>

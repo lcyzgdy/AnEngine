@@ -1,4 +1,4 @@
-#include"CommandQueue.h"
+﻿#include"CommandQueue.h"
 
 namespace AnEngine::RenderCore
 {
@@ -21,7 +21,7 @@ namespace AnEngine::RenderCore
 		return m_cp_commandQueue.Get();
 	}
 
-	ID3D12CommandQueue * CommandQueue::GetCommandQueue()
+	ID3D12CommandQueue* CommandQueue::GetCommandQueue()
 	{
 		return m_cp_commandQueue.Get();
 	}

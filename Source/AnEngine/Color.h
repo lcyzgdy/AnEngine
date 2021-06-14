@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __COLOR_H__
 #define __COLOR_H__
 #include <DirectXMath.h>
@@ -9,9 +9,9 @@ namespace AnEngine
 {
 	class DLL_API Color
 	{
-		//XMVECTOR m_color;
 		DirectX::XMFLOAT4 m_color;
 		bool m_hdr;
+		bool m_linear;		// 是否为线性空间
 		float m_hdrIntensity;
 
 		Color(DirectX::XMVECTOR vec);
@@ -22,15 +22,14 @@ namespace AnEngine
 		Color(const Color& color);
 		Color(float r, float g, float b, float a = 1.0f);
 		Color(bool enableHdr, float hdrIntensity, float r, float g, float b, float a = 1.0f);
-		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color(uint32_t rgbaLittleEndian);
 
 		~Color() = default;
 
-		float GetR() const;
-		float GetG() const;
-		float GetB() const;
-		float GetA() const;
+		inline const float GetR() const { return m_color.x; }
+		inline const float GetG() const { return m_color.y; };
+		inline const float GetB() const { return m_color.z; };
+		inline const float GetA() const { return m_color.w; };
 
 		//void R(float r) const;
 		//void G(float g) const;
@@ -40,10 +39,10 @@ namespace AnEngine
 		bool operator==(const Color& rhs) const;
 		bool operator!=(const Color& rhs) const;
 
-		void SetR(float r);
-		void SetG(float g);
-		void SetB(float b);
-		void SetA(float a);
+		inline void SetR(float r) { m_color.x = r; }
+		inline void SetG(float g) { m_color.y = g; };
+		inline void SetB(float b) { m_color.z = b; };
+		inline void SetA(float a) { m_color.w = a; };
 
 		float* GetPtr(void);
 		//float& operator[](int index);
@@ -73,22 +72,20 @@ namespace AnEngine
 
 	class Color32
 	{
-		//XMVECTOR m_color;
 		DirectX::XMINT4 m_color;
 	public:
 		Color32() = default;
 		Color32(DirectX::XMVECTOR vec);
 		Color32(const DirectX::XMVECTORF32& vec);
 		Color32(int r, int g, int b, int a = 255);
-		//Color(uint16_t r, uint16_t g, uint16_t b, uint16_t a = 255, uint16_t bitDepth = 8);
 		explicit Color32(uint32_t rgbaLittleEndian);
 
 		~Color32() = default;
 
-		int R() const;
-		int G() const;
-		int B() const;
-		int A() const;
+		inline const int R() const { return m_color.x; }
+		inline const int G() const { return m_color.y; }
+		inline const int B() const { return m_color.z; }
+		inline const int A() const { return m_color.w; }
 
 		bool operator==(const Color32& rhs) const;
 		bool operator!=(const Color32& rhs) const;
@@ -99,7 +96,6 @@ namespace AnEngine
 		void SetA(int a);
 
 		int* GetPtr(void);
-		//float& operator[](int index);
 
 		void SetRGB(int r, int g, int b);
 
@@ -112,8 +108,6 @@ namespace AnEngine
 		uint32_t R8G8B8A8() const;
 
 		uint32_t R11G11B10F(bool RoundToEven = false) const;
-
-		//operator XMVECTOR() const;
 	};
 }
 

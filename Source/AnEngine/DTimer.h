@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __DTIMER_H__
 #define __DTIMER_H__
 
@@ -38,8 +38,6 @@ namespace AnEngine
 		~DTimer();
 
 	public:
-		//static DTimer* Instance();
-
 		const uint64_t GetElapsedTicks();
 		const double GetElapsedSeconds();
 		// 获取自上次调用以来所经过的时间
@@ -82,9 +80,9 @@ namespace AnEngine
 	class Timer
 	{
 	public:
-		static inline uint64_t _vectorcall GetTotalTicks() { return DTimer::Instance()->GetTotalTicks(); }
-		static inline double Timer::GetTotalSeconds() { return DTimer::Instance()->GetTotalSeconds(); }
-		static inline uint32_t GetFPS() { return DTimer::Instance()->GetFramePerSecond(); }
+		static inline uint64_t _vectorcall GetTotalTicks() { return DTimer::Instance().GetTotalTicks(); }
+		static inline double Timer::GetTotalSeconds() { return DTimer::Instance().GetTotalSeconds(); }
+		static inline uint32_t GetFPS() { return DTimer::Instance().GetFramePerSecond(); }
 	};
 }
 #endif // !__DTIMER_H__

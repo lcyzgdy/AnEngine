@@ -1,4 +1,4 @@
-#include "SampleMeshRender.h"
+﻿#include "SampleMeshRender.h"
 #include "GpuContext.h"
 #include "Screen.h"
 #include "DescriptorHeap.hpp"
@@ -21,21 +21,21 @@ namespace AnEngine::Game
 
 	void SampleMeshRenderer::LoadAsset()
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 		var[commandList, commandAllocator] = GraphicsContext::GetOne();
 		var iList = commandList->GetCommandList();
 		var iAllocator = commandAllocator->GetAllocator();
 		iAllocator->Reset();
 		iList->Reset(iAllocator, nullptr);
 
-		var[m_dsvHeap, m_dsvHandle, m_dsvGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		var[m_dsvHeap, m_dsvHandle, m_dsvGpuHandle] = DescriptorHeapAllocator::Instance().Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
 		const uint32_t nullSrvCount = 2;
 		const uint32_t cbvCount = 2;
 		const uint32_t srvCount = _countof(SampleAssets::Textures);
-		var[m_cbvSrvHeap, m_cbvSrvHandle, m_cbvSrvGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+		var[m_cbvSrvHeap, m_cbvSrvHandle, m_cbvSrvGpuHandle] = DescriptorHeapAllocator::Instance().Allocate2(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
 			nullSrvCount + cbvCount + srvCount, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
-		var[m_samplerHeap, m_samplerHandle, m_samplerGpuHandle] = DescriptorHeapAllocator::Instance()->Allocate2(
+		var[m_samplerHeap, m_samplerHandle, m_samplerGpuHandle] = DescriptorHeapAllocator::Instance().Allocate2(
 			D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, 2, D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
 		{
 			D3D12_FEATURE_DATA_ROOT_SIGNATURE featureData = {};
@@ -121,8 +121,8 @@ namespace AnEngine::Game
 			m_psoShadowMap->Finalize(psoDesc);
 		}
 		{
-			CD3DX12_RESOURCE_DESC shadowTextureDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<uint32_t>(Screen::Instance()->Width()),
-				static_cast<uint32_t>(Screen::Instance()->Height()), 1, 1, DXGI_FORMAT_D32_FLOAT, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
+			CD3DX12_RESOURCE_DESC shadowTextureDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<uint32_t>(Screen::Instance().Width()),
+				static_cast<uint32_t>(Screen::Instance().Height()), 1, 1, DXGI_FORMAT_D32_FLOAT, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
 				D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL | D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE);
 
 			D3D12_CLEAR_VALUE clearValue;
@@ -264,8 +264,8 @@ namespace AnEngine::Game
 		//ID3D12CommandList* ppCommandLists[] = { iList };
 		//r_graphicsCard[0]->ExecuteSync(_countof(ppCommandLists), ppCommandLists);
 
-		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::Instance()->Width()),
-			static_cast<UINT>(Screen::Instance()->Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
+		CD3DX12_RESOURCE_DESC shadowTexDesc(D3D12_RESOURCE_DIMENSION_TEXTURE2D, 0, static_cast<UINT>(Screen::Instance().Width()),
+			static_cast<UINT>(Screen::Instance().Height()), 1, 1, DXGI_FORMAT_R32_TYPELESS, 1, 0, D3D12_TEXTURE_LAYOUT_UNKNOWN,
 			D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 
 		D3D12_CLEAR_VALUE clearValue;
@@ -306,7 +306,7 @@ namespace AnEngine::Game
 
 	void SampleMeshRenderer::OnRender(ID3D12GraphicsCommandList* iList, ID3D12CommandAllocator* iAllocator)
 	{
-		ID3D12Device* device = GpuContext::Instance()->Default();
+		ID3D12Device* device = GpuContext::Instance().Default();
 
 		ThrowIfFailed(iAllocator->Reset());
 		ThrowIfFailed(iList->Reset(iAllocator, m_pso->GetPSO()));

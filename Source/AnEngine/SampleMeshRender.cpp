@@ -2,7 +2,7 @@
 #include "GpuContext.h"
 #include "Screen.h"
 #include "DescriptorHeap.hpp"
-#include "CommandContext.h"
+#include "Graphics/CommandContext.h"
 #include "CommonState.h"
 
 using namespace std;

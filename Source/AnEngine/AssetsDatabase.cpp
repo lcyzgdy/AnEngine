@@ -1,7 +1,7 @@
 ﻿#include "AssetsDatabase.h"
 #include "UniqueId.hpp"
 
-#include "StringBuilder.hpp"
+#include "3rdparty/StringBuilder.hpp"
 
 
 using namespace std;

@@ -2,7 +2,7 @@
 #ifndef __COMMANDLIST_H__
 #define __COMMANDLIST_H__
 
-#include"DX.h"
+#include "../DX.h"
 
 namespace AnEngine::RenderCore
 {

@@ -183,8 +183,8 @@ class DrawTriangle :public D3D12AppBase, public D3D12Base
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	// 应用程序资源
 
-	vector<Vertex> vertex;
-	stack<int> vertexIndexStack;
+	std::vector<Vertex> vertex;
+	std::stack<int> vertexIndexStack;
 
 	float Cross(Vertex& a, Vertex& b);
 

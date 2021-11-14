@@ -2,7 +2,7 @@
 #ifndef __FENCECONTEXT_H__
 #define __FENCECONTEXT_H__
 
-#include "CommandContext.h"
+#include "Graphics/CommandContext.h"
 #include "Singleton.h"
 
 namespace AnEngine::RenderCore

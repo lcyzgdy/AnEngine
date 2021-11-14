@@ -50,7 +50,7 @@ void NBody::OnUpdate()
 {
 	WaitForSingleObjectEx(swapChainEvent, 100, false);
 	//timer.Tick(nullptr);
-	DTimer::Instance()->Tick(nullptr);
+	DTimer::Instance().Tick(nullptr);
 	//camera.OnUpdate(static_cast<float>(timer.GetElapsedSeconds()));
 	// camera.OnUpdate(static_cast<float>(DTimer::Instance()->GetElapsedSeconds()));
 

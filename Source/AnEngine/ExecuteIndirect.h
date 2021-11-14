@@ -121,7 +121,7 @@ class ExecuteIndirect :public D3D12AppBase, public D3D12Base
 	// 计数器必须在4K边界上对齐，因此我们填充命令缓冲区（如果需要），使得计数器将放置在缓冲区中的有效位置。
 
 public:
-	ExecuteIndirect(const HWND _hwnd, const UINT _width, const UINT _height, const wstring& _title);
+	ExecuteIndirect(const HWND _hwnd, const UINT _width, const UINT _height, const std::wstring& _title);
 	~ExecuteIndirect();
 
 	virtual void OnInit();

@@ -1,6 +1,6 @@
 #include "GpuContext.h"
 #include "VertexBuffer.h"
-#include "CommandContext.h"
+#include "Graphics/CommandContext.h"
 #include "d3dx12.h"
 using namespace AnEngine::RenderCore;
 

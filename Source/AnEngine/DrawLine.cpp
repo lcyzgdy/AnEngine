@@ -38,17 +38,17 @@ void DrawLine::OnRelease()
 
 void DrawLine::OnUpdate()
 {
-	if (BaseInput::Instance()->GetMouseButton(0))
+	if (BaseInput::Instance().GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::Instance()->GetMouseButtonDown(0))
+		if (BaseInput::Instance().GetMouseButtonDown(0))
 		{
 			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		auto pos = BaseInput::Instance()->GetM128MousePosition();
+		auto pos = BaseInput::Instance().GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -355,17 +355,17 @@ void DrawLineWithWu::OnRelease()
 
 void DrawLineWithWu::OnUpdate()
 {
-	if (BaseInput::Instance()->GetMouseButton(0))
+	if (BaseInput::Instance().GetMouseButton(0))
 	{
 		Vertex v;
 		//v.color = { 0.5f,0.1f,0.0f,1.0f };
-		if (BaseInput::Instance()->GetMouseButtonDown(0))
+		if (BaseInput::Instance().GetMouseButtonDown(0))
 		{
 			v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 			(*vertex.begin()).color = { Random(0.0f,1.0f), Random(0.0f,1.0f),Random(0.0f,1.0f),1.0f };
 		}
 		else v.color = (*vertex.rbegin()).color;
-		var pos = BaseInput::Instance()->GetM128MousePosition();
+		var pos = BaseInput::Instance().GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		*(vertex.rbegin()) = v;
@@ -748,11 +748,11 @@ void DrawTriangle::OnRelease()
 
 void DrawTriangle::OnUpdate()
 {
-	if (BaseInput::Instance()->GetMouseButtonDown(0))
+	if (BaseInput::Instance().GetMouseButtonDown(0))
 	{
 		Vertex v;
 		v.color = { Random(0.0f,1.0f), Random(0.0f,1.0f) ,Random(0.0f,1.0f) ,1.0f };
-		auto pos = BaseInput::Instance()->GetM128MousePosition();
+		auto pos = BaseInput::Instance().GetM128MousePosition();
 
 		v.position = XMFLOAT3(pos.m128_f32[0], pos.m128_f32[1], 0.0f);
 		vertex.push_back(v);

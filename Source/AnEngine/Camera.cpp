@@ -2,7 +2,7 @@
 #include "RenderCore.h"
 #include "ThreadPool.hpp"
 #include "Screen.h"
-#include "CommandContext.h"
+#include "Graphics/CommandContext.h"
 #include "DTimer.h"
 #include "CommonState.h"
 

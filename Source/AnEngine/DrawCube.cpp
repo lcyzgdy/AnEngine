@@ -15,10 +15,10 @@ DrawCube::DrawCube(const HWND _hwnd, const uint32_t _width, const uint32_t _heig
 
 void DrawCube::OnInit()
 {
-	camera.OnInit({ 0.0f, 0.0f, 5.0f });
-	camera.SetMoveSpeed(1.0f);
+	// camera.OnInit({ 0.0f, 0.0f, 5.0f });
+	// camera.SetMoveSpeed(1.0f);
 
-	projectionMatrix = camera.GetProjectionMatrix(0.8f, aspectRatio);
+	// projectionMatrix = camera.GetProjectionMatrix(0.8f, aspectRatio);
 
 	InitializePipeline();
 	InitializeAssets();
@@ -35,8 +35,8 @@ void DrawCube::OnUpdate()
 {
 	WaitForSingleObjectEx(swapChainEvent, 100, FALSE);
 
-	DTimer::Instance()->Tick(NULL);
-	camera.OnUpdate(static_cast<float>(DTimer::Instance()->GetElapsedSeconds()));
+	DTimer::Instance().Tick(NULL);
+	// camera.OnUpdate(static_cast<float>(DTimer::Instance().GetElapsedSeconds()));
 }
 
 void DrawCube::OnRender()
@@ -192,7 +192,7 @@ void DrawCube::InitializeAssets()
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, sizeof(XMFLOAT3), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, sizeof(DirectX::XMFLOAT3), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};

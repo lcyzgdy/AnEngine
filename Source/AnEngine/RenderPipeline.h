@@ -2,7 +2,7 @@
 #ifndef __RENDERPIPELINE_H__
 #define __RENDERPIPELINE_H__
 
-#include "CommandContext.h"
+#include "Graphics/CommandContext.h"
 #include "FenceContext.h"
 #include "RenderPipelineType.h"
 #include "onwind.h"

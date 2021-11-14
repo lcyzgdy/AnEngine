@@ -1,6 +1,7 @@
 #include "ExecuteIndirect.h"
 #include <string>
 
+using namespace std;
 using namespace Microsoft::WRL;
 using namespace DirectX;
 

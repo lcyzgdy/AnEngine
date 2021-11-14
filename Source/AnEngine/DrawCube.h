@@ -5,7 +5,7 @@
 #include"onwind.h"
 #include"DX.h"
 #include"RenderCore.h"
-#include"MCamera.h"
+#include"Camera.h"
 #include"DTimer.h"
 #include"DynamicConstantBuffer.h"
 using namespace AnEngine;
@@ -14,19 +14,19 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 {
 	struct VertexPositionColor
 	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
 	};
 
 	struct VertexPositionUV
 	{
-		XMFLOAT4 position;
-		XMFLOAT2 uv;
+		DirectX::XMFLOAT4 position;
+		DirectX::XMFLOAT2 uv;
 	};
 
 	struct DrawConstantBuffer
 	{
-		XMMATRIX worldViewProjection;
+		DirectX::XMMATRIX worldViewProjection;
 	};
 
 	enum RootParameters : UINT32
@@ -79,13 +79,13 @@ class DrawCube :public D3D12AppBase, public D3D12Base
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer;
 	D3D12_VERTEX_BUFFER_VIEW cubeVbv;
 	D3D12_INDEX_BUFFER_VIEW cubeIbv;
-	XMFLOAT4X4  cBMatrix;
+	DirectX::XMFLOAT4X4  cBMatrix;
 	// 应用程序资源
 
 	std::vector<VertexPositionColor> vertex;
 
-	MiCamera camera;
-	XMMATRIX projectionMatrix;
+	AnEngine::Game::Camera camera;
+	DirectX::XMMATRIX projectionMatrix;
 	//DTimer timer;
 
 public:

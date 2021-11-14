@@ -9,7 +9,7 @@
 #include <queue>
 #include <set>
 #include "Archetype.h"
-#include "MetatypeHash.hpp"
+#include "3rdparty/MetatypeHash.hpp"
 
 
 namespace AnEngine::AssetsWrapper

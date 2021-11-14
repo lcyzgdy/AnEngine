@@ -110,7 +110,7 @@ namespace AnEngine::RenderCore
 		}
 	}
 
-	GraphicsCard::GraphicsCard(D3D_FEATURE_LEVEL featureLevel) :m_commandQueues(8), m_node(0), m_d3dFeatureLevel(featureLevel),
+	GraphicsCard::GraphicsCard(D3D_FEATURE_LEVEL featureLevel) :m_commandQueues(0), m_node(0), m_d3dFeatureLevel(featureLevel),
 		m_isTypedUAVLoadSupport_R11G11B10_FLOAT(false), m_isTypedUAVLoadSupport_R16G16B16A16_FLOAT(false), m_stableFlag(false)
 	{
 
@@ -135,7 +135,7 @@ namespace AnEngine::RenderCore
 		return m_commandQueues[static_cast<int>(type)].Get();
 	}
 
-	ID3D12CommandQueue * const * GraphicsCard::GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type) const
+	ID3D12CommandQueue* const* GraphicsCard::GetCommandQueueAddress(D3D12_COMMAND_LIST_TYPE type) const
 	{
 		return m_commandQueues[static_cast<int>(type)].GetAddressOf();
 	}

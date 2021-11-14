@@ -6,7 +6,7 @@
 #include "Screen.h"
 using namespace AnEngine;
 
-#include"Test.h"
+#include "Test.h"
 
 WNDCLASSEX wnd;
 HWND window;

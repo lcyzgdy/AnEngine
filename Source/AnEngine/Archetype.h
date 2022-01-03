@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __ARCHETYPE_H__
 #define __ARCHETYPE_H__
 
@@ -12,7 +12,7 @@ namespace AnEngine
 	{
 	private:
 		std::vector<size_t> m_typeids;
-		std::list<Memory::Chunk*> m_chunks;
+
 	public:
 		Archetype(std::initializer_list<size_t>&& init_list);
 		Archetype(const std::vector<size_t>& right_v);

@@ -1,5 +1,5 @@
-# CMakeList.txt: ���� CMake ��Ŀ�ļ����ڴ˴�ִ��ȫ������
-# ����������Ŀ��
+﻿# CMakeList.txt: 顶层 CMake 项目文件，在此处执行全局配置
+# 并包含子项目。
 #
 cmake_minimum_required (VERSION 3.8)
 
@@ -7,7 +7,7 @@ project ("AnEngine" LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib) # ָ����̬�����Ŀ¼
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib) # 指定动态库输出目录
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 

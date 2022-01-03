@@ -13,5 +13,6 @@ include_directories(${AnEngine_SOURCE_DIR})
 
 # 包含子项目。
 add_subdirectory("./Source/3rdparty")
+add_subdirectory("./Source/PlatformDependence")
 add_subdirectory("./Source/AnEngine")
 add_subdirectory("./Source/OutputTarget")

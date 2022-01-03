@@ -261,7 +261,9 @@ __pycache__/
 *.pyc
 
 # SubModule
-3rdparty/
+!Source/3rdparty/
+Source/3rdparty/*
+!Source/3rdparty/ScatteredUtils/
 
 # Assets
 *.bin

@@ -1,0 +1,18 @@
+#include "CommonState.h"
+
+namespace AnEngine::RenderCore::CommonState
+{
+	D3D12_RESOURCE_BARRIER commonToRenderTarget;
+	D3D12_RESOURCE_BARRIER renderTargetToCommon;
+	D3D12_RESOURCE_BARRIER commonToResolveDest;
+	D3D12_RESOURCE_BARRIER resolveDestToCommon;
+	D3D12_RESOURCE_BARRIER renderTargetToResolveDest;
+	D3D12_RESOURCE_BARRIER resolveSourceToRenderTarget;
+	D3D12_RESOURCE_BARRIER presentToRenderTarget;
+	D3D12_RESOURCE_BARRIER renderTargetToPresent;
+	D3D12_RESOURCE_BARRIER renderTarget2ResolveSource;
+	D3D12_RESOURCE_BARRIER commonToResolveSource;
+	D3D12_RESOURCE_BARRIER resolveSourceToCommon;
+	D3D12_RESOURCE_BARRIER depthWrite2PsResource;
+	D3D12_RESOURCE_BARRIER psResource2DepthWrite;
+}

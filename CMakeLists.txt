@@ -9,10 +9,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS On)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/bin) # 指定可执行文件输出目录
 
-include_directories(${AnEngine_SOURCE_DIR})
-
 # 包含子项目。
 add_subdirectory("./Source/3rdparty")
-add_subdirectory("./Source/PlatformDependence")
+add_subdirectory("./Source/AnEngine.Interface")
+add_subdirectory("./Source/AnEngine.PlatformDependence")
+add_subdirectory("./Source/AnEngine.OutputTarget")
 add_subdirectory("./Source/AnEngine")
-add_subdirectory("./Source/OutputTarget")

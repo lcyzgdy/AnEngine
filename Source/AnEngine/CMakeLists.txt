@@ -21,6 +21,8 @@ file(GLOB_RECURSE SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE INC "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 include_directories(${Assimp_BINARY_DIR})
+include_directories(${AnEngine.Interface_SOURCE_DIR})
+include_directories(${AnEngine.PlatformDependence_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR})
 
 # Create the source groups for source tree with root at CMAKE_CURRENT_SOURCE_DIR.

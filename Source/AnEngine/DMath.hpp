@@ -48,31 +48,13 @@ namespace AnEngine::DMath
 	template<typename T>
 	__forceinline T& __vectorcall Min(T& t ...)
 	{
-		size_t size = sizeof(T);
-		T* args = &t;
-		T* minn = args;
-		args += size;
-		while ((*args) != static_cast<T>(0))
-		{
-			minn = ((*args) < (*minn)) ? args : minn;
-			args += size;
-		}
-		return *minn;
+		return std::min(t...);
 	}
 
 	template<typename T>
 	__forceinline T& __vectorcall Max(T& t ...)
 	{
-		size_t size = sizeof(T);
-		T* args = &t;
-		T* minn = args;
-		args += size;
-		while ((*args) != static_cast<T>(0))
-		{
-			minn = ((*args) < (*minn)) ? minn : args;
-			args += size;
-		}
-		return *minn;
+		return std::max(t...);
 	}
 
 	inline uint32_t Align(uint32_t size, uint32_t alignment)

@@ -15,6 +15,25 @@ int screenw;
 int screenh;
 Win32App* win32App;
 
+
+inline LPCWSTR ToLPCWSTR(std::string& orig)
+{
+	size_t origsize = orig.length() + 1;
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (origsize - 1));
+	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
+	return wcstring;
+}
+
+
+inline LPCWSTR ToLPCWSTR(const char* l)
+{
+	size_t origsize = strlen(l) + 1;
+	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
+	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
+	return wcstring;
+}
+
+
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)

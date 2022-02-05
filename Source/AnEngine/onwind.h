@@ -24,111 +24,19 @@
 
 #ifdef _WIN64
 
-#include <Windows.h>
-
 #ifdef _WINDLL
 #define DLL_API __declspec(dllexport)
 #else // _WINDLL
 #define DLL_API __declspec(dllimport)
 #endif // _WINDLL
 
+#ifdef __cplusplus
+#define EXTERN_C_BEGIN extern "C" {
+#define EXTERN_C_END }
+#endif /* __cplusplus */
 
-
-#ifdef UNICODE
-
-constexpr auto SOLUTION_DIR = L"C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine";
-
-#define Strcpy(a,b) wcscpy_s(a, b)
-#define ERRORBLOCK(a) MessageBox(NULL, ToLPCWSTR(a), L"Error", 0)
-
-#if defined _DEBUG || defined DEBUG
-#define ERRORBREAK(a) {\
-						ERRORBLOCK(a); \
-						throw std::exception(); \
-					  }
-#else
-#define ERRORBREAK(a) (a)
-#endif // _DEBUG || DEBUG
-
-inline LPCWSTR ToLPCWSTR(std::string& orig)
-{
-	size_t origsize = orig.length() + 1;
-	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (origsize - 1));
-	mbstowcs_s(nullptr, wcstring, origsize, orig.c_str(), _TRUNCATE);
-	return wcstring;
-}
-
-
-inline LPCWSTR ToLPCWSTR(const char* l)
-{
-	size_t origsize = strlen(l) + 1;
-	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * origsize);
-	mbstowcs_s(nullptr, wcstring, origsize, l, _TRUNCATE);
-	return wcstring;
-}
-
-inline std::string WStringToString(const std::wstring& wl)
-{
-
-}
-
-inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
-{
-	if (path == nullptr)
-	{
-		throw std::exception();
-	}
-
-	DWORD size = GetModuleFileName(nullptr, path, pathSize);
-	if (size == 0 || size == pathSize)
-	{
-		// Method failed or path was truncated.
-		throw std::exception();
-	}
-
-	WCHAR* lastSlash = wcsrchr(path, L'\\');
-	if (lastSlash)
-	{
-		*(lastSlash + 1) = L'\0';
-	}
-}
-
-inline void ThrowIfFailed(HRESULT hr)
-{
-	if (FAILED(hr))
-	{
-		throw std::exception("一个奇怪的错误");
-	}
-}
-
-inline void ThrowIfFailed(HRESULT hr, const std::function<void(void)>& f)
-{
-	if (FAILED(hr))
-	{
-		f();
-		throw std::exception("一个奇怪的错误");
-	}
-}
-inline void ThrowIfFalse(bool value)
-{
-	ThrowIfFailed(value ? S_OK : E_FAIL);
-}
-
-inline void ThrowIfFalse(bool value, const wchar_t* msg)
-{
-	ThrowIfFailed(value ? S_OK : E_FAIL);
-}
-
-#else	// UNICODE
-#define Strcpy(a,b) wcscpy(a,b);
-#define SOLUTION_DIR "C:\\Users\\PC\\Documents\\Code\\VSProject\\AnEngine"
-#endif // !UNICODE
 #else	// _WIN64
-#ifndef UNICODE
-#define Strcpy(a,b) strcpy_s(a,b);
-#define stl(l) (l.c_str())
 
-#endif
 #endif // !_WIN64
 
 #else // _WINDOWS
@@ -161,7 +69,7 @@ struct Range
 		if (value > m_maxn) return false;
 		return true;
 	}
-};
+	};
 
 template<int Minn, int Maxn>
 struct Range1

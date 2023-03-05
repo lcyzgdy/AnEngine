@@ -2,6 +2,11 @@
 #ifndef __ANENGINE_PLATFORMDEPENDENCE_WINDOWS_DIRECTX__UTILITY_HPP__
 #define __ANENGINE_PLATFORMDEPENDENCE_WINDOWS_DIRECTX__UTILITY_HPP__
 
+#include <exception>
+#include <functional>
+
+#include "Windows.h"
+
 inline void ThrowIfFailed(HRESULT hr)
 {
 	if (FAILED(hr))

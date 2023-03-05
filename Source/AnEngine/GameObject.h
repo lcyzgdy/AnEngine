@@ -28,12 +28,12 @@ namespace AnEngine::Game
 		friend class AssetsWrapper::AssetsDatabase;
 		friend class std::shared_ptr<GameObject>;
 		friend class std::unique_ptr<GameObject>;
-		friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
+		// friend std::shared_ptr<GameObject> std::make_shared(std::string&&);
 
 		template <class _Ty>
-		friend void std::_Destroy_in_place<_Ty>(_Ty&) noexcept;
+		friend constexpr void std::_Destroy_in_place<_Ty>(_Ty&) noexcept;
 		template<typename _Ty, typename... _Types>
-		friend void std::_Construct_in_place(_Ty& _Obj, _Types&&... _Args) noexcept(std::is_nothrow_constructible_v<_Ty, _Types...>);
+		friend constexpr void std::_Construct_in_place(_Ty& _Obj, _Types&&... _Args) noexcept(std::is_nothrow_constructible_v<_Ty, _Types...>);
 		friend struct std::default_delete<GameObject>;
 
 		std::mutex m_mutex;

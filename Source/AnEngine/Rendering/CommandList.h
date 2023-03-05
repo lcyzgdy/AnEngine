@@ -1,8 +1,8 @@
-#pragma once
-#ifndef __COMMANDLIST_H__
-#define __COMMANDLIST_H__
+﻿#pragma once
+#ifndef __ANENGINE_COMMANDLIST_H__
+#define __ANENGINE_COMMANDLIST_H__
 
-#include "../DX.h"
+#include "../onwind.h"
 
 namespace AnEngine::RenderCore
 {
@@ -41,4 +41,29 @@ namespace AnEngine::RenderCore
 	};
 }
 
-#endif // !__COMMANDLIST_H__
+#ifdef _WIN32
+#include "../PlatformDependence/Windows/DirectX/PlatformCommandList.h"
+#endif
+
+namespace AnEngine::Rendering
+{
+	class IPlatformCommandListImpl
+	{
+	public:
+		virtual void Init() = 0;
+		virtual void Destroy() = 0;
+	};
+
+	class CommandList : IPlatformCommandListImpl
+	{
+		std::shared_ptr<IPlatformCommandListImpl> m_impl;
+	public:
+		CommandList() = default;
+		~CommandList() = default;
+
+		void Init() override;
+		void Destroy() override;
+	};
+}
+
+#endif // !__ANENGINE_COMMANDLIST_H__

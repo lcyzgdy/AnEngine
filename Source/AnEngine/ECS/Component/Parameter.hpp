@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef __ANENGINE__PARAMETER_HPP
 #define __ANENGINE__PARAMETER_HPP
 

@@ -7,8 +7,6 @@ namespace AnEngine::RenderCore
 	CommandList::CommandList(CommandFormatDesc& formatDesc, D3D12_COMMAND_LIST_TYPE type) : m_desc(formatDesc)
 	{
 		ID3D12Device* device = GpuContext::Instance().Default();
-		ThrowIfFailed(device->CreateCommandList(formatDesc.nodeMask, type, formatDesc.allocator,
-			formatDesc.pipelineState, IID_PPV_ARGS(&m_commandList)));
 		m_commandList->Close();
 	}
 
@@ -53,4 +51,10 @@ namespace AnEngine::RenderCore
 	{
 		return m_allocator.Get();
 	}
+}
+
+
+namespace AnEngine::Rendering
+{
+
 }

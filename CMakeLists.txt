@@ -11,7 +11,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/bin) # 指定可�
 
 # 包含子项目。
 add_subdirectory("./Source/3rdparty")
-add_subdirectory("./Source/AnEngine.Interface")
-add_subdirectory("./Source/AnEngine.PlatformDependence")
-add_subdirectory("./Source/AnEngine.OutputTarget")
 add_subdirectory("./Source/AnEngine")
